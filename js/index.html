@@ -1,1 +1,117 @@
-
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>PHP MEMO</title></head><body oncontextmenu='return false;'><table border=0>	<tr>		<td>			<input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked>			<label for=0>日本語</label>		</td>		<td>			<input type=radio id='r1' name='r1' value=1 onchange='f1(1);'>			<label for=1>ENGLISH</label>		</td>	</tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table>	<tr>		<td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">			曜日コードの取得		</td>	</tr>	<tr>		<td>PHPが曜日をコードとして返す結果は日曜日が0から始まる値となっています。<br>下記サンプルです。<br></td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">No</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">曜日</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">0</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">日</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">1</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">月</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">2</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">火</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">3</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">水</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">4</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">木</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">5</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">金</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">6</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">土</td></tr></table><table><tr><td><textarea id="t1" rows=10 cols=50>
+getWeekNo();
+function getWeekNo()
+{
+	//2026/01/04は日曜日です
+	let day = new Date("2026-01-04");
+	let week =day.getDay();
+	console.log(week);
+}
+</textarea></td></tr><tr><td>[出力結果]<br><label id=weekno value=""></label><script>const obj=document.getElementById("weekno");obj.innerHTML=getWeekNo();function getWeekNo(){		let day = new Date("2026-01-04");	let week =day.getDay();	console.log(week);	return week;}</script></script></td></tr>			</table><table>	<tr>		<td colspan=2>[ブラウザ上の検証手順]<br>ブラウザからscriptの結果を検証する場合は、<br>ブラウザ上で右クリックをします。<br>「検証」を選択します。<br>右側にサイドバーが表示されます。<br>下にConsoleタブがあるので、タブを選択すると実行結果が表示されます。		</td>	</tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">1週間の日付と曜日を表示する例</td></tr><tr><td><table><tr><td><textarea id="t2" rows=10 cols=50>
+function displayOneWeek()
+{
+	let tmp="";
+	const date =new Date();
+	for(i=0;i<7;i++)
+	{
+		//date.getMonth()
+		//0から始まる数字を返すため
+		//+1をした数字を月の数字として使用します。
+		tmp+=date.getFullYear() + "/" 
+		+ (date.getMonth() + 1) + "/" 
+		+ date.getDate() 
+		+ " [" + getWeekString(date.getDay())+"]\n";
+		date.setDate(date.getDate() + 1);
+	}
+	const obj=document.getElementById("t3");
+	obj.innerHTML=tmp;
+}
+function getWeekString(no)
+{
+	let data="";
+	switch(no)
+	{
+		case 0:
+			data="日";
+			break;
+		case 1:
+			data="月";
+			break;
+		case 2:
+			data="火";
+			break;
+		case 3:
+			data="水";
+			break;
+		case 4:
+			data="木";
+			break;
+		case 5:
+			data="金";
+			break;
+		case 6:
+			data="土";
+			break;
+	}
+	return data;
+}
+</textarea></td></tr><tr><td>[実行結果]</td></tr><tr><td><textarea id="t3" rows=10 cols=50>
+</textarea></td></tr></table></td></tr></table><script>const t3=document.getElementById("t3");t3.innerHTML=displayOneWeek();function displayOneWeek(){	let tmp="";	const date =new Date();	for(i=0;i<7;i++)	{								tmp+=date.getFullYear() + "/" 		+ (date.getMonth() + 1) + "/" 		+ date.getDate() 		+ " [" + getWeekString(date.getDay())+"]\n";		date.setDate(date.getDate() + 1);	}	return tmp;}function getWeekString(no){	let data="";	switch(no)	{		case 0:			data="日";			break;		case 1:			data="月";			break;		case 2:			data="火";			break;		case 3:			data="水";			break;		case 4:			data="木";			break;		case 5:			data="金";			break;		case 6:			data="土";			break;	}	return data;}</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table>	<tr>		<td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">			Get the day of the week code		</td>	</tr>	<tr>		<td>The day of the week returned by PHP as a code starts with 0 for Sunday.<br>Below is a sample.<br></td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">No</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">week</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">0</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Sun</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">1</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Mon</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">2</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Tue</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">3</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Wed</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">4</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Thu</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">5</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Fri</td></tr><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">6</td><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Sat</td></tr></table><table><tr><td><textarea id="t4" rows=10 cols=50>
+getWeekNo();
+function getWeekNo()
+{
+	//Jan 4th,2026 is Sunday
+	let day = new Date("2026-01-04");
+	let week =day.getDay();
+	console.log(week);
+}
+</textarea></td></tr><tr><td>[Output result]<br><label id=weeknoEn value=""></label><script>const obj2=document.getElementById("weeknoEn");obj2.innerHTML=getWeekNo2();function getWeekNo2(){		let day = new Date("2026-01-04");	let week =day.getDay();	console.log(week);	return week;}</script></script></td></tr>			</table><table>	<tr>		<td colspan=2>[Verification procedure in the browser]<br>To verify the results of a script from the browser,<br>right-click on the browser.<br><br>choose "Verrify".<br><br>A sidebar will appear on the right.<br><br>There is a Console tab at the bottom,<br>so choose the tab to display the execution results.		</td>	</tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Example of displaying the date and day of the week.</td></tr><tr><td><table><tr><td><textarea id="t5" rows=10 cols=50>
+function displayOneWeek()
+{
+	let tmp="";
+	const date =new Date();
+	for(i=0;i<7;i++)
+	{
+		//date.getMonth()
+		//To return a number starting from 0,
+		//use the number below 1 as the month number.
+		tmp+=date.getFullYear() + "/" 
+		+ (date.getMonth() + 1) + "/" 
+		+ date.getDate() 
+		+ " [" + getWeekString(date.getDay())+"]\n";
+		date.setDate(date.getDate() + 1);
+	}
+	const obj=document.getElementById("t3");
+	obj.innerHTML=tmp;
+}
+function getWeekString(no)
+{
+	let data="";
+	switch(no)
+	{
+		case 0:
+			data="Sun";
+			break;
+		case 1:
+			data="Mon";
+			break;
+		case 2:
+			data="Tue";
+			break;
+		case 3:
+			data="Wed";
+			break;
+		case 4:
+			data="Thu";
+			break;
+		case 5:
+			data="Fri";
+			break;
+		case 6:
+			data="Sat";
+			break;
+	}
+	return data;
+}
+</textarea></td></tr><tr><td>[Execution result]</td></tr><tr><td><textarea id="t6" rows=10 cols=50>
+</textarea></td></tr></table></td></tr></table><script>const t6=document.getElementById("t6");t6.innerHTML=displayOneWeek();function displayOneWeek(){	let tmp="";	const date =new Date();	for(i=0;i<7;i++)	{								tmp+=date.getFullYear() + "/" 		+ (date.getMonth() + 1) + "/" 		+ date.getDate() 		+ " [" + getWeekString(date.getDay())+"]\n";		date.setDate(date.getDate() + 1);	}	return tmp;}function getWeekString(no){	let data="";	switch(no)	{		case 0:			data="Sun";			break;		case 1:			data="Mon";			break;		case 2:			data="Tue";			break;		case 3:			data="Wed";			break;		case 4:			data="Thu";			break;		case 5:			data="Fri";			break;		case 6:			data="Sat";			break;	}	return data;}</script></script><br><br>		<a href="#" onclick="f2();">back</a></div>			    <script>		window.onload = function() {		f3();		f0();	};	function f1(value)	{		const obj=document.getElementById('lang');		obj.value=value;		f0();	}	function f0()	{		const obj=document.getElementById('lang');		const l0=document.getElementById('l0');		const l1=document.getElementById('l1');		let lang=obj.value;		if(lang==1)		{			l0.style.display="none";			l1.style.display="block";		}		else		{			l0.style.display="block";			l1.style.display="none";		}		f4();	}	function f4()	{		const obj=document.getElementById('lang');		let d=obj.value;		let o=document.getElementsByName('r1');		if(d==0)		{			o[0].checked=true;		}		else		{			o[1].checked=true;		}	}	function f3()	{		let o1=new URL(window.location.href);		let o2=o1.searchParams;		let d=o2.get('lang');		if(d==1)		{			const obj=document.getElementById('lang');			obj.value=d;		}	}	function f2()	{		const obj=document.getElementById('lang');		let lang=obj.value;		let url="";		if(lang==0)		{			url='/index.html?lang=0';		}		else		{			url='/index.html?lang=1';		}		window.location.href=url;	}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'>	<tr>	<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'>	<b>著作権情報</b>	</td>	</tr>	<tr class=p2>	<td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
