@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>PHP MEMO</title></head><body oncontextmenu='return false;'><table border=0>	<tr>		<td>			<input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked>			<label for=0>日本語</label>		</td>		<td>			<input type=radio id='r1' name='r1' value=1 onchange='f1(1);'>			<label for=1>ENGLISH</label>		</td>	</tr></table><input type=hidden id=lang value=0><div id=l0>Japanese<a href='#' onClick="f2();">戻る</a><br><br><table>	<tr>		<td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">			日付の加減算		</td>	</tr>	<tr>		<td>Javascriptでは今日の日付や指定の日付に対して日付を加減算した結果を取得できます。<br>下記サンプルです。<br></td></tr></table><br><table><tr><td><textarea id="t1" rows=10 cols=50>
+getDateResult();
+function getDateResult()
+{
+	//今日の日付
+	let date = new Date();
+	let year = date.getFullYear();
+	let month = date.getFullYear();
+	let day = date.getFullYear();
+	let tmp ="";
+	tmp += "[今日の日付]<br>";
+	tmp+=date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate() +"<br>";
+
+	//明日にするためには今日の日付に1を加算します。
+	date.setDate(date.getDate() + 1);
+
+	tmp += "[明日の日付]<br>";
+	tmp += date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate() +"<br>";
+
+	//今日の日付
+	date = new Date();
+	//昨日にするためには今日の日付に1を減算します。
+	date.setDate(date.getDate() - 1);
+	tmp += "[昨日の日付]<br>";
+	tmp+=date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate() +"<br>";
+
+	const obj=document.getElementById("date1");
+	obj.innerHTML=tmp;
+}
+</textarea></td></tr></td></tr><tr><td>[出力結果]<br><div id=date1 value=""></div><script>getDateResult();function getDateResult(){		let date = new Date();	let year = date.getFullYear();	let month = date.getFullYear();	let day = date.getFullYear();	let tmp ="";	tmp += "[今日の日付]<br>";	tmp+=date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate() +"<br>";		date.setDate(date.getDate() + 1);	tmp += "[明日の日付]<br>";	tmp += date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate() +"<br>";		date = new Date();		date.setDate(date.getDate() - 1);	tmp += "[昨日の日付]<br>";	tmp+=date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate() +"<br>";	const obj=document.getElementById("date1");	obj.innerHTML=tmp;}</script></script></td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">日付の加減算を使用した選択問題</td></tr><tr><td><table><tr><td><textarea id="t2" rows=10 cols=50>
+/*
+num:ボタン選択をしたイベントの管理番号
+0:左側
+1:中央
+2:右側
+*/
+function func(num)
+{
+	const ans=document.getElementById("answerNo");
+	let txt="";
+	if(ans.value ==num)
+	{
+		txt="正解です。";
+	}
+	else
+	{
+		txt="不正解です。";
+	}
+	//結果をメッセージで表示します。
+	alert(txt);
+	//正解の日付を表示<div>タグを表示状態にします
+	document.getElementById("lbl1").style.display='block';
+	document.getElementById("lbl2").style.display='block';
+}
+/*
+乱数を返す処理
+0からnum-1までの数字の範囲から任意の1つの数字を返します。
+num:0から始まる個数を指定
+0から始まる数字のため1を減算します
+(例)
+0-2なら3
+0-9までなら10
+*/
+function random(num)
+{
+	return Math.floor(Math.random() * num);
+}
+/*
+0から2までの3個の中から1個ををランダムに取得して正解の日付として使用します。
+0:昨日
+1:今日
+2:明日
+*/
+let correct=random(3);
+//日付に使用するため値を調整します
+//昨日であれば0から-1にするため値をデクリメントします。
+
+
+let txt="";
+let num=0;
+switch(correct)
+{
+	case 0:
+		txt="昨日の日付を選択してください。";
+		num=2;
+		break;
+	case 1:
+		txt="今日の日付を選択してください。";
+		num=1;
+		break;
+	default://case 2:
+		txt="明日の日付を選択してください。";
+		num=0;
+		break;
+}
+document.getElementById("problem").innerHTML=txt;
+correct--;
+//正解の日付
+date = new Date();
+date.setDate(date.getDate() + correct);
+//divタグに正解の日付を設定します
+document.getElementById("lbl2").innerHTML=dateFormat(date);
+//正解の日付の位置を０から2までの3個の中から1個ををランダムに取得して決めます。
+//0:左側
+//1:中央
+//2:右側
+//let buttonPosition=random(2);
+let buttonPosition=random(3);
+
+//正解のボタン番号を格納します
+document.getElementById("answerNo").value=buttonPosition;
+
+num=0;
+switch(buttonPosition)
+{
+	case 0:
+		num=2;
+		break;
+	case 1:
+		num=1;
+		break;
+	default://case 2:
+		num=0;
+		break;
+}
+correct++;
+//答えの日付から右側の日付となるように調整します
+/*
+ボタンイベントのjavascipt引数に下記の値を設定しておきます
+そして正解判定はhiddenタグのanswerNoと比較判定します。
+[引数に使用する値]
+左側:0
+中央:1
+右側:2
+*/
+const left=document.getElementById("btnLeft");//左側
+const center=document.getElementById("btnCenter");//中央
+const right=document.getElementById("btnRight");//右側
+//今日の日付
+date = new Date();
+correct--;
+date.setDate(date.getDate()+correct);
+date.setDate(date.getDate()+num);
+date.setDate(date.getDate());//右側
+right.innerHTML=dateFormat(date);
+date.setDate(date.getDate() - 1);
+center.innerHTML=dateFormat(date);//中央
+date.setDate(date.getDate() - 1);
+left.innerHTML=dateFormat(date);//左側
+function dateText(date, num)
+{
+	date.setDate(date.getDate() - num);
+	return dateFormat(date);
+}
+//Dateクラスオブジェクトの値を使用して一定の日付書式にして返します
+function dateFormat(date)
+{
+	let tmp ="";
+	return date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate();
+}
+</textarea></td></tr></table></td></tr><tr><td>[日付の問題]</td></tr><tr><td><label id=problem></label></td></tr></table><table><tr><td><button type="button" id=btnLeft onclick="func(0);">左側の日付</button></td><td><button type="button" id=btnCenter onclick="func(1);">真ん中の日付</button></td><td><button type="button" id=btnRight onclick="func(2);">右側の日付</button></td></tr></table><div id=lbl1 style="display:none;">正解の日付</div><div id=lbl2 style="display:none;">XXX</div><input type=hidden id=answerNo value=0><script>function func(num){	const ans=document.getElementById("answerNo");	let txt="";	if(ans.value ==num)	{		txt="正解です。";	}	else	{		txt="不正解です。";	}		alert(txt);		document.getElementById("lbl1").style.display='block';	document.getElementById("lbl2").style.display='block';}function random(num){	return Math.floor(Math.random() * num);}let correct=random(3);let txt="";let num=0;switch(correct){	case 0:		txt="昨日の日付を選択してください。";		num=2;		break;	case 1:		txt="今日の日付を選択してください。";		num=1;		break;	default:		txt="明日の日付を選択してください。";		num=0;		break;}document.getElementById("problem").innerHTML=txt;correct--;date = new Date();date.setDate(date.getDate() + correct);document.getElementById("lbl2").innerHTML=dateFormat(date);let buttonPosition=random(3);document.getElementById("answerNo").value=buttonPosition;num=0;switch(buttonPosition){	case 0:		num=2;		break;	case 1:		num=1;		break;	default:		num=0;		break;}correct++;const left=document.getElementById("btnLeft");const center=document.getElementById("btnCenter");const right=document.getElementById("btnRight");date = new Date();correct--;date.setDate(date.getDate()+correct);date.setDate(date.getDate()+num);date.setDate(date.getDate());right.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);center.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);left.innerHTML=dateFormat(date);function dateText(date, num){	date.setDate(date.getDate() - num);	return dateFormat(date);}function dateFormat(date){	let tmp ="";	return date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate();}</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1>English<a href='#' onClick="f2();">back</a><br><br><table>	<tr>		<td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Adding and Subtracting Dates		</td>	</tr>	<tr>		<td>Using Javascript, get the result of adding or subtracting a date from today's date or a specified date.<br>Below is a sample.</td></tr></table><br><table><tr><td><textarea id="t1En" rows=10 cols=50>
+getDateResult();
+function getDateResult()
+{
+	//today date
+	let date = new Date();
+	let year = date.getFullYear();
+	let month = date.getFullYear();
+	let day = date.getFullYear();
+	let tmp ="";
+	tmp += "[today date]<br>";
+	tmp+=date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate() +"<br>";
+
+	//To go to tomorrow, add 1 to today's date.
+	date.setDate(date.getDate() + 1);
+
+	tmp += "[tomorow date]<br>";
+	tmp += date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate() +"<br>";
+
+	//today date
+	date = new Date();
+	//To make it yesterday, subtract 1 from today's date.
+	date.setDate(date.getDate() - 1);
+	tmp += "[yesterday date]<br>";
+	tmp+=date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate() +"<br>";
+
+	const obj=document.getElementById("date1");
+	obj.innerHTML=tmp;
+}
+</textarea></td></tr></td></tr><tr><td>[Output result]<br><div id=date1En value=""></div><script>getDateResultEn();function getDateResultEn(){		let date = new Date();	let year = date.getFullYear();	let month = date.getFullYear();	let day = date.getFullYear();	let tmp ="";	tmp += "[today date]<br>";	tmp+=date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate() +"<br>";		date.setDate(date.getDate() + 1);	tmp += "[tomorrow date]<br>";	tmp += date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate() +"<br>";		date = new Date();		date.setDate(date.getDate() - 1);	tmp += "[yesterday date]<br>";	tmp+=date.getFullYear() + "/" 	+ (date.getMonth() + 1) + "/" 	+ date.getDate() +"<br>";	const objEn=document.getElementById("date1En");	objEn.innerHTML=tmp;}</script></script></td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Multiple choice questions using addition and subtraction of dates</td></tr><tr><td><table><tr><td><textarea id="t2En" rows=10 cols=50>
+/*
+num:Event number for which the button wa choose
+0:left
+1:center
+2:right
+*/
+function funcEn(num)
+{
+	const ans=document.getElementById("answerNoEn");
+	let txt="";
+	if(ans.value ==num)
+	{
+		txt="correct";
+	}
+	else
+	{
+		txt="incorrect";
+	}
+	//The result will be displayed in a message.
+	alert(txt);
+	//show the correct answer date.<div>tag will be displayed.
+	document.getElementById("lbl1En").style.display='block';
+	document.getElementById("lbl2En").style.display='block';
+}
+/*
+process to return a dondom number
+returns one random number from the range of numbers from 0 to num - 1.
+num:specify the number starting from 0.
+since the numbers starts from 0, subtract 1.
+ex.)
+if it is between 0 and 2, it is 3.
+if it is between 0 and 9, it is 10.
+
+*/
+function randomEn(num)
+{
+	return Math.floor(Math.random() * num);
+}
+/*
+One of the three numbers between 0 and 2 will be randomly choose and used as the correct date.
+0:yesterday
+1:today
+2:tomorrow
+*/
+let correctEn=randomEn(3);
+
+
+let txtEn="";
+switch(correctEn)
+{
+	case 0:
+		txtEn="choose yesterday's date";
+		break;
+	case 1:
+		txtEn="choose today's date";
+		break;
+	default://case 2:
+		txtEn="choose tomorrow's date";
+		break;
+}
+document.getElementById("problemEn").innerHTML=txtEn;
+//adjust the value to use fro the date
+//if it was yesterday, decrement the value from 0 to -1.
+correctEn--;
+//set the correct date
+date = new Date();
+date.setDate(date.getDate() + correctEn);
+//set the correct date in a div tag
+document.getElementById("lbl2En").innerHTML=dateFormatEn(date);
+//determine the position of the correct date by randomly choosing one of the three values from 0 to 2.
+//0:left
+//1:center
+//2:right
+let buttonPositionEn=randomEn(3);
+
+//save the correct button number.
+document.getElementById("answerNoEn").value=buttonPositionEn;
+
+let numEn=0;
+switch(buttonPositionEn)
+{
+	case 0:
+		numEn=2;
+		break;
+	case 1:
+		numEn=1;
+		break;
+	default://case 2:
+		numEn=0;
+		break;
+}
+correctEn++;
+//adjust the date so that it is to the right of the answer date.
+/*
+set the following value as the Javascript argument for the button event.
+the correct answer will be determined by comparing it with the answerNo in the hidden tag.
+[Value to use for argument]
+left:0
+center:1
+right:2
+*/
+const leftEn=document.getElementById("btnLeftEn");//left
+const centerEn=document.getElementById("btnCenterEn");//center
+const rightEn=document.getElementById("btnRightEn");//right
+//today date
+date = new Date();
+correctEn--;
+date.setDate(date.getDate()+correctEn);
+date.setDate(date.getDate()+numEn);
+date.setDate(date.getDate());//right
+rightEn.innerHTML=dateFormatEn(date);
+date.setDate(date.getDate() - 1);
+centerEn.innerHTML=dateFormatEn(date);//center
+date.setDate(date.getDate() - 1);
+leftEn.innerHTML=dateFormatEn(date);//left
+function dateTextEn(date, num)
+{
+	date.setDate(date.getDate() - num);
+	return dateFormatEn(date);
+}
+//Returns a date in a fixed format using the value of a Date class object
+function dateFormatEn(date)
+{
+	let tmp ="";
+/*
+	return date.getFullYear() + "/" 
+	+ (date.getMonth() + 1) + "/" 
+	+ date.getDate();
+*/
+	return changeMonth(date.getMonth())+ " " 
+	+ date.getDate() + "th " 
+	+ ", " + date.getFullYear();
+}
+function changeMonth(month)
+{
+	let txt="";
+	switch(month)
+	{
+		case 0:
+			txt="Jan";
+			break;
+		case 1:
+			txt="Feb";
+			break;
+		case 2:
+			txt="Mar";
+			break;
+		case 3:
+			txt="Apr";
+			break;
+		case 4:
+			txt="May";
+			break;
+		case 5:
+			txt="Jun";
+			break;
+		case 6:
+			txt="Jul";
+			break;
+		case 7:
+			txt="Aug";
+			break;
+		case 8:
+			txt="Sep";
+			break;
+		case 9:
+			txt="Oct";
+			break;
+		case 10:
+			txt="Nov";
+			break;
+		case 11:
+			txt="Dec";
+			break;
+	}
+	return txt;
+}
+</textarea></td></tr></table></td></tr><tr><td>[date problem]</td></tr><tr><td><label id=problemEn></label></td></tr></table><table><tr><td><button type="button" id=btnLeftEn onclick="funcEn(0);">left date</button></td><td><button type="button" id=btnCenterEn onclick="funcEn(1);">center date</button></td><td><button type="button" id=btnRightEn onclick="funcEn(2);">right date</button></td></tr></table><div id=lbl1En style="display:none;">correct date</div><div id=lbl2En style="display:none;">XXX</div><input type=hidden id=answerNoEn value=0><br><script>function funcEn(num){	const ans=document.getElementById("answerNoEn");	let txt="";	if(ans.value ==num)	{		txt="correct";	}	else	{		txt="incorrect";	}		alert(txt);		document.getElementById("lbl1En").style.display='block';	document.getElementById("lbl2En").style.display='block';}function randomEn(num){	return Math.floor(Math.random() * num);}let correctEn=randomEn(3);let txtEn="";switch(correctEn){	case 0:		txtEn="choose yesterday's date";		break;	case 1:		txtEn="choose today's date";		break;	default:		txtEn="choose tomorrow's date";		break;}document.getElementById("problemEn").innerHTML=txtEn;correctEn--;date = new Date();date.setDate(date.getDate() + correctEn);document.getElementById("lbl2En").innerHTML=dateFormatEn(date);let buttonPositionEn=randomEn(3);document.getElementById("answerNoEn").value=buttonPositionEn;let numEn=0;switch(buttonPositionEn){	case 0:		numEn=2;		break;	case 1:		numEn=1;		break;	default:		numEn=0;		break;}correctEn++;const leftEn=document.getElementById("btnLeftEn");const centerEn=document.getElementById("btnCenterEn");const rightEn=document.getElementById("btnRightEn");date = new Date();correctEn--;date.setDate(date.getDate()+correctEn);date.setDate(date.getDate()+numEn);date.setDate(date.getDate());rightEn.innerHTML=dateFormatEn(date);date.setDate(date.getDate() - 1);centerEn.innerHTML=dateFormatEn(date);date.setDate(date.getDate() - 1);leftEn.innerHTML=dateFormatEn(date);function dateTextEn(date, num){	date.setDate(date.getDate() - num);	return dateFormatEn(date);}function dateFormatEn(date){	let tmp ="";	return changeMonth(date.getMonth())+ " " 	+ date.getDate() + "th " 	+ ", " + date.getFullYear();}function changeMonth(month){	let txt="";	switch(month)	{		case 0:			txt="Jan";			break;		case 1:			txt="Feb";			break;		case 2:			txt="Mar";			break;		case 3:			txt="Apr";			break;		case 4:			txt="May";			break;		case 5:			txt="Jun";			break;		case 6:			txt="Jul";			break;		case 7:			txt="Aug";			break;		case 8:			txt="Sep";			break;		case 9:			txt="Oct";			break;		case 10:			txt="Nov";			break;		case 11:			txt="Dec";			break;	}	return txt;}</script></script><br><br><a href='#' onClick="f2();">back</a></div>			    <script>		window.onload = function() {		f3();		f0();	};	function f1(value)	{		const obj=document.getElementById('lang');		obj.value=value;		f0();	}	function f0()	{		const obj=document.getElementById('lang');		const l0=document.getElementById('l0');		const l1=document.getElementById('l1');		let lang=obj.value;		if(lang==1)		{			l0.style.display="none";			l1.style.display="block";		}		else		{			l0.style.display="block";			l1.style.display="none";		}		f4();	}	function f4()	{		const obj=document.getElementById('lang');		let d=obj.value;		let o=document.getElementsByName('r1');		if(d==0)		{			o[0].checked=true;		}		else		{			o[1].checked=true;		}	}	function f3()	{		let o1=new URL(window.location.href);		let o2=o1.searchParams;		let d=o2.get('lang');		if(d==1)		{			const obj=document.getElementById('lang');			obj.value=d;		}	}	function f2()	{		const obj=document.getElementById('lang');		let lang=obj.value;		let url="";		if(lang==0)		{			url='/js/index.html?lang=0';		}		else		{			url='/js/index.html?lang=1';		}		window.location.href=url;	}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'>	<tr>	<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'>	<b>著作権情報</b>	</td>	</tr>	<tr class=p2>	<td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
