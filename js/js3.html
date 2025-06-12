@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">タグの表示切り替え</td></tr><tr><td>javascriptでタグの表示切替</td></tr></table>このサンプルではdivタグを用いた表示切り替えのサンプルとなります。<br><button id=sample1 >javascript(style.display)の切り替え</button><br>[プログラム]<br><textarea id="t1" rows=10 cols=50>
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }</style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">タグの表示切り替え</td></tr><tr><td>javascriptでタグの表示切替</td></tr></table>このサンプルではdivタグを用いた表示切り替えのサンプルとなります。<br><button id=sample1 >javascript(style.display)の切り替え</button><br>[プログラム]<br><pre class="prettyprint linenums;lang-js";>
+/*
+&lt;div id=div1 style="display:block;"&gt;divタグを表示しています。&lt;/div&gt;
+&lt;input type=hidden id=display value=0&gt;
+&lt;button id=sample1 &gt;javascript(style.display)の切り替え&lt;/button&gt;
+*/
 function test1()
 {
-/*
-<div id=div1 style="display:block;">divタグを表示しています。</div>
-<input type=hidden id=display value=0>
-<button id=sample1 >javascript(style.display)の切り替え</button>
-*/
 	let result=document.getElementById("display").value;
 	let status="";
 	if(result==0)
@@ -24,14 +24,14 @@ function test1()
 //javascript(style.display)の切り替え
 let btn1=document.getElementById("sample1");
 btn1.addEventListener("click", test1);
-</textarea><br><button id=sample2 >javascript(setProperty)の切り替え</button><br>[プログラム]<br><textarea id="t2" rows=10 cols=50>
+</pre><br><button id=sample2 >javascript(setProperty)の切り替え</button><br>[プログラム]<br><pre class="prettyprint linenums;lang-js";>
+/*
+&lt;div id=div1 style="display:block;"&gt;divタグを表示しています。&lt;/div&gt;
+&lt;input type=hidden id=display value=0&gt;
+&lt;button id=sample2 &gt;javascript(setProperty)の切り替え&lt;/button&gt;
+*/
 function test2()
 {
-/*
-<div id=div1 style="display:block;">divタグを表示しています。</div>
-<input type=hidden id=display value=0>
-<button id=sample2 >javascript(setProperty)の切り替え</button>
-*/
 	let result=document.getElementById("display").value;
 	let status="";
 	if(result==0)
@@ -50,14 +50,14 @@ function test2()
 //javascript(setProperty)の切り替え
 let btn2=document.getElementById("sample2");
 btn2.addEventListener("click", test2);
-</textarea><br><button id=sample3 >javascript(cssText)の切り替え</button><br>[プログラム]<br><textarea id="t3" rows=10 cols=50>
+</pre><br><button id=sample3 >javascript(cssText)の切り替え</button><br>[プログラム]<br><pre class="prettyprint linenums;lang-js";>
+/*
+&lt;div id=div1 style="display:block;"&gt;divタグを表示しています。&lt;/div&gt;
+&lt;input type=hidden id=display value=0&gt;
+&lt;button id=sample3 &gt;javascript(cssText)の切り替え&lt;/button&gt;
+*/
 function test3()
 {
-/*
-<div id=div1 style="display:block;">divタグを表示しています。</div>
-<input type=hidden id=display value=0>
-<button id=sample3 >javascript(cssText)の切り替え</button>
-*/
 	let result=document.getElementById("display").value;
 	let status="";
 	if(result==0)
@@ -76,14 +76,14 @@ function test3()
 //javascript(cssText)の切り替え
 let btn3=document.getElementById("sample3");
 btn3.addEventListener("click", test3);
-</textarea><br><div id=div1 style="display:block;">divタグを表示しています。</div><br><br><input type=hidden id=display value=0><script>function test1(){let result=document.getElementById("display").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("display").value=result;document.getElementById("div1").style.display=status;}function test2(){let result=document.getElementById("display").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("display").value=result;document.getElementById("div1").style.setProperty("display", status);}function test3(){let result=document.getElementById("display").value;let status="";if(result==0){result = 1;status="display:block";}else{result = 0;status="display:none";}document.getElementById("display").value=result;document.getElementById("div1").style.cssText=status;}let btn1=document.getElementById("sample1");btn1.addEventListener("click", test1);let btn2=document.getElementById("sample2");btn2.addEventListener("click", test2);let btn3=document.getElementById("sample3");btn3.addEventListener("click", test3);</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Tag display switching</td></tr><tr><td>Switching tag display with javascript</td></tr></table>This sample shows how to switch displays using div tag.<br><button id=btnEn >javascript(style.display) switch</button><br>[program]<br><textarea id="t1" rows=10 cols=50>
+</pre><br><div id=div1 style="display:block;">divタグを表示しています。</div><br><br><input type=hidden id=display value=0><script>function test1(){let result=document.getElementById("display").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("display").value=result;document.getElementById("div1").style.display=status;}function test2(){let result=document.getElementById("display").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("display").value=result;document.getElementById("div1").style.setProperty("display", status);}function test3(){let result=document.getElementById("display").value;let status="";if(result==0){result = 1;status="display:block";}else{result = 0;status="display:none";}document.getElementById("display").value=result;document.getElementById("div1").style.cssText=status;}let btn1=document.getElementById("sample1");btn1.addEventListener("click", test1);let btn2=document.getElementById("sample2");btn2.addEventListener("click", test2);let btn3=document.getElementById("sample3");btn3.addEventListener("click", test3);</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Tag display switching</td></tr><tr><td>Switching tag display with javascript</td></tr></table>This sample shows how to switch displays using div tag.<br><button id=btnEn >javascript(style.display) switch</button><br>[program]<br><pre class="prettyprint linenums;lang-js";>
+/*
+&lt;div id=div1 style="display:block;"&gt;Showing div tag&lt;/div&gt;
+&lt;input type=hidden id=display value=0&gt;
+&lt;button id=sample1 &gt;javascript(style.display) switch&lt;/button&gt;
+*/
 function test1()
 {
-/*
-<div id=div1 style="display:block;">Showing div tag</div>
-<input type=hidden id=display value=0>
-<button id=sample1 >javascript(style.display) switch</button>
-*/
 	let result=document.getElementById("display").value;
 	let status="";
 	if(result==0)
@@ -104,14 +104,14 @@ let btn1=document.getElementById("sample1");
 btn1.addEventListener("click", function(){
 	test1();
 });
-</textarea><br><button id=sampleEn2 >javascript(setProperty) switch</button><br>[program]<br><textarea id="t2" rows=10 cols=50>
+</pre><br><button id=sampleEn2 >javascript(setProperty) switch</button><br>[program]<br><pre class="prettyprint linenums;lang-js";>
+/*
+&lt;div id=div1 style="display:block;"&gt;Showing div tag&lt;/div&gt;
+&lt;input type=hidden id=display value=0&gt;
+&lt;button id=sample2 &gt;javascript(setProperty) switch&lt;/button&gt;
+*/
 function test2()
 {
-/*
-<div id=div1 style="display:block;">Showing div tag</div>
-<input type=hidden id=display value=0>
-<button id=sample2 >javascript(setProperty) switch</button>
-*/
 	let result=document.getElementById("display").value;
 	let status="";
 	if(result==0)
@@ -130,14 +130,14 @@ function test2()
 //javascript(setProperty) switch
 let btn2=document.getElementById("sample2");
 btn2.addEventListener("click", test2);
-</textarea><br><button id=sampleEn3 >javascript(cssText) switch</button><br>[program]<br><textarea id="t3" rows=10 cols=50>
+</pre><br><button id=sampleEn3 >javascript(cssText) switch</button><br>[program]<br><pre class="prettyprint linenums;lang-js";>
+/*
+&lt;div id=div1 style="display:block;"&gt;Showing div tag&lt;/div&gt;
+&lt;input type=hidden id=display value=0&gt;
+&lt;button id=sample3 &gt;javascript(cssText) switch&lt;/button&gt;
+*/
 function test3()
 {
-/*
-<div id=div1 style="display:block;">Showing div tag</div>
-<input type=hidden id=display value=0>
-<button id=sample3 >javascript(cssText) switch</button>
-*/
 	let result=document.getElementById("display").value;
 	let status="";
 	if(result==0)
@@ -156,4 +156,4 @@ function test3()
 //javascript(cssText) switch
 let btn3=document.getElementById("sample3");
 btn3.addEventListener("click", test3);
-</textarea><br><div id=divEn1 style="display:block;">Showing div tag</div><br><br><input type=hidden id=displayEn value=0><script>function test1En(){let result=document.getElementById("displayEn").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("displayEn").value=result;document.getElementById("divEn1").style.display=status;}function testEn2(){let result=document.getElementById("displayEn").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("displayEn").value=result;document.getElementById("divEn1").style.setProperty("display", status);}function testEn3(){let result=document.getElementById("displayEn").value;let status="";if(result==0){result = 1;status="display:block";}else{result = 0;status="display:none";}document.getElementById("displayEn").value=result;document.getElementById("divEn1").style.cssText=status;}let btnEn1=document.getElementById("btnEn");btnEn1.addEventListener("click", function(){test1En();});let btnEn2=document.getElementById("sampleEn2");btnEn2.addEventListener("click", testEn2);let btnEn3=document.getElementById("sampleEn3");btnEn3.addEventListener("click", testEn3);</script></script><a href="#" onclick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
+</pre><br><div id=divEn1 style="display:block;">Showing div tag</div><br><br><input type=hidden id=displayEn value=0><script>function test1En(){let result=document.getElementById("displayEn").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("displayEn").value=result;document.getElementById("divEn1").style.display=status;}function testEn2(){let result=document.getElementById("displayEn").value;let status="";if(result==0){result = 1;status="block";}else{result = 0;status="none";}document.getElementById("displayEn").value=result;document.getElementById("divEn1").style.setProperty("display", status);}function testEn3(){let result=document.getElementById("displayEn").value;let status="";if(result==0){result = 1;status="display:block";}else{result = 0;status="display:none";}document.getElementById("displayEn").value=result;document.getElementById("divEn1").style.cssText=status;}let btnEn1=document.getElementById("btnEn");btnEn1.addEventListener("click", function(){test1En();});let btnEn2=document.getElementById("sampleEn2");btnEn2.addEventListener("click", testEn2);let btnEn3=document.getElementById("sampleEn3");btnEn3.addEventListener("click", testEn3);</script></script><a href="#" onclick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
