@@ -144,11 +144,6 @@ date.setDate(date.getDate() - 1);
 center.innerHTML=dateFormat(date);//中央
 date.setDate(date.getDate() - 1);
 left.innerHTML=dateFormat(date);//左側
-function dateText(date, num)
-{
-	date.setDate(date.getDate() - num);
-	return dateFormat(date);
-}
 //Dateクラスオブジェクトの値を使用して一定の日付書式にして返します
 function dateFormat(date)
 {
@@ -157,37 +152,99 @@ function dateFormat(date)
 	+ (date.getMonth() + 1) + "/" 
 	+ date.getDate();
 }
-</pre></td></tr></table></td></tr><tr><td>[日付の問題]</td></tr><tr><td><label id=problem></label></td></tr></table><table><tr><td><button type="button" id=btnLeft onclick="func(0);">左側の日付</button></td><td><button type="button" id=btnCenter onclick="func(1);">真ん中の日付</button></td><td><button type="button" id=btnRight onclick="func(2);">右側の日付</button></td></tr></table><div id=lbl1 style="display:none;">正解の日付</div><div id=lbl2 style="display:none;">XXX</div><input type=hidden id=answerNo value=0><script>function func(num){const ans=document.getElementById("answerNo");let txt="";if(ans.value ==num){txt="正解です。";}else{txt="不正解です。";}alert(txt);document.getElementById("lbl1").style.display='block';document.getElementById("lbl2").style.display='block';}function random(num){return Math.floor(Math.random() * num);}let correct=random(3);let txt="";let num=0;switch(correct){case 0:txt="昨日の日付を選択してください。";num=2;break;case 1:txt="今日の日付を選択してください。";num=1;break;default:txt="明日の日付を選択してください。";num=0;break;}document.getElementById("problem").innerHTML=txt;let dateAdjust=0;dateAdjust=correct - 1;date = new Date();date.setDate(date.getDate() + dateAdjust);document.getElementById("lbl2").innerHTML=dateFormat(date);let buttonPosition=random(3);document.getElementById("answerNo").value=buttonPosition;num=0;switch(buttonPosition){case 0:num=2;break;case 1:num=1;break;default:num=0;break;}const left=document.getElementById("btnLeft");const center=document.getElementById("btnCenter");const right=document.getElementById("btnRight");date = new Date();date.setDate(date.getDate()+dateAdjust);date.setDate(date.getDate()+num);date.setDate(date.getDate());right.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);center.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);left.innerHTML=dateFormat(date);function dateText(date, num){date.setDate(date.getDate() - num);return dateFormat(date);}function dateFormat(date){let tmp ="";return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();}</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href='#' onClick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Adding and Subtracting Dates</td></tr><tr><td>Using Javascript, get the result of adding or subtracting a date from today's date or a specified date.<br>Below is a sample.</td></tr></table><br><table><tr><td><pre class="prettyprint linenums;lang-js";>
+</pre></td></tr></table></td></tr><tr><td>[日付の問題]</td></tr><tr><td><label id=problem></label></td></tr></table><table><tr><td><button type="button" id=btnLeft onclick="func(0);">左側の日付</button></td><td><button type="button" id=btnCenter onclick="func(1);">真ん中の日付</button></td><td><button type="button" id=btnRight onclick="func(2);">右側の日付</button></td></tr></table><div id=lbl1 style="display:none;">正解の日付</div><div id=lbl2 style="display:none;">XXX</div><input type=hidden id=answerNo value=0><script>function func(num){const ans=document.getElementById("answerNo");let txt="";if(ans.value ==num){txt="正解です。";}else{txt="不正解です。";}alert(txt);document.getElementById("lbl1").style.display='block';document.getElementById("lbl2").style.display='block';}function random(num){return Math.floor(Math.random() * num);}let correct=random(3);let txt="";let num=0;switch(correct){case 0:txt="昨日の日付を選択してください。";num=2;break;case 1:txt="今日の日付を選択してください。";num=1;break;default:txt="明日の日付を選択してください。";num=0;break;}document.getElementById("problem").innerHTML=txt;let dateAdjust=0;dateAdjust=correct - 1;date = new Date();date.setDate(date.getDate() + dateAdjust);document.getElementById("lbl2").innerHTML=dateFormat(date);let buttonPosition=random(3);document.getElementById("answerNo").value=buttonPosition;num=0;switch(buttonPosition){case 0:num=2;break;case 1:num=1;break;default:num=0;break;}const left=document.getElementById("btnLeft");const center=document.getElementById("btnCenter");const right=document.getElementById("btnRight");date = new Date();date.setDate(date.getDate()+dateAdjust);date.setDate(date.getDate()+num);date.setDate(date.getDate());right.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);center.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);left.innerHTML=dateFormat(date);function dateFormat(date){let tmp ="";return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();}</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href='#' onClick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Adding and Subtracting Dates</td></tr><tr><td>Using Javascript, get the result of adding or subtracting a date from today's date or a specified date.<br>Below is a sample.</td></tr></table><br><table><tr><td><pre class="prettyprint linenums;lang-js";>
 getDateResult();
-function getDateResult()
+function getDateResultEn()
 {
 	//today date
 	let date = new Date();
 	let tmp ="";
 	tmp += "[today date]&lt;br&gt;";
+	tmp += dateFormat(date.getFullYear(),date.getMonth(),date.getDate());
+	tmp += "&lt;br&gt;";
+	/*
 	tmp+=date.getFullYear() + "/" 
 	+ (date.getMonth() + 1) + "/" 
 	+ date.getDate() +"&lt;br&gt;";
+	*/
 
 	//To go to tomorrow, add 1 to today's date.
 	date.setDate(date.getDate() + 1);
 
-	tmp += "[tomorow date]&lt;br&gt;";
+	tmp += "[tomorrow date]&lt;br&gt;";
+	tmp += dateFormat(date.getFullYear(),date.getMonth(),date.getDate());
+	tmp += "&lt;br&gt;";
+	/*
 	tmp += date.getFullYear() + "/" 
 	+ (date.getMonth() + 1) + "/" 
 	+ date.getDate() +"&lt;br&gt;";
+	*/
 
 	//today date
 	date = new Date();
 	//To make it yesterday, subtract 1 from today's date.
 	date.setDate(date.getDate() - 1);
 	tmp += "[yesterday date]&lt;br&gt;";
+	tmp += dateFormat(date.getFullYear(),date.getMonth(),date.getDate());
+	tmp += "&lt;br&gt;";
+	/*
 	tmp+=date.getFullYear() + "/" 
 	+ (date.getMonth() + 1) + "/" 
 	+ date.getDate() +"&lt;br&gt;";
-
-	const obj=document.getElementById("date1");
-	obj.innerHTML=tmp;
+	*/
+	const objEn=document.getElementById("date1En");
+	objEn.innerHTML=tmp;
+}
+//Returns a date in a fixed format using the value of a Date class object
+function dateFormat(year,month,day)
+{
+	return changeMonth(month)+ " " 
+	+ day + "th " 
+	+ ", " + year;
+}
+function changeMonth(month)
+{
+	let txt="";
+	switch(month)
+	{
+		case 0:
+			txt="Jan";
+			break;
+		case 1:
+			txt="Feb";
+			break;
+		case 2:
+			txt="Mar";
+			break;
+		case 3:
+			txt="Apr";
+			break;
+		case 4:
+			txt="May";
+			break;
+		case 5:
+			txt="Jun";
+			break;
+		case 6:
+			txt="Jul";
+			break;
+		case 7:
+			txt="Aug";
+			break;
+		case 8:
+			txt="Sep";
+			break;
+		case 9:
+			txt="Oct";
+			break;
+		case 10:
+			txt="Nov";
+			break;
+		case 11:
+			txt="Dec";
+			break;
+	}
+	return txt;
 }
 </pre></td></tr></td></tr><tr><td>[Output result]<br><div id=date1En value=""></div><script>getDateResultEn();function getDateResultEn(){let date = new Date();let tmp ="";tmp += "[today date]<br>";tmp += dateFormat(date.getFullYear(),date.getMonth(),date.getDate());tmp += "<br>";date.setDate(date.getDate() + 1);tmp += "[tomorrow date]<br>";tmp += dateFormat(date.getFullYear(),date.getMonth(),date.getDate());tmp += "<br>";date = new Date();date.setDate(date.getDate() - 1);tmp += "[yesterday date]<br>";tmp += dateFormat(date.getFullYear(),date.getMonth(),date.getDate());tmp += "<br>";const objEn=document.getElementById("date1En");objEn.innerHTML=tmp;}function dateFormat(year,month,day){return changeMonth(month)+ " " + day + "th " + ", " + year;}function changeMonth(month){let txt="";switch(month){case 0:txt="Jan";break;case 1:txt="Feb";break;case 2:txt="Mar";break;case 3:txt="Apr";break;case 4:txt="May";break;case 5:txt="Jun";break;case 6:txt="Jul";break;case 7:txt="Aug";break;case 8:txt="Sep";break;case 9:txt="Oct";break;case 10:txt="Nov";break;case 11:txt="Dec";break;}return txt;}</script></script></td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Multiple choice questions using addition and subtraction of dates</td></tr><tr><td><table><tr><td><pre class="prettyprint linenums;lang-js";>
 /*
@@ -302,11 +359,6 @@ date.setDate(date.getDate() - 1);
 centerEn.innerHTML=dateFormatEn(date);//center
 date.setDate(date.getDate() - 1);
 leftEn.innerHTML=dateFormatEn(date);//left
-function dateTextEn(date, num)
-{
-	date.setDate(date.getDate() - num);
-	return dateFormatEn(date);
-}
 //Returns a date in a fixed format using the value of a Date class object
 function dateFormatEn(date)
 {
@@ -364,4 +416,4 @@ function changeMonth(month)
 	}
 	return txt;
 }
-</pre></td></tr></table></td></tr><tr><td>[date problem]</td></tr><tr><td><label id=problemEn></label></td></tr></table><table><tr><td><button type="button" id=btnLeftEn onclick="funcEn(0);">left date</button></td><td><button type="button" id=btnCenterEn onclick="funcEn(1);">center date</button></td><td><button type="button" id=btnRightEn onclick="funcEn(2);">right date</button></td></tr></table><div id=lbl1En style="display:none;">correct date</div><div id=lbl2En style="display:none;">XXX</div><input type=hidden id=answerNoEn value=0><br><script>function funcEn(num){const ans=document.getElementById("answerNoEn");let txt="";if(ans.value ==num){txt="correct";}else{txt="incorrect";}alert(txt);document.getElementById("lbl1En").style.display='block';document.getElementById("lbl2En").style.display='block';}function randomEn(num){return Math.floor(Math.random() * num);}let correctEn=randomEn(3);let txtEn="";switch(correctEn){case 0:txtEn="choose yesterday's date";break;case 1:txtEn="choose today's date";break;default:txtEn="choose tomorrow's date";break;}document.getElementById("problemEn").innerHTML=txtEn;let dateAdjustEn=0;dateAdjustEn=correctEn-1;date = new Date();date.setDate(date.getDate() + dateAdjustEn);document.getElementById("lbl2En").innerHTML=dateFormatEn(date);let buttonPositionEn=randomEn(3);document.getElementById("answerNoEn").value=buttonPositionEn;let numEn=0;switch(buttonPositionEn){case 0:numEn=2;break;case 1:numEn=1;break;default:numEn=0;break;}const leftEn=document.getElementById("btnLeftEn");const centerEn=document.getElementById("btnCenterEn");const rightEn=document.getElementById("btnRightEn");date = new Date();date.setDate(date.getDate()+dateAdjustEn);date.setDate(date.getDate()+numEn);date.setDate(date.getDate());rightEn.innerHTML=dateFormatEn(date);date.setDate(date.getDate() - 1);centerEn.innerHTML=dateFormatEn(date);date.setDate(date.getDate() - 1);leftEn.innerHTML=dateFormatEn(date);function dateTextEn(date, num){date.setDate(date.getDate() - num);return dateFormatEn(date);}function dateFormatEn(date){let tmp ="";return changeMonth(date.getMonth())+ " " + date.getDate() + "th " + ", " + date.getFullYear();}function changeMonth(month){let txt="";switch(month){case 0:txt="Jan";break;case 1:txt="Feb";break;case 2:txt="Mar";break;case 3:txt="Apr";break;case 4:txt="May";break;case 5:txt="Jun";break;case 6:txt="Jul";break;case 7:txt="Aug";break;case 8:txt="Sep";break;case 9:txt="Oct";break;case 10:txt="Nov";break;case 11:txt="Dec";break;}return txt;}</script></script><br><br><a href='#' onClick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
+</pre></td></tr></table></td></tr><tr><td>[date problem]</td></tr><tr><td><label id=problemEn></label></td></tr></table><table><tr><td><button type="button" id=btnLeftEn onclick="funcEn(0);">left date</button></td><td><button type="button" id=btnCenterEn onclick="funcEn(1);">center date</button></td><td><button type="button" id=btnRightEn onclick="funcEn(2);">right date</button></td></tr></table><div id=lbl1En style="display:none;">correct date</div><div id=lbl2En style="display:none;">XXX</div><input type=hidden id=answerNoEn value=0><br><script>function funcEn(num){const ans=document.getElementById("answerNoEn");let txt="";if(ans.value ==num){txt="correct";}else{txt="incorrect";}alert(txt);document.getElementById("lbl1En").style.display='block';document.getElementById("lbl2En").style.display='block';}function randomEn(num){return Math.floor(Math.random() * num);}let correctEn=randomEn(3);let txtEn="";switch(correctEn){case 0:txtEn="choose yesterday's date";break;case 1:txtEn="choose today's date";break;default:txtEn="choose tomorrow's date";break;}document.getElementById("problemEn").innerHTML=txtEn;let dateAdjustEn=0;dateAdjustEn=correctEn-1;date = new Date();date.setDate(date.getDate() + dateAdjustEn);document.getElementById("lbl2En").innerHTML=dateFormatEn(date);let buttonPositionEn=randomEn(3);document.getElementById("answerNoEn").value=buttonPositionEn;let numEn=0;switch(buttonPositionEn){case 0:numEn=2;break;case 1:numEn=1;break;default:numEn=0;break;}const leftEn=document.getElementById("btnLeftEn");const centerEn=document.getElementById("btnCenterEn");const rightEn=document.getElementById("btnRightEn");date = new Date();date.setDate(date.getDate()+dateAdjustEn);date.setDate(date.getDate()+numEn);date.setDate(date.getDate());rightEn.innerHTML=dateFormatEn(date);date.setDate(date.getDate() - 1);centerEn.innerHTML=dateFormatEn(date);date.setDate(date.getDate() - 1);leftEn.innerHTML=dateFormatEn(date);function dateFormatEn(date){let tmp ="";return changeMonth(date.getMonth())+ " " + date.getDate() + "th " + ", " + date.getFullYear();}function changeMonth(month){let txt="";switch(month){case 0:txt="Jan";break;case 1:txt="Feb";break;case 2:txt="Mar";break;case 3:txt="Apr";break;case 4:txt="May";break;case 5:txt="Jun";break;case 6:txt="Jul";break;case 7:txt="Aug";break;case 8:txt="Sep";break;case 9:txt="Oct";break;case 10:txt="Nov";break;case 11:txt="Dec";break;}return txt;}</script></script><br><br><a href='#' onClick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
