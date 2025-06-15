@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">prettify内のプログラムをコピーする処理</td></tr><tr><td>prettify内のプログラムをコピーするサンプルです。</td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[サンプル]</td></tr><tr><td>copyボタンをタップするとプログラムがクリップボードにコピーされた状態になります。</td></tr></table><br>    <a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a>  <pre id="codeBlock1" class="prettyprint linenums">
+let result = 0;
+result = random(0);
+console.log(result);
+function random(num) {
+  return Math.floor(Math.random() * num);
+}
+  </pre>    <a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a>  <pre id="codeBlock2" class="prettyprint linenums">
+let message = "Hello, world!";
+console.log(message);
+  </pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">[CSS]</div><br>[headに実装する部分]<br><a href="javascript:void(0);" id="head" class="copy-button" data-target="headBlock">copy</a><pre id="headBlock" class="prettyprint linenums">
+.prettyprint ol.linenums > li {
+	list-style-type: decimal; 
+}
+/* お好みでボタンのスタイルも設定 */
+.copy-button {
+	display: inline-block; /* インライン要素をブロック要素のように扱う */
+	padding: 2px 5px; /* リンクテキストの周りに余白を追加 */
+	border: 1px solid #000; /* 枠線を追加 */
+	border-radius: 3px; /* 角を丸くする */
+	text-decoration: none; /* デフォルトの下線を消す */
+	color: #000; /* リンクの色 */
+	background-color: #ffffcc; /* 背景色を黄色に */
+	/* 蛍光ペン風の背景色 */
+	/* background: linear-gradient(transparent 60%, #ffffcc 60%); */
+}
+.copy-button:hover {
+	background-color: #ffeb99; /* ホバー時の背景色 */
+}
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">copyボタンのリンク</div><br><a href="javascript:void(0);" id="copyLink" class="copy-button" data-target="copyLinkBlock">copy</a><pre id="copyLinkBlock" class="prettyprint linenums">
+&lt;a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1"&gt;copy&lt;/a&gt;
+</pre>a hrefタグのidはプログラムの処理としては使用されていませんが、<br>今後の機能拡張や個別操作のために必要となる可能性があります。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">prettyprintを囲むタグ部分</div><br><textarea id="t1" rows=5 cols=50>
+&lt;pre id="codeBlock1" class="prettyprint linenums"&gt;
+...
+&lt;/pre&gt;
+</textarea><br><div style="background-color:rgb(245 255 250 / 0.8);text-align:left;">document.querySelectorAll('.copy-button')イベントリスナー</div>「data-target」は「カスタムデータ属性」の一つであり、決まった書き方ではありません。<br>属性名が 「data-」で始まる任意の名前を自由に定義できるようになっています。<br>そのため、「data-target」という名前はよく使われる一例ですが、<br>例えば「data-code-target」や「data-copy-target」のように、用途に応じて自由に名前を付けることができます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">copyボタンのプログラム部分(javascript)</div><br><a href="javascript:void(0);" id="programLink" class="copy-button" data-target="programLinkBlock">copy</a><pre id="programLinkBlock" class="prettyprint linenums">
+// Clipboard API を利用したコピー処理
+function copyCodeById(targetId) {
+const codeElement = document.getElementById(targetId);
+if (!codeElement) {
+	console.error("対象のコードブロックが見つかりません: " + targetId);
+	return;
+}
+// コードブロック内のテキストを取得（タグ内の書式設定が不要な場合は innerText でOK）
+const codeText = codeElement.innerText;
+
+if (navigator.clipboard && navigator.clipboard.writeText) {
+		navigator.clipboard.writeText(codeText)
+		.then(() => {
+			console.log("コピー成功");
+		})
+		.catch(err => {
+			console.error("コピー中にエラーが発生しました:", err);
+		});
+	} else {
+		console.error("Clipboard API はこのブラウザで利用できません");
+	}
+}
+
+// 各コピーリンクに共通のイベントリスナーを設定
+document.querySelectorAll('.copy-button').forEach(function(button) {
+	button.addEventListener('click', function() {
+		const targetId = this.getAttribute('data-target');
+		copyCodeById(targetId);
+	});
+});
+</pre>document.querySelectorAllこのイベントリスナー内で、クリックされた要素の「data-target」属性から対象の id を取得し、<br>「copyCodeById」に渡しています。  <script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });  </script>  </script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Copying programs in prettify</td></tr><tr><td>This is an example of copying a program in prettify.</td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[sample]</td></tr><tr><td>When you tap the copy button, the program will be copied to the clipboard.</td></tr></table><br>    <a href="javascript:void(0);" id="copyEn1" class="copy-button" data-target="codeBlockEn1">copy</a>  <pre id="codeBlockEn1" class="prettyprint linenums">
+let result = 0;
+result = random(0);
+console.log(result);
+function random(num) {
+  return Math.floor(Math.random() * num);
+}
+  </pre>    <a href="javascript:void(0);" id="copyEn2" class="copy-button" data-target="codeBlockEn2">copy</a>  <pre id="codeBlockEn2" class="prettyprint linenums">
+let message = "Hello, world!";
+console.log(message);
+  </pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">[CSS]</div><br>[Part to be implemented in head]<br><a href="javascript:void(0);" id="headEn" class="copy-button" data-target="headEnBlock">copy</a><pre id="headEnBlock" class="prettyprint linenums">
+.prettyprint ol.linenums > li {
+	list-style-type: decimal; 
+}
+/* Style the buttons to your liking */
+.copy-button {
+	display: inline-block; /* Treat inline elements like block elements */
+	padding: 2px 5px; /* Add space around link text */
+	border: 1px solid #000; /* Add Border */
+	border-radius: 3px; /* Rounded Corners */
+	text-decoration: none; /* Remove the default underline */
+	color: #000; /* Link Color */
+	background-color: #ffffcc; /* Yellow background color */
+	/* Highlighter-style background color */
+	/* background: linear-gradient(transparent 60%, #ffffcc 60%); */
+}
+.copy-button:hover {
+	background-color: #ffeb99; /* Background color on hover */
+}
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Copy button link</div><br><a href="javascript:void(0);" id="copyLinkEn" class="copy-button" data-target="copyLinkEnBlock">copy</a><pre id="copyLinkEnBlock" class="prettyprint linenums">
+&lt;a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1"&gt;copy&lt;/a&gt;
+</pre>The id of the a href tag is not used for program processing, but may be required for future feature expansion or individual operations.<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">The tag surrounding the prettyprint</div><br><textarea id="t1" rows=5 cols=50>
+&lt;pre id="codeBlock1" class="prettyprint linenums"&gt;
+...
+&lt;/pre&gt;
+</textarea><br><div style="background-color:rgb(245 255 250 / 0.8);text-align:left;">document.querySelectorAll('.copy-button') event listener</div>"data-target" is one of the "custom data attributes" and there is no set way to write it. <br>You can freely define any name that starts with "data-". <br>Therefore, the name "data-target" is a commonly used example, <br>but you can freely name it according to your purpose, such as "data-code-target" or "data-copy-target". <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Copy button program (javascript)</div><br><a href="javascript:void(0);" id="programLinkEn" class="copy-button" data-target="programLinkEnBlock">copy</a><pre id="programLinkEnBlock" class="prettyprint linenums">
+// Copy processing using the Clipboard API
+function copyCodeById(targetId) {
+const codeElement = document.getElementById(targetId);
+if (!codeElement) {
+	console.error("Target code block not found: " + targetId);
+	return;
+}
+// Get the text inside a code block (innerText is OK if you don't need formatting inside tags)
+const codeText = codeElement.innerText;
+
+if (navigator.clipboard && navigator.clipboard.writeText) {
+		navigator.clipboard.writeText(codeText)
+		.then(() => {
+			console.log("Copy successful");
+		})
+		.catch(err => {
+			console.error("An error occurred while copying:", err);
+		});
+	} else {
+		console.error("The Clipboard API is not available in this browser.");
+	}
+}
+
+// Set a common event listener for each copy link
+document.querySelectorAll('.copy-button').forEach(function(button) {
+	button.addEventListener('click', function() {
+		const targetId = this.getAttribute('data-target');
+		copyCodeById(targetId);
+	});
+});
+</pre>document.querySelectorAllWithin this event listener, we get the target id from the clicked element's "data-target" attribute and pass it to <br>"copyCodeById".<br><br><a href="#" onclick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
