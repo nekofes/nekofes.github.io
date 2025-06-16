@@ -33,19 +33,19 @@ console.log(message);
 &lt;pre id="codeBlock1" class="prettyprint linenums"&gt;
 ...
 &lt;/pre&gt;
-</textarea><br><div style="background-color:rgb(245 255 250 / 0.8);text-align:left;">document.querySelectorAll('.copy-button')イベントリスナー</div>「data-target」は「カスタムデータ属性」の一つであり、決まった書き方ではありません。<br>属性名が 「data-」で始まる任意の名前を自由に定義できるようになっています。<br>そのため、「data-target」という名前はよく使われる一例ですが、<br>例えば「data-code-target」や「data-copy-target」のように、用途に応じて自由に名前を付けることができます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">copyボタンのプログラム部分(javascript)</div><br><a href="javascript:void(0);" id="programLink" class="copy-button" data-target="programLinkBlock">copy</a><pre id="programLinkBlock" class="prettyprint linenums">
+</textarea><br>「data-target」は「カスタムデータ属性」の一つであり、決まった書き方ではありません。<br>属性名が 「data-」で始まる任意の名前を自由に定義できるようになっています。<br>そのため、「data-target」という名前はよく使われる一例ですが、<br>例えば「data-code-target」や「data-copy-target」のように、用途に応じて自由に名前を付けることができます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">copyボタンのプログラム部分(javascript)</div><br><a href="javascript:void(0);" id="programLink" class="copy-button" data-target="programLinkBlock">copy</a><pre id="programLinkBlock" class="prettyprint linenums">
 // Clipboard API を利用したコピー処理
 function copyCodeById(targetId) {
-const codeElement = document.getElementById(targetId);
-if (!codeElement) {
-	console.error("対象のコードブロックが見つかりません: " + targetId);
-	return;
-}
-// コードブロック内のテキストを取得（タグ内の書式設定が不要な場合は innerText でOK）
-const codeText = codeElement.innerText;
-
-if (navigator.clipboard && navigator.clipboard.writeText) {
-		navigator.clipboard.writeText(codeText)
+	const codeElement = document.getElementById(targetId);
+	if (!codeElement) {
+		console.error("対象のコードブロックが見つかりません: " + targetId);
+		return;
+	}
+	// コードブロック内のテキストを取得（タグ内の書式設定が不要な場合は innerText でOK）
+	const codeText = codeElement.innerText;
+	
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(codeText)
 		.then(() => {
 			console.log("コピー成功");
 		})
@@ -64,7 +64,7 @@ document.querySelectorAll('.copy-button').forEach(function(button) {
 		copyCodeById(targetId);
 	});
 });
-</pre>document.querySelectorAllこのイベントリスナー内で、クリックされた要素の「data-target」属性から対象の id を取得し、<br>「copyCodeById」に渡しています。  <script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });  </script>  </script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Copying programs in prettify</td></tr><tr><td>This is an example of copying a program in prettify.</td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[sample]</td></tr><tr><td>When you tap the copy button, the program will be copied to the clipboard.</td></tr></table><br>    <a href="javascript:void(0);" id="copyEn1" class="copy-button" data-target="codeBlockEn1">copy</a>  <pre id="codeBlockEn1" class="prettyprint linenums">
+</pre><div style="background-color:rgb(245 255 250 / 0.8);text-align:left;">document.querySelectorAll('.copy-button')イベントリスナー</div>document.querySelectorAllこのイベントリスナー内で、クリックされた要素の「data-target」属性から対象の id を取得し、<br>「copyCodeById」に渡しています。  <script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });  </script>  </script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Copying programs in prettify</td></tr><tr><td>This is an example of copying a program in prettify.</td></tr></table><br><table><tr><td style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[sample]</td></tr><tr><td>When you tap the copy button, the program will be copied to the clipboard.</td></tr></table><br>    <a href="javascript:void(0);" id="copyEn1" class="copy-button" data-target="codeBlockEn1">copy</a>  <pre id="codeBlockEn1" class="prettyprint linenums">
 let result = 0;
 result = random(0);
 console.log(result);
@@ -99,19 +99,19 @@ console.log(message);
 &lt;pre id="codeBlock1" class="prettyprint linenums"&gt;
 ...
 &lt;/pre&gt;
-</textarea><br><div style="background-color:rgb(245 255 250 / 0.8);text-align:left;">document.querySelectorAll('.copy-button') event listener</div>"data-target" is one of the "custom data attributes" and there is no set way to write it. <br>You can freely define any name that starts with "data-". <br>Therefore, the name "data-target" is a commonly used example, <br>but you can freely name it according to your purpose, such as "data-code-target" or "data-copy-target". <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Copy button program (javascript)</div><br><a href="javascript:void(0);" id="programLinkEn" class="copy-button" data-target="programLinkEnBlock">copy</a><pre id="programLinkEnBlock" class="prettyprint linenums">
+</textarea><br>"data-target" is one of the "custom data attributes" and there is no set way to write it. <br>You can freely define any name that starts with "data-". <br>Therefore, the name "data-target" is a commonly used example, <br>but you can freely name it according to your purpose, such as "data-code-target" or "data-copy-target". <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Copy button program (javascript)</div><br><a href="javascript:void(0);" id="programLinkEn" class="copy-button" data-target="programLinkEnBlock">copy</a><pre id="programLinkEnBlock" class="prettyprint linenums">
 // Copy processing using the Clipboard API
 function copyCodeById(targetId) {
-const codeElement = document.getElementById(targetId);
-if (!codeElement) {
-	console.error("Target code block not found: " + targetId);
-	return;
-}
-// Get the text inside a code block (innerText is OK if you don't need formatting inside tags)
-const codeText = codeElement.innerText;
-
-if (navigator.clipboard && navigator.clipboard.writeText) {
-		navigator.clipboard.writeText(codeText)
+	const codeElement = document.getElementById(targetId);
+	if (!codeElement) {
+		console.error("Target code block not found: " + targetId);
+		return;
+	}
+	// Get the text inside a code block (innerText is OK if you don't need formatting inside tags)
+	const codeText = codeElement.innerText;
+	
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(codeText)
 		.then(() => {
 			console.log("Copy successful");
 		})
@@ -130,4 +130,4 @@ document.querySelectorAll('.copy-button').forEach(function(button) {
 		copyCodeById(targetId);
 	});
 });
-</pre>document.querySelectorAllWithin this event listener, we get the target id from the clicked element's "data-target" attribute and pass it to <br>"copyCodeById".<br><br><a href="#" onclick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
+</pre><div style="background-color:rgb(245 255 250 / 0.8);text-align:left;">document.querySelectorAll('.copy-button') event listener</div>document.querySelectorAllWithin this event listener, we get the target id from the clicked element's "data-target" attribute and pass it to <br>"copyCodeById".<br><br><a href="#" onclick="f2();">back</a></div>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
