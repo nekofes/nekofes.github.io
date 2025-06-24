@@ -74,20 +74,16 @@ function random(num)
 let correct=random(3);
 
 let txt="";
-let num=0;
 switch(correct)
 {
 	case 0:
 		txt="昨日の日付を選択してください。";
-		num=2;
 		break;
 	case 1:
 		txt="今日の日付を選択してください。";
-		num=1;
 		break;
 	default://case 2:
 		txt="明日の日付を選択してください。";
-		num=0;
 		break;
 }
 document.getElementById("problem").innerHTML=txt;
@@ -108,7 +104,7 @@ let buttonPosition=random(3);
 //正解のボタン番号を格納します
 document.getElementById("answerNo").value=buttonPosition;
 
-num=0;
+let num=0;
 switch(buttonPosition)
 {
 	case 0:
@@ -152,7 +148,7 @@ function dateFormat(date)
 	+ (date.getMonth() + 1) + "/" 
 	+ date.getDate();
 }
-</pre></td></tr></table></td></tr><tr><td>[日付の問題]</td></tr><tr><td><label id=problem></label></td></tr></table><table><tr><td><button type="button" id=btnLeft onclick="func(0);">左側の日付</button></td><td><button type="button" id=btnCenter onclick="func(1);">真ん中の日付</button></td><td><button type="button" id=btnRight onclick="func(2);">右側の日付</button></td></tr></table><div id=lbl1 style="display:none;">正解の日付</div><div id=lbl2 style="display:none;">XXX</div><input type=hidden id=answerNo value=0><script>function func(num){const ans=document.getElementById("answerNo");let txt="";if(ans.value ==num){txt="正解です。";}else{txt="不正解です。";}alert(txt);document.getElementById("lbl1").style.display='block';document.getElementById("lbl2").style.display='block';}function random(num){return Math.floor(Math.random() * num);}let correct=random(3);let txt="";let num=0;switch(correct){case 0:txt="昨日の日付を選択してください。";num=2;break;case 1:txt="今日の日付を選択してください。";num=1;break;default:txt="明日の日付を選択してください。";num=0;break;}document.getElementById("problem").innerHTML=txt;let dateAdjust=0;dateAdjust=correct - 1;date = new Date();date.setDate(date.getDate() + dateAdjust);document.getElementById("lbl2").innerHTML=dateFormat(date);let buttonPosition=random(3);document.getElementById("answerNo").value=buttonPosition;num=0;switch(buttonPosition){case 0:num=2;break;case 1:num=1;break;default:num=0;break;}const left=document.getElementById("btnLeft");const center=document.getElementById("btnCenter");const right=document.getElementById("btnRight");date = new Date();date.setDate(date.getDate()+dateAdjust);date.setDate(date.getDate()+num);date.setDate(date.getDate());right.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);center.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);left.innerHTML=dateFormat(date);function dateFormat(date){let tmp ="";return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();}</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href='#' onClick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Adding and Subtracting Dates</td></tr><tr><td>Using Javascript, get the result of adding or subtracting a date from today's date or a specified date.<br>Below is a sample.</td></tr></table><br><table><tr><td><pre class="prettyprint linenums;lang-js";>
+</pre></td></tr></table></td></tr><tr><td>[日付の問題]</td></tr><tr><td><label id=problem></label></td></tr></table><table><tr><td><button type="button" id=btnLeft onclick="func(0);">左側の日付</button></td><td><button type="button" id=btnCenter onclick="func(1);">真ん中の日付</button></td><td><button type="button" id=btnRight onclick="func(2);">右側の日付</button></td></tr></table><div id=lbl1 style="display:none;">正解の日付</div><div id=lbl2 style="display:none;">XXX</div><input type=hidden id=answerNo value=0><script>function func(num){const ans=document.getElementById("answerNo");let txt="";if(ans.value ==num){txt="正解です。";}else{txt="不正解です。";}alert(txt);document.getElementById("lbl1").style.display='block';document.getElementById("lbl2").style.display='block';}function random(num){return Math.floor(Math.random() * num);}let correct=random(3);let txt="";switch(correct){case 0:txt="昨日の日付を選択してください。";break;case 1:txt="今日の日付を選択してください。";break;default:txt="明日の日付を選択してください。";break;}document.getElementById("problem").innerHTML=txt;let dateAdjust=0;dateAdjust=correct - 1;date = new Date();date.setDate(date.getDate() + dateAdjust);document.getElementById("lbl2").innerHTML=dateFormat(date);let buttonPosition=random(3);document.getElementById("answerNo").value=buttonPosition;let num=0;switch(buttonPosition){case 0:num=2;break;case 1:num=1;break;default:num=0;break;}const left=document.getElementById("btnLeft");const center=document.getElementById("btnCenter");const right=document.getElementById("btnRight");date = new Date();date.setDate(date.getDate()+dateAdjust);date.setDate(date.getDate()+num);date.setDate(date.getDate());right.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);center.innerHTML=dateFormat(date);date.setDate(date.getDate() - 1);left.innerHTML=dateFormat(date);function dateFormat(date){let tmp ="";return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();}</script></script><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href='#' onClick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Adding and Subtracting Dates</td></tr><tr><td>Using Javascript, get the result of adding or subtracting a date from today's date or a specified date.<br>Below is a sample.</td></tr></table><br><table><tr><td><pre class="prettyprint linenums;lang-js";>
 getDateResult();
 function getDateResultEn()
 {
