@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">HTMLタグの出力</td></tr><tr><td>HTMLタグを出力する方法</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">HTMLタグの出力サンプル</div><div id=ad></div>上記サンプルはdivタグの中にjavascriptで出力したタグが含まれています。<br>このようにjavascriptで任意のタグを出力できます。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">ノードを指定の位置に追加する</div><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[書式]</div><textarea id="t1" rows=2 cols=50>
+element.insertAdjacentHTML(position, text)
+</textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[第1引数] 位置の指定</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">beforebegin</td><td>elementの前に追加</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">afterbegin</td><td>elementの子要素の先頭に追加</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">beforeend</td><td>elementの子要素の最後に追加</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">afterend</td><td>elementの後に追加</td></tr></table><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[第2引数] 出力文字列</div>(例)<br><textarea id="t1" rows=2 cols=86>
+'<p style="background-color:rgb(245 255 250 / 1.0);text-align:center;">sample</p>'
+</textarea><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[insertAdjacentHTML使用例]</div>getElementByIdで指定したオブジェクトのノードに<br>指定した位置に出録したい文字列を追加します。<br>(例)<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;">
+let element = document.getElementById('xxx');
+element.insertAdjacentHTML('beforebegin', '&lt;p&gt;sample&lt;/p&gt;');
+</pre><br>上記のサンプルを次のように実装しています。<br>(例)<br>divタグを準備して<br>広告のような宣伝タグを表示したい例<br><br>[divタグの例]<br><textarea id="t1" rows=3 cols=20>
+<div id="ad">
+</div>
+</textarea><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;">
+loadAd();
+function loadAd()
+{
+	const parent = document.getElementById('ad');
+	parent.insertAdjacentHTML('afterbegin', ad());
+}
+function ad()
+{
+	let path="画像パスを設定します";// ex.) path="img/";
+	let fileID="soco-st_sample4.png";
+	let text="ソコスト";
+	let url="https://soco-st.com";
+	let memo="ソコストさんのイラストはこちら";
+	let html="";
+	html += "&lt;table&gt;";
+	html += "&lt;tr&gt;";
+	html += "&lt;td&gt;";
+	html += "&lt;img src=" + path + fileID + " style='max-width:50px;max-height:50px;'&gt;";
+	html += "&lt;/td>";
+	html += "&lt;td>";
+	html += "&lt;label&gt;" + text + "&lt;/label&gt;";
+	html += "&lt;/td&gt;";
+	html += "&lt;/tr&gt;";
+	html += "&lt;tr&gt;";
+	html += "&lt;td&gt;";
+	html += "[URL]";
+	html += "&lt;/td&gt;";
+	html += "&lt;td style='word-break:break-all'&gt;";
+	html += "&lt;a href='" + url + "' TARGET='_blank'&gt;" + text + "&lt;/a&gt;";
+	html += "&lt;/td&gt;";
+	html += "&lt;/tr&gt;";
+	html += "&lt;/table&gt;";
+
+	return html;
+}
+</pre><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「ソコスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]ソコスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://soco-st.com' TARGET='_blank'><font color='#333399'><b>URL[https://soco-st.com][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Outputting HTML tags</td></tr><tr><td>How to output HTML tags</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">HTML tag output sample</div><div id="adEn"></div>The above sample contains a tag output by javascript inside the div tag. <br>You can output any tag with javascript like this. <br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Adds a node at a specified position.</div><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[Syntax]</div><textarea id="t1" rows=2 cols=50>
+element.insertAdjacentHTML(position, text)
+</textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[First argument] Position specification</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">beforebegin</td><td>Add before element</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">afterbegin</td><td>Add to the beginning of the child elements of element</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">beforeend</td><td>Add to the end of element's children</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">afterend</td><td>Add after element</td></tr></table><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[2nd argument] Output string</div>ex.)<br><textarea id="t1" rows=2 cols=86>
+'<p style="background-color:rgb(245 255 250 / 1.0);text-align:center;">sample</p>'
+</textarea><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[insertAdjacentHTML usage example]</div>Add the string you want to include to the specified position in the node of the object specified by getElementById. <br>(Example)<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;">
+let element = document.getElementById('xxx');
+element.insertAdjacentHTML('beforebegin', '&lt;p&gt;sample&lt;/p&gt;');
+</pre><br>The above sample is implemented as follows. <br>(Example)<br>Prepare a div tag<br>An example of displaying promotional tags like advertisements<br><br>[Example of div tag]<br><textarea id="t1" rows=3 cols=20>
+<div id="ad">
+</div>
+</textarea><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;">
+loadAd();
+function loadAd()
+{
+	const parent = document.getElementById('ad');
+	parent.insertAdjacentHTML('afterbegin', ad());
+}
+function ad()
+{
+	let path="Set the image path";// ex.) path="img/";
+	let fileID="soco-st_sample4.png";
+	let text="soco-st.com";
+	let url="https://soco-st.com";
+	let memo="Check out soco-st.com's illustrations here";
+	let html="";
+	html += "&lt;table&gt;";
+	html += "&lt;tr&gt;";
+	html += "&lt;td&gt;";
+	html += "&lt;img src=" + path + fileID + " style='max-width:50px;max-height:50px;'&gt;";
+	html += "&lt;/td>";
+	html += "&lt;td>";
+	html += "&lt;label&gt;" + text + "&lt;/label&gt;";
+	html += "&lt;/td&gt;";
+	html += "&lt;/tr&gt;";
+	html += "&lt;tr&gt;";
+	html += "&lt;td&gt;";
+	html += "[URL]";
+	html += "&lt;/td&gt;";
+	html += "&lt;td style='word-break:break-all'&gt;";
+	html += "&lt;a href='" + url + "' TARGET='_blank'&gt;" + text + "&lt;/a&gt;";
+	html += "&lt;/td&gt;";
+	html += "&lt;/tr&gt;";
+	html += "&lt;/table&gt;";
+
+	return html;
+}
+</pre><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>the images used are from "illustration by soco-st.com"<br><table>Thank you very much.<br><tr><td colspan=2>[URL]soco-st.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://soco-st.com' TARGET='_blank'><font color='#333399'><b>URL[https://soco-st.com][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>var queryString = window.location.search;const params = new URLSearchParams(queryString);const lang =params.get("lang");const obj=document.getElementById('lang');obj.value = lang;loadAd();function loadAd(){const obj=document.getElementById('lang');let lang = obj.value;let tagId="";if(lang==1){tagId="adEn";}else{tagId="ad";}const parent = document.getElementById(tagId);parent.insertAdjacentHTML('afterbegin', ad());}function ad(){let path="../o/i3/";let fileID="soco-st_sample4.png";let text="";let url="";let memo="";const obj=document.getElementById('lang');let lang = obj.value;if(lang==1){text="soco-st.com";url="https://soco-st.com";memo="For illustrations of soco-st.com, tap here";}else{text="ソコスト";url="https://soco-st.com";memo="ソコストさんのイラストはこちら";}let html="";html += "<table>";html += "<tr>";html += "<td>";html += "<img src=" + path + fileID + " style='max-width:50px;max-height:50px;'>";html += "</td>";html += "<td>";html += "<label>" + text + "</label>";html += "</td>";html += "</tr>";html += "<tr>";html += "<td>";html += "[URL]";html += "</td>";html += "<td style='word-break:break-all'>";html += "<a href='" + url + "' TARGET='_blank'>" + text + "</a>";html += "</td>";html += "</tr>";html += "</table>";return html;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
