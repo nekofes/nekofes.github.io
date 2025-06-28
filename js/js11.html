@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">要素の表示切替</td></tr><tr><td>要素の表示切り替えの説明となります。</td></tr></table><br><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">displayで表示・非表示を切り替える</div>周辺の表示に影響します。<br><br><div id=t1><img src=../o/i3/soco-st_sample5.png  style='max-width:50px;max-height:50px;'></div>状態(style.display)<label id=lbl1 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label><br><br><textarea id="t1" rows=8 cols=80>
+<div id=t1>
+<img src=../o/i3/soco-st_sample5.png  style='max-width:50px;max-height:50px;'>
+</div>
+
+状態(style.display)<label id=lbl1 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label>
+</textarea><br><button id=b1>表示切り替え</button><br><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+let state1=1;//[0]非表示 [1]表示
+const b1 = document.getElementById("b1");
+b1.addEventListener("click", () => 
+{
+	//状態を切り替え
+	state1=state1==0?1:0;
+	let txt="";
+	let state="";
+	if(state1==0)
+	{
+		txt="非表示";
+		state="none";
+	}
+	else
+	{
+		txt="表示";
+		state="block";
+	}
+	const t1 = document.getElementById("t1");
+	t1.style.display=state;
+	const lbl1 = document.getElementById("lbl1");
+	lbl1.textContent=txt;
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t1 = document.getElementById("t1");<br>t1.style.display=state;</div>style.displayプロパティに表示切り替えの値を設定することで表示を切り替えます。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">none</td><td>非表示</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">block</td><td>表示</td></tr></table><script>let state1=1;const b1 = document.getElementById("b1");b1.addEventListener("click", () => {switch1();});</script></script><hr><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">visibilityで表示・非表示を切り替える</div>周辺の表示には影響しません。<br><br><div id=t2><img src=../o/i3/soco-st_sample2.png  style='max-width:50px;max-height:50px;'></div>状態(style.visibility)<label id=lbl2 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label><br><br><button id=b2>表示切り替え</button><br><br><textarea id="t1" rows=8 cols=80>
+<div id=t2>
+<img src=../o/i3/soco-st_sample2.png  style='max-width:50px;max-height:50px;'>
+</div>
+
+状態(style.visibility)<label id=lbl2 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label><br>
+<br>
+<button id=b2>表示切り替え</button>
+</textarea><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+let state2=1;//[0]非表示 [1]表示
+const b2 = document.getElementById("b2");
+b2.addEventListener("click", () => 
+{
+	//状態を切り替え
+	state2=state2==0?1:0;
+	let txt="";
+	let state="";
+	if(state2==0)
+	{
+		txt="非表示";
+		state="hidden";
+	}
+	else
+	{
+		txt="表示";
+		state="visible";
+	}
+	const t2 = document.getElementById("t2");
+	t2.style.visibility=state;
+	const lbl2 = document.getElementById("lbl2");
+	lbl2.textContent=txt;
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t2 = document.getElementById("t2");<br>t2.style.visibility=state;</div>style.visibilityプロパティに表示切り替えの値を設定することで表示を切り替えます。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">hidden</td><td>非表示</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">visible</td><td>表示</td></tr></table><script>let state2=1;const b2 = document.getElementById("b2");b2.addEventListener("click", () => {switch2();});</script></script><hr><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">opacityで表示・非表示を切り替える</div>周辺の表示には影響しません。<br><br><div id=t3><img src=../o/i3/soco-st_sample4.png  style='max-width:50px;max-height:50px;'></div>状態(style.opacity)<label id=lbl3 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label><br><br><textarea id="t1" rows=8 cols=80>
+<div id=t3>
+<img src=../o/i3/soco-st_sample4.png  style='max-width:50px;max-height:50px;'>
+</div>
+
+状態(style.opacity)<label id=lbl3 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label>
+</textarea><br><button id=b3>表示切り替え</button><br><br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+let state3=1;//[0]非表示 [1]表示
+const b3 = document.getElementById("b3");
+b3.addEventListener("click", () => 
+{
+	//状態を切り替え
+	state3=state3==0?1:0;
+	let txt="";
+	let value=0;
+	if(state3==0)
+	{
+		txt="非表示";
+		value=0;
+	}
+	else
+	{
+		txt="表示";
+		value=1;
+	}
+	const t3 = document.getElementById("t3");
+	t3.style.opacity=value;
+	const lbl3 = document.getElementById("lbl3");
+	lbl3.textContent=txt;
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t3 = document.getElementById("t3");<br>t3.style.opacity=value;</div>style.opacityプロパティに表示切り替えの値を設定することで表示を切り替えます。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">0</td><td>非表示</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">1</td><td>表示</td></tr></table><script>let state3=1;const b3 = document.getElementById("b3");b3.addEventListener("click", () => {switch3();});</script></script><hr><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">インライン要素で表示・非表示を切り替える</div>周辺の表示に影響します。<br><br><div id=t4><img src=../o/i3/soco-st_sample1.png  style='max-width:50px;max-height:50px;'></div><br>状態(style.display)<label id=lbl4 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label><br><br><button id=b4>表示切り替え</button><br><br><textarea id="t1" rows=10 cols=80>
+<div id=t4>
+<img src=../o/i3/soco-st_sample1.png  style='max-width:50px;max-height:50px;'>
+</div>
+<br>
+
+状態(style.display)<label id=lbl4 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">表示</label><br>
+<br>
+<button id=b4>表示切り替え</button>
+</textarea><br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+let state4=1;//[0]非表示 [1]表示
+const b4 = document.getElementById("b4");
+b4.addEventListener("click", () => 
+{
+	switch4();
+
+	//状態を切り替え
+	state4=state4==0?1:0;
+	let txt="";
+	let state="";
+	if(state4==0)
+	{
+		txt="非表示";
+		state="none";
+	}
+	else
+	{
+		txt="表示";
+		state="inline";
+	}
+	const t4 = document.getElementById("t4");
+	t4.style.display=state;
+	const lbl4 = document.getElementById("lbl4");
+	lbl4.textContent=txt;
+
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t4 = document.getElementById("t4");<br>t4.style.display=state;</div>style.displayプロパティに表示切り替えの値を設定することで表示を切り替えます。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">none</td><td>非表示</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">inline</td><td>表示</td></tr></table><script>let state4=1;const b4 = document.getElementById("b4");b4.addEventListener("click", () => {switch4();});</script></script><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>画像のサンプルとして「ソコスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]ソコスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://soco-st.com' TARGET='_blank'><font color='#333399'><b>URL[https://soco-st.com][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Toggle element visibility</td></tr><tr><td>This explains how to switch the display of elements.</td></tr></table><br><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Toggle visibility with display</div>This affects the display of the surroundings.<br><br><div id=t1En><img src=../o/i3/soco-st_sample5.png  style='max-width:50px;max-height:50px;'></div>State (style.display) <label id=lbl1En style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label><br><br><textarea id="t11" rows=8 cols=80>
+<div id=t1>
+<img src=../o/i3/soco-st_sample5.png  style='max-width:50px;max-height:50px;'>
+</div>
+
+state(style.display)<label id=lbl1 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label>
+</textarea><br><button id="b1En">Display Switching</button><br><br><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+let state1=1;//[0]hidden [1]show
+const b1 = document.getElementById("b1");
+b1.addEventListener("click", () => 
+{
+	//oggle State
+	state1=state1==0?1:0;
+	let txt="";
+	let state="";
+	if(state1==0)
+	{
+		txt="hidden";
+		state="none";
+	}
+	else
+	{
+		txt="show";
+		state="block";
+	}
+	const t1 = document.getElementById("t1");
+	t1.style.display=state;
+	const lbl1 = document.getElementById("lbl1");
+	lbl1.textContent=txt;
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t1 = document.getElementById("t1");<br>t1.style.display=state;</div>You can switch the display by setting the display switching value in the style.display property. <br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">none</td><td>hidden</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">block</td><td>show</td></tr></table><script></script></script><script>state1=1;const b1En = document.getElementById("b1En");b1En.addEventListener("click", () => {switch1();});</script></script><hr><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Toggle display/hide with visibility</div>It does not affect the surrounding display.<br><br><div id=t2En><img src=../o/i3/soco-st_sample2.png  style='max-width:50px;max-height:50px;'></div>state(style.visibility)<label id=lbl2En style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label><br><br><button id=b2En>Display Switching</button><br><br><textarea id="t12" rows=8 cols=80>
+<div id=t2>
+<img src=../o/i3/soco-st_sample2.png  style='max-width:50px;max-height:50px;'>
+</div>
+
+state(style.visibility)<label id=lbl2 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label><br>
+<br>
+<button id=b2>View Switching</button>
+</textarea><br><a href="javascript:void(0);" id="copy12" class="copy-button" data-target="codeBlock12">copy</a><pre id="codeBlock12" class="prettyprint linenums;lang-js;">
+let state2=1;//[0]hidden [1]show
+const b2 = document.getElementById("b2");
+b2.addEventListener("click", () => 
+{
+	//View Switching
+	state2=state2==0?1:0;
+	let txt="";
+	let state="";
+	if(state2==0)
+	{
+		txt="hidden";
+		state="hidden";
+	}
+	else
+	{
+		txt="show";
+		state="visible";
+	}
+	const t2 = document.getElementById("t2");
+	t2.style.visibility=state;
+	const lbl2 = document.getElementById("lbl2");
+	lbl2.textContent=txt;
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t2 = document.getElementById("t2");<br>t2.style.visibility=state;</div>You can toggle the visibility by setting the visibility value in the style.visibility property.<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">hidden</td><td>hidden</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">visible</td><td>show</td></tr></table><script>state2=1;const b2En = document.getElementById("b2En");b2En.addEventListener("click", () => {switch2();});</script></script><hr><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Toggle visibility with opacity</div>It does not affect the surrounding display.<br><br><div id=t3En><img src=../o/i3/soco-st_sample4.png  style='max-width:50px;max-height:50px;'></div>state(style.opacity)<label id=lbl3En style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label><br><br><textarea id="t13" rows=8 cols=80>
+<div id=t3>
+<img src=../o/i3/soco-st_sample4.png  style='max-width:50px;max-height:50px;'>
+</div>
+
+state(style.opacity)<label id=lbl3 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label>
+</textarea><br><button id=b3En>Display Switching</button><br><br><a href="javascript:void(0);" id="copy13" class="copy-button" data-target="codeBlock13">copy</a><pre id="codeBlock13" class="prettyprint linenums;lang-js;">
+let state3=1;//[0]hidden [1]show
+const b3 = document.getElementById("b3");
+b3.addEventListener("click", () => 
+{
+	//Toggle State
+	state3=state3==0?1:0;
+	let txt="";
+	let value=0;
+	if(state3==0)
+	{
+		txt="hidden";
+		value=0;
+	}
+	else
+	{
+		txt="show";
+		value=1;
+	}
+	const t3 = document.getElementById("t3");
+	t3.style.opacity=value;
+	const lbl3 = document.getElementById("lbl3");
+	lbl3.textContent=txt;
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t3 = document.getElementById("t3");<br>t3.style.opacity=value;</div>You can toggle the display by setting the style.opacity property to a value that toggles the display.<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">0</td><td>hidden</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">1</td><td>show</td></tr></table><script>state3=1;const b3En = document.getElementById("b3En");b3En.addEventListener("click", () => {switch3();});</script></script><hr><div  style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Show/hide inline elements</div>This affects the display of the surroundings.<br><br><div id=t4En><img src=../o/i3/soco-st_sample1.png  style='max-width:50px;max-height:50px;'></div><br>state(style.display)<label id=lbl4En style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label><br><br><button id=b4En>Switch display</button><br><br><textarea id="t14" rows=10 cols=80>
+<div id=t4>
+<img src=../o/i3/soco-st_sample1.png  style='max-width:50px;max-height:50px;'>
+</div>
+<br>
+
+state(style.display)<label id=lbl4 style="background-color:rgb(75 0 130 / 0.2);text-align:center;">show</label><br>
+<br>
+<button id=b4>View Switching</button>
+</textarea><br><a href="javascript:void(0);" id="copy14" class="copy-button" data-target="codeBlock14">copy</a><pre id="codeBlock14" class="prettyprint linenums;lang-js;">
+let state4=1;//[0]hidden [1]show
+const b4 = document.getElementById("b4");
+b4.addEventListener("click", () => 
+{
+	switch4();
+
+	//View Switching
+	state4=state4==0?1:0;
+	let txt="";
+	let state="";
+	if(state4==0)
+	{
+		txt="hidden";
+		state="none";
+	}
+	else
+	{
+		txt="show";
+		state="inline";
+	}
+	const t4 = document.getElementById("t4");
+	t4.style.display=state;
+	const lbl4 = document.getElementById("lbl4");
+	lbl4.textContent=txt;
+
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const t4 = document.getElementById("t4");<br>t4.style.display=state;</div>You can switch the display by setting the display switching value in the style.display property. <br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">none</td><td>hidden</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">inline</td><td>show</td></tr></table><script>state4=1;const b4En = document.getElementById("b4En");b4En.addEventListener("click", () => {switch4();});</script></script><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>the images used are from "illustration by soco-st.com"<br><table>Thank you very much.<br><tr><td colspan=2>[URL]soco-st.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://soco-st.com' TARGET='_blank'><font color='#333399'><b>URL[https://soco-st.com][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>function switch1(){state1=state1==0?1:0;let txt="";let txtEn="";let state="";if(state1==0){txt="非表示";txtEn="hide";state="none";}else{txt="表示";txtEn="show";state="block";}const t1 = document.getElementById("t1");t1.style.display=state;const lbl1 = document.getElementById("lbl1");lbl1.textContent=txt;const t1En = document.getElementById("t1En");t1En.style.display=state;const lbl1En = document.getElementById("lbl1En");lbl1En.textContent=txtEn;}function switch2(){state2=state2==0?1:0;let txt="";let txtEn="";let state="";if(state2==0){txt="非表示";txtEn="hide";state="hidden";}else{txt="表示";txtEn="show";state="visible";}const t2 = document.getElementById("t2");t2.style.visibility=state;const lbl2 = document.getElementById("lbl2");lbl2.textContent=txt;const t2En = document.getElementById("t2En");t2En.style.visibility=state;const lbl2En = document.getElementById("lbl2En");lbl2En.textContent=txtEn;}function switch3(){state3=state3==0?1:0;let txt="";let txtEn="";let value=0;if(state3==0){txt="非表示";txtEn="hide";value=0;}else{txt="表示";txtEn="show";value=1;}const t3 = document.getElementById("t3");t3.style.opacity=value;const lbl3 = document.getElementById("lbl3");lbl3.textContent=txt;const t3En = document.getElementById("t3En");t3En.style.opacity=value;const lbl3En = document.getElementById("lbl3En");lbl3En.textContent=txtEn;}function switch4(){state4=state4==0?1:0;let txt="";let txtEn="";let state="";if(state4==0){txt="非表示";txtEn="hide";state="none";}else{txt="表示";txtEn="show";state="inline";}const t4 = document.getElementById("t4");t4.style.display=state;const lbl4 = document.getElementById("lbl4");lbl4.textContent=txt;const t4En = document.getElementById("t4En");t4En.style.display=state;const lbl4En = document.getElementById("lbl4En");lbl4En.textContent=txtEn;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
