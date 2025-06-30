@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">asyncとawaitによる同期処理</td></tr><tr><td>javascriptは非同期処理で実行されます。<br>そのため、順番を守って実行したい場合は<br>asyncとawaitを使って実装する方法があります。<br></td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div><div id="pageNo" style="background-color:rgb(245 255 250 / 1.0);text-align:center;"></div><div><img id="screen" style="width:300px;height:300px;"></div><div id="story" style="width:300px;"></div><table border=0><tr><td><a href="javascript:void(0);" id="back"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td><td style="width:200px;">&nbsp;</td><td><a href="javascript:void(0);" id="forward"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td></tr></table><textarea id="t1" rows=17 cols=80>
+<div id="pageNo" style="background-color:rgb(245 255 250 / 1.0);text-align:center;"></div>
+<div>
+<img id="screen" style="width:300px;height:300px;">
+</div>
+<div id="story" style="width:300px;">
+</div>
+<table border=0>
+<tr>
+<td><a href="javascript:void(0);" id="back"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td style="width:200px;">&nbsp;</td>
+<td><a href="javascript:void(0);" id="forward"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+</tr>
+</table>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+let pageIndex=0;
+let pageMax=8;
+displayScreen();
+//戻る
+b1.addEventListener("click", () => 
+{
+	//画像を表示する
+	//ストーリーを表示する
+	//ボタンの表示有無
+	pageIndex--;
+	if(pageIndex < 0) pageIndex = 0;
+	displayScreen(pageIndex, 0);
+});
+//進む
+b2.addEventListener("click", () => 
+{
+	pageIndex++;
+	if(pageIndex >= pageMax)pageIndex = pageMax - 1;
+	displayScreen(pageIndex, 1);
+});
+async function displayScreen()
+{
+	await task1();//画像
+	await task2();//ストーリー
+	await task3();//ページ番号
+	await task4();//ボタン表示切り替え
+}
+//画像
+async function task1()
+{
+	return new Promise(resolve =>
+	{
+		let path = "";// ex.)img/
+		let file = "";
+		switch(pageIndex)
+		{
+			case 0:
+				file ="nawmin_sample2.png";//くま
+				break;
+			case 1:
+				file ="nawmin_sample4.png";//農家の人
+				break;
+			case 2:
+				file ="nawmin_sample2.png";//くま
+				break;
+			case 3:
+				file ="nawmin_sample5.png";//野菜セット
+				break;
+			case 4:
+				file ="nawmin_sample2.png";//くま
+				break;
+			case 5:
+				file ="nawmin_sample3.png";//どんぐり
+				break;
+			case 6:
+				file ="nawmin_sample2.png";//くま
+				break;
+			case 7:
+				file ="nawmin_sample4.png";//農家の人
+				break;
+		}
+		const d1 = document.getElementById("screen");
+		d1.src=path+file;
+		resolve();
+	});
+}
+//ストーリー
+async function task2()
+{
+	return new Promise(resolve =>
+	{
+		let story = "";
+		switch(pageIndex)
+		{
+			case 0:
+				story = "こんにちは";
+				break;
+			case 1:
+				story = "おや、どうしたんだい？";
+				break;
+			case 2:
+				story = "お腹へっちゃって";
+				break;
+			case 3:
+				story = "野菜はどう？";
+				break;
+			case 4:
+				story = "それは、ちょっと";
+				break;
+			case 5:
+				story = "あぁ、そういえばこれ拾ったんだった。\n（どんぐりを差し出す）";
+				break;
+			case 6:
+				story = "いいの？\nありがとう";
+				break;
+			case 7:
+				story = "どういたしまして\n(こうしてくまさん森へ帰っていきました。)";
+				break;
+		}
+		const d1 = document.getElementById("story");
+		d1.innerText = story;
+		resolve();
+	});
+}
+//ページ番号
+async function task3()
+{
+	return new Promise(resolve =>
+	{
+		const d1 = document.getElementById("pageNo");
+		d1.textContent = (pageIndex + 1) + "/" + pageMax;
+		resolve();
+	});
+}
+//ボタン表示切り替え
+async function task4()
+{
+	return new Promise(resolve =>
+	{
+		const b1 = document.getElementById("btn1");
+		const b2 = document.getElementById("btn2");
+		b1.style.visibility="visible";
+		b2.style.visibility="visible";
+		if(pageIndex==0)
+		{
+			b1.style.visibility="hidden";
+			
+		}
+		if(pageIndex + 1 == pageMax)
+		{
+			b2.style.visibility="hidden";
+		}
+		resolve();
+	});
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">b1.addEventListener("click", () => </div>前のページに戻ります。<br>pageIndex(ページ番号のインデックス)をデクリメントします。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pageIndex--;<br>if(pageIndex < 0) pageIndex = 0;</div>一番先頭でデクリメントするとマイナスになってしまうため0にします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">b2.addEventListener("click", () => </div>次のページに進みます。<br>pageIndex(ページ番号のインデックス)をデクリメントします。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pageIndex++;<br>if(pageIndex >= pageMax)pageIndex = pageMax - 1;</div>一番最後でインクリメントすると最後の要素インデックスを超えてしまうため「最後のページ - 1」にします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">async function displayScreen()</div>asyncをつけることで、その関数ではPromiseオブジェクトを返すようになります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await task1();//画像<br>await task2();//ストーリー<br>await task3();//ページ番号<br>await task4();//ボタン表示切り替え<br></div>awaitはPromiseオブジェクトの状態が確定するまでの処理を一時中断する動作をします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return new Promise(resolve =></div>Promise関数は2つの引数を持っています。<br>1個目が実行するメソッドです。<br>2個目はエラーの場合に処理するメソッドを設定することができるのですが、任意となり、このサンプルでは使用していません。<br>1個目のメソッドを実行することでPromise関数に処理の終了を伝えることができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">resolve();</div>引数と同じメソッド名を実行することで、このPromise関数の処理が終わることを意味します。<br>そして、この第1引数にメソッドを設定した場合、そのメソッドの処理が終わり次第、Promise関数の処理が終わることになります。<br>途中でエラーになった場合は、第2引数のエラー判定処理を実行することで仕様上の対応処理が可能となります。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Synchronous processing with async and await</td></tr><tr><td>JavaScript is executed asynchronously. <br>Therefore, if you want to execute things in order, <br>you can implement it using async and await. <br></td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Sample</div><div id="pageNoEn" style="background-color:rgb(245 255 250 / 1.0);text-align:center;"></div><div><img id="screenEn" style="width:300px;height:300px;"></div><div id="storyEn" style="width:300px;"></div><table border=0><tr><td><a href="javascript:void(0);" id="backEn"><div id="btn1En"><img id="img_backEn" style="width:50px;"></div></a></td><td style="width:200px;">&nbsp;</td><td><a href="javascript:void(0);" id="forwardEn"><div id="btn2En"><img id="img_forwardEn" style="width:50px;"></div></a></td></tr></table><textarea id="t1" rows=17 cols=80>
+<div id="pageNo" style="background-color:rgb(245 255 250 / 1.0);text-align:center;"></div>
+<div>
+<img id="screen" style="width:300px;height:300px;">
+</div>
+<div id="story" style="width:300px;">
+</div>
+<table border=0>
+<tr>
+<td><a href="javascript:void(0);" id="back"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td style="width:200px;">&nbsp;</td>
+<td><a href="javascript:void(0);" id="forward"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+</tr>
+</table>
+</textarea><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+let pageIndex=0;
+let pageMax=8;
+displayScreen();
+//back
+b1.addEventListener("click", () => 
+{
+	//Displaying images
+	//View the story
+	//Display of button
+	pageIndex--;
+	if(pageIndex < 0) pageIndex = 0;
+	displayScreen(pageIndex, 0);
+});
+//forward
+b2.addEventListener("click", () => 
+{
+	pageIndex++;
+	if(pageIndex >= pageMax)pageIndex = pageMax - 1;
+	displayScreen(pageIndex, 1);
+});
+async function displayScreen()
+{
+	await task1();//image
+	await task2();//story
+	await task3();//page no
+	await task4();//Button display switching
+}
+//image
+async function task1()
+{
+	return new Promise(resolve =>
+	{
+		let path = "";// ex.)img/
+		let file = "";
+		switch(pageIndex)
+		{
+			case 0:
+				file ="nawmin_sample2.png";//bear
+				break;
+			case 1:
+				file ="nawmin_sample4.png";//Farmer
+				break;
+			case 2:
+				file ="nawmin_sample2.png";//bear
+				break;
+			case 3:
+				file ="nawmin_sample5.png";//Vegetable set
+				break;
+			case 4:
+				file ="nawmin_sample2.png";//bear
+				break;
+			case 5:
+				file ="nawmin_sample3.png";//Acorns
+				break;
+			case 6:
+				file ="nawmin_sample2.png";//bear
+				break;
+			case 7:
+				file ="nawmin_sample4.png";//Farmer
+				break;
+		}
+		const d1 = document.getElementById("screen");
+		d1.src=path+file;
+		resolve();
+	});
+}
+//story
+async function task2()
+{
+	return new Promise(resolve =>
+	{
+		let story = "";
+		switch(pageIndex)
+		{
+			case 0:
+				story = "Hello";
+				break;
+			case 1:
+				story = "Hey, what's wrong?";
+				break;
+			case 2:
+				story = "I'm hungry";
+				break;
+			case 3:
+				story = "What about vegetables?";
+				break;
+			case 4:
+				story = "That's a bit";
+				break;
+			case 5:
+				story = "Ah, that reminds me, I picked this up. \n (Hands over the acorn)";
+				break;
+			case 6:
+				story = "Is that okay?\nThank you";
+				break;
+			case 7:
+				story = "You're welcome.\n(And so the bear returned to the forest.)";
+				break;
+		}
+		const d1 = document.getElementById("story");
+		d1.innerText = story;
+		resolve();
+	});
+}
+//page no
+async function task3()
+{
+	return new Promise(resolve =>
+	{
+		const d1 = document.getElementById("pageNo");
+		d1.textContent = (pageIndex + 1) + "/" + pageMax;
+		resolve();
+	});
+}
+//Button display switching
+async function task4()
+{
+	return new Promise(resolve =>
+	{
+		const b1 = document.getElementById("btn1");
+		const b2 = document.getElementById("btn2");
+		b1.style.visibility="visible";
+		b2.style.visibility="visible";
+		if(pageIndex==0)
+		{
+			b1.style.visibility="hidden";
+			
+		}
+		if(pageIndex + 1 == pageMax)
+		{
+			b2.style.visibility="hidden";
+		}
+		resolve();
+	});
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">b1.addEventListener("click", () => </div>Return to the previous page. <br>Decrements pageIndex (page number index). <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pageIndex--;<br>if(pageIndex < 0) pageIndex = 0;</div>If you decrement at the very beginning, it will become negative, so make it 0. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">b2.addEventListener("click", () => </div>Go to the next page. <br>Decrement pageIndex (page number index). <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pageIndex++;<br>if(pageIndex >= pageMax)pageIndex = pageMax - 1;</div>If you increment it at the very end, it will exceed the last element index, so you should make it "last page - 1". <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">async function displayScreen()</div>By adding async, the function will return a Promise object. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await task1();//Image<br>await task2();//Story<br>await task3();//Page number<br>await task4();//Button display toggle<br></div>await suspends processing until the state of the Promise object is determined. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return new Promise(resolve =></div>The Promise function has two arguments. <br>The first is the method to execute. <br>The second allows you to set a method to handle errors, but this is optional and is not used in this sample. <br>By executing the first method, you can notify the Promise function that processing has finished. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">resolve();</div>This means that the processing of this Promise function will end by executing the method with the same name as the argument. <br>If a method is set in this first argument, the processing of the Promise function will end as soon as the processing of that method is finished. <br>If an error occurs during the process, it is possible to handle the problem according to the specifications by executing the error detection process of the second argument. <br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>displayImage("../o/c0_1","img_back");displayImage("../o/c0_2","img_forward");displayImage("../o/c0_1","img_backEn");displayImage("../o/c0_2","img_forwardEn");function displayImage(d1,d2){fetch(d1).then(response=>response.text()).then(d=>{const i1=document.getElementById(d2);i1.src=d;i1.onload=function(){};}).catch(error=>{});}const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");let pageIndex=0;let pageMax=8;displayScreen();b1.addEventListener("click", () => {pageIndex--;if(pageIndex < 0) pageIndex = 0;displayScreen(pageIndex, 0);});b2.addEventListener("click", () => {pageIndex++;if(pageIndex >= pageMax)pageIndex = pageMax - 1;displayScreen(pageIndex, 1);});b1En.addEventListener("click", () => {pageIndex--;if(pageIndex < 0) pageIndex = 0;displayScreen(pageIndex, 0);});b2En.addEventListener("click", () => {pageIndex++;if(pageIndex >= pageMax)pageIndex = pageMax - 1;displayScreen(pageIndex, 1);});async function displayScreen(){await task1();await task2();await task3();await task4();}async function task1(){return new Promise(resolve =>{let path = "../o/i3/";let file = "";switch(pageIndex){case 0:file ="nawmin_sample2.png";break;case 1:file ="nawmin_sample4.png";break;case 2:file ="nawmin_sample2.png";break;case 3:file ="nawmin_sample5.png";break;case 4:file ="nawmin_sample2.png";break;case 5:file ="nawmin_sample3.png";break;case 6:file ="nawmin_sample2.png";break;case 7:file ="nawmin_sample4.png";break;}const d1 = document.getElementById("screen");d1.src=path+file;const d2 = document.getElementById("screenEn");d2.src=path+file;resolve();});}async function task2(){return new Promise(resolve =>{let story = "";let storyEn = "";switch(pageIndex){case 0:story = "こんにちは";storyEn = "Hello";break;case 1:story = "おや、どうしたんだい？";storyEn = "Hey, what's wrong?";break;case 2:story = "お腹へっちゃって";storyEn = "I'm hungry";break;case 3:story = "野菜はどう？";storyEn = "What about vegetables?";break;case 4:story = "それは、ちょっと";storyEn = "That's a bit";break;case 5:story = "あぁ、そういえばこれ拾ったんだった。\n（どんぐりを差し出す）";storyEn = "Ah, that reminds me, I picked this up. \n (Hands over the acorn)";break;case 6:story = "いいの？\nありがとう";storyEn = "Is that okay?\nThank you";break;case 7:story = "どういたしまして\n(こうしてくまさんは森へ帰っていきました。)";storyEn = "You're welcome.\n(And so the bear returned to the forest.)";break;}const d1 = document.getElementById("story");d1.innerText = story;const d2 = document.getElementById("storyEn");d2.innerText = storyEn;resolve();});}async function task3(){return new Promise(resolve =>{const d1 = document.getElementById("pageNo");d1.textContent = (pageIndex + 1) + "/" + pageMax;const d2 = document.getElementById("pageNoEn");d2.textContent = (pageIndex + 1) + "/" + pageMax;resolve();});}async function task4(){return new Promise(resolve =>{const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");b1.style.visibility="visible";b2.style.visibility="visible";b1En.style.visibility="visible";b2En.style.visibility="visible";if(pageIndex==0){b1.style.visibility="hidden";b1En.style.visibility="hidden";}if(pageIndex + 1 == pageMax){b2.style.visibility="hidden";b2En.style.visibility="hidden";}resolve();});}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
