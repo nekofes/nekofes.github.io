@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">z-indexによる画像の重なり</td></tr><tr><td>z-indexを使用することにより<br>ブラウザ上で画像を重ねて表現することができます。<br></td></tr></table><br><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layer layer1"><img src=../o/i3/nawmin_sample7.png style="width:200px;"></div>    <div class="layer layer2"><img src=../o/i3/nawmin_sample6.png style="width:100px;"></div>    <div class="layer layer3"><img src=../o/i3/nawmin_sample8.png style="width:50px;"></div></div><style>.container{position: sticky;}.layer{width: 200px;height: 200px;position: absolute;}.layer1{top: 0px;left: 0px;}.layer2{top: 100px;left: 90px;}.layer3{top: 140px;left: 20px;}</style><br><textarea id="t1" rows=14 cols=80>
+[HTMLタグ]
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+    <div class="layer layer1">
+	<img src=../o/i3/nawmin_sample7.png style="width:200px;">
+	</div>
+    <div class="layer layer2">
+	<img src=../o/i3/nawmin_sample6.png style="width:100px;">
+	</div>
+    <div class="layer layer3">
+	<img src=../o/i3/nawmin_sample8.png style="width:50px;">
+	</div>
+</div>
+
+</textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[CSS]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+}
+.layer3{
+	top: 140px;
+	left: 20px;
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[使用した画像]</div><table><tr><td><table><tr><td><div style="background-color:rgb(75 0 130 / 0.2);text-align:center;">こむぎ</div></td></tr><tr><td><img src=../o/i3/nawmin_sample7.png style="width:50px;"></td></tr></table></td><td><table><tr><td><div style="background-color:rgb(75 0 130 / 0.2);text-align:center;">ひよこ</div></td></tr><tr><td><img src=../o/i3/nawmin_sample6.png style="width:50px;"></td></tr></table></td><td><table><tr><td><div style="background-color:rgb(75 0 130 / 0.2);text-align:center;">大豆</div></td></tr><tr><td><img src=../o/i3/nawmin_sample8.png style="width:50px;"></td></tr></table></td></tr></table><br>sticky要素をスクロールに応じて、親要素を基準に固定します。z-indexを適用できます。﻿<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">HTMLタグ</div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"&gt;</div>「class="container"」cssの「container」を参照します。<br>stickyはpositionプロパティです。<br>ブラウザ上のスクロールする要素に対して、親様相を基準に固定配置します。﻿<br>他のpositionプロパティの種類は下記のとおりとなります。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">static</td><td>初期値で、位置も重なり順も指定できません﻿(z-indexは使用できません)。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">relative</td><td>要素を本来の位置を基準に相対的に配置します。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">absolute</td><td>親要素を基準に絶対的な位置に配置します。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">fixed</td><td>ブラウザのウィンドウを基準に要素を固定します。</td></tr></table><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;div class="layer layer1"&gt;</div>cssの「.layer」と「.layer1」を参照します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">CSS</div>z-indexは画像の重なりを表現します。<br>z-indexは整数を使用して順番を設定できます。<br>デフォルトは0で、明記をしないと最初の要素は一番下に配置されます。<br>今回の例では<br>(1) こむぎ<br>(2) ひよこ<br>(3) 大豆<br>でした。<br>z-indexの明記がないため、上記の順番に下から上に順番に配置されました。<br><br>小麦のz-indexを1に設定した例です。<br>※cssは書き換えたと想定した例となります。<br><div class="container0" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layer0 layer01"><img src=../o/i3/nawmin_sample7.png style="width:200px;"></div>    <div class="layer0 layer02"><img src=../o/i3/nawmin_sample6.png style="width:100px;"></div>    <div class="layer0 layer03"><img src=../o/i3/nawmin_sample8.png style="width:50px;"></div></div><br><style>.container0{position: sticky;}.layer0{width: 200px;height: 200px;position: absolute;}.layer01{top: 0px;left: 0px;z-index:1;}.layer02{top: 100px;left: 90px;}.layer03{top: 140px;left: 20px;}</style><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+	z-index:1;//ここに追加
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+}
+.layer3{
+	top: 140px;
+	left: 20px;
+}
+</pre>ちょっと、分かりづらいサンプルとなりましたが、小麦に、ひよこが隠れているような構図になりました。<br>このようにz-indexを使用すると画像を重ねたり、構図の表現の幅を広げることができます。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Image overlap with z-index</td></tr><tr><td>By using z-index, you can overlap images on the browser.</td></tr></table><br><div class="containerEn" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layerEn layer1En"><img src=../o/i3/nawmin_sample7.png style="width:200px;"></div>    <div class="layerEn layer2En"><img src=../o/i3/nawmin_sample6.png style="width:100px;"></div>    <div class="layerEn layer3En"><img src=../o/i3/nawmin_sample8.png style="width:50px;"></div></div><style>.containerEn{position: sticky;}.layerEn{width: 200px;height: 200px;position: absolute;}.layer1En{top: 0px;left: 0px;}.layer2En{top: 100px;left: 90px;}.layer3En{top: 140px;left: 20px;}</style><br><textarea id="t2" rows=14 cols=80>
+[HTML tag]
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+    <div class="layer layer1">
+	<img src=../o/i3/nawmin_sample7.png style="width:200px;">
+	</div>
+    <div class="layer layer2">
+	<img src=../o/i3/nawmin_sample6.png style="width:100px;">
+	</div>
+    <div class="layer layer3">
+	<img src=../o/i3/nawmin_sample8.png style="width:50px;">
+	</div>
+</div>
+
+</textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[CSS]</div><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+}
+.layer3{
+	top: 140px;
+	left: 20px;
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[Images used]</div><table><tr><td><table><tr><td><div style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Wheat</div></td></tr><tr><td><img src=../o/i3/nawmin_sample7.png style="width:50px;"></td></tr></table></td><td><table><tr><td><div style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Chick</div></td></tr><tr><td><img src=../o/i3/nawmin_sample6.png style="width:50px;"></td></tr></table></td><td><table><tr><td><div style="background-color:rgb(75 0 130 / 0.2);text-align:center;">soy</div></td></tr><tr><td><img src=../o/i3/nawmin_sample8.png style="width:50px;"></td></tr></table></td></tr></table><br>sticky<br>An element is fixed relative to its parent element when scrolled. z-index can be applied.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">HTML tag</div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"&gt;</div>"class="container"" refers to the "container" css. <br>sticky is a position property. <br>For scrolling elements in the browser, it fixes the position based on the parent aspect. ﻿<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">static</td><td>By default, neither position nor stacking order can be specified (z-index cannot be used).</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">relative</td><td>Positions an element relative to its intrinsic position.</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">absolute</td><td>Positions the element absolutely relative to the parent element.</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">fixed</td><td>Anchors an element relative to the browser window.</td></tr></table><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;div class="layer layer1"&gt;</div>Refer to ".layer" and ".layer1" in the css. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">CSS</div>z-index represents the overlap of images. <br>z-index can be set to an integer to set the order. <br>The default is 0, and if not specified, the first element will be placed at the bottom. <br>In this example, <br>(1) Wheat<br>(2) Chick<br>(3) Soybean<br><br>Since z-index was not specified, they were placed in the above order from bottom to top. <br><br>This is an example where the z-index of wheat is set to 1. <br>*This example assumes that the css has been rewritten. <br><div class="container0En" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layer0En layer01En"><img src=../o/i3/nawmin_sample7.png style="width:200px;"></div>    <div class="layer0En layer02En"><img src=../o/i3/nawmin_sample6.png style="width:100px;"></div>    <div class="layer0En layer03En"><img src=../o/i3/nawmin_sample8.png style="width:50px;"></div></div><br><style>.container0En{position: sticky;}.layer0En{width: 200px;height: 200px;position: absolute;}.layer01En{top: 0px;left: 0px;z-index:1;}.layer02En{top: 100px;left: 90px;}.layer03En{top: 140px;left: 20px;}</style><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+	z-index:1;//Add here
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+}
+.layer3{
+	top: 140px;
+	left: 20px;
+}
+</pre>This sample is a little difficult to understand, but the composition looks like a chick is hiding in the wheat. <br>By using z-index like this, you can overlap images and expand the range of expression of your composition. <br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/css/index.html?lang=0';}else{url='/css/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/css/css1.html?lang=0';}else{url='/css/css1.html?lang=1';}break;case 2:if(lang==0){url='/css/css2.html?lang=0';}else{url='/css/csss2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
