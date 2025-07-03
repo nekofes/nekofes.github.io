@@ -1,0 +1,489 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">z-indexを使用したキャラの当たり判定</td></tr><tr><td>簡単な当たり判定のサンプル</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;"><label>スコア</label></td></tr><tr><td style="width:200px;text-align:center;"><label id="score">0</label></td></tr></table><table><tr><td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn3"><img id="img_up" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn4"><img id="img_down" style="width:50px;"></div></a></td></tr></table><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layer layer1"><img src="../o/i3/nawmin_sample7.png" style="width:200px;"></div>    <div class="layer layer2" id="hiyoko" style="width:100px;height:100px;"><img id="img" src="../o/i3/nawmin_sample6.png" style="width:100px;height:100px;"></div>    <div class="layer layer3" id="daizu" style="width:50px;height:50px;"><img src="../o/i3/nawmin_sample8.png" style="width:50px;height:50px;"></div></div><style>.container{position: sticky;}.layer{width: 200px;height: 200px;position: absolute;}.layer1{top: 0px;left: 0px;}.layer2{top: 100px;left: 90px;z-index:1;}.layer3{top: 140px;left: 20px;}</style><table><tr><td>ひよこの座標<div id="hiyoko_pos"></div></td><td>大豆の座標<div id="daizu_pos"></div></td></tr><tr><td>ひよこの中心座標<div id="hiyoko_center_pos"></div></td><td>大豆の中心座標<div id="daizu_center_pos"></div></td></tr></table><br><textarea id="t1" rows=17 cols=110>
+<table>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">
+<label>スコア</label>
+</td>
+</tr>
+<tr>
+<td style="width:200px;text-align:center;">
+<label id="score">0</label>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn3"><img id="img_up" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn4"><img id="img_down" style="width:50px;"></div></a></td>
+</tr>
+</table>
+
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	<div class="layer layer1">
+		<img src="nawmin_sample7.png" style="width:200px;">
+	</div>
+	<div class="layer layer2" id="hiyoko" style="width:100px;height:100px;">
+		<img id="img" src="i3/nawmin_sample6.png" style="width:100px;height:100px;">
+	</div>
+	<div class="layer layer3" id="daizu" style="width:50px;height:50px;">
+		<img src="nawmin_sample8.png" style="width:50px;height:50px;">
+	</div>
+</div>
+
+<table>
+<tr>
+<td>
+ひよこの座標<div id="hiyoko_pos"></div>
+</td>
+<td>
+大豆の座標<div id="daizu_pos"></div>
+</td>
+</tr>
+<tr>
+<td>
+ひよこの中心座標<div id="hiyoko_center_pos"></div>
+</td>
+<td>
+大豆の中心座標<div id="daizu_center_pos"></div>
+</td>
+</tr>
+</table>
+</textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;div class="layer layer2" id="hiyoko" style="width:100px;height:100px;"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;img id="img" src="i3/nawmin_sample6.png" style="width:100px;height:100px;"&gt;<br>&lt;div&gt;</div>ひよこのdivタグです。<br>「nawmin_sample6.png」は、ひよこの画像ファイルIDです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;div class="layer layer3" id="daizu" style="width:50px;height:50px;"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="nawmin_sample8.png" style="width:50px;height:50px;"&gt;<br>&lt;div&gt;</div>大豆のdivタグです。<br>「nawmin_sample8.png」は、大豆の画像ファイルIDです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">大豆の座標&lt;div id="daizu_pos"&gt;&lt;/div&gt;</div>大豆の座標位置情報を表示するエリアです。<br><br>[CSS]<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+	z-index:1;
+}
+.layer3{
+	top: 140px;
+	left: 20px;
+}
+</pre>「.layer2」はひよこのレイヤーです。<br>「.layer3」は大豆のレイヤーです。<br><br>[javascript]<br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+//大豆の座標配列
+const aryX=[20,120,50];
+const aryY=[140,0,50];
+let index=0;
+//大豆の座標位置を表示
+currentDaizuPosition();
+let score=0;
+let x=90;//キャラクターのx座標位置(初期値はキャラの初期座標位置)
+let y=100;//キャラクターのy座標位置(初期値はキャラの初期座標位置)
+currentHiyokoPosition();
+const b1 = document.getElementById("btn1");//左方向ボタン
+const b2 = document.getElementById("btn2");//右方向ボタン
+const b3 = document.getElementById("btn3");//上方向ボタン
+const b4 = document.getElementById("btn4");//下方向ボタン
+const leftPosition=0;//枠の左側の位置
+const rightPosition=200-100;//枠の幅- 画像の幅
+const upPosition=0;//枠の上
+const downPosition=200-100;//枠の高さ- 画像の高さ
+let moveDistance=10;//移動距離
+//左へ
+b1.addEventListener("click", () => 
+{
+	moveCharacterImage(0);
+});
+//右へ
+b2.addEventListener("click", () => 
+{
+	moveCharacterImage(1);
+});
+//上へ
+b3.addEventListener("click", () => 
+{
+	moveCharacterImage(2);
+});
+//下へ
+b4.addEventListener("click", () => 
+{
+	moveCharacterImage(3);
+})
+//ひよこの移動処理
+//direction:
+//0:左へ移動
+//1:右へ移動
+//2:上へ移動
+//3:下へ移動
+function moveCharacterImage(direction)
+{
+	const obj = document.getElementById("hiyoko");
+	const img = document.getElementById("img");
+	if(direction==0)//左
+	{
+		//パスは環境にあわせて変更してください
+		img.src="nawmin_sample6.png";
+		x-=moveDistance;
+		if(x < leftPosition)
+		{
+			x=-10;//微調整
+		}
+		obj.style.left = x +'px';
+		if(x<0)x=0;
+	}
+	else if(direction==1)//右
+	{
+		//パスは環境にあわせて変更してください
+		img.src="nawmin_sample9.png";
+		x+=moveDistance;
+		if(x > rightPosition)
+		{
+			x=rightPosition+5;//微調整
+		}
+		obj.style.left = x +'px';
+		if(x>rightPosition)x=rightPosition;
+	}
+	else if(direction==2)//上
+	{
+		//パスは環境にあわせて変更してください
+		img.src="nawmin_sample10.png";
+		y-=moveDistance;
+		if(y&gt;upPosition)
+		{
+			y=upPosition-5;//微調整
+		}
+		obj.style.top = y +'px';
+		if(y<0)y=0;
+	}
+	else if(direction==3)//下
+	{
+		//パスは環境にあわせて変更してください
+		img.src="nawmin_sample10.png";
+		y+=moveDistance;
+		if(y>downPosition)
+		{
+			y=downPosition;//微調整
+		}
+		obj.style.top = y +'px';
+		if(y>downPosition)y=downPosition;
+	}
+	//大豆のあたり判定
+	judgeFeed();
+	currentHiyokoPosition();
+}
+//大豆のあたり判定
+function judgeFeed()
+{
+	let result = 0;
+	result = judgeHiyoko();
+	if(result == 1)
+	{
+		//次の配列インデックスを準備します
+		index++;
+		if(index==aryX.length)index=0;
+		//大豆の位置を反映
+		const daizu = document.getElementById("daizu");
+		daizu.style.top = aryY[index] +'px';
+		daizu.style.left = aryX[index] +'px';
+		//スコアを加算した結果を反映
+		score++;
+		const point = document.getElementById("score");
+		point.textContent = score;
+		//大豆の座標位置を表示
+		currentDaizuPosition();
+	}
+}
+//ひよこ判定
+function judgeHiyoko()
+{
+	let result =0;
+	//ひよこのx/y座標
+	let x1=x+100/2;
+	let y1=y+100/2;
+	//大豆のx/y座標
+	let x2=aryX[index]+50/2;
+	let y2=aryY[index]+50/2;
+	//ひよこと大豆のx座標の差分の絶対値
+	let xx=Math.abs(x1-x2);
+	//ひよこと大豆のy座標の差分の絶対値
+	let yy=Math.abs(y1-y2);
+	//絶対値の累乗(xとy)を計算
+	let xy=Math.pow(xx,2) + Math.pow(yy,2);
+	//ルート計算
+	let r=Math.sqrt(xy);
+	//if(r<=75)//ピッタリ接触(ひよこの半分:50 + 大豆の半分:25)
+	if(r<=30)//微調整
+	{
+		result =1;//あたり
+	}
+	return result;
+}
+//大豆の座標位置を表示
+function currentDaizuPosition()
+{
+	//x座標 y座標
+	const pos = document.getElementById("daizu_pos");
+	pos.textContent = "x:"+aryX[index]+" y:"+aryY[index];
+	//中心座標
+	const posCenter = document.getElementById("daizu_center_pos");
+	posCenter.textContent = "x:"+(aryX[index]+25)+" y:"+(aryY[index]+25);
+}
+//ひよこの座標位置を表示
+function currentHiyokoPosition()
+{
+	const pos = document.getElementById("hiyoko_pos");
+	//x座標 y座標
+	pos.textContent = "x:"+x+" y:"+y;
+	//中心座標
+	const posCenter = document.getElementById("hiyoko_center_pos");
+	posCenter.textContent = "x:"+(x+50)+" y:"+(y+50);
+}
+</pre>ひよこが大豆にぶつかったらスコアが加算されるサンプルです。<br>ひよこと大豆の中心座標の距離を三平方の定理で距離を計算します。<br>そのため、ひよこと大豆、それぞれのx中心座標とy中心座標を取得して<br>1:ひよこと大豆のx座標の差分<br>2:ひよこと大豆のy座標の差分<br>を求めます。<br>1と2の計算結果は距離を知りたいため絶対値にします。<br>1(x差分)と2(y差分)をそれぞれ累乗した結果を加算します。<br>上記のたし算をした結果をルートにすることで、三平方の定理の斜線の長さを求められます。<br>この計算結果がひよこの半分の長さと大豆の半分の長さと一致している場合は衝突したと考えれます。<br>この判定方法が<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(r<=75)//ピッタリ接触(ひよこの半分:50 + 大豆の半分:25)</div>という判定方法です。<br>しかし、画像には透過色の余白があるため、視覚的に有効なあたり判定にするため<br>この判定処理では下記の判定方法にしています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(r<=30)//微調整</div><br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Character collision detection using z-index</td></tr><tr><td>A simple example of collision detection</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">sample</div><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;"><label>score</label></td></tr><tr><td style="width:200px;text-align:center;"><label id="scoreEn">0</label></td></tr></table><table><tr><td><a href="javascript:void(0);"><div id="btn1En"><img id="img_backEn" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn2En"><img id="img_forwardEn" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn3En"><img id="img_upEn" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn4En"><img id="img_downEn" style="width:50px;"></div></a></td></tr></table><div class="containerEn" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layerEn layer1En"><img src="../o/i3/nawmin_sample7.png" style="width:200px;"></div>    <div class="layerEn layer2En" id="hiyokoEn"><img id="imgEn" src="../o/i3/nawmin_sample6.png" style="width:100px;height:100px;"></div>    <div class="layerEn layer3En" id="daizuEn"><img src="../o/i3/nawmin_sample8.png" style="width:50px;height:50px;"></div></div><style>.containerEn{position: sticky;}.layerEn{width: 200px;height: 200px;position: absolute;}.layer1En{top: 0px;left: 0px;}.layer2En{top: 100px;left: 90px;z-index:1;}.layer3En{top: 140px;left: 20px;}</style><table><tr><td>chick coordinate<div id="hiyoko_posEn"></div></td><td>soybean coordinate<div id="daizu_posEn"></div></td></tr><tr><td>chick center coordinate<div id="hiyoko_center_posEn"></div></td><td>soybean center coordinate<div id="daizu_center_posEn"></div></td></tr></table><br><textarea id="t1" rows=17 cols=110>
+<table>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">
+<label>score</label>
+</td>
+</tr>
+<tr>
+<td style="width:200px;text-align:center;">
+<label id="score">0</label>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn3"><img id="img_up" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn4"><img id="img_down" style="width:50px;"></div></a></td>
+</tr>
+</table>
+
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	<div class="layer layer1">
+		<img src="nawmin_sample7.png" style="width:200px;">
+	</div>
+	<div class="layer layer2" id="hiyoko" style="width:100px;height:100px;">
+		<img id="img" src="i3/nawmin_sample6.png" style="width:100px;height:100px;">
+	</div>
+	<div class="layer layer3" id="daizu" style="width:50px;height:50px;">
+		<img src="nawmin_sample8.png" style="width:50px;height:50px;">
+	</div>
+</div>
+
+<table>
+<tr>
+<td>
+chick coordinate<div id="hiyoko_pos"></div>
+</td>
+<td>
+soybean coordinate<div id="daizu_pos"></div>
+</td>
+</tr>
+<tr>
+<td>
+chick center coordinate<div id="hiyoko_center_pos"></div>
+</td>
+<td>
+soybean center coordinate<div id="daizu_center_pos"></div>
+</td>
+</tr>
+</table>
+</textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;div class="layer layer2" id="hiyoko" style="width:100px;height:100px;"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;img id="img" src="i3/nawmin_sample6.png" style="width:100px;height:100px;"&gt;<br>&lt;div&gt;</div>This is the div tag for the chick. <br>"nawmin_sample6.png" is the image file ID for the chick. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;div class="layer layer3" id="daizu" style="width:50px;height:50px;"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="nawmin_sample8.png" style="width:50px;height:50px;"&gt;<br>&lt;div&gt;</div>This is the div tag for soybeans. <br>"nawmin_sample8.png" is the image file ID for soybeans. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Soybean coordinates &lt;div id="daizu_pos"&gt;&lt;/div&gt;</div>This is the area that displays the coordinate location information for soybeans. <br><br>[CSS]<br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+	z-index:1;
+}
+.layer3{
+	top: 140px;
+	left: 20px;
+}
+</pre>".layer2" is the chick layer. <br>".layer3" is the soybean layer. <br><br>[javascript]<br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+//Soybean coordinate array
+const aryX=[20,120,50];
+const aryY=[140,0,50];
+let index=0;
+//Display the coordinates of soybeans
+currentDaizuPosition();
+let score=0;
+let x=90;//Character's x coordinate position (initial value is the character's initial coordinate position)
+let y=100;//Character's y coordinate position (initial value is the character's initial coordinate position)
+currentHiyokoPosition();
+const b1 = document.getElementById("btn1");//Left Arrow Button
+const b2 = document.getElementById("btn2");//Right button
+const b3 = document.getElementById("btn3");//Up button
+const b4 = document.getElementById("btn4");//Down button
+const leftPosition=0;//Left position of frame
+const rightPosition=200-100;//Width of frame - width of image
+const upPosition=0;//Top of frame
+const downPosition=200-100;//Height of frame - height of image
+let moveDistance=10;//Movement distance
+//To the left
+b1.addEventListener("click", () => 
+{
+	moveCharacterImage(0);
+});
+//right
+b2.addEventListener("click", () => 
+{
+	moveCharacterImage(1);
+});
+//up
+b3.addEventListener("click", () => 
+{
+	moveCharacterImage(2);
+});
+//down
+b4.addEventListener("click", () => 
+{
+	moveCharacterImage(3);
+})
+//Chick movement process
+//direction:
+//0: Move left
+//1: Move right
+//2: Move up
+//3: Move down
+function moveCharacterImage(direction)
+{
+	const obj = document.getElementById("hiyoko");
+	const img = document.getElementById("img");
+	if(direction==0)//left
+	{
+		//Please change the path according to your environment.
+		img.src="nawmin_sample6.png";
+		x-=moveDistance;
+		if(x < leftPosition)
+		{
+			x=-10;//Fine adjustment
+		}
+		obj.style.left = x +'px';
+		if(x<0)x=0;
+	}
+	else if(direction==1)//right
+	{
+		//Please change the path according to your environment.
+		img.src="nawmin_sample9.png";
+		x+=moveDistance;
+		if(x > rightPosition)
+		{
+			x=rightPosition+5;//Fine adjustment
+		}
+		obj.style.left = x +'px';
+		if(x>rightPosition)x=rightPosition;
+	}
+	else if(direction==2)//up
+	{
+		//Please change the path according to your environment.
+		img.src="nawmin_sample10.png";
+		y-=moveDistance;
+		if(y&gt;upPosition)
+		{
+			y=upPosition-5;//Fine adjustment
+		}
+		obj.style.top = y +'px';
+		if(y<0)y=0;
+	}
+	else if(direction==3)//down
+	{
+		//Please change the path according to your environment.
+		img.src="nawmin_sample10.png";
+		y+=moveDistance;
+		if(y>downPosition)
+		{
+			y=downPosition;//Fine adjustment
+		}
+		obj.style.top = y +'px';
+		if(y>downPosition)y=downPosition;
+	}
+	//Soybean hit detection
+	judgeFeed();
+	currentHiyokoPosition();
+}
+//Soybean hit detection
+function judgeFeed()
+{
+	let result =0;
+	result judgeHiyoko();
+	if(result == 1)
+	{
+		//Prepare the next array index
+		index++;
+		if(index==aryX.length)index=0;
+		//Reflects the position of soybeans
+		const daizu = document.getElementById("daizu");
+		daizu.style.top = aryY[index] +'px';
+		daizu.style.left = aryX[index] +'px';
+		//Reflect the result of adding the score
+		score++;
+		const point = document.getElementById("score");
+		point.textContent = score;
+		//Display the coordinates of soybeans
+		currentDaizuPosition();
+	}
+}
+//judge chick
+function judgeHiyoko()
+{
+	let result =0;
+	//chick x/y coordinate
+	let x1=x+100/2;
+	let y1=y+100/2;
+	//soybean x/y coordinate
+	let x2=aryX[index]+50/2;
+	let y2=aryY[index]+50/2;
+	//chick and soybean absolute value of the difference in x coordinates
+	let xx=Math.abs(x1-x2);
+	//chick and soybean value of the difference in y coordinates
+	let yy=Math.abs(y1-y2);
+	//absolute value power(x and y) calculate
+	let xy=Math.pow(xx,2) + Math.pow(yy,2);
+	//root calculation
+	let r=Math.sqrt(xy);
+	//if(r<=75)//just the right contact(chick half:50 + soyabean half:25)
+	if(r<=30)//fine adjustment
+	{
+		result =1;//hit
+	}
+	return result;
+}
+//Display the coordinates of soybeans
+function currentDaizuPosition()
+{
+	//x coordinate y coordinate
+	const pos = document.getElementById("daizu_pos");
+	pos.textContent = "x:"+aryX[index]+" y:"+aryY[index];
+	//center coordinate
+	const posCenter = document.getElementById("daizu_center_pos");
+	posCenter.textContent = "x:"+(aryX[index]+25)+" y:"+(aryY[index]+25);
+}
+//Display the coordinates of chick
+function currentHiyokoPosition()
+{
+	const pos = document.getElementById("hiyoko_pos");
+	//x coordinate y coordinate
+	pos.textContent = "x:"+x+" y:"+y;
+	//center coordinate
+	const posCenter = document.getElementById("hiyoko_center_pos");
+	posCenter.textContent = "x:"+(x+50)+" y:"+(y+50);
+}
+</pre>This is a sample where a score is added if the chick collides with the soybean.<br>The distance between the center coordinates of the chick and the soybean is calculated using Pythagoras' theorem.<br>To do this, obtain the x and y center coordinates of the chick and the soybean, and calculate<br>1: the difference between the x coordinates of the chick and the soybean<br>2: the difference between the y coordinates of the chick and the soybean<br><br>The results of 1 and 2 are absolute values ​​because we want to know the distance.<br>The results of raising 1 (x difference) and 2 (y difference) to their respective powers are added.<br>The length of the diagonal line in Pythagoras' theorem can be found by taking the result of the above addition as the root.<br>If this calculation result matches the half length of the chick and the half length of the soybean, it is considered that a collision has occurred.<br>This determination method is called<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(r<=75)//exact contact (half of the chick: 50 + half of the soybean: 25)</div>However, since the image has a transparent margin, in order to make the hit determination visually valid,<br>the following judgment method is used in this judgment process.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(r<=30) // Fine-tuning</div><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>displayImage("../o/c0_1","img_back");displayImage("../o/c0_2","img_forward");displayImage("../o/c0_3","img_up");displayImage("../o/c0_4","img_down");displayImage("../o/c0_1","img_backEn");displayImage("../o/c0_2","img_forwardEn");displayImage("../o/c0_3","img_upEn");displayImage("../o/c0_4","img_downEn");function displayImage(d1,d2){fetch(d1).then(response=>response.text()).then(d=>{const i1=document.getElementById(d2);i1.src=d;i1.onload=function(){};}).catch(error=>{});}const aryX=[20,120,50];const aryY=[140,0,50];let index=0;currentDaizuPosition();let score=0;let x=90;let y=100;currentHiyokoPosition();const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b3 = document.getElementById("btn3");const b4 = document.getElementById("btn4");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");const b3En = document.getElementById("btn3En");const b4En = document.getElementById("btn4En");const leftPosition=0;const rightPosition=200-100;const upPosition=0;const downPosition=200-100;let moveDistance=10;b1.addEventListener("click", () => {moveCharacterImage(0);});b2.addEventListener("click", () => {moveCharacterImage(1);});b3.addEventListener("click", () => {moveCharacterImage(2);});b4.addEventListener("click", () => {moveCharacterImage(3);});b1En.addEventListener("click", () => {moveCharacterImage(0);});b2En.addEventListener("click", () => {moveCharacterImage(1);});b3En.addEventListener("click", () => {moveCharacterImage(2);});b4En.addEventListener("click", () => {moveCharacterImage(3);});function moveCharacterImage(direction){const obj = document.getElementById("hiyoko");const img = document.getElementById("img");const objEn = document.getElementById("hiyokoEn");const imgEn = document.getElementById("imgEn");if(direction==0){img.src="../o/i3/nawmin_sample6.png";imgEn.src="../o/i3/nawmin_sample6.png";x-=moveDistance;if(x<leftPosition){x=-10;}obj.style.left = x +'px';objEn.style.left = x +'px';if(x<0)x=0;}else if(direction==1){img.src="../o/i3/nawmin_sample9.png";imgEn.src="../o/i3/nawmin_sample9.png";x+=moveDistance;if(x>rightPosition){x=rightPosition+5;}obj.style.left = x +'px';objEn.style.left = x +'px';if(x>rightPosition)x=rightPosition;}else if(direction==2){img.src="../o/i3/nawmin_sample10.png";imgEn.src="../o/i3/nawmin_sample10.png";y-=moveDistance;if(y<upPosition){y=upPosition-5;}obj.style.top = y +'px';objEn.style.top = y +'px';if(y<0)y=0;}else if(direction==3){img.src="../o/i3/nawmin_sample10.png";imgEn.src="../o/i3/nawmin_sample10.png";y+=moveDistance;if(y>downPosition){y=downPosition;}obj.style.top = y +'px';objEn.style.top = y +'px';if(y>downPosition)y=downPosition;}judgeFeed();currentHiyokoPosition();}function judgeFeed(){let result= 0;result =judgeHiyoko();if(result == 1){index++;if(index==aryX.length)index=0;const daizu = document.getElementById("daizu");const daizuEn = document.getElementById("daizuEn");daizu.style.top = aryY[index] +'px';daizu.style.left = aryX[index] +'px';daizuEn.style.top = aryY[index] +'px';daizuEn.style.left = aryX[index] +'px';score++;const point = document.getElementById("score");const pointEn = document.getElementById("scoreEn");point.textContent = score;pointEn.textContent = score;currentDaizuPosition();}}function judgeHiyoko(){let result =0;let x1=x+100/2;let y1=y+100/2;let x2=aryX[index]+50/2;let y2=aryY[index]+50/2;let xx=Math.abs(x1-x2);let yy=Math.abs(y1-y2);let xy=Math.pow(xx,2) + Math.pow(yy,2);let r=Math.sqrt(xy);if(r<=30){result =1;}return result;}function currentDaizuPosition(){const pos = document.getElementById("daizu_pos");pos.textContent = "x:"+aryX[index]+" y:"+aryY[index];const posCenter = document.getElementById("daizu_center_pos");posCenter.textContent = "x:"+(aryX[index]+25)+" y:"+(aryY[index]+25);const posEn = document.getElementById("daizu_posEn");posEn.textContent = "x:"+aryX[index]+" y:"+aryY[index];const posCenterEn = document.getElementById("daizu_center_posEn");posCenterEn.textContent = "x:"+(aryX[index]+25)+" y:"+(aryY[index]+25);}function currentHiyokoPosition(){const pos = document.getElementById("hiyoko_pos");pos.textContent = "x:"+x+" y:"+y;const posCenter = document.getElementById("hiyoko_center_pos");posCenter.textContent = "x:"+(x+50)+" y:"+(y+50);const posEn = document.getElementById("hiyoko_posEn");posEn.textContent = "x:"+x+" y:"+y;const posCenterEn = document.getElementById("hiyoko_center_posEn");posCenterEn.textContent = "x:"+(x+50)+" y:"+(y+50);}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
