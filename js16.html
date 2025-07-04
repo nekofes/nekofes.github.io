@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+if(self!=top){top.location=self.location;}
+</script>
+<title>Javascript MEMO</title>
+<script type = "text/javascript" src="../o/run_prettify.js"></script>
+<link href = "../o/prettify.css" type="text/css" rel="stylesheet" />
+  <style>
+    .prettyprint ol.linenums > li {
+      list-style-type: decimal; 
+    }
+    /* お好みでボタンのスタイルも設定 */
+    .copy-button {
+      display: inline-block; /* インライン要素をブロック要素のように扱う */
+      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */
+      border: 1px solid #000; /* 枠線を追加 */
+      border-radius: 3px; /* 角を丸くする */
+      text-decoration: none; /* デフォルトの下線を消す */
+      color: #000; /* リンクの色 */
+      background-color: #ffffcc; /* 背景色を黄色に */
+      /* 蛍光ペン風の背景色 */
+      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */
+    }
+    .copy-button:hover {
+      background-color: #ffeb99; /* ホバー時の背景色 */
+    }
+
+  </style>
+</head>
+<!--
+<body oncontextmenu='return false;'>
+<body>
+-->
+<body oncontextmenu='return false;'>
+<table border=0>
+	<tr>
+		<td>
+			<input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked>
+			<label for=0>日本語</label>
+		</td>
+		<td>
+			<input type=radio id='r1' name='r1' value=1 onchange='f1(1);'>
+			<label for=1>ENGLISH</label>
+		</td>
+	</tr>
+</table>
+<input type=hidden id=lang value=0>
+<div id=l0>
+<a href='#' onClick="f2();">戻る</a>
+<!--
+<a href='#' onClick="f2();">back</a>
+-->
+<br>
+<br>
+
+<table>
+	<tr>
+		<td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">
+列挙型
+		</td>
+	</tr>
+	<tr>
+<td>
+enumのような定数の代わりとなる方法のサンプルです。
+</td>
+</tr>
+</table>
+<br>
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">1</td><td>オブジェクトで定数を定義</td>
+</tr>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">2</td><td>freezeを使ったオブジェクトの定数を定義</td>
+</tr>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">3</td><td>Symbolを使ったユニークキー</td>
+</tr>
+</table>
+<br>
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+オブジェクトで定数を定義
+</div>
+連想配列を一つのオブジェクトまとめる方法です。<br>
+書き換えが可能な方法です。<br>
+<br>
+<div id="no1"></div>
+問題<div id="p1"></div>
+答えを入力してください。<input type=text id="ans1" value=""><br>
+<button id="btn1">結果の判定</button><br>
+<br>
+<textarea id="t1" rows=5 cols=70>
+<div id="no1"></div>
+問題<div id="p1"></div>
+答えを入力してください。<input type=text id="ans1" value=""><br>
+<button id="btn1">結果の判定</button><br>
+</textarea>
+<br>
+<a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a>
+<pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+//オブジェクトを使用した列挙型を定義します
+const data1 = {
+	ok:"正解",
+	ng:"不正解",
+	end:"問題はこれ以上ありません。",
+	index:0//使用中のインデックス
+}
+//問題に使用する数字
+const aryNum1=[2,3,5];//1個目の数字
+const aryNum2=[4,1,6];//2個目の数字
+//問題の出題数を表示
+displayProblemNo("no1", data1.index + 1);
+//問題を出力
+printCalcProblem();
+const btn1 = document.getElementById("btn1");
+btn1.addEventListener("click", () => 
+{
+	//インデックスが3問目を超えているケース
+	if(data1.index==3)
+	{
+		alert(data1.end);
+		return;
+	}
+	//計算を判定
+	judgeCalc();
+	if(data1.index<3)
+	{
+		//問題の出題数を表示
+		 displayProblemNo("no1", data1.index + 1);
+		//問題を出力
+		printCalcProblem();
+	}
+});
+//問題の出題数を表示
+function displayProblemNo(id, no)
+{
+	const obj =document.getElementById(id);
+	obj.innerText = no + "問目";
+}
+//問題を出力
+function printCalcProblem()
+{
+	const obj =document.getElementById("p1");
+	obj.innerText = String(aryNum1[data1.index]) + " + " + String(aryNum2[data1.index]);
+}
+//計算を判定
+function judgeCalc()
+{
+	let result = 0;
+	//ユーザーの入力した結果を取得
+	const obj =document.getElementById("ans1");
+	result = obj.value;
+	//たし算の結果とユーザーの入力した数字との判定
+	if(Number(aryNum1[data1.index] + aryNum2[data1.index]) == result)
+	{
+		alert(data1.ok);//正解
+	}
+	else
+	{
+		alert(data1.ng);//不正解
+	}
+	data1.index++;//次のデータを参照するためインクリメントします
+}
+</pre>
+このサンプルは3個の問題を出題しています。<br>
+3個を答えたら、「問題はこれ以上ありません。」というメッセージを表示し<br>
+これ以上実行できないようにしています。<br>
+<br>
+<div id="p" style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+//オブジェクトを使用した列挙型を定義します<br>
+const data1 = {<br>
+&nbsp;&nbsp;ok:"正解",<br>
+&nbsp;&nbsp;ng:"不正解",<br>
+&nbsp;&nbsp;end:"問題はこれ以上ありません。",<br>
+&nbsp;&nbsp;index:0//使用中のインデックス<br>
+}<br>
+</div>
+<br>
+オブジェクトを作り、その中に連想配列を使用しています。<br>
+そのため、内部の値は変更することができます。<br>
+列挙型の定数として使用したい場合は、下記で説明するfreezeを使いますが、<br>
+オブジェクトの仕組みを使用して、必要な部分を変数として用いることができます。<br>
+今回はオブジェクト内のindexを問題のインデックスとして判定等に使用しています。<br>
+<br>
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+freezeを使ったオブジェクトの定数を定義
+</div>
+連想配列を一つのオブジェクトまとめる方法です。<br>
+書き換えが不可能な方法です。<br>
+<div id="no2"></div>
+問題<div id="p2"></div>
+何文字か答えてください。<input type=text id="ans2" value=""><br>
+<button id="btn2">結果の判定</button><br>
+<textarea id="t2" rows=5 cols=70>
+<div id="no2"></div>
+問題<div id="p2"></div>
+何文字か答えてください。<input type=text id="ans2" value=""><br>
+<button id="btn2">結果の判定</button><br>
+</textarea>
+<br>
+<a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a>
+<pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+//オブジェクトを使用した列挙型を定義します
+const data2 = Object.freeze({
+	ok:"正解",
+	ng:"不正解",
+	end:"問題はこれ以上ありません。",
+	count:3//問題個数
+});
+//問題に使用する文字列
+const aryData=["word","water","problem"];
+let index = 0;
+//問題の出題数を表示
+displayProblemNo("no2", index + 1);
+//問題を表示
+displayProblemString();
+const btn2 = document.getElementById("btn2");
+btn2.addEventListener("click", () => 
+{
+	//インデックスが問題要素数を超えたケース
+	if(index==data2.count)
+	{
+		alert(data2.end);
+		//freezeを使ったオブジェクトの値を変更するテスト
+		checkChangeValue();
+		return;
+	}
+	//文字数を判定
+	judgeLength();
+	//次の問題が存在するケースは下記の処理を実行します
+	if(index < data2.count)
+	{
+		//問題の出題数を表示
+		displayProblemNo("no2", index + 1);
+		//問題を出力
+		displayProblemString();
+	}
+});
+//freezeを使ったオブジェクトの値を変更するテスト
+function checkChangeValue()
+{
+	try{
+		data2.count = 0;//変更処理をしてみます
+		alert("ステップが実行されました");
+	}catch{
+		alert("catch:エラーになった場合は、ここを通ります");
+	}finally{
+		alert("finally");
+		alert("data2.countの現在の値:"+data2.count);
+	}
+}
+//文字数を判定
+function judgeLength()
+{
+	let result = 0;
+	//ユーザーの入力した結果を取得
+	const obj =document.getElementById("ans2");
+	result = obj.value;
+	//問題の文字列の長さを判定
+	if(aryData[index].length == result)
+	{
+		alert(data1.ok);//正解
+	}
+	else
+	{
+		alert(data1.ng);//不正解
+	}
+	index++;//次のデータを参照するためインクリメントします
+}
+//問題を表示
+function displayProblemString()
+{
+	const obj =document.getElementById("p2");
+	obj.innerText = aryData[index];
+}
+//問題の出題数を表示
+function displayProblemNo(id, no)
+{
+	const obj =document.getElementById(id);
+	obj.innerText = no + "問目";
+}
+</pre>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+//オブジェクトを使用した列挙型を定義します<br>
+const data2 = Object.freeze({<br>
+&nbsp;&nbsp;ok:"正解",<br>
+&nbsp;&nbsp;ng:"不正解",<br>
+&nbsp;&nbsp;end:"問題はこれ以上ありません。",<br>
+&nbsp;&nbsp;count:3//問題個数<br>
+});<br>
+</div>
+「Object.freeze」を使用すると内部で実装した連想配列の値を変更することができません。<br>
+このメリットとして複数人のプロジェクトで開発をしている場合、<br>
+オブジェクトの値を書き換えてしまう実装ミスを減らすことができます。<br>
+このサンプルでは下記の判定により、「Object.freeze」を使用したことにより<br>
+値の書き換えの変更ができない結果を実行したものです。<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+//freezeを使ったオブジェクトの値を変更するテスト<br>
+function checkChangeValue()<br>
+{<br>
+&nbsp;&nbsp;try{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data2.count = 0;//変更処理をしてみます<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("ステップが実行されました");<br>
+&nbsp;&nbsp;}catch{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("catch:エラーになった場合は、ここを通ります");<br>
+&nbsp;&nbsp;}finally{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("finally");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("data2.countの現在の値:"+data2.count);<br>
+&nbsp;&nbsp;}<br>
+}<br>
+</div>
+[実行結果]<br>
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">ステップ</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">alert結果</td>
+</tr>
+<tr>
+<td style="text-align:center;">(1)</td>
+<td>ステップが実行されました</td>
+</tr>
+<tr>
+<td style="text-align:center;">(2)</td>
+<td>finally</td>
+</tr>
+<tr>
+<td style="text-align:center;">(3)</td>
+<td>data2.countの現在の値:3</td>
+</tr>
+</table>
+<br>
+<div  style="background-color:rgb(75 0 130 / 0.2);text-align:left;">
+data2.count = 0;
+</div>
+ここで値の書き換えを実行しました。<br>
+しかし、alertの結果を確認してもわかるように変更されているないことがわかります。<br>
+書き換えが不可能であることがわかります。<br>
+<br>
+
+<br>
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+Symbolを使ったユニークキー
+</div>
+SymbolはES6(ECMAScript 2015)で導入された仕組みです。<br>
+一意で不変な値を表すプリミティブ型として使われます。<br>
+<button id="btn3">symbolの変数との比較結果</button><br>
+<button id="btn4">symbolで同じ変数同士の比較結果</button><br>
+<button id="btn5">symbolで変数名が異なる比較結果</button><br>
+<br>
+<textarea id="t3" rows=4 cols=70>
+<button id="btn3">symbolの変数との比較結果</button><br>
+<button id="btn4">symbolで同じ変数同士の比較結果</button><br>
+<button id="btn5">symbolで変数名が異なる比較結果</button><br>
+</textarea>
+<br>
+<a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a>
+<pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+//symbolの変数との比較結果
+const data3 ={
+	ok1:Symbol(1),
+	ok2:Symbol(1),
+}
+const btn3 = document.getElementById("btn3");
+btn3.addEventListener("click", () => 
+{
+	if(data3.ok1.valueOf() === 1)
+	{
+		alert("一致");
+	}
+	else
+	{
+		alert("不一致");
+	}
+});
+//symbolで同じ変数同士の比較結果
+const btn4 = document.getElementById("btn4");
+btn4.addEventListener("click", () => 
+{
+	if(data3.ok1 == data3.ok1)
+	{
+		alert("一致");
+	}
+	else
+	{
+		alert("不一致");
+	}
+});
+//symbolで変数名が異なる比較結果
+const btn5 = document.getElementById("btn5");
+btn5.addEventListener("click", () => 
+{
+	if(data3.ok1 == data3.ok2)
+	{
+		alert("一致");
+	}
+	else
+	{
+		alert("不一致");
+	}
+});
+</pre>
+<div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">
+valueOf()
+</div>
+SymbolオブジェクトはvalueOf()メソッドを実行することで、その中に格納されている値を返すことできます。<br>
+<br>
+javascriptの列挙型(オブジェクトで定義)でSymbolを使用して定義した値と<br>
+プリミティブな値(数字や文字列など)と比較した場合、通常は一致しません<br>
+Symbolは一意な識別子であり、プリミティブな値とは異なる型として扱われるためです。<br>
+厳密な比較(===)でも厳密でない比較(==)でもfalseを返すためです。<br>
+<br>
+[ボタンの実行結果]<br>
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">ボタン名</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">alert結果</td>
+</tr>
+<tr>
+<td>symbolの変数との比較結果</td>
+<td>不一致</td>
+</tr>
+<tr>
+<td>symbolで同じ変数同士の比較結果</td>
+<td>一致</td>
+</tr>
+<tr>
+<td>symbolで変数名が異なる比較結果</td>
+<td>不一致</td>
+</tr>
+</table>
+
+<br><br>
+<a href='#' onClick="f2();">戻る</a>
+<!--
+<a href='#' onClick="f2();">back</a>
+-->
+
+</div>
+<!--
+english
+-->
+<div id=l1>
+<!--
+<a href="#" onclick="f2();">戻る</a>
+-->
+<a href="#" onclick="f2();">back</a>
+<br>
+<br>
+<table>
+	<tr>
+		<td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">
+<!--
+列挙型
+-->
+Enumerations
+		</td>
+	</tr>
+	<tr>
+<td>
+<!--
+enumのような定数の代わりとなる方法のサンプルです。
+-->
+Here's an example of an alternative to enum-like constants.
+</td>
+</tr>
+</table>
+<br>
+<table>
+<tr>
+<!--
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">1</td><td>オブジェクトで定数を定義</td>
+</tr>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">2</td><td>freezeを使ったオブジェクトの定数を定義</td>
+</tr>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">3</td><td>Symbolを使ったユニークキー</td>
+-->
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">1</td><td>Define constants with objects</td>
+</tr>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">2</td><td>Define constants with objects using freeze</td>
+</tr>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">3</td><td>Unique key using Symbol</td>
+</tr>
+</table>
+<br>
+<!--
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+オブジェクトで定数を定義
+</div>
+連想配列を一つのオブジェクトまとめる方法です。<br>
+書き換えが可能な方法です。<br>
+<br>
+<div id="no1En"></div>
+問題<div id="p1En"></div>
+答えを入力してください。<input type=text id="ans1En" value=""><br>
+<button id="btn1En">結果の判定</button><br>
+-->
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+Define constants with objects
+</div>
+This is a way to combine associative arrays into one object. <br>
+This is a method that allows you to rewrite. <br>
+<br>
+<div id="no1En"></div>
+Question<div id="p1En"></div>
+Enter your answer. <input type=text id="ans1En" value=""><br>
+<button id="btn1En">Judge the result</button><br>
+<br>
+<textarea id="t1En" rows=5 cols=70>
+<div id="no1"></div>
+problem<div id="p1"></div>
+Please enter your answer.<input type=text id="ans1" value=""><br>
+<button id="btn1">結果の判定</button><br>
+</textarea>
+<br>
+<a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a>
+<pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+//Define an enumeration type using an object
+const data1 = {
+	ok:"correct",
+	ng:"incorrect",
+	end:"no more problem",
+	index:0//Indexes in use
+}
+//Numbers used in the question
+const aryNum1=[2,3,5];//First number
+const aryNum2=[4,1,6];//Second number
+//Show number of questions
+displayProblemNo("no1", data1.index + 1);
+//Print the problem
+printCalcProblem();
+const btn1 = document.getElementById("btn1");
+btn1.addEventListener("click", () => 
+{
+	//Cases where the index is greater than the third question
+	if(data1.index==3)
+	{
+		alert(data1.end);
+		return;
+	}
+	//Evaluate the calculation
+	judgeCalc();
+	if(data1.index<3)
+	{
+		//Show number of questions
+		 displayProblemNo("no1", data1.index + 1);
+		//Print the problem
+		printCalcProblem();
+	}
+});
+//Show number of questions
+function displayProblemNo(id, no)
+{
+	const obj =document.getElementById(id);
+	obj.innerText = "No:"+no ;
+}
+//Print the problem
+function printCalcProblem()
+{
+	const obj =document.getElementById("p1");
+	obj.innerText = String(aryNum1[data1.index]) + " + " + String(aryNum2[data1.index]);
+}
+//Evaluate the calculation
+function judgeCalc()
+{
+	let result = 0;
+	//Get the result of the user's input
+	const obj =document.getElementById("ans1");
+	result = obj.value;
+	//Check whether the result of the addition is the same as the number entered by the user
+	if(Number(aryNum1[data1.index] + aryNum2[data1.index]) == result)
+	{
+		alert(data1.ok);//correct
+	}
+	else
+	{
+		alert(data1.ng);//incorrect
+	}
+	data1.index++;//Increment to reference the next data
+}
+</pre>
+<!--
+このサンプルは3個の問題を出題しています。<br>
+3個を答えたら、「問題はこれ以上ありません。」というメッセージを表示し<br>
+これ以上実行できないようにしています。<br>
+-->
+This sample asks three questions. <br>
+After you answer all three questions, the message "There are no more questions" is displayed and you cannot continue. <br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+<!--
+//オブジェクトを使用した列挙型を定義します<br>
+const data1 = {<br>
+&nbsp;&nbsp;ok:"正解",<br>
+&nbsp;&nbsp;ng:"不正解",<br>
+&nbsp;&nbsp;end:"問題はこれ以上ありません。",<br>
+&nbsp;&nbsp;index:0//使用中のインデックス<br>
+}<br>
+-->
+//Define an enumeration using an object<br>
+const data1 = {<br>
+&nbsp;&nbsp;ok:"correct",<br>
+&nbsp;&nbsp;ng:"incorrect",<br>
+&nbsp;&nbsp;end:"no more problem",<br>
+&nbsp;&nbsp;index:0//Indexes in use<br>
+}<br>
+</div>
+<br>
+<!--
+オブジェクトを作り、その中に連想配列を使用しています。<br>
+そのため、内部の値は変更することができます。<br>
+列挙型の定数として使用したい場合は、下記で説明するfreezeを使いますが、<br>
+オブジェクトの仕組みを使用して、必要な部分を変数として用いることができます。<br>
+今回はオブジェクト内のindexを問題のインデックスとして判定等に使用しています。<br>
+-->
+An object is created and an associative array is used within it. <br>
+Therefore, the internal values ​​can be changed. <br>
+If you want to use it as an enumeration constant, use freeze, which is explained below, <br>
+You can use the object mechanism to use the parts you need as variables. <br>
+In this case, the index within the object is used as the problem index for judgment, etc. <br><br>
+<br>
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+<!--
+freezeを使ったオブジェクトの定数を定義
+-->
+Defining constants for objects using freeze
+</div>
+<!--
+連想配列を一つのオブジェクトまとめる方法です。<br>
+書き換えが不可能な方法です。<br>
+-->
+This is a method to combine associative arrays into one object. <br>
+This method cannot be rewritten. <br>
+<div id="no2En"></div>
+<!--
+問題<div id="p2En"></div>
+何文字か答えてください。<input type=text id="ans2En" value=""><br>
+-->
+Question<div id="p2En"></div>
+Please answer with a few characters. <input type=text id="ans2En" value=""><br>
+<!--
+<button id="btn2En">結果の判定</button><br>
+-->
+<button id="btn2En">judge result</button><br>
+<textarea id="t2En" rows=5 cols=70>
+<div id="no2"></div>
+ploblem<div id="p2"></div>
+Please answer with a few characters. <input type=text id="ans2" value=""><br>
+<button id="btn2">judge result</button><br>
+</textarea>
+<br>
+<a href="javascript:void(0);" id="copy5" class="copy-button" data-target="codeBlock5">copy</a>
+<pre id="codeBlock5" class="prettyprint linenums;lang-js;">
+//Define an enumeration type using an object
+const data2 = Object.freeze({
+	ok:"correct",
+	ng:"incorrect",
+	end:"no more problem",
+	count:3//problme count
+});
+//String to use in question
+const aryData=["word","water","problem"];
+let index = 0;
+//Show number of questions
+displayProblemNo("no2", index + 1);
+//display problem
+displayProblemString();
+const btn2 = document.getElementById("btn2");
+btn2.addEventListener("click", () => 
+{
+	//Cases where the index exceeds the number of problem elements
+	if(index==data2.count)
+	{
+		alert(data2.end);
+		//Testing changing object values ​​using freeze
+		checkChangeValue();
+		return;
+	}
+	//Determine the number of characters
+	judgeLength();
+	//If the following problem exists, perform the following steps:
+	if(index < data2.count)
+	{
+		//Show number of questions
+		displayProblemNo("no2", index + 1);
+		//Print the problem
+		displayProblemString();
+	}
+});
+//Testing changing object values ​​using freeze
+function checkChangeValue()
+{
+	try{
+		data2.count = 0;//try to make the change
+		alert("Step performed");
+	}catch{
+		alert("catch:If get an error, go here");
+	}finally{
+		alert("finally");
+		alert("data2.count current value:"+data2.count);
+	}
+}
+//Determine the number of characters
+function judgeLength()
+{
+	let result = 0;
+	//Get the result of the user's input
+	const obj =document.getElementById("ans2");
+	result = obj.value;
+	//Determine the length of the string in question
+	if(aryData[index].length == result)
+	{
+		alert(data1.ok);//correct
+	}
+	else
+	{
+		alert(data1.ng);//incorrect
+	}
+	index++;//Increment to reference the next data
+}
+//display problem
+function displayProblemString()
+{
+	const obj =document.getElementById("p2");
+	obj.innerText = aryData[index];
+}
+//Show number of questions
+function displayProblemNo(id, no)
+{
+	const obj =document.getElementById(id);
+	obj.innerText = "No:" + no;
+}
+</pre>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+<!--
+//オブジェクトを使用した列挙型を定義します<br>
+const data2 = Object.freeze({<br>
+&nbsp;&nbsp;ok:"正解",<br>
+&nbsp;&nbsp;ng:"不正解",<br>
+&nbsp;&nbsp;end:"問題はこれ以上ありません。",<br>
+&nbsp;&nbsp;count:3//問題個数<br>
+});<br>
+-->
+//Define an enumeration type using an object<br>
+const data2 = Object.freeze({<br>
+&nbsp;&nbsp;ok:"Correct",<br>
+&nbsp;&nbsp;ng:"Incorrect",<br>
+&nbsp;&nbsp;end:"No more questions.",<br>
+&nbsp;&nbsp;count:3//Number of questions<br>
+});<br>
+</div>
+<!--
+「Object.freeze」を使用すると内部で実装した連想配列の値を変更することができません。<br>
+このメリットとして複数人のプロジェクトで開発をしている場合、<br>
+オブジェクトの値を書き換えてしまう実装ミスを減らすことができます。<br>
+このサンプルでは下記の判定により、「Object.freeze」を使用したことにより<br>
+値の書き換えの変更ができない結果を実行したものです。<br>
+-->
+When you use "Object.freeze", you cannot change the values ​​of the internally implemented associative array. <br>
+The advantage of this is that when developing a project with multiple people,<br>
+it reduces implementation errors that cause object values ​​to be overwritten. <br>
+In this sample, the following judgment was made, and the result of using "Object.freeze"<br>
+would not allow the value to be overwritten. <br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+<!--
+//freezeを使ったオブジェクトの値を変更するテスト<br>
+function checkChangeValue()<br>
+{<br>
+&nbsp;&nbsp;try{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data2.count = 0;//変更処理をしてみます<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("ステップが実行されました");<br>
+&nbsp;&nbsp;}catch{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("catch:エラーになった場合は、ここを通ります");<br>
+&nbsp;&nbsp;}finally{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("finally");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("data2.countの現在の値:"+data2.count);<br>
+&nbsp;&nbsp;}<br>
+}<br>
+-->
+//Test changing object value using freeze<br>
+function checkChangeValue()<br>
+{<br>
+&nbsp;&nbsp;try{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data2.count = 0;// Try the change process<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("Step was executed");<br>
+&nbsp;&nbsp;}catch{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("catch:If an error occurs, go through here");<br>
+&nbsp;&nbsp;}finally{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert("finally");<br>
+&nbsp;&nbsp;&nbsp;alert("Current value of data2.count:"+data2.count);<br>
+&nbsp;&nbsp;}<br>
+}<br>
+</div>
+<!--
+[実行結果]<br>
+-->
+[Execution result]<br>
+<!--
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">ステップ</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">alert結果</td>
+</tr>
+<tr>
+<td style="text-align:center;">(1)</td>
+<td>ステップが実行されました</td>
+</tr>
+<tr>
+<td style="text-align:center;">(2)</td>
+<td>finally</td>
+</tr>
+<tr>
+<td style="text-align:center;">(3)</td>
+<td>data2.countの現在の値:3</td>
+</tr>
+</table>
+-->
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Step</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">alert result</td>
+</tr>
+<tr>
+<td style="text-align:center;">(1)</td>
+<td>Step executed</td>
+</tr>
+<tr>
+<td style="text-align:center;">(2)</td>
+<td>finally</td>
+</tr>
+<tr>
+<td style="text-align:center;">(3)</td>
+<td>Current value of data2.count: 3</td>
+</tr>
+</table>
+<br>
+<div  style="background-color:rgb(75 0 130 / 0.2);text-align:left;">
+data2.count = 0;
+</div>
+<!--
+ここで値の書き換えを実行しました。<br>
+しかし、alertの結果を確認してもわかるように変更されているないことがわかります。<br>
+書き換えが不可能であることがわかります。<br>
+-->
+Here, we rewrote the value.<br>
+However, as you can see from the alert result, no changes have been made.<br>
+We can see that rewriting is not possible.<br>
+<br>
+
+<br>
+<div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">
+<!--
+Symbolを使ったユニークキー
+-->
+Unique key using Symbol
+</div>
+<!--
+SymbolはES6(ECMAScript 2015)で導入された仕組みです。<br>
+一意で不変な値を表すプリミティブ型として使われます。<br>
+-->
+Symbol is a mechanism introduced in ES6 (ECMAScript 2015).<br>
+It is used as a primitive type to represent a unique and immutable value. <br>
+<!--
+<button id="btn3En">symbolの変数との比較結果</button><br>
+<button id="btn4En">symbolで同じ変数同士の比較結果</button><br>
+<button id="btn5En">symbolで変数名が異なる比較結果</button><br>
+-->
+<button id="btn3En">Comparison results with symbol variables</button><br>
+<button id="btn4En">Comparison results between variables with the same symbol</button><br>
+<button id="btn5En">Comparison results with different variable names with symbol</button><br>
+<br>
+<textarea id="t3En" rows=4 cols=70>
+<button id="btn3">Comparison results with symbol variables</button><br>
+<button id="btn4">Comparison results with the same variables in symbol</button><br>
+<button id="btn5">Comparison results with different variable names in symbol</button><br>
+</textarea>
+<br>
+<a href="javascript:void(0);" id="copy6" class="copy-button" data-target="codeBlock6">copy</a>
+<pre id="codeBlock6" class="prettyprint linenums;lang-js;">
+//The result of comparing symbol with the variable
+const data3 ={
+	ok1:Symbol(1),
+	ok2:Symbol(1),
+}
+const btn3 = document.getElementById("btn3");
+btn3.addEventListener("click", () => 
+{
+	if(data3.ok1.valueOf() === 1)
+	{
+		alert("equal");
+	}
+	else
+	{
+		alert("not equal");
+	}
+});
+//Comparison result between variables with the same symbol
+const btn4 = document.getElementById("btn4");
+btn4.addEventListener("click", () => 
+{
+	if(data3.ok1 == data3.ok1)
+	{
+		alert("equal");
+	}
+	else
+	{
+		alert("not equal");
+	}
+});
+//Comparison result where the variable name is different for symbol
+const btn5 = document.getElementById("btn5");
+btn5.addEventListener("click", () => 
+{
+	if(data3.ok1 == data3.ok2)
+	{
+		alert("equal");
+	}
+	else
+	{
+		alert("not equal");
+	}
+});
+</pre>
+<div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">
+valueOf()
+</div>
+<!--
+SymbolオブジェクトはvalueOf()メソッドを実行することで、その中に格納されている値を返すことできます。<br>
+<br>
+javascriptの列挙型(オブジェクトで定義)でSymbolを使用して定義した値と<br>
+プリミティブな値(数字や文字列など)と比較した場合、通常は一致しません<br>
+Symbolは一意な識別子であり、プリミティブな値とは異なる型として扱われるためです。<br>
+厳密な比較(===)でも厳密でない比較(==)でもfalseを返すためです。<br>
+<br>
+[ボタンの実行結果]<br>
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">ボタン名</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">alert結果</td>
+</tr>
+<tr>
+<td>symbolの変数との比較結果</td>
+<td>不一致</td>
+</tr>
+<tr>
+<td>symbolで同じ変数同士の比較結果</td>
+<td>一致</td>
+</tr>
+<tr>
+<td>symbolで変数名が異なる比較結果</td>
+<td>不一致</td>
+</tr>
+</table>
+-->
+Symbol objects can return the value stored in them by executing the valueOf() method. <br>
+<br>
+Values ​​defined using Symbol in JavaScript enumerations (defined in objects)<br>
+When compared with primitive values ​​(numbers, strings, etc.), they usually do not match.<br>
+This is because Symbols are unique identifiers and are treated as a different type than primitive values. <br>
+This is because both strict (===) and non-strict (==) comparisons return false. <br>
+<br>
+[Button execution results]<br>
+<table>
+<tr>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Button name</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Alert result</td>
+</tr>
+<tr>
+<td>Comparison result with symbol variable</td>
+<td>Mismatch</td>
+</tr>
+<tr>
+<td>Comparison result with same variable in symbol</td>
+<td>Match</td>
+</tr>
+<tr>
+<td>Comparison result with different variable name in symbol</td>
+<td>Mismatch</td>
+</tr>
+</table>
+<br><br>
+<!--
+<a href="#" onclick="f2();">戻る</a>
+-->
+<a href="#" onclick="f2();">back</a>
+
+</div>
+			
+<!--
+共通CSSおよびjavascript
+-->
+<script>
+//-------------------------------------------
+//オブジェクトで定数を定義
+//-------------------------------------------
+//オブジェクトを使用した列挙型を定義します
+const data1 = {
+	ok:"正解",
+	ng:"不正解",
+	end:"問題はこれ以上ありません。",
+	index:0//使用中のインデックス
+}
+const data1En = {
+	ok:"correct",
+	ng:"incorrect",
+	end:"no more problem",
+	index:0//使用中のインデックス
+}
+//問題に使用する数字
+const aryNum1=[2,3,5];//1個目の数字
+const aryNum2=[4,1,6];//2個目の数字
+//問題を出力
+let o1=new URL(window.location.href);
+let o2=o1.searchParams;
+let d=o2.get('lang');
+const obj=document.getElementById('lang');
+let langValue=0;
+if(d==1||obj.value==1)
+{
+	langValue=1;
+}
+else
+{
+	langValue=0;
+}
+//問題の出題数を表示
+displayProblemNo(langValue,langValue==0?"no1":"no1En", data1.index + 1);
+printCalcProblem(langValue);
+const btn1 = document.getElementById("btn1");
+btn1.addEventListener("click", () => 
+{
+	test1(0);
+});
+const btn1En = document.getElementById("btn1En");
+btn1En.addEventListener("click", () => 
+{
+	test1(1);
+});
+function test1(lang)
+{
+	//インデックスが3問目を超えているケース
+	if(data1.index==3)
+	{
+		if(lang==0)
+		{
+			alert(data1.end);
+		}
+		else
+		{
+			alert(data1En.end);
+		}
+		return;
+	}
+	//計算を判定
+	judgeCalc(lang);
+	let value=0;
+	value=lang==0?data1.index:data1En.index;
+	if(value<3)
+	{
+		//問題の出題数を表示
+		 displayProblemNo(lang,lang==0?"no1":"no1En", value + 1);
+		//問題を出力
+		printCalcProblem(lang);
+	}
+}
+//問題を出力
+function printCalcProblem(lang)
+{
+	let value =0;
+	value=lang==0?data1.index:data1En.index;
+	const obj =document.getElementById(lang==0?"p1":"p1En");
+	obj.innerText = String(aryNum1[value]) + " + " + String(aryNum2[value]);
+}
+//計算を判定
+function judgeCalc(lang)
+{
+	let result = 0;
+	//ユーザーの入力した結果を取得
+	const obj =document.getElementById("ans1");
+	result = obj.value;
+	let value=0;
+	value=lang==0?data1.index:data1En.index;
+	//たし算の結果とユーザーの入力した数字との判定
+	if(Number(aryNum1[value] + aryNum2[value]) == result)
+	{
+		alert(lang==0?data1.ok:data1En.ok);//正解
+	}
+	else
+	{
+		alert(lang==0?data1.ng:data1En.ng);//不正解
+	}
+	if(lang==0)
+	{
+		data1.index++;//次のデータを参照するためインクリメントします
+	}
+	else
+	{
+		data1En.index++;//次のデータを参照するためインクリメントします
+	}
+}
+//-------------------------------------------
+//freezeを使ったオブジェクトの定数を定義
+//-------------------------------------------
+//オブジェクトを使用した列挙型を定義します
+const data2 = Object.freeze({
+	ok:"正解",
+	ng:"不正解",
+	end:"問題はこれ以上ありません。",
+	count:3//問題個数
+});
+const data2En = Object.freeze({
+	ok:"correct",
+	ng:"incorrect",
+	end:"no more problem",
+	count:3//問題個数
+});
+//問題に使用する文字列
+const aryData=["word","water","problem"];
+let index = 0;
+//問題の出題数を表示
+displayProblemNo(langValue,langValue==0?"no2":"no2En", index + 1);
+//問題を表示
+displayProblemString(langValue);
+const btn2 = document.getElementById("btn2");
+btn2.addEventListener("click", () => 
+{
+	test2(0);
+});
+const btn2En = document.getElementById("btn2En");
+btn2En.addEventListener("click", () => 
+{
+	test2(1);
+});
+function test2(lang)
+{
+	//インデックスが問題要素数を超えたケース
+	let value= 0;
+	value=lang==0?data2.count:data2En.count;
+	if(index==value)
+	{
+		alert(lang==0?data2.end:data2En.end);
+		//freezeを使ったオブジェクトの値を変更するテスト
+		checkChangeValue(lang);
+		return;
+	}
+	//文字数を判定
+	judgeLength(lang);
+	//次の問題が存在するケースは下記の処理を実行します
+	if(index < value)
+	{
+		//問題の出題数を表示
+		displayProblemNo(lang,lang==0?"no2":"no2En", index + 1);
+		//問題を出力
+		displayProblemString(lang);
+	}
+}
+//freezeを使ったオブジェクトの値を変更するテスト
+function checkChangeValue(lang)
+{
+	try{
+		data2.count = 0;//変更処理をしてみます
+		if(lang==0)
+		{
+			alert("ステップが実行されました");
+		}
+		else
+		{
+			alert("program step executed");
+		}
+	}catch{
+		if(lang==0)
+		{
+			alert("catch:エラーになった場合は、ここを通ります");
+		}
+		else
+		{
+			alert("Incase of an error, this step is executed.");
+		}
+	}finally{
+		if(lang==0)
+		{
+			alert("finally");
+			alert("data2.countの現在の値:"+data2.count);
+		}
+		else
+		{
+			alert("finally");
+			alert("data2.count current value:"+data2En.count);
+		}
+	}
+}
+//文字数を判定
+function judgeLength(lang)
+{
+	let result = 0;
+	//ユーザーの入力した結果を取得
+	const obj =document.getElementById(lang==0?"ans2":"ans2En");
+	result = obj.value;
+	//問題の文字列の長さを判定
+	if(aryData[index].length == result)
+	{
+		alert(lang==0?data2.ok:data2En.ok);//正解
+	}
+	else
+	{
+		alert(lang==0?data2.ng:data2En.ng);//不正解
+	}
+	index++;//次のデータを参照するためインクリメントします
+}
+//問題を表示
+function displayProblemString(lang)
+{
+	const obj =document.getElementById(lang==0?"p2":"p2En");
+	obj.innerText = aryData[index];
+}
+//問題の出題数を表示
+function displayProblemNo(lang,id, no)
+{
+	const obj =document.getElementById(id);
+	if(lang==0)
+	{
+		obj.innerText = no + "問目";
+	}
+	else
+	{
+		obj.innerText = "No:" + no;
+	}
+
+}
+//-------------------------------------------
+//Symbolを使ったユニークキー
+//-------------------------------------------
+//symbolの変数との比較結果
+const data3 ={
+	ok1:Symbol(1),
+	ok2:Symbol(1),
+}
+const btn3 = document.getElementById(langValue==0?"btn3":"btn3En");
+btn3.addEventListener("click", () => 
+{
+	if(data3.ok1.valueOf() === 1)
+	{
+		alert(langValue==0?"一致":"equal");
+	}
+	else
+	{
+		alert(langValue==0?"不一致":"not equal");
+	}
+});
+//symbolで同じ変数同士の比較結果
+const btn4 = document.getElementById(langValue==0?"btn4":"btn4En");
+btn4.addEventListener("click", () => 
+{
+	if(data3.ok1 == data3.ok1)
+	{
+		alert(langValue==0?"一致":"equal");
+	}
+	else
+	{
+		alert(langValue==0?"不一致":"not equal");
+	}
+});
+//symbolで変数名が異なる比較結果
+const btn5 = document.getElementById(langValue==0?"btn5":"btn5En");
+btn5.addEventListener("click", () => 
+{
+	if(data3.ok1 == data3.ok2)
+	{
+		alert(langValue==0?"一致":"equal");
+	}
+	else
+	{
+		alert(langValue==0?"不一致":"not equal");
+	}
+});
+
+</script>
+
+<!--
+scriptタグのプログラムはボタンの最後に実装する必要があります。
+-->
+<script>
+    // Clipboard API を利用したコピー処理
+    function copyCodeById(targetId) {
+      const codeElement = document.getElementById(targetId);
+      if (!codeElement) {
+        console.error("対象のコードブロックが見つかりません: " + targetId);
+        return;
+      }
+      // コードブロック内のテキストを取得（タグ内の書式設定が不要な場合は innerText でOK）
+      const codeText = codeElement.innerText;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(codeText)
+          .then(() => {
+            console.log("コピー成功");
+          })
+          .catch(err => {
+            console.error("コピー中にエラーが発生しました:", err);
+          });
+      } else {
+        console.error("Clipboard API はこのブラウザで利用できません");
+      }
+    }
+
+    // 各コピーリンクに共通のイベントリスナーを設定
+    document.querySelectorAll('.copy-button').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        copyCodeById(targetId);
+      });
+    });
+</script>
+
+<script>
+
+	/* onloadイベントを設定 */
+	window.onload = function() {
+		f3();
+		f0();
+	};
+	function f1(value)
+	{
+		const obj=document.getElementById('lang');
+		obj.value=value;
+		f0();
+	}
+	function f0()
+	{
+		const obj=document.getElementById('lang');
+		const l0=document.getElementById('l0');
+		const l1=document.getElementById('l1');
+		let lang=obj.value;
+		if(lang==1)
+		{
+			l0.style.display="none";
+			l1.style.display="block";
+		}
+		else
+		{
+			l0.style.display="block";
+			l1.style.display="none";
+		}
+		f4();
+	}
+	function f4()
+	{
+		const obj=document.getElementById('lang');
+		let d=obj.value;
+		let o=document.getElementsByName('r1');
+		if(d==0)
+		{
+			o[0].checked=true;
+		}
+		else
+		{
+			o[1].checked=true;
+		}
+	}
+	function f3()
+	{
+		let o1=new URL(window.location.href);
+		let o2=o1.searchParams;
+		let d=o2.get('lang');
+		const obj=document.getElementById('lang');
+		if(d==1||obj.value==1)
+		{
+			obj.value=1;
+		}
+		else
+		{
+			obj.value=0;
+		}
+	}
+	/*
+	function f3()
+	{
+		let o1=new URL(window.location.href);
+		let o2=o1.searchParams;
+		let d=o2.get('lang');
+		if(d==1)
+		{
+			const obj=document.getElementById('lang');
+			obj.value=d;
+		}
+	}
+	*/
+	function f2()
+	{
+		const obj=document.getElementById('lang');
+		let lang=obj.value;
+		let url="";
+		if(lang==0)
+		{
+			url='/js/index.html?lang=0';
+		}
+		else
+		{
+			url='/js/index.html?lang=1';
+		}
+		window.location.href=url;
+	}
+	function f5(no)
+	{
+		const obj=document.getElementById('lang');
+		let lang=obj.value;
+		let url="";
+		switch(no)
+		{
+			case 1:
+				if(lang==0)
+				{
+					url='/js/js1.html?lang=0';
+				}
+				else
+				{
+					url='/js/js1.html?lang=1';
+				}
+				break;
+			case 2:
+				if(lang==0)
+				{
+					url='/js/js2.html?lang=0';
+				}
+				else
+				{
+					url='/js/js2.html?lang=1';
+				}
+				break;
+		}
+		window.location.href=url;
+	}
+</script>
+
+<br>
+<br>
+<br>
+<!--  著作権情報 -->
+<table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'>	<tr>	<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'>	<b>著作権情報</b>	</td>	</tr>	<tr class=p2>	<td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body>
+</html>
