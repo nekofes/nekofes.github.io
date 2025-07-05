@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">try ... catchについて</td></tr><tr><td>try catchのエラーについて</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Error</div><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">1.構文エラ(文法エラー)</td></tr><tr><td>プログラムの実装をした際に作ってしまったエラーです。<br>キーワードのタイプミスやカッコの閉じる個数の過不足などがあります。</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">2.論理エラー</td></tr><tr><td>プログラムは実行できても仕様にそぐわない結果を実行してしまう結果のプログラムです。<br>原因としては変数に設定する値や条件のミスや条件分岐のタイミングによるエラーがあります。</td></tr></table>エラーが発生するとErrorオブジェクトが生成します。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(1) name</td></tr><tr><td>エラーの種類を表す文字列です。<br>(例)<br>TypeError<br>ReferenceError<br></td></tr></table><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(2) message</td></tr><tr><td>詳細なエラーメッセージです。<br>(例)<br>"Cannot read property 'xxx' of undefined".<br></td></tr></table><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(3) stack</td></tr><tr><td>エラーが発生した場所を示すスタックトレースを表示します。<br><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+try {
+  //エラーが発生すると仮定します
+  let result = test();
+} catch (error) {
+  //エラーが発生した場合の処理
+  console.error(error.name);//(例)TypeError
+  console.error(error.message);//(例)Cannot read property 'xxx' of undefined.
+  console.error(error.stack);//(例)スタックトレース
+}
+</pre></td></tr></table>カスタムエラーの作成<br>Errorオブジェクトを継承することで独自のエラーを作成することができます。<br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class ValidationError extends Error
+{
+	constructor(message, value)
+	{
+		super(message);
+		this.name = 'ValidationError';
+		this.field = field;
+	}
+}
+
+let range = 0;
+...
+try
+{
+	//バリデーションエラーを発生させる
+	throw new ValidationError('データ範囲外', range);
+} catch (error) {
+	if (error instanceof ValidationError)
+	{
+		console.error(error.name);//(例)ValidationError
+		console.error(error.message);//(例)データ範囲外
+		console.error(error.value);//(例)rangeの値
+	}
+}
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">ReferenceError</div>参照先が不明な場合に起きるエラーです。<br>ReferenceErrorが発生する主な原因<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(1)変数の未定義</div>変数をletやconstなどで宣言せずに使用しようとしたケース<br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+function test1() 
+{
+  // 'result' は宣言されていません
+  console.log(result);//ReferenceError: result is not defined
+}
+test1();
+</pre>スコープ外の変数を参照しようとしたケース<br>(例)<br>関数内でローカル変数にアクセスしようとしたケース<br>undefined や null の変数のプロパティにアクセスしようとした場合。<br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+let data1 = 1;
+function test2() {
+    console.log(data1);//1(スコープ内)
+    console.log(data2);//ReferenceError: data2 is not defined (スコープ外)
+}
+test2();
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(2)スペルミス</div>変数名や関数名をタイプミスした場合。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(3)非同期処理の問題</div>非同期処理<br>(例)<br>setTimeoutやfetchの中で、まだ定義されていない変数を参照しようとしたケース。﻿<br><a href="javascript:void(0);" id="copy5" class="copy-button" data-target="codeBlock5">copy</a><pre id="codeBlock5" class="prettyprint linenums;lang-js;">
+//undefined のオブジェクトのプロパティにアクセス
+let obj = undefined;
+try 
+{
+    console.log(obj.prop);//ReferenceError: Cannot read properties of undefined (reading 'prop')
+}catch (e){
+    console.log(e);
+}
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">SyntaxError</div>コードの構文(文法)が間違っている場合に発生するエラーです。<br>(例)<br>括弧や引用符の閉じ忘れ<br>文の区切りミス:セミコロン「;」の実装し忘れ<br>配列の要素エラー:要素数を超えた位置にアクセスしようとした場合<br><a href="javascript:void(0);" id="copy6" class="copy-button" data-target="codeBlock6">copy</a><pre id="codeBlock6" class="prettyprint linenums;lang-js;">
+function test()
+{
+	const ary=[];
+	for(i=0;i<3;i++)
+	{
+		ary[i]=i+1;
+	}
+	//下記の部分では要素不足のためエラーが発生します
+	if(ary[3]==3)
+	{
+		...
+	}	
+}
+test();
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">TypeError</div>オブジェクトの仕様と異なる設定や実行をしたときに発生するエラーです。<br>(例)<br>型が一致しない<br>関数の引数の型が合わない<br>プロパティへの不正なアクセス<br>例えば、存在しないオブジェクトのプロパティにアクセスしようとしたり、<br>nullやundefinedのオブジェクトにプロパティを設定しようとしたケース<br><a href="javascript:void(0);" id="copy7" class="copy-button" data-target="codeBlock7">copy</a><pre id="codeBlock7" class="prettyprint linenums;lang-js;">
+const num = "100";
+const sum = num + 10;//TypeError: 文字列と数値の加算は型エラー
+
+const obj = null;
+obj.property = "aaa";//TypeError: nullオブジェクトのプロパティにアクセス
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">RangeError</div>数値が有効な範囲外で使用された場合に発生するエラーです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const ary = new Array(-1); //RangeError: Invalid array length</div>配列の長さは0以上の整数の必要があるため。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const invalidDate = new Date('2026-12-32'); // RangeError: Invalid time value</div>存在しない日付 (12月32日) を指定すると、RangeErrorが発生します。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">about try ... catch</td></tr><tr><td>about try ... catch error</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Error</div><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">1. Syntax error (grammar error)</td></tr><tr><td>These are errors that were made when implementing the program. <br>These include typos in keywords and too many or too few closing parentheses.</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">2. Logical Error</td></tr><tr><td>Even if the program can be executed, it will end up executing results that do not match the specifications. <br>The causes of this include errors in the values ​​or conditions set for variables, or errors due to the timing of conditional branching.</td></tr></table>When an error occurs, an Error object is created.<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(1) name</td></tr><tr><td>A string that indicates the type of error. <br>(Example)<br>TypeError<br>ReferenceError<br></td></tr></table><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(2) message</td></tr><tr><td>A detailed error message. <br>(Example)<br>"Cannot read property 'xxx' of undefined".<br></td></tr></table><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(3) stack</td></tr><tr><td>Displays a stack trace showing where the error occurred.<br><br><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+try {
+  //Assuming you get an error
+  let result = test();
+} catch (error) {
+  //What to do if an error occurs
+  console.error(error.name);//(例)TypeError
+  console.error(error.message);//(例)Cannot read property 'xxx' of undefined.
+  console.error(error.stack);//(例)Stack trace
+}
+</pre></td></tr></table>Creating custom errors<br>You can create your own errors by inheriting the Error object.<br><a href="javascript:void(0);" id="copy12" class="copy-button" data-target="codeBlock12">copy</a><pre id="codeBlock12" class="prettyprint linenums;lang-js;">
+class ValidationError extends Error
+{
+	constructor(message, value)
+	{
+		super(message);
+		this.name = 'ValidationError';
+		this.field = field;
+	}
+}
+
+let range = 0;
+...
+try
+{
+	//Raising Validation Errors
+	throw new ValidationError('Data out of range', range);
+} catch (error) {
+	if (error instanceof ValidationError)
+	{
+		console.error(error.name);//ex.)ValidationError
+		console.error(error.message);//ex.)Data out of range
+		console.error(error.value);//ex.)range value
+	}
+}
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">ReferenceError</div>This error occurs when the reference is unknown. <br>Main causes of ReferenceError<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(1) Undefined variable</div>An attempt was made to use a variable without declaring it using let or const etc.<a href="javascript:void(0);" id="copy13" class="copy-button" data-target="codeBlock13">copy</a><pre id="codeBlock13" class="prettyprint linenums;lang-js;">
+function test1() 
+{
+  //'result' is undeclared
+  console.log(result);//ReferenceError: result is not defined
+}
+test1();
+</pre>Cases where an attempt is made to reference a variable outside of its scope<br>(Example)<br>Case where an attempt is made to access a local variable within a function<br>When an attempt is made to access a property of an undefined or null variable.<br><a href="javascript:void(0);" id="copy14" class="copy-button" data-target="codeBlock14">copy</a><pre id="codeBlock14" class="prettyprint linenums;lang-js;">
+let data1 = 1;
+function test2() {
+    console.log(data1);//1(In scope)
+    console.log(data2);//ReferenceError: data2 is not defined (Out of scope)
+}
+test2();
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(2) Spelling mistakes</div>When you make a typo in a variable or function name. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(3) Asynchronous processing issues</div>Asynchronous processing<br>(Example)<br>When trying to reference a variable that has not yet been defined in setTimeout or fetch. ﻿<br><a href="javascript:void(0);" id="copy15" class="copy-button" data-target="codeBlock15">copy</a><pre id="codeBlock15" class="prettyprint linenums;lang-js;">
+//Accessing properties of an undefined object
+let obj = undefined;
+try 
+{
+    console.log(obj.prop);//ReferenceError: Cannot read properties of undefined (reading 'prop')
+}catch (e){
+    console.log(e);
+}
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">SyntaxError</div>This error occurs when the code syntax (grammar) is incorrect. <br>(Example)<br>Forgetting to close parentheses or quotation marks<br>Mis-delimiting a statement: Forgetting to implement a semicolon ";"<br>Array element error: When attempting to access a position beyond the number of elements<br><a href="javascript:void(0);" id="copy16" class="copy-button" data-target="codeBlock16">copy</a><pre id="codeBlock16" class="prettyprint linenums;lang-js;">
+function test()
+{
+	const ary=[];
+	for(i=0;i<3;i++)
+	{
+		ary[i]=i+1;
+	}
+	//An error occurs in the following part due to a lack of elements.
+	if(ary[3]==3)
+	{
+		...
+	}	
+}
+test();
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">TypeError</div>This error occurs when you configure or execute something that does not match the object's specifications. <br>(Example)<br>Type mismatch<br>Function argument types do not match<br>Invalid access to property<br>For example, when you try to access a property of a non-existent object, or<br>when you try to set a property on a null or undefined object<br><a href="javascript:void(0);" id="copy17" class="copy-button" data-target="codeBlock17">copy</a><pre id="codeBlock17" class="prettyprint linenums;lang-js;">
+const num = "100";
+const sum = num + 10;//TypeError: Adding a string and a number causes a type error
+
+const obj = null;
+obj.property = "aaa";//TypeError: Accessing properties of a null object
+</pre><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">RangeError</div>This error occurs when a number is used outside the valid range.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const ary = new Array(-1); //RangeError: Invalid array length</div>The length of the array must be an integer greater than or equal to 0. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const invalidDate = new Date('2026-12-32'); // RangeError: Invalid time value</div>If you specify a date that does not exist (December 32nd), a RangeError will occur. <br><br><br><br><a href="#" onclick="f2();">back</a></div><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
