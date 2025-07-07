@@ -1,0 +1,822 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return true;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">障害物判定</td></tr><tr><td>障害物に当たったときの判定処理</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;"><label>スコア</label></td></tr><tr><td style="width:200px;text-align:center;"><label id="score">0</label></td></tr></table><table><tr><td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn3"><img id="img_up" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn4"><img id="img_down" style="width:50px;"></div></a></td></tr></table><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer" style="z-index:2;" id="hiyoko" style="width:50px;height:50px;"><img id="img" src="../o/i3/nawmin_sample6.png" style="width:50px;height:50px;"></div><div class="layer" id="daizu" style="width:50px;height:50px;"><img src="../o/i3/nawmin_sample8.png" style="width:50px;height:50px;"></div><div class="layer" id="rock1" style="z-index:1;" style="width:50px;height:50px;"><img src="../o/i3/nureyon_sample1.png" style="width:50px;"></div><div class="layer" id="rock2" style="z-index:1;" style="width:50px;height:50px;"><img src="../o/i3/nureyon_sample2.png" style="width:50px;"></div></div><style>.container{position: sticky;}/* 背景 */.layer{width: 200px;height: 200px;position: absolute;}</style><table><tr><td>ひよこの座標<div id="hiyoko_pos"></div></td><td>大豆の座標<div id="daizu_pos"></div></td></tr><tr><td>ひよこの中心座標<div id="hiyoko_center_pos"></div></td><td>大豆の中心座標<div id="daizu_center_pos"></div></td></tr></table><table border=0><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">岩の種類</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td></tr><tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">岩(グレー)</td><td id="rock1_x" style="text-align:center;"></td><td id="rock1_y" style="text-align:center;"></td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">岩(茶)</td><td id="rock2_x" style="text-align:center;"></td><td id="rock2_y" style="text-align:center;"></td></tr><br></table><textarea id="t1" rows=17 cols=110>
+<table>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">
+<label>スコア</label>
+</td>
+</tr>
+<tr>
+<td style="width:200px;text-align:center;">
+<label id="score">0</label>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn3"><img id="img_up" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn4"><img id="img_down" style="width:50px;"></div></a></td>
+</tr>
+</table>
+
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	<div class="layer" style="z-index:2;" id="hiyoko" style="width:50px;height:50px;">
+		<img id="img" src="nawmin_sample6.png" style="width:50px;height:50px;">
+	</div>
+	<div class="layer" id="daizu" style="width:50px;height:50px;">
+		<img src="nawmin_sample8.png" style="width:50px;height:50px;">
+	</div>
+	<div class="layer" id="rock1" style="z-index:1;" style="width:50px;height:50px;">
+		<img src="nureyon_sample1.png" style="width:50px;">
+	</div>
+	<div class="layer" id="rock2" style="z-index:1;" style="width:50px;height:50px;">
+		<img src="nureyon_sample2.png" style="width:50px;">
+	</div>
+</div>
+<style>
+.container{
+	position: sticky;
+}
+/* 背景 */
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+</style>
+
+<table>
+<tr>
+<td>
+ひよこの座標<div id="hiyoko_pos"></div>
+</td>
+<td>
+大豆の座標<div id="daizu_pos"></div>
+</td>
+</tr>
+<tr>
+<td>
+ひよこの中心座標<div id="hiyoko_center_pos"></div>
+</td>
+<td>
+大豆の中心座標<div id="daizu_center_pos"></div>
+</td>
+</tr>
+</table>
+<table border=0>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+岩の種類
+</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">
+x
+</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+岩(グレー)
+</td>
+<td id="rock1_x" style="text-align:center;">
+</td>
+<td id="rock1_y" style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+岩(茶)
+</td>
+<td id="rock2_x" style="text-align:center;">
+</td>
+<td id="rock2_y" style="text-align:center;">
+</td>
+</tr>
+<br>
+</table>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+//大豆の座標配列
+const aryX=[0,50,150];//left
+const aryY=[150,0,150];//top
+//岩(グレー) x:100 y:50
+//岩(茶)    x:50 y:100
+const aryRockX=[50,100];
+const aryRockY=[100,50];
+const imageSize=50;//画像のサイズ(ひよこ/大豆/岩のいずれも同じにしています)
+let index=0;
+//大豆の位置
+daizuPosition();
+//現在の大豆の位置
+currentDaizuPosition();
+//岩の座標位置を表示
+displayRockPosition();
+let x=150;//キャラクターのx座標位置(初期値はキャラの初期座標位置)
+let y=150;//キャラクターのy座標位置(初期値はキャラの初期座標位置)
+//ひよこのスタート位置
+initChickPosition();
+//ひよこの位置情報表示
+currentChickPosition();
+let score = 0;
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+const b3 = document.getElementById("btn3");
+const b4 = document.getElementById("btn4");
+const leftPosition=0;//左枠の位置
+const rightPosition=200-imageSize;//枠の幅 - 画像の幅
+const upPosition=0;//枠の上
+const downPosition=200-imageSize;//枠の幅高さ- 画像の高さ
+let moveDistance=10;//移動距離
+//左へ
+b1.addEventListener("click", () => 
+{
+	moveCharacterImage(1);
+});
+//右へ
+b2.addEventListener("click", () => 
+{
+	moveCharacterImage(2);
+});
+//上へ
+b3.addEventListener("click", () => 
+{
+	moveCharacterImage(3);
+});
+//下へ
+b4.addEventListener("click", () => 
+{
+	moveCharacterImage(4);
+});
+//direction:
+//1:左へ移動
+//2:右へ移動
+//3:上へ移動
+//4:下へ移動
+function moveCharacterImage(direction)
+{
+	const obj = document.getElementById("hiyoko");
+	const img = document.getElementById("img");
+	switch(direction)
+	{
+		case 1://左
+			img.src="../o/i3/nawmin_sample6.png";
+			x-=moveDistance;
+			if(x < leftPosition)
+			{
+				x=-5;//10;//微調整
+			}
+			obj.style.left = x +'px';
+			if(x < 0)x=0;
+			break;
+		case 2://右
+			img.src="../o/i3/nawmin_sample9.png";
+			x+=moveDistance;
+			if(x > rightPosition)
+			{
+				x = rightPosition;//+5;//微調整
+			}
+			obj.style.left = x +'px';
+			if(x > rightPosition)x = rightPosition;
+			break;
+		case 3://上
+			img.src="../o/i3/nawmin_sample10.png";
+			y-=moveDistance;
+			if(y < upPosition)
+			{
+				y=upPosition;//-5;//微調整
+			}
+			obj.style.top = y +'px';
+			if(y < 0)y=0;
+			break;
+		case 4://下
+			img.src="../o/i3/nawmin_sample10.png";
+			y+=moveDistance;
+			if(y > downPosition)
+			{
+				y = downPosition;//微調整
+			}
+			obj.style.top = y +'px';
+			if(y > downPosition)y = downPosition;
+			break;
+	}
+	//岩との衝突判定処理
+	judgeRock(direction);
+	//大豆判定処理
+	judgeFeed();
+	//ひよこの現在位置情報表示
+	currentChickPosition();
+}
+//岩との衝突判定処理
+function judgeRock(direction)
+{
+	let x1 = x;
+	let y1 = y;
+	let x2 = 0;
+	let y2 = 0;
+	let xx = 0;
+	let yy = 0;
+	let xy = 0;
+	let r = 0;
+	let result =0;
+	for(i=0;i < aryRockX.length;i++)
+	{
+		result =0;
+		x2 = aryRockX[i];
+		y2 = aryRockY[i];
+		//ひよこのx/y座標
+		x1 = x + imageSize/2;
+		y1 = y + imageSize/2;
+		//岩のx/y座標
+		x2+=imageSize/2;
+		y2+=imageSize/2;
+		//ひよこと岩のx座標の差分の絶対値
+		xx=Math.abs(x1-x2);
+		//ひよこと大豆のy座標の差分の絶対値
+		yy=Math.abs(y1-y2);
+		//絶対値の累乗(xとy)を計算
+		xy=Math.pow(xx,2) + Math.pow(yy,2);
+		//ルート計算
+		r=Math.sqrt(xy);
+		//if(r<=50)//ピッタリ接触(ひよこの半分:25 + 岩の半分:25)
+		if(r<=49)//微調整
+		{
+			result =1;//あたり
+		}
+		else
+		{
+			continue;
+		}
+		//岩に埋まらないようにひよこの位置を戻します
+		switch(direction)
+		{
+			case 1://左
+				x += moveDistance;
+				break;
+			case 2://右
+				x -= moveDistance;
+				break;
+			case 3://上
+				y += moveDistance;
+				break;
+			case 4://下
+				y -= moveDistance;
+				break;
+		}
+		if(result ==1)
+		{
+			break;
+		}
+	}
+}
+//大豆判定処理
+function judgeFeed()
+{
+	let result= 0;
+	//ひよこ判定
+	result =judgeHiyoko(aryX[index],aryY[index]);
+	if(result == 1)
+	{
+		index++;
+		if(index==aryX.length)index=0;
+		//大豆の位置
+		daizuPosition();
+
+		//大豆の位置を反映
+		//スコアにインクリメントした結果を反映
+		score++;
+		const point = document.getElementById("score");
+		point.textContent = score;
+		//大豆の位置情報表示
+		currentDaizuPosition();
+	}
+}
+//大豆の位置
+function daizuPosition()
+{
+	const daizu = document.getElementById("daizu");
+	daizu.style.top = aryY[index] +'px';
+	daizu.style.left = aryX[index] +'px';
+}
+//ひよこ判定
+//大豆との判定処理
+//x2:x座標
+//y2:y座標
+//kind:種類
+//1:岩
+//2:大豆
+function judgeHiyoko(x2, y2)
+{
+	let result =0;
+	//ひよこのx/y座標
+	let x1=x+imageSize/2;
+	let y1=y+imageSize/2;
+	//大豆のx/y座標
+	x2+=imageSize/2;
+	y2+=imageSize/2;
+	//ひよこと大豆のx座標の差分の絶対値
+	let xx=Math.abs(x1-x2);
+	//ひよこと大豆のy座標の差分の絶対値
+	let yy=Math.abs(y1-y2);
+	//絶対値の累乗(xとy)を計算
+	let xy=Math.pow(xx,2) + Math.pow(yy,2);
+	//ルート計算
+	let r=Math.sqrt(xy);
+	//if(r<=50)//ピッタリ接触(ひよこの半分:25 + 大豆の半分:25)
+	if(r<=25)//微調整
+	{
+		result =1;//あたり
+	}
+	return result;
+}
+//ひよこのスタート位置
+function initChickPosition()
+{
+	const chick = document.getElementById("hiyoko");
+	chick.style.left = x +'px';
+	chick.style.top = y +'px';
+}
+//岩の座標位置を表示
+function displayRockPosition()
+{
+	//岩(グレー)
+	const rock1_x = document.getElementById("rock1_x");
+	rock1_x.textContent = aryRockX[0];
+	const rock1_y = document.getElementById("rock1_y");
+	rock1_y.textContent = aryRockY[0];
+	const rock1 = document.getElementById("rock1");
+	rock1.style.left = aryRockX[0] +'px';
+	rock1.style.top = aryRockY[0] +'px';
+	//岩(茶)
+	const rock2_x = document.getElementById("rock2_x");
+	rock2_x.textContent = aryRockX[1];
+	const rock2_y = document.getElementById("rock2_y");
+	rock2_y.textContent = aryRockY[1];
+	const rock2 = document.getElementById("rock2");
+	rock2.style.left = aryRockX[1] +'px';
+	rock2.style.top = aryRockY[1] +'px';
+}
+//大豆の座標位置を表示
+function currentDaizuPosition()
+{
+	//x座標 y座標
+	const pos = document.getElementById("daizu_pos");
+	pos.textContent = "x:"+aryX[index]+" y:"+aryY[index];
+	//中心座標
+	const posCenter = document.getElementById("daizu_center_pos");
+	posCenter.textContent = "x:"+(aryX[index]+imageSize/2)+" y:"+(aryY[index]+imageSize/2);
+}
+//ひよこの座標位置を表示
+function currentChickPosition()
+{
+	const pos = document.getElementById("hiyoko_pos");
+	//x座標 y座標
+	pos.textContent = "x:"+x+" y:"+y;
+	//中心座標
+	const posCenter = document.getElementById("hiyoko_center_pos");
+	posCenter.textContent = "x:"+(x+imageSize/2)+" y:"+(y+imageSize/2);
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">岩との衝突判定処理<br>function judgeRock(direction)</div>for文で岩の個数分だけ判定処理をします。<br><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+//if(r<=50)//ピッタリ接触(ひよこの半分:25 + 岩の半分:25)
+if(r<=49)//微調整
+{
+	result =1;//あたり
+}
+else
+{
+	continue;
+}
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if(r<=49)//微調整</div>ひよこの画像が岩の隣を通る場合、ぴったりくっついてしまうと衝突とみなされるのを避けるため<br>微調整として1を少なくしています。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">continue;</div>岩と衝突判定とみなされない場合は、次の岩を判定します。<br><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+//岩に埋まらないようにひよこの位置を戻します
+switch(direction)
+{
+	case 1://左
+		x += moveDistance;
+		break;
+	case 2://右
+		x -= moveDistance;
+		break;
+	case 3://上
+		y += moveDistance;
+		break;
+	case 4://下
+		y -= moveDistance;
+		break;
+}
+if(result ==1)
+{
+	break;
+}
+</pre>衝突をするということは、ひよこが進んだということです。<br>でも衝突をしたということは、これ以上進んではダメなので、<br>元の位置に戻す必要があります。<br>例えば、ひよこが左方向に進んだとします。<br>右側には、岩があるとします。<br>岩にぶつかってしまい、岩の内部に進んでしまうとダメなので<br>進んだ左をなかったことにするため、右側にもどしてあげます。<br>この方法が下記の部分です。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x += moveDistance;</div>左側にいくとx座標をマイナスにしますが、右側はプラスにします。<br>一度に進む距離を「moveDistance」の値としているので、<br>進んだ分だけ右側に戻すため「+」にしています。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if(result ==1)<br>{<br>&nbsp;&nbsp;break;<br>}<br></div>あたり判定となったいるため、ループから抜けます。<br>※ひよこが一度に2個の岩に衝突することは仕様上ないため。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Obstacle Detection</td></tr><tr><td>Judgment process when hitting an obstacle</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">sample</div><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;"><label>score</label></td></tr><tr><td style="width:200px;text-align:center;"><label id="scoreEn">0</label></td></tr></table><table><tr><td><a href="javascript:void(0);"><div id="btn1En"><img id="img_backEn" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn2En"><img id="img_forwardEn" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn3En"><img id="img_upEn" style="width:50px;"></div></a></td><td><a href="javascript:void(0);"><div id="btn4En"><img id="img_downEn" style="width:50px;"></div></a></td></tr></table><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer" style="z-index:2;" id="hiyokoEn" style="width:50px;height:50px;"><img id="imgEn" src="../o/i3/nawmin_sample6.png" style="width:50px;height:50px;"></div><div class="layer" id="daizuEn" style="width:50px;height:50px;"><img src="../o/i3/nawmin_sample8.png" style="width:50px;height:50px;"></div><div class="layer" id="rock1En" style="z-index:1;" style="width:50px;height:50px;"><img src="../o/i3/nureyon_sample1.png" style="width:50px;"></div><div class="layer" id="rock2En" style="z-index:1;" style="width:50px;height:50px;"><img src="../o/i3/nureyon_sample2.png" style="width:50px;"></div></div><style>.container{position: sticky;}/* background */.layer{width: 200px;height: 200px;position: absolute;}</style><table><tr><td>Chick coordinates <div id="hiyoko_posEn"></div></td><td>Soybean coordinates <div id="daizu_posEn"></div></td></tr><tr><td>Chick center coordinates <div id="hiyoko_center_posEn"></div></td><td>Soybean center coordinates <div id="daizu_center_posEn"></div></td></tr></table><table border=0><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Rock type</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td></tr><tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Rock (Gray)</td><td id="rock1_xEn" style="text-align:center;"></td><td id="rock1_yEn" style="text-align:center;"></td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Rock (brown)</td><td id="rock2_xEn" style="text-align:center;"></td><td id="rock2_yEn" style="text-align:center;"></td></tr><br></table><textarea id="t1" rows=17 cols=110>
+<table>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">
+<label>Score</label>
+</td>
+</tr>
+<tr>
+<td style="width:200px;text-align:center;">
+<label id="score">0</label>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn3"><img id="img_up" style="width:50px;"></div></a></td>
+<td><a href="javascript:void(0);"><div id="btn4"><img id="img_down" style="width:50px;"></div></a></td>
+</tr>
+</table>
+
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"> 
+<div class="layer" style="z-index:2;" id="hiyoko" style="width:50px;height:50px;"> 
+<img id="img" src="nawmin_sample6.png" style="width:50px;height:50px;"> 
+</div> 
+<div class="layer" id="daizu" style="width:50px;height:50px;"> 
+<img src="nawmin_sample8.png" style="width:50px;height:50px;"> 
+</div> 
+<div class="layer" id="rock1" style="z-index:1;" style="width:50px;height:50px;"> 
+<img src="nureyon_sample1.png" style="width:50px;"> 
+</div> 
+<div class="layer" id="rock2" style="z-index:1;" style="width:50px;height:50px;"> 
+<img src="nureyon_sample2.png" style="width:50px;"> </div>
+</div>
+<style>
+.container{
+position: sticky;
+}
+/* background */
+.layer{
+width: 200px;
+height: 200px;
+position: absolute;
+}
+</style>
+
+<table>
+<tr>
+<td>
+Chick coordinates <div id="hiyoko_pos"></div>
+</td>
+<td>
+Soybean coordinates <div id="daizu_pos"></div>
+</td>
+</tr>
+<tr>
+<td>
+Chick center coordinates <div id="hiyoko_center_pos"></div>
+</td>
+<td>
+Soybean center coordinates <div id="daizu_center_pos"></div>
+</td>
+</tr>
+</table>
+<table border=0>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+type of rock
+</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">
+x
+</td>
+<td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+Rock (gray)
+</td>
+<td id="rock1_x" style="text-align:center;">
+</td>
+<td id="rock1_y" style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+Rock (brown)
+</td>
+<td id="rock2_x" style="text-align:center;">
+</td>
+<td id="rock2_y" style="text-align:center;">
+</td>
+</tr>
+<br>
+</table>
+</textarea><br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+//Soybean coordinate array
+const aryX=[0,50,150];//left
+const aryY=[150,0,150];//top
+//Rock (Gray) x:100 y:50
+//Rock (brown)    x:50 y:100
+const aryRockX=[50,100];
+const aryRockY=[100,50];
+const imageSize=50;//Image size (same for chick, soybean, and rock)
+let index=0;
+//Soybean Location
+daizuPosition();
+//Current position of soybeans
+currentDaizuPosition();
+//Show rock coordinates
+displayRockPosition();
+let x=150;//Character's x-coordinate position (initial value is the character's initial coordinate position)
+let y=150;//Character's y coordinate position (initial value is the character's initial coordinate position)
+//Chick starting position
+initChickPosition();
+//Displaying chick location
+currentChickPosition();
+let score = 0;
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+const b3 = document.getElementById("btn3");
+const b4 = document.getElementById("btn4");
+const leftPosition=0;//Left frame position
+const rightPosition=200-imageSize;//frame width - image width
+const upPosition=0;//Above the frame
+const downPosition=200-imageSize;//Frame width height - Image height
+let moveDistance=10;//Distance traveled
+//To the left
+b1.addEventListener("click", () => 
+{
+	moveCharacterImage(1);
+});
+//To the right
+b2.addEventListener("click", () => 
+{
+	moveCharacterImage(2);
+});
+//Up
+b3.addEventListener("click", () => 
+{
+	moveCharacterImage(3);
+});
+//Down
+b4.addEventListener("click", () => 
+{
+	moveCharacterImage(4);
+});
+//direction:
+//1:Move Left
+//2:Move right
+//3:Move Up
+//4:Move Down
+function moveCharacterImage(direction)
+{
+	const obj = document.getElementById("hiyoko");
+	const img = document.getElementById("img");
+	switch(direction)
+	{
+		case 1://left
+			img.src="../o/i3/nawmin_sample6.png";
+			x-=moveDistance;
+			if(x < leftPosition)
+			{
+				x=-5;//10;//Fine adjustment
+			}
+			obj.style.left = x +'px';
+			if(x < 0)x=0;
+			break;
+		case 2://right
+			img.src="../o/i3/nawmin_sample9.png";
+			x+=moveDistance;
+			if(x > rightPosition)
+			{
+				x = rightPosition;//+5;//Fine adjustment
+			}
+			obj.style.left = x +'px';
+			if(x > rightPosition)x = rightPosition;
+			break;
+		case 3://up
+			img.src="../o/i3/nawmin_sample10.png";
+			y-=moveDistance;
+			if(y < upPosition)
+			{
+				y=upPosition;//-5;//Fine adjustment
+			}
+			obj.style.top = y +'px';
+			if(y < 0)y=0;
+			break;
+		case 4://down
+			img.src="../o/i3/nawmin_sample10.png";
+			y+=moveDistance;
+			if(y > downPosition)
+			{
+				y = downPosition;//Fine adjustment
+			}
+			obj.style.top = y +'px';
+			if(y > downPosition)y = downPosition;
+			break;
+	}
+	//Collision detection with rocks
+	judgeRock(direction);
+	//Soybean identification process
+	judgeFeed();
+	//Chick's current location information
+	currentChickPosition();
+}
+//Collision detection with rocks
+function judgeRock(direction)
+{
+	let x1 = x;
+	let y1 = y;
+	let x2 = 0;
+	let y2 = 0;
+	let xx = 0;
+	let yy = 0;
+	let xy = 0;
+	let r = 0;
+	let result =0;
+	for(i=0;i < aryRockX.length;i++)
+	{
+		result =0;
+		x2 = aryRockX[i];
+		y2 = aryRockY[i];
+		//Chick's x/y coordinates
+		x1 = x + imageSize/2;
+		y1 = y + imageSize/2;
+		//x/y coordinates of the rock
+		x2+=imageSize/2;
+		y2+=imageSize/2;
+		//Absolute value of the difference between the x coordinates of the chick and the rock
+		xx=Math.abs(x1-x2);
+		//Absolute value of the difference between the y coordinates of chicks and soybeans
+		yy=Math.abs(y1-y2);
+		//Calculate the absolute power of (x and y)
+		xy=Math.pow(xx,2) + Math.pow(yy,2);
+		//Route Calculation
+		r=Math.sqrt(xy);
+		//if(r<=50)//Exact contact (Half of chick: 25 + Half of rock: 25)
+		if(r<=49)//Fine adjustment
+		{
+			result =1;//hit
+		}
+		else
+		{
+			continue;
+		}
+		//Move the chick back so it doesn't get buried in the rocks.
+		switch(direction)
+		{
+			case 1://left
+				x += moveDistance;
+				break;
+			case 2://right
+				x -= moveDistance;
+				break;
+			case 3://up
+				y += moveDistance;
+				break;
+			case 4://down
+				y -= moveDistance;
+				break;
+		}
+		if(result ==1)
+		{
+			break;
+		}
+	}
+}
+//Soybean identification process
+function judgeFeed()
+{
+	let result= 0;
+	//Chick Judgment
+	result =judgeHiyoko(aryX[index],aryY[index]);
+	if(result == 1)
+	{
+		index++;
+		if(index==aryX.length)index=0;
+		//Soybean Location
+		daizuPosition();
+
+		//Reflects the position of soybeans
+		//The incremented score is reflected
+		score++;
+		const point = document.getElementById("score");
+		point.textContent = score;
+		//Displaying soybean location information
+		currentDaizuPosition();
+	}
+}
+//Soybean Location
+function daizuPosition()
+{
+	const daizu = document.getElementById("daizu");
+	daizu.style.top = aryY[index] +'px';
+	daizu.style.left = aryX[index] +'px';
+}
+//Chick determination
+//Soybean determination process
+//x2: x coordinate
+//y2: y coordinate
+//kind: type
+//1: rock
+//2: soybean
+function judgeHiyoko(x2, y2)
+{
+	let result =0;
+	//Chick's x/y coordinates
+	let x1=x+imageSize/2;
+	let y1=y+imageSize/2;
+	//Soybean x/y coordinates
+	x2+=imageSize/2;
+	y2+=imageSize/2;
+	//Absolute value of the difference between the x coordinates of chicks and soybeans
+	let xx=Math.abs(x1-x2);
+	//Absolute value of the difference between the y coordinates of chicks and soybeans
+	let yy=Math.abs(y1-y2);
+	//Calculate the absolute power of (x and y)
+	let xy=Math.pow(xx,2) + Math.pow(yy,2);
+	//Route Calculation
+	let r=Math.sqrt(xy);
+	//if(r<=50)//Perfect contact (half chick: 25 + half soybean: 25)
+	if(r<=25)//Fine adjustment
+	{
+		result =1;//hit
+	}
+	return result;
+}
+//Chick starting position
+function initChickPosition()
+{
+	const chick = document.getElementById("hiyoko");
+	chick.style.left = x +'px';
+	chick.style.top = y +'px';
+}
+//Show rock coordinates
+function displayRockPosition()
+{
+	//Rock (Gray)
+	const rock1_x = document.getElementById("rock1_x");
+	rock1_x.textContent = aryRockX[0];
+	const rock1_y = document.getElementById("rock1_y");
+	rock1_y.textContent = aryRockY[0];
+	const rock1 = document.getElementById("rock1");
+	rock1.style.left = aryRockX[0] +'px';
+	rock1.style.top = aryRockY[0] +'px';
+	//Rock (brown)
+	const rock2_x = document.getElementById("rock2_x");
+	rock2_x.textContent = aryRockX[1];
+	const rock2_y = document.getElementById("rock2_y");
+	rock2_y.textContent = aryRockY[1];
+	const rock2 = document.getElementById("rock2");
+	rock2.style.left = aryRockX[1] +'px';
+	rock2.style.top = aryRockY[1] +'px';
+}
+//Display the coordinates of soybeans
+function currentDaizuPosition()
+{
+	//x coordinate y coordinate
+	const pos = document.getElementById("daizu_pos");
+	pos.textContent = "x:"+aryX[index]+" y:"+aryY[index];
+	//x coordinate y coordinate
+	const posCenter = document.getElementById("daizu_center_pos");
+	posCenter.textContent = "x:"+(aryX[index]+imageSize/2)+" y:"+(aryY[index]+imageSize/2);
+}
+//Display the coordinates of the chick
+function currentChickPosition()
+{
+	const pos = document.getElementById("hiyoko_pos");
+	//x coordinate y coordinate
+	pos.textContent = "x:"+x+" y:"+y;
+	//center coordinates
+	const posCenter = document.getElementById("hiyoko_center_pos");
+	posCenter.textContent = "x:"+(x+imageSize/2)+" y:"+(y+imageSize/2);
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Collision detection with rocks<br>function judgeRock(direction)</div>The for statement performs the judgment process for the number of rocks. <br><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+//if(r<=50)//Exact contact (Half of chick: 25 + Half of rock: 25)
+if(r<=49)//Fine adjustment
+{
+	result =1;//hit
+}
+else
+{
+	continue;
+}
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if(r<=49)//Fine adjustment</div>When the chick image passes next to a rock, we subtract 1 as a fine adjustment to avoid it being recognized as a collision if it is too close to the rock.<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">continue;</div>If it doesn't collide with the rock, it will check for the next rock.<br><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+//Move the chick back so it doesn't get buried in the rocks.
+switch(direction)
+{
+	case 1://left
+		x += moveDistance;
+		break;
+	case 2://right
+		x -= moveDistance;
+		break;
+	case 3://up
+		y += moveDistance;
+		break;
+	case 4://down
+		y -= moveDistance;
+		break;
+}
+if(result ==1)
+{
+	break;
+}
+</pre>If there is a collision, it means that the chick has moved forward. <br>However, if there is a collision, it cannot move any further, so <br>it needs to be returned to its original position. <br>For example, let's say the chick moves to the left. <br>Let's say there is a rock on the right side. <br>It would be no good if the chick collided with the rock and went inside the rock, <br>so to make the left movement go away nonexistent, we return it to the right side. <br>This method is shown below. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x += moveDistance;</div>If you go to the left, the x coordinate will be negative, but if you go to the right, it will be positive. <br>The distance moved at one time is the value of "moveDistance", <br>We set it to "+" to return the distance moved to the right. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if(result ==1)<br>{<br>&nbsp;&nbsp;break;<br>}<br></div>Because it is a collision detection, it will exit the loop. <br>*The chick will not collide with two rocks at once due to the specifications. <br><br><br><br><a href="#" onclick="f2();">back</a></div><script>displayImage("../o/c0_1","img_back");displayImage("../o/c0_2","img_forward");displayImage("../o/c0_3","img_up");displayImage("../o/c0_4","img_down");displayImage("../o/c0_1","img_backEn");displayImage("../o/c0_2","img_forwardEn");displayImage("../o/c0_3","img_upEn");displayImage("../o/c0_4","img_downEn");function displayImage(d1,d2){fetch(d1).then(response=>response.text()).then(d=>{const i1=document.getElementById(d2);i1.src=d;i1.onload=function(){};}).catch(error=>{});}const aryX=[0,50,150];const aryY=[150,0,150];const aryRockX=[50,100];const aryRockY=[100,50];const imageSize=50;let index=0;let x=150;let y=150;daizuPosition();currentDaizuPosition();displayRockPosition();initChickPosition();currentChickPosition();let score = 0;const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b3 = document.getElementById("btn3");const b4 = document.getElementById("btn4");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");const b3En = document.getElementById("btn3En");const b4En = document.getElementById("btn4En");const leftPosition=0;const rightPosition=200-imageSize;const upPosition=0;const downPosition=200-imageSize;let moveDistance=10;b1.addEventListener("click", () => {moveCharacterImage(1);});b2.addEventListener("click", () => {moveCharacterImage(2);});b3.addEventListener("click", () => {moveCharacterImage(3);});b4.addEventListener("click", () => {moveCharacterImage(4);});b1En.addEventListener("click", () => {moveCharacterImage(1);});b2En.addEventListener("click", () => {moveCharacterImage(2);});b3En.addEventListener("click", () => {moveCharacterImage(3);});b4En.addEventListener("click", () => {moveCharacterImage(4);});function moveCharacterImage(direction){const obj = document.getElementById("hiyoko");const img = document.getElementById("img");const objEn = document.getElementById("hiyokoEn");const imgEn = document.getElementById("imgEn");switch(direction){case 1:img.src="../o/i3/nawmin_sample6.png";x-=moveDistance;if(x<leftPosition){x=-5;}obj.style.left = x +'px';imgEn.src="../o/i3/nawmin_sample6.png";objEn.style.left = x +'px';if(x<0)x=0;break;case 2:img.src="../o/i3/nawmin_sample9.png";x+=moveDistance;if(x > rightPosition){x = rightPosition;}obj.style.left = x +'px';imgEn.src="../o/i3/nawmin_sample9.png";objEn.style.left = x +'px';if(x > rightPosition)x = rightPosition;break;case 3:img.src="../o/i3/nawmin_sample10.png";y-=moveDistance;if(y<upPosition){y=upPosition;}obj.style.top = y +'px';imgEn.src="../o/i3/nawmin_sample10.png";objEn.style.top = y +'px';if(y<0)y=0;break;case 4:img.src="../o/i3/nawmin_sample10.png";y+=moveDistance;if(y > downPosition){y = downPosition;}obj.style.top = y +'px';imgEn.src="../o/i3/nawmin_sample10.png";objEn.style.top = y +'px';if(y > downPosition)y = downPosition;break;}judgeRock(direction);judgeFeed();currentChickPosition();}function judgeRock(direction){let x1 = x;let y1 = y;let x2 = 0;let y2 = 0;let xx = 0;let yy = 0;let xy = 0;let r = 0;let result =0;for(i=0;i < aryRockX.length;i++){result =0;x2 = aryRockX[i];y2 = aryRockY[i];x1 = x + imageSize/2;y1 = y + imageSize/2;x2+=imageSize/2;y2+=imageSize/2;xx=Math.abs(x1-x2);yy=Math.abs(y1-y2);xy=Math.pow(xx,2) + Math.pow(yy,2);r=Math.sqrt(xy);if(r<=49){result =1;}else{continue;}switch(direction){case 1:x += moveDistance;break;case 2:x -= moveDistance;break;case 3:y += moveDistance;break;case 4:y -= moveDistance;break;}if(result ==1){break;}}}function judgeFeed(){let result= 0;result =judgeHiyoko(aryX[index],aryY[index]);if(result == 1){index++;if(index==aryX.length)index=0;daizuPosition();score++;const point = document.getElementById("score");point.textContent = score;const pointEn = document.getElementById("scoreEn");pointEn.textContent = score;currentDaizuPosition();}}function daizuPosition(){const daizu = document.getElementById("daizu");daizu.style.top = aryY[index] +'px';daizu.style.left = aryX[index] +'px';const daizuEn = document.getElementById("daizuEn");daizuEn.style.top = aryY[index] +'px';daizuEn.style.left = aryX[index] +'px';}function judgeHiyoko(x2, y2){let result =0;let x1=x+imageSize/2;let y1=y+imageSize/2;x2+=imageSize/2;y2+=imageSize/2;let xx=Math.abs(x1-x2);let yy=Math.abs(y1-y2);let xy=Math.pow(xx,2) + Math.pow(yy,2);let r=Math.sqrt(xy);if(r<=25){result =1;}return result;}function initChickPosition(){const chick = document.getElementById("hiyoko");chick.style.left = x +'px';chick.style.top = y +'px';const chickEn = document.getElementById("hiyokoEn");chickEn.style.left = x +'px';chickEn.style.top = y +'px';}function displayRockPosition(){const rock1_x = document.getElementById("rock1_x");rock1_x.textContent = aryRockX[0];const rock1_y = document.getElementById("rock1_y");rock1_y.textContent = aryRockY[0];const rock1 = document.getElementById("rock1");rock1.style.left = aryRockX[0] +'px';rock1.style.top = aryRockY[0] +'px';const rock2_x = document.getElementById("rock2_x");rock2_x.textContent = aryRockX[1];const rock2_y = document.getElementById("rock2_y");rock2_y.textContent = aryRockY[1];const rock2 = document.getElementById("rock2");rock2.style.left = aryRockX[1] +'px';rock2.style.top = aryRockY[1] +'px';const rock1_xEn = document.getElementById("rock1_xEn");rock1_xEn.textContent = aryRockX[0];const rock1_yEn = document.getElementById("rock1_yEn");rock1_yEn.textContent = aryRockY[0];const rock1En = document.getElementById("rock1En");rock1En.style.left = aryRockX[0] +'px';rock1En.style.top = aryRockY[0] +'px';const rock2_xEn = document.getElementById("rock2_xEn");rock2_xEn.textContent = aryRockX[1];const rock2_yEn = document.getElementById("rock2_yEn");rock2_yEn.textContent = aryRockY[1];const rock2En = document.getElementById("rock2En");rock2En.style.left = aryRockX[1] +'px';rock2En.style.top = aryRockY[1] +'px';}function currentDaizuPosition(){const pos = document.getElementById("daizu_pos");pos.textContent = "x:"+aryX[index]+" y:"+aryY[index];const posCenter = document.getElementById("daizu_center_pos");posCenter.textContent = "x:"+(aryX[index]+imageSize/2)+" y:"+(aryY[index]+imageSize/2);const posEn = document.getElementById("daizu_posEn");posEn.textContent = "x:"+aryX[index]+" y:"+aryY[index];const posCenterEn = document.getElementById("daizu_center_posEn");posCenterEn.textContent = "x:"+(aryX[index]+imageSize/2)+" y:"+(aryY[index]+imageSize/2);}function currentChickPosition(){const pos = document.getElementById("hiyoko_pos");pos.textContent = "x:"+x+" y:"+y;const posCenter = document.getElementById("hiyoko_center_pos");posCenter.textContent = "x:"+(x+imageSize/2)+" y:"+(y+imageSize/2);const posEn = document.getElementById("hiyoko_posEn");posEn.textContent = "x:"+x+" y:"+y;const posCenterEn = document.getElementById("hiyoko_center_posEn");posCenterEn.textContent = "x:"+(x+50)+" y:"+(y+50);}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
