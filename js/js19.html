@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">fetchでテキストファイルを読み込む方法</td></tr><tr><td>fetch APIを使ってテキストファイルを読み込む処理</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div>[読み込んだテキストの表示]<br><textarea id="text" rows=10 cols=100>
+</textarea><br><button id="btn1">テキストの読み込み</button><br><button id="btn2">テキストのクリア</button><br><textarea id="text2" rows=7 cols=100>
+&lt;textarea id="text" rows=10 cols=100&gt;
+&lt;/textarea&gt;
+<br>
+<button id="btn1">テキストの読み込み</button>
+<br>
+<button id="btn2">テキストのクリア</button>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+b1.addEventListener("click", () => 
+{
+	loadText();
+});
+b2.addEventListener("click", () => 
+{
+	clearText();
+});
+function loadText()
+{
+	fetch('js19_txt_jp.txt')
+	.then(response => 
+	{
+		if (!response.ok)
+		{
+			throw new Error('Network response was not ok');
+		}
+		return response.text();
+	})
+	.then(text => 
+	{
+		// テキストデータ 'text' を処理
+		const d1 = document.getElementById("text");
+		d1.textContent = text;
+	})
+	.catch(error => 
+	{
+		// エラー処理
+		console.error('There has been a problem with your fetch operation:', error);
+	});
+}
+function clearText()
+{
+	const d1 = document.getElementById("text");
+	d1.textContent = "";
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">解説</div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">fetch('js19_txt_jp.txt')</div>fetch関数は、HTTPリクエストを送信し、その結果を表すPromiseに返します。<br>Promiseが解決した（リクエストが成功した場合）ときにthenメソッドが呼び出されます。<br>そして、thenに渡されたコールバック関数が実行されます。﻿<br>thenに渡すコールバック関数の引数には、fetchの結果を表すResponseオブジェクトが渡されます。<br>このResponseオブジェクトには、レスポンスのステータスコード、ヘッダー、ボディなどの情報が含まれています。﻿<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.then(response => <br>{<br>...<br>})<br></div>この例ではthenの引数名に「response」を設定しています。<br>thenメソッドの引数名は、自由に設定できます。<br>また、変数名として有効なものであれば何でも構いません。<br><br>fetch関数からのレスポンスを受け取り、処理を実行します。<br>response.okでHTTPステータスコードが200番台かどうかを確認します。<br>※エラーの場合はthrow new Error()でエラーを発生させ、catch()ブロックで処理します。<br><br>response.text()でレスポンスボディをテキストデータとして読み込みます。<br>※xxx.text()の「.text()」がテキストを読み込むため、用意されたメソッドです。<br>Promiseを返すため、さらにthen()で処理を続けます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.then(text => <br>{<br>...<br>})<br></div>「return response.text();」の結果をthenの引数名「text」に渡します。<br>ここのtext変数名は別の名前でも構いません。<br>この例では、textareaタグにテキストデータを表示しています。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.catch(error => <br>{<br>...<br>});<br></div>fetch()の実行中、またはthen()内の処理でエラーが発生した場合に実行されます。<br>エラーメッセージをコンソールに表示する例です。﻿<br><br>fetchを非同期処理で実行するため、thenやcatch()で処理をつなげる必要があります。<br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">fetchでテキストファイルを読み込む方法</td></tr><tr><td>fetch APIを使ってテキストファイルを読み込む処理</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div>[読み込んだテキストの表示]<br><textarea id="textEn" rows=10 cols=100>
+</textarea><br><button id="btn1En">テキストの読み込み</button><br><button id="btn2En">テキストのクリア</button><br><textarea id="text2En" rows=7 cols=100>
+&lt;textarea id="text" rows=10 cols=100&gt;
+&lt;/textarea&gt;
+<br>
+<button id="btn1">テキストの読み込み</button>
+<br>
+<button id="btn2">テキストのクリア</button>
+</textarea><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+b1.addEventListener("click", () => 
+{
+	loadText();
+});
+b2.addEventListener("click", () => 
+{
+	clearText();
+});
+function loadText()
+{
+	fetch('js19_txt_jp.txt')
+	.then(response => 
+	{
+		if (!response.ok)
+		{
+			throw new Error('Network response was not ok');
+		}
+		return response.text();
+	})
+	.then(text => 
+	{
+		// テキストデータ 'text' を処理
+		const d1 = document.getElementById("text");
+		d1.textContent = text;
+	})
+	.catch(error => 
+	{
+		// エラー処理
+		console.error('There has been a problem with your fetch operation:', error);
+	});
+}
+function clearText()
+{
+	const d1 = document.getElementById("text");
+	d1.textContent = "";
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">解説</div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">fetch('js19_txt_jp.txt')</div>fetch関数は、HTTPリクエストを送信し、その結果を表すPromiseに返します。<br>Promiseが解決した（リクエストが成功した場合）ときにthenメソッドが呼び出されます。<br>そして、thenに渡されたコールバック関数が実行されます。﻿<br>thenに渡すコールバック関数の引数には、fetchの結果を表すResponseオブジェクトが渡されます。<br>このResponseオブジェクトには、レスポンスのステータスコード、ヘッダー、ボディなどの情報が含まれています。﻿<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.then(response => <br>{<br>...<br>})<br></div>この例ではthenの引数名に「response」を設定しています。<br>thenメソッドの引数名は、自由に設定できます。<br>また、変数名として有効なものであれば何でも構いません。<br><br>fetch関数からのレスポンスを受け取り、処理を実行します。<br>response.okでHTTPステータスコードが200番台かどうかを確認します。<br>※エラーの場合はthrow new Error()でエラーを発生させ、catch()ブロックで処理します。<br><br>response.text()でレスポンスボディをテキストデータとして読み込みます。<br>※xxx.text()の「.text()」がテキストを読み込むため、用意されたメソッドです。<br>Promiseを返すため、さらにthen()で処理を続けます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.then(text => <br>{<br>...<br>})<br></div>「return response.text();」の結果をthenの引数名「text」に渡します。<br>ここのtext変数名は別の名前でも構いません。<br>この例では、textareaタグにテキストデータを表示しています。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.catch(error => <br>{<br>...<br>});<br></div>fetch()の実行中、またはthen()内の処理でエラーが発生した場合に実行されます。<br>エラーメッセージをコンソールに表示する例です。﻿<br><br>fetchを非同期処理で実行するため、thenやcatch()で処理をつなげる必要があります。<br><br><br><a href="#" onclick="f2();">back</a></div><script>const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");b1.addEventListener("click", () => {loadText(0);});b2.addEventListener("click", () => {clearText();});b1En.addEventListener("click", () => {loadText(1);});b2En.addEventListener("click", () => {clearText();});function loadText(lang){let path = "";path =lang==0 ? "../o/i3/js19_txt_jp.txt" : "../o/i3/js19_txt_en.txt";fetch(path).then(response => {if (!response.ok){throw new Error('Network response was not ok');}return response.text();}).then(text => {const d1 = document.getElementById("text");d1.textContent = text;const d2 = document.getElementById("textEn");d2.textContent = text;console.log(text);}).catch(error => {console.error('There has been a problem with your fetch operation:', error);});}function clearText(){const d1 = document.getElementById("text");d1.textContent = "";const d2 = document.getElementById("textEn");d2.textContent = "";}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
