@@ -1,26 +1,26 @@
-(bear)
+[bear]
 Hello
 
-(farmer)
+[farmer]
 Hey, what's wrong?
 
-(bear)
+[bear]
 I'm hungry
 
-(farmer)
+[farmer]
 What about vegetables?
 
-(bear)
+[bear]
 That's a bit
 
-(farmer)
+[farmer]
 Ah, that reminds me, I picked this up. 
 (Hands over the acorn)
 
-(bear)
+[bear]
 Is that okay?
 Thank you
 
-(farmer)
+[farmer]
 You're welcome.
 (And so the bear returned to the forest.)
