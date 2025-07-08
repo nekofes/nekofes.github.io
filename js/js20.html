@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">乱数</td></tr><tr><td>数字を使った乱数のサンプル</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サイコロを振るサンプル</div><br><div><img id="dice" style="width:50px;height:50px;"></div><button id="btn1">サイコロを振る</button><br><br><textarea id="t1" rows=5 cols=50>
+<div>
+<img id="dice" style="width:50px;height:50px;">
+</div>
+<button id="btn1">サイコロを振る</button>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", () => 
+{
+	let number =1;
+	//サイコロの目を取得
+	number = dice();
+	//サイコロを表示
+	displayDice(number);
+});
+//サイコロの目を取得
+function dice()
+{
+	let number = 1;
+	const start = 1;
+	const end = 6;
+	//指定の範囲の整数を取得
+	number = Math.floor(Math.random() * (end - start + 1)) + start;
+	return number;
+}
+//サイコロを表示
+function displayDice(number)
+{
+	//サイコロの画像は準備してください
+	let file = "";
+	switch(number)
+	{
+		case 1:
+			file = "dice1.png";
+			break;
+		case 2:
+			file = "dice2.png";
+			break;
+		case 3:
+			file = "dice3.png";
+			break;
+		case 4:
+			file = "dice4.png";
+			break;
+		case 5:
+			imfileg = "dice5.png";
+			break;
+		case 6:
+			file = "dice6.png";
+			break;
+	}
+	const img = document.getElementById("dice");
+	img.src = img;
+}
+</pre>このサンプルでは下記の関数を実行することでサイコロの目の1から6までのランダムに発生する値を使った<br>サイコロを表示するサンプルです。<table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">関数</td><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">内容</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.random</td><td>疑似乱数で、完全なランダム性を持つわけではありません。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.floor</td><td>小数点以下を切り捨てることで整数に変換するために使用しています。</td></tr></table><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.random</div>0以上1未満の浮動小数点(小数点以下を含む数字)の疑似乱数を生成します。<br>常に0以上1未満の値を返します。<br>(例)<br>0.123<br>0.987<br>0.009<br>など<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(end - start + 1)</div>取得したい乱数の範囲を計算します。<br>今回の例ではサイコロの目は1から6まで範囲なので<br>start:1(最小)<br>end:6(最大)<br>この範囲は(6 - 1 + 1) = 6となります。<br>Math.random() * (end - start + 1)<br>0以上1未満 * 6(範囲の計算結果)の範囲を返すことになるため、<br>乱数としての範囲は0から6未満までの範囲となります。<br>計算式の全体は下記の通りです。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.floor(Math.random() * (end - start + 1)) + start;</div>Math.random()が返す値が「0.258」と仮定します。<br>(end - start + 1) = 0.258 * (6 - 1 + 1) = 1.548<br>Math.floorは切り捨てなので「1」を返します。<br>1「Math.floor(Math.random() * (end - start + 1))」 + start<br>1 + 1 = 2<br>サイコロの目として表示されるのは「2」となります。<br><br>例えばサイコロを2個使う場合は<br>startが2個分なので最小の「1」✕2=12)<br>endが12(2個分なので最大の「6」✕2=12)<br>この範囲は(12 - 2 + 1) = 11となります。<br>0以上1未満 * 11(範囲の計算結果)の範囲を返すことになるため、<br>乱数としての範囲は0から11未満までの範囲となります。<br>計算式の全体は下記の通りです。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.floor(Math.random() * (end - start + 1)) + start;</div>Math.random()が返す値が「0.658」と仮定します。<br>(end - start + 1) = 0.658 * (12 - 2 + 1) = 7.238<br>Math.floorは切り捨てなので「7」を返します。<br>7「Math.floor(Math.random() * (end - start + 1))」 + start<br>7 + 2 = 9<br>サイコロの目として表示されるのは「9」となります。<br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">random numbers</td></tr><tr><td>random numbers sample using number</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Dice rolling sample</div><br><div><img id="diceEn" style="width:50px;height:50px;"></div><button id="btn1En">Roll the dice</button><br><br><textarea id="t2" rows=5 cols=50>
+<div>
+<img id="dice" style="width:50px;height:50px;">
+</div>
+<button id="btn1">Roll the dice</button>
+</textarea><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", () => 
+{
+	let number =1;
+	//get dice number
+	number = dice();
+	//display dice
+	displayDice(number);
+});
+//get dice number
+function dice()
+{
+	let number = 1;
+	const start = 1;
+	const end = 6;
+	//get specific range integer
+	number = Math.floor(Math.random() * (end - start + 1)) + start;
+	return number;
+}
+//display dice
+function displayDice(number)
+{
+	//prepare dice image
+	let file = "";
+	switch(number)
+	{
+		case 1:
+			file = "dice1.png";
+			break;
+		case 2:
+			file = "dice2.png";
+			break;
+		case 3:
+			file = "dice3.png";
+			break;
+		case 4:
+			file = "dice4.png";
+			break;
+		case 5:
+			imfileg = "dice5.png";
+			break;
+		case 6:
+			file = "dice6.png";
+			break;
+	}
+	const img = document.getElementById("dice");
+	img.src = img;
+}
+</pre>This sample executes the function below to display a dice using randomly generated values ​​from 1 to 6.<table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">Function</td><td style="background-color:rgb(245 255 250 / 1.0);text-align:center;">Contents</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.random</td><td>This is a pseudo-random number, and is not completely random.</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.floor</td><td>Used to convert to an integer by truncating the decimal point.</td></tr></table><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.random</div>Generates a pseudo-random floating point number (a number with a decimal point) between 0 and 1. <br>Always returns a value between 0 and 1. <br>(Example)<br>0.123<br>0.987<br>0.009<br>etc.<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">(end - start + 1)</div>Calculate the range of the random number you want to obtain. <br>In this example, the dice numbers range from 1 to 6, so <br>start:1 (minimum)<br>end:6 (maximum)<br>The range is (6 - 1 + 1) = 6. <br>Math.random() * (end - start + 1)<br>The range returned is 0 to less than 1 * 6 (the range calculation result), so <br>The range of the random number is 0 to less than 6. <br>The entire calculation formula is as follows. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.floor(Math.random() * (end - start + 1)) + start;</div>Assume that the value returned by Math.random() is "0.258". <br>(end - start + 1) = 0.258 * (6 - 1 + 1) = 1.548<br>Since Math.floor rounds down, it returns "1". <br>1 "Math.floor(Math.random() * (end - start + 1))" + start<br>1 + 1 = 2<br>The number displayed on the dice is "2". <br><br>For example, if you use two dice,<br>start is the number of two dice, so the smallest is "1" x 2 = 12)<br>end is 12 (the largest is "6" x 2 = 12)<br>The range is (12 - 2 + 1) = 11. <br>Since the range returned is 0 or more and less than 1 * 11 (the range calculation result),<br>the range of random numbers is from 0 to less than 11. <br>The entire formula is as follows. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.floor(Math.random() * (end - start + 1)) + start;</div>Assume that the value returned by Math.random() is "0.658". <br>(end - start + 1) = 0.658 * (12 - 2 + 1) = 7.238<br>Since Math.floor rounds down, it returns "7". <br>7 "Math.floor(Math.random() * (end - start + 1))" + start<br>7 + 2 = 9<br>The number displayed on the dice is "9".<br><br><br><a href="#" onclick="f2();">back</a></div><script>function displayImage(d1,d2){fetch(d1).then(response=>response.text()).then(d=>{const i1=document.getElementById(d2);i1.src=d;i1.onload=function(){};}).catch(error=>{});}const b1 = document.getElementById("btn1");b1.addEventListener("click", () => {diceNumber();});const b1En = document.getElementById("btn1En");b1En.addEventListener("click", () => {diceNumber();});function diceNumber(){let number =1;number = dice();displayDice(number);}function dice(){let number = 1;const start = 1;const end = 6;number = Math.floor(Math.random() * (end - start + 1)) + start;return number;}function displayDice(number){let file = "";switch(number){case 1:file = "c1_1";break;case 2:file = "c1_2";break;case 3:file = "c1_3";break;case 4:file = "c1_4";break;case 5:file = "c1_5";break;case 6:file = "c1_6";break;}displayImage("../o/"+file,"dice");displayImage("../o/"+file,"diceEn");}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
