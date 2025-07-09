@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">キャラの場所の変更</td></tr><tr><td>A地点からB地点への変更処理</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div><div><img id="dice" style="width:50px;height:50px;"></div><button id="btn1">サイコロを振る</button>&nbsp;&nbsp;<button id="btn2">リセット</button><br><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer layer1" id="hiyoko"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><div class="layer layer2" id="map0" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map1" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map2" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map3" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map4" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map5" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map6" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map7" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map8" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layer layer2" id="map9" style="background-color:seagreen;width: 50px;height: 50px;"></div></div><style>.container{position: sticky;}.layer{width: 200px;height: 200px;position: absolute;}.layer1{top: 0px;left: 150px;z-index:1;}.layer2{width: 50px;height: 50px;}</style><br><textarea id="t1" rows=34 cols=110>
+<div>
+<img id="dice" style="width:50px;height:50px;">
+</div>
+<button id="btn1">サイコロを振る</button>
+&nbsp;&nbsp;
+<button id="btn2">リセット</button>
+<br>
+
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	<div class="layer layer1" id="hiyoko">
+		<img id="img" src="nawmin_sample10.png" style="width:50px;height:50px;">
+	</div>
+	<div class="layer layer2" id="map0" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map1" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map2" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map3" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map4" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map5" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map6" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map7" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map8" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map9" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+</div>
+</textarea><br>[CSS]<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 150px;
+	z-index:1;
+}
+.layer2{
+	width: 50px;
+	height: 50px;
+}
+</pre><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+let index = 0;
+const aryX=[150,150,150,150,100,50,0,0,0,0];
+const aryY=[0,50,100,150,150,150,150,100,50,0];
+intiMap();
+//マップの通り道を設定
+function intiMap()
+{
+	//通り道
+	for(i=0; i < aryX.length; i++)
+	{
+		const obj = document.getElementById("map"+i);
+		obj.style.left = aryX[i] +'px';
+		obj.style.top = aryY[i] +'px';	
+	}
+	//ひよこを初期位置にします
+	moveChick()
+}
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", () => 
+{
+	//サイコロを振る
+	diceNumber();
+});
+const b2 = document.getElementById("btn2");
+b2.addEventListener("click", () => 
+{
+	//リセット
+	mapReset();
+});
+//サイコロを振る
+function diceNumber()
+{
+	//サイコロの目を取得
+	let number = dice();
+	//サイコロを表示
+	displayDice(number);
+	index += number;
+	//ゴール判定処理
+	judgeGoal();
+}
+//ゴール判定処理
+function judgeGoal()
+{
+	if(index >= 9)
+	{
+		//最後の位置にします
+		index=9;
+	}
+	//ひよこを移動します。
+	moveChick();
+	setTimeout(() => 
+	{
+		if(index < 9)
+		{
+			return;
+		}
+		//ボタンを非表示にします。
+		const b1 = document.getElementById("btn1");
+		b1.style.visibility="hidden";
+		const b1En = document.getElementById("btn1En");
+		b1En.style.visibility="hidden";
+		//ゴールのメッセージを表示します。
+		alert("おめでとうございます。\nゴールしました。");
+	}, 0);
+}
+//サイコロの目を取得
+function dice()
+{
+	const start = 1;
+	const end = 6;
+	//指定の範囲の整数を返します
+	return Math.floor(Math.random() * (end - start + 1)) + start;
+}
+//サイコロを表示
+function displayDice(number)
+{
+	//サイコロの画像は準備してください
+	let file = "";
+	switch(number)
+	{
+		case 1:
+			file = "dice1.png";
+			break;
+		case 2:
+			file = "dice2.png";
+			break;
+		case 3:
+			file = "dice3.png";
+			break;
+		case 4:
+			file = "dice4.png";
+			break;
+		case 5:
+			file = "dice5.png";
+			break;
+		case 6:
+			file = "dice6.png";
+			break;
+	}
+	const img = document.getElementById("dice");
+	img.src = img;
+}
+//ひよこの場所変更
+function moveChick()
+{
+	//ひよこ
+	const obj = document.getElementById("hiyoko");
+	obj.style.left = aryX[index] +'px';
+	obj.style.top = aryY[index] +'px';
+}
+//リセット
+function mapReset()
+{
+	index = 0;
+	moveChick();
+	const b1 = document.getElementById("btn1");
+	b1.style.visibility="visible";
+}
+</pre><br>緑色がひよこが通る場所です。<br>サイコロを振るとサイコロの目の数だけ場所を変更するサンプルです。<br>リセットボタンを選択すると初期位置に戻ります。<br>ひよこの通り道のサイズは「.layer2」で設定しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">intiMap()</div>この関数で、緑の通り道とひよこの初期位置を設定してます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">diceNumber()</div>サイコロを振った処理を実行しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">judgeGoal()</div>サイコロを振った結果のマス目の分だけ、ひよこを移動させます。<br>このマス目は、配列の個数でいうと10個あります。<br>aryXとaryYが緑色のマップ位置であり、ひよこが通る道です。<br>このサンプルプログラムでの考え方としてインデックスの位置を採用しており、<br>開始位置がインデックス0<br>サイコロの目が3だったら<br>index = 0(現時点のインデックス位置) + 3(サイコロの目);<br>index = 3;<br>配列要素3の配列要素の座標にひよこを移動させます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(index >= 9)</div>ゴールはインデックス位置が9ですので、これ以上進ませないことが条件としています。<br>そのため、サイコロの目を加算した結果により、インデックスの値が9を超えても9に修正をしています。<br>ゴール判定ですので、ゴールに到達していない場合は、この処理を抜けます。<br>ゴールに到達している場合は、<br>(1)サイコロボタンを非表示にする<br>(2)メッセージを表示する<br>という処理を実行しています。<br> <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mapReset()</div>リセット処理をします。<br>ひよこを初期位置に戻します。<br>ひよこを初期位置に戻すのでインデックス変数もリセットしています。<br>サイコロボタンを再表示します。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Change the character's location</td></tr><tr><td>Processing a change from point A to point B</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">sample</div><div><img id="diceEn" style="width:50px;height:50px;"></div><button id="btn1En">Roll the dice</button>&nbsp;&nbsp;<button id="btn2En">Reset</button><br><div class="containerEn" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layerEn layer1En" id="hiyokoEn"><img id="imgEn" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><div class="layerEn layer2En" id="mapEn0" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn1" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn2" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn3" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn4" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn5" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn6" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn7" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn8" style="background-color:seagreen;width: 50px;height: 50px;"></div><div class="layerEn layer2En" id="mapEn9" style="background-color:seagreen;width: 50px;height: 50px;"></div></div><style>.containerEn{position: sticky;}.layerEn{width: 200px;height: 200px;position: absolute;}.layer1En{top: 0px;left: 150px;z-index:1;}.layer2En{width: 50px;height: 50px;}</style><br><textarea id="t2" rows=34 cols=110>
+<div>
+<img id="dice" style="width:50px;height:50px;">
+</div>
+<button id="btn1">Roll the dice</button>
+&nbsp;&nbsp;
+<button id="btn2">Reset</button>
+<br>
+
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	<div class="layer layer1" id="hiyoko">
+		<img id="img" src="nawmin_sample10.png" style="width:50px;height:50px;">
+	</div>
+	<div class="layer layer2" id="map0" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map1" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map2" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map3" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map4" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map5" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map6" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map7" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map8" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+	<div class="layer layer2" id="map9" style="background-color:seagreen;width: 50px;height: 50px;">
+	</div>
+</div>
+</textarea><br>[CSS]<br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 150px;
+	z-index:1;
+}
+.layer2{
+	width: 50px;
+	height: 50px;
+}
+</pre><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+let index = 0;
+const aryX=[150,150,150,150,100,50,0,0,0,0];
+const aryY=[0,50,100,150,150,150,150,100,50,0];
+intiMap();
+//Set the map route
+function intiMap()
+{
+	//path
+	for(i=0; i < aryX.length; i++)
+	{
+		const obj = document.getElementById("map"+i);
+		obj.style.left = aryX[i] +'px';
+		obj.style.top = aryY[i] +'px';	
+	}
+	//Set the chick to its initial position
+	moveChick()
+}
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", () => 
+{
+	//Roll the dice
+	diceNumber();
+});
+const b2 = document.getElementById("btn2");
+b2.addEventListener("click", () => 
+{
+	//Reset
+	mapReset();
+});
+//Roll the dice
+function diceNumber()
+{
+	//Get the number on the dice
+	let number = dice();
+	//Show Dice
+	displayDice(number);
+	index += number;
+	//Goal determination process
+	judgeGoal();
+}
+//Goal determination process
+function judgeGoal()
+{
+	if(index >= 9)
+	{
+		//Make it the last position
+		index=9;
+	}
+	//Move the chick.
+	moveChick();
+	setTimeout(() => 
+	{
+		if(index < 9)
+		{
+			return;
+		}
+		//Hide the button.
+		const b1 = document.getElementById("btn1");
+		b1.style.visibility="hidden";
+		//Shows the goal message。
+		alert("Congratulations! \nreached the goal.");
+	}, 0);
+}
+//Get the number on the dice
+function dice()
+{
+	const start = 1;
+	const end = 6;
+	//Returns an integer in the specified range
+	return Math.floor(Math.random() * (end - start + 1)) + start;
+}
+//Show Dice
+function displayDice(number)
+{
+	//Please prepare a picture of the dice
+	let file = "";
+	switch(number)
+	{
+		case 1:
+			file = "dice1.png";
+			break;
+		case 2:
+			file = "dice2.png";
+			break;
+		case 3:
+			file = "dice3.png";
+			break;
+		case 4:
+			file = "dice4.png";
+			break;
+		case 5:
+			file = "dice5.png";
+			break;
+		case 6:
+			file = "dice6.png";
+			break;
+	}
+	const img = document.getElementById("dice");
+	img.src = img;
+}
+//Change chick location
+function moveChick()
+{
+	//chick
+	const obj = document.getElementById("hiyoko");
+	obj.style.left = aryX[index] +'px';
+	obj.style.top = aryY[index] +'px';
+}
+//Reset
+function mapReset()
+{
+	index = 0;
+	moveChick();
+	const b1 = document.getElementById("btn1");
+	b1.style.visibility="visible";
+}
+</pre><br>The green areas are where the chicks pass. <br>This is an example where the location changes by the number of dots on the dice when you roll them. <br>Select the reset button to return to the initial position. <br>The size of the chicks' path is set in ".layer2". <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">intiMap()</div>This function sets the green path and the chicks' initial position. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">diceNumber()</div>The process of rolling the dice is being executed. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">judgeGoal()</div>Move the chick to the number of squares determined by the dice roll. <br>There are 10 squares in this array. <br>aryX and aryY are the green map positions, and are the path the chick will take. <br>The index position is used as the concept in this sample program, and <br>The starting position is index 0.<br>If the dice number is 3, then <br>index = 0 (current index position) + 3 (number on the dice);<br>index = 3;<br>Move the chick to the coordinates of the array element of array element 3. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(index >= 9)</div>The goal is index position 9, so the condition is not to go any further. <br>Therefore, even if the index value exceeds 9 due to the addition of the dice number, it is corrected to 9. <br>Since this is a goal determination, if the goal has not been reached, this process will be terminated. <br>If the goal has been reached, the following process is executed: <br>(1) Hide the dice button<br>(2) Display a message<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mapReset()</div>Performs the reset process. <br>Returns the chick to its initial position. <br>The index variable is also reset because the chick is returned to its initial position. <br>The dice button is displayed again. <br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>function displayImage(d1,d2){fetch(d1).then(response=>response.text()).then(d=>{const i1=document.getElementById(d2);i1.src=d;i1.onload=function(){};}).catch(error=>{});}let index = 0;const aryX=[150,150,150,150,100,50,0,0,0,0];const aryY=[0,50,100,150,150,150,150,100,50,0];intiMap();function intiMap(){for(i=0;i<aryX.length;i++){const obj = document.getElementById("map"+i);obj.style.left = aryX[i] +'px';obj.style.top = aryY[i] +'px';const objEn = document.getElementById("mapEn"+i);objEn.style.left = aryX[i] +'px';objEn.style.top = aryY[i] +'px'}moveChick()}const b1 = document.getElementById("btn1");b1.addEventListener("click", () => {diceNumber(0);});const b2 = document.getElementById("btn2");b2.addEventListener("click", () => {mapReset();});const b1En = document.getElementById("btn1En");b1En.addEventListener("click", () => {diceNumber(1);});const b2En = document.getElementById("btn2En");b2En.addEventListener("click", () => {mapReset();});function diceNumber(lang){let number = dice();displayDice(number);index += number;judgeGoal(lang);}function judgeGoal(lang){if(index>=9){index=9;}moveChick();setTimeout(() => {if(index<9){return;}const b1 = document.getElementById("btn1");b1.style.visibility="hidden";const b1En = document.getElementById("btn1En");b1En.style.visibility="hidden";if(lang==0){alert("おめでとうございます。\nゴールしました。");}else{alert("Congratulations!\nreached the finish line.");}}, 0);}function dice(){const start = 1;const end = 6;return Math.floor(Math.random() * (end - start + 1)) + start;}function displayDice(number){let file = "";switch(number){case 1:file = "c1_1";break;case 2:file = "c1_2";break;case 3:file = "c1_3";break;case 4:file = "c1_4";break;case 5:file = "c1_5";break;case 6:file = "c1_6";break;}displayImage("../o/"+file,"dice");displayImage("../o/"+file,"diceEn");}function moveChick(){const obj = document.getElementById("hiyoko");obj.style.left = aryX[index] +'px';obj.style.top = aryY[index] +'px';const objEn = document.getElementById("hiyokoEn");objEn.style.left = aryX[index] +'px';objEn.style.top = aryY[index] +'px';}function mapReset(){index = 0;moveChick();const b1 = document.getElementById("btn1");b1.style.visibility="visible";const b1En = document.getElementById("btn1En");b1En.style.visibility="visible";}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
