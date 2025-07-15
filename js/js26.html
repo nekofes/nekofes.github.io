@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">正規表現を使った数字チェック</td></tr><tr><td>正規表現を使用した数字チェック</td></tr></table><br>数字のみ<div id="t1">100</div>結果<div id="rr1"></div><hr>小数点あり<div id="t2">10.5</div>結果<div id="rr2"></div><hr>test<div id="t3">"3"</div>文字列の数字<div id="rr3"></div><hr>小数点あり<div id="t4">3.</div>結果<div id="rr4"></div><hr>タグ内に半角空白あり<div id="t5"> 3</div>結果<div id="rr5"></div><hr>前ゼロあり<div id="t6">03</div>結果<div id="rr6"></div><hr><button id="btn1">test</button><br><br><textarea id="tt1" rows=5 cols=50>
+数字のみ<div id="t1">100</div>
+結果<div id="r1"></div>
+<hr>
+小数点あり<div id="t2">10.5</div>
+結果<div id="r2"></div>
+<hr>
+test<div id="t3">"3"</div>
+文字列の数字<div id="r3"></div>
+<hr>
+小数点あり<div id="t4">3.</div>
+結果<div id="r4"></div>
+<hr>
+タグ内に半角空白あり<div id="t5"> 3</div>
+結果<div id="r5"></div>
+<hr>
+前ゼロあり<div id="t6">03</div>
+結果<div id="r6"></div>
+<hr>
+</textarea><br><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", () => 
+{
+	for(i=0; i<6; i++)
+	{
+		const t = document.getElementById("t"+(i+1));
+		const r = document.getElementById("r"+(i+1));
+		r.innerText =test(t.innerText)+" length:"+t.innerText.length;
+	}
+});
+function test(data)
+{
+  return /^[0-9]+$/.test(data);
+}
+</pre>数字チェックのサンプルに^[0-9]+$ という正規表現パターンを使用しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return /^[0-9]+$/.test(data);</div>[解説]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">^[0-9]+$</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">^</td><td>文字列の先頭に一致</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">[0-9]</td><td>0から9までのいずれかの文字に一致</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">+</td><td>直前の文字が1回以上繰り返される文字列に一致</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">$</td><td>文字列の末尾に一致</td></tr></table><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test()</div>正規表現オブジェクトのメソッドで、指定された文字列が正規表現パターンにマッチするかどうかを調べます。<br>マッチすれば true を返し、マッチしなければ false を返します。﻿<br>正規表現のtestメソッドの結果を判定する際には、=== (厳密等価演算子) を使用します。<br>== (等価演算子) でも、trueとtrue、falseとfalseは正しく比較できますが、<br>型変換を伴うため、意図しない結果になる可能性があります。<br><br>[その他]<br>javascriptで半角数字のみと,(カンマ)のみを判定する例<br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+function test(data) {
+  // 半角数字とカンマのみかどうかを判定する正規表現
+  const regex = /^[\d,]+$/;
+  return regex.test(data);
+}
+</pre><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">^</td><td>文字列の先頭に一致</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">[\d,]</td><td>半角数字 (\d) またはカンマ (,) に一致</td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Check numbers using regular expressions Check numbers</td></tr><tr><td>using regular expressions</td></tr></table><br>Numbers only<div id="t1En">100</div>Result<div id="rr1En"></div><hr>Decimal point included<div id="t2En">10.5</div>Result<div id="rr2En"></div><hr>test<div id="t3En">"3"</div>Number as string<div id="rr3En"></div><hr>Decimal point included<div id="t4En">3.</div>Result<div id="rr4En"></div><hr>Half-width space included in tag<div id="t5En"> 3</div>Result<div id="rr5En"></div><hr>Leading zero included<div id="t6En">03</div>Result<div id="rr6En"></div><hr><button id="btn1En">test</button><br><br><textarea id="tt1" rows=5 cols=50>
+Numbers only<div id="t1">100</div>
+Result<div id="r1"></div>
+<hr>
+Decimal point included<div id="t2">10.5</div>
+Result<div id="r2"></div>
+<hr>
+test<div id="t3">"3"</div>
+Number as string<div id="r3"></div>
+<hr>
+Decimal point included<div id="t4">3.</div>
+Result<div id="r4"></div>
+<hr>
+Half-width space included in tag<div id="t5"> 3</div>
+Result<div id="r5"></div>
+<hr>
+Leading zero included<div id="t6">03</div>
+Result<div id="r6"></div>
+<hr>
+</textarea><br><br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", () => 
+{
+	for(i=0; i<6; i++)
+	{
+		const t = document.getElementById("t"+(i+1));
+		const r = document.getElementById("r"+(i+1));
+		r.innerText =test(t.innerText)+" length:"+t.innerText.length;
+	}
+});
+function test(data)
+{
+  return /^[0-9]+$/.test(data);
+}
+</pre>The regular expression pattern used for checking numbers is ^[0-9]+$. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return /^[0-9]+$/.test(data);</div>[Explanation]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">^[0-9]+$</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">^</td><td>Matches the beginning of the string</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">[0-9]</td><td>Matches any character between 0 and 9</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">+</td><td>Matches a string where the previous character is repeated one or more times</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">$</td><td>Matches the end of the string</td></tr></table><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test()</div>A method of the regular expression object that checks whether a specified string matches the regular expression pattern.<br>If it matches, it returns true, otherwise it returns false.﻿<br>When checking the result of the test method of a regular expression, use === (strict equality operator).<br>Even with == (equality operator), true and true, and false and false can be compared correctly, <br>but because it involves type conversion, it may result in unintended results.<br><br>[Other]<br>Example of checking only half-width numbers and only , (commas) in javascript<br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+function test(data) {
+  //Regular expression to check if the string contains only half-width numbers and commas
+  const regex = /^[\d,]+$/;
+  return regex.test(data);
+}
+</pre><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">^</td><td>Matches the beginning of the string</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">[\d,]</td><td>Matches half-width numbers (\d) or commas (,)</td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>const b1 = document.getElementById("btn1");const b1En = document.getElementById("btn1En");b1.addEventListener("click", () => {for(i=0; i<6; i++){const t = document.getElementById("t"+(i+1));const r = document.getElementById("rr"+(i+1));r.innerText =test(t.innerText)+" length:"+t.innerText.length;}});b1En.addEventListener("click", () => {for(i=0; i<6; i++){const t = document.getElementById("t"+(i+1)+"En");const r = document.getElementById("rr"+(i+1)+"En");r.innerText =test(t.innerText)+" length:"+t.innerText.length;}});function test(data){  return /^[0-9]+$/.test(data);}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
