@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">値が存在しない状態(nullとundefined)</td></tr><tr><td>値が存在しない状態</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null</div><br>意図的に値がないことを示す特殊な値です。<br>オブジェクトの存在しない状態を表すために使用されます。<br>論理演算では偽値として扱われます。﻿<br>値が意図的に「空」であることを示すために使用されます。<br>オブジェクトのプロパティが今は存在しないことを表す場合などに使われます。﻿<br><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+function test1(value)
+{
+	if(value == null)
+	{
+		console.log("value(==):"+value);//value(==):null
+	}
+	if(value === null)
+	{
+		console.log("value(===):"+value);//value(===):null
+	}
+	let tmp;//undefined
+	if(tmp ==  null)
+	{
+		console.log("tmp(undefined) ==");//tmp(undefined) ==
+	}
+	if(tmp ===  null)
+	{
+		console.log("tmp(undefined) ===:true");//
+	}
+	else
+	{
+		console.log("tmp(undefined) ===:false");//tmp(undefined) ===:false
+	}
+}
+test(null);
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">===(厳密等価演算子)</div>変数とnullを比較判定した場合、<br>===(厳密等価演算子)はtrueを返します。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">==(等価演算子)</div>変数とnullを比較判定した場合、<br>==(等価演算子)はtrueを返します。<br>また、変数がundefinedであった場合、<br>==(等価演算子)とnullを比較判定した場合もtrueを返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">undefined</div>変数が宣言されているが、まだ値が代入されていない状態を表します。<br>また、関数が値を返さない場合に暗黙的に返される値でもあります。<br><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+function test2()
+{
+	let value;//undefined
+
+	if(value == undefined)
+	{
+		console.log("value(==):"+value);//value(==):undefined
+	}
+	if(value === undefined)
+	{
+		console.log("value(===):"+value);//value(===):undefined
+	}
+
+	if(value ==  null)
+	{
+		console.log("value(undefined) ==");//value(undefined) ==
+	}
+	if(value ===  null)
+	{
+		console.log("value(undefined) ===:true");//
+	}
+	else
+	{
+		console.log("value(undefined) ===:false");//value(undefined) ===:false
+	}
+}
+test2();
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">===(厳密等価演算子)</div>変数とundefinedを比較判定した場合、<br>===(厳密等価演算子)はtrueを返します。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">==(等価演算子)</div>変数とundefinedを比較判定した場合、<br>==(等価演算子)はtrueを返します。<br>==(等価演算子)とnullを比較判定した場合もtrueを返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">関数の引数チェック</div>JavaScriptには、他のプログラミング言語のように引数がnullになることを明示的に禁止する仕組みはありません。<br>そのため、下記のチェックを行うことで回避を処理を実装します。<br><table><tr><td>(1)</td><td>関数の引数にデフォルト値を設定</td></tr><tr><td>(2)</td><td>引数の存在チェック</td></tr></table><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">関数の引数にデフォルト値を設定</div>JavaScriptでは、関数の引数にデフォルト値を設定できます。<br>引数が省略された場合、またはundefinedの場合、デフォルト値が使用されます。<br>もしも引数にnullやnullが入った変数を設定した場合でも、デフォルト値により回避可能となります。<br><br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+function test3(param = "default")
+{
+	console.log("param:"+param);
+}
+</pre>[実行例]<br>test3();//param:default<br>test3(null);//param:default<br>test3();//param:default<br>test3("value");//param:value<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">引数の存在チェック</div>関数内部でnullチェックをする例<br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+function test4(value)
+{
+	if(value === null || value === undefined)
+	{
+		value = "default";
+	}
+	console.log("value:"+value);
+}
+test4(null);
+</pre>引数がnullかundefinedかチェックし、該当する場合は別の処理を行うサンプルです。﻿<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Absence of a value (null and undefined)</td></tr><tr><td>Absence of a value</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null</div><br>A special value that indicates the intentional absence of a value. <br>Used to indicate the non-existence of an object. <br>Treats as a false value in logical operations. ﻿<br>Used to indicate that a value is intentionally "empty". <br>Used to indicate that a property of an object does not currently exist. ﻿<br><br><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+function test1(value)
+{
+	if(value == null)
+	{
+		console.log("value(==):"+value);//value(==):null
+	}
+	if(value === null)
+	{
+		console.log("value(===):"+value);//value(===):null
+	}
+	let tmp;//undefined
+	if(tmp ==  null)
+	{
+		console.log("tmp(undefined) ==");//tmp(undefined) ==
+	}
+	if(tmp ===  null)
+	{
+		console.log("tmp(undefined) ===:true");//
+	}
+	else
+	{
+		console.log("tmp(undefined) ===:false");//tmp(undefined) ===:false
+	}
+}
+test(null);
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">=== (strict equality operator)</div>When comparing a variable with null,<br>=== (strict equality operator) returns true. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">== (equality operator)</div>When comparing a variable with null,<br>== (equality operator) returns true. <br>Also, if the variable is undefined,<br>== (equality operator) also returns true when comparing with null. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">undefined</div>Denotes that a variable has been declared but has not yet been assigned a value. <br>It is also the value implicitly returned if a function does not return a value. <br><br><a href="javascript:void(0);" id="copy12" class="copy-button" data-target="codeBlock12">copy</a><pre id="codeBlock12" class="prettyprint linenums;lang-js;">
+function test2()
+{
+	let value;//undefined
+
+	if(value == undefined)
+	{
+		console.log("value(==):"+value);//value(==):undefined
+	}
+	if(value === undefined)
+	{
+		console.log("value(===):"+value);//value(===):undefined
+	}
+
+	if(value ==  null)
+	{
+		console.log("value(undefined) ==");//value(undefined) ==
+	}
+	if(value ===  null)
+	{
+		console.log("value(undefined) ===:true");//
+	}
+	else
+	{
+		console.log("value(undefined) ===:false");//value(undefined) ===:false
+	}
+}
+test2();
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">=== (strict equality operator)</div>When comparing a variable with undefined, <br>=== (strict equality operator) returns true. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">== (equality operator)</div>When comparing a variable with undefined, <br>== (equality operator) returns true. <br>== (equality operator) also returns true when comparing with null. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Function argument check</div>JavaScript does not have a mechanism to explicitly prohibit arguments from becoming null, as in other programming languages. <br>Therefore, the following checks are performed to implement the avoidance process. <br><table><tr><td>(1)</td><td>Set default value for function argument</td></tr><tr><td>(2)</td><td>Check existence of argument</td></tr></table><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Set default value for function argument</div>JavaScript allows you to set default value for function argument. <br>If argument is omitted or undefined, default value is used. <br>Even if null or a variable containing null is set as argument, it can be avoided by default value. <br><br><a href="javascript:void(0);" id="copy13" class="copy-button" data-target="codeBlock13">copy</a><pre id="codeBlock13" class="prettyprint linenums;lang-js;">
+function test3(param = "default")
+{
+	console.log("param:"+param);
+}
+</pre>[Example]<br>test3();//param:default<br>test3(null);//param:default<br>test3();//param:default<br>test3("value");//param:value<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Checking whether an argument exists</div>Example of checking for null within a function<br><a href="javascript:void(0);" id="copy14" class="copy-button" data-target="codeBlock14">copy</a><pre id="codeBlock14" class="prettyprint linenums;lang-js;">
+function test4(value)
+{
+	if(value === null || value === undefined)
+	{
+		value = "default";
+	}
+	console.log("value:"+value);
+}
+test4(null);
+</pre>This is an example that checks whether an argument is null or undefined, and performs a different process if it is.<br><br><br><a href="#" onclick="f2();">back</a></div><script></script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
