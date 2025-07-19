@@ -1,0 +1,415 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">画面切り替え</td></tr><tr><td>画面を切り替える例</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">マップ全体例</div><div class="containerP" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layerP layerP0" style="background-color:seagreen;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">A</div><div class="layerP layerP1" style="background-color:aliceblue;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">B</div><div class="layerP layerP2" style="background-color:salmon;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">C</div><div class="layerP layerP3" style="background-color:gold;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">D</div></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">マップ画面切り替えサンプル</div><br><table><tr><td style="width:50px;"></td><td><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer layer0" id="map0" style="background-color:seagreen;display:flex;justify-content:center;align-items:center;">A</div><div class="layer layer1" id="map1" style="background-color:aliceblue;display:flex;justify-content:center;align-items:center;">B</div><div class="layer layer2" id="map2" style="background-color:salmon;display:flex;justify-content:center;align-items:center;">C</div><div class="layer layer3" id="map3" style="background-color:gold;display:flex;justify-content:center;align-items:center;">D</div><button class="layer layerButton" style="width:100px;height:100px;" id="left">◀</button><button class="layer layerButton" style="width:100px;height:100px;" id="right">▶</button><button class="layer layerButton" style="width:100px;height:100px;" id="top">▲</button>><button class="layer layerButton" style="width:100px;height:100px;" id="down">▼</button></div></td></tr></table>[CSS]<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer0{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layer2{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layer3{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layerButton{
+	top: 0px;
+	left: 0px;
+	z-index:1;
+}
+</pre>[javascript]<br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+//画面枠の画面切り替えボタン(上下左右)
+const o1 = document.getElementById("left");
+const o2 = document.getElementById("right");
+const o3 = document.getElementById("top");
+const o4 = document.getElementById("down");
+//左ボタン
+o1.style.left = -25 +'px';
+o1.style.top = 75 +'px';
+o1.style.width=25+"px";
+o1.style.height=50+"px";
+//右ボタン
+o2.style.left = 200 +'px';
+o2.style.top = 75 +'px';
+o2.style.width=25+"px";
+o2.style.height=50+"px";
+//上ボタン
+o3.style.left = 75 +'px';
+o3.style.top = -25 +'px';
+o3.style.width=50+"px";
+o3.style.height=25+"px";
+//下ボタン
+o4.style.left = 75 +'px';
+o4.style.top = 200 +'px';
+o4.style.width=50+"px";
+o4.style.height=25+"px";
+
+//初期段階でA以外を隠す
+const m0 = document.getElementById("map0");//A
+const m1 = document.getElementById("map1");//B
+const m2 = document.getElementById("map2");//C
+const m3 = document.getElementById("map3");//D
+styleVisibility(m1,1);
+styleVisibility(m2,1);
+styleVisibility(m3,1);
+//エリアの表示・非表示
+//o:オブジェクト
+//state:style.visibilityに設定する値
+//0:visible:表示
+//1:hidden:非表示
+function styleVisibility(o, state)
+{
+	o.style.visibility = state == 0 ? "visible" : "hidden";
+}
+//現在座標位置
+let x=0;
+let y=0;
+o1.addEventListener("click", () => 
+{
+	//left
+	judgeMove(0);
+});
+o2.addEventListener("click", () => 
+{
+	//right
+	judgeMove(1);
+});
+o3.addEventListener("click", () => 
+{
+	//top
+	judgeMove(2);
+});
+o4.addEventListener("click", () => 
+{
+	//down
+	judgeMove(3);
+});
+function judgeMove(direction)
+{
+	let result =0;
+	//移動判定および座標更新処理
+	switch(direction)
+	{
+		case 0:
+			result =judgeMoveLeftRight(-1);
+			if(result==0)x--;
+			break;
+		case 1:
+			result =judgeMoveLeftRight(1);
+			if(result==0)x++;
+			break;
+		case 2:
+			result =judgeMoveTopDown(-1);
+			if(result==0)y--;
+			break;
+		case 3:
+			result =judgeMoveTopDown(1);
+			if(result==0)y++;
+			break;
+	}
+	if(result == 1)
+	{
+		//範囲外のため処理を抜けます。
+		alert("選択した方向は範囲外です。");
+		return;
+	}
+	//
+	hiddenAllArea();
+	displayArea();
+}
+//すべて(マップ用レイヤー)を非表示にします
+function hiddenAllArea()
+{
+	styleVisibility(m0,1);
+	styleVisibility(m1,1);
+	styleVisibility(m2,1);
+	styleVisibility(m3,1);
+}
+//座標のレイヤーを表示状態にします
+function displayArea()
+{
+	if(x == 0 && y == 0)
+	{
+		styleVisibility(m0,0);
+	}
+	else if(x == 1 && y == 0)
+	{
+		styleVisibility(m1,0);
+	}
+	else if(x == 0 && y == 1)
+	{
+		styleVisibility(m2,0);
+	}
+	else// if(x == 1 && y == 1)
+	{
+		styleVisibility(m3,0);
+	}
+}
+//移動判定(左右)
+function judgeMoveLeftRight(direction)
+{
+	let result=0;
+	let xx=x;
+	xx += direction;
+	if(xx < 0)
+	{
+		return 1;
+	}
+	if(1 < xx)
+	{
+		return 1;
+	}
+	return 0;
+}
+//移動判定(上下)
+function judgeMoveTopDown(direction)
+{
+	let result=0;
+	let yy=y;
+	yy += direction;
+	if(yy < 0)
+	{
+		return 1;
+	}
+	if(1 < yy)
+	{
+		return 1;
+	}
+	return 0;
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">レイヤーの表示切り替え</div><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+//o:オブジェクト
+//state:style.visibilityに設定する値
+//0:visible:表示
+//1:hidden:非表示
+function styleVisibility(o, state)
+{
+	o.style.visibility = state == 0 ? "visible" : "hidden";
+}
+</pre>style.visibilityを使用して、表示するレイヤーのみvisibleを設定します。<br>その他のレイヤーはhiddenを設定して非表示にします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">移動処理</div>[移動処理]<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">左に移動</td><td>x座標をマイナス</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">右に移動</td><td>x座標をプラス</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">上に移動</td><td>y座標をマイナス</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">下に移動</td><td>y座標をプラス</td></tr></table>[各レイヤーの座標]<br><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">A</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>0</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>0</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">B</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>1</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>0</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">C</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>0</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>1</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">D</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>1</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>1</td></tr></table>左に移動を例とします。<br>judgeMoveLeftRight関数で左方向にするためマイナスにします。<br>現在の座標をマイナスにした結果<br>0未満になる場合は枠外になるため移動できません。<br>この結果を受け取り、問題なければx座標を更新しています。<br>残りの右、上下も判定をします。<br>結果として移動可能な場合は、見えるレイヤーのみを表示しています。<br>このサンプルでは<br> hiddenAllArea関数で一度すべてのレイヤーを非表示にします。<br>そしてdisplayArea関数で該当レイヤーのみ表示しています。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Screen switching</td></tr><tr><td>Example of switching screens</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Example of the entire map</div><div class="containerP" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layerP layerP0" style="background-color:seagreen;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">A</div><div class="layerP layerP1" style="background-color:aliceblue;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">B</div><div class="layerP layerP2" style="background-color:salmon;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">C</div><div class="layerP layerP3" style="background-color:gold;width: 100px;height: 100px;display:flex;justify-content:center;align-items:center;">D</div></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Map screen switching sample</div><br><table><tr><td style="width:50px;"></td><td><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer layer0" id="map0En" style="background-color:seagreen;display:flex;justify-content:center;align-items:center;">A</div><div class="layer layer1" id="map1En" style="background-color:aliceblue;display:flex;justify-content:center;align-items:center;">B</div><div class="layer layer2" id="map2En" style="background-color:salmon;display:flex;justify-content:center;align-items:center;">C</div><div class="layer layer3" id="map3En" style="background-color:gold;display:flex;justify-content:center;align-items:center;">D</div><button class="layer layerButton" style="width:100px;height:100px;" id="leftEn">◀</button><button class="layer layerButton" style="width:100px;height:100px;" id="rightEn">▶</button><button class="layer layerButton" style="width:100px;height:100px;" id="topEn">▲</button>><button class="layer layerButton" style="width:100px;height:100px;" id="downEn">▼</button></div></td></tr></table>[CSS]<br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer0{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layer2{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layer3{
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 200px;
+}
+.layerButton{
+	top: 0px;
+	left: 0px;
+	z-index:1;
+}
+</pre>[javascript]<br><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+//Screen switching buttons on the screen frame (up, down, left, right)
+const o1 = document.getElementById("left");
+const o2 = document.getElementById("right");
+const o3 = document.getElementById("top");
+const o4 = document.getElementById("down");
+//Left Button
+o1.style.left = -25 +'px';
+o1.style.top = 75 +'px';
+o1.style.width=25+"px";
+o1.style.height=50+"px";
+//Right button
+o2.style.left = 200 +'px';
+o2.style.top = 75 +'px';
+o2.style.width=25+"px";
+o2.style.height=50+"px";
+//Up button
+o3.style.left = 75 +'px';
+o3.style.top = -25 +'px';
+o3.style.width=50+"px";
+o3.style.height=25+"px";
+//Down button
+o4.style.left = 75 +'px';
+o4.style.top = 200 +'px';
+o4.style.width=50+"px";
+o4.style.height=25+"px";
+
+//Hide everything except A in the early stages
+const m0 = document.getElementById("map0");//A
+const m1 = document.getElementById("map1");//B
+const m2 = document.getElementById("map2");//C
+const m3 = document.getElementById("map3");//D
+styleVisibility(m1,1);
+styleVisibility(m2,1);
+styleVisibility(m3,1);
+//Show/hide area
+//o:Object
+//state: Value to set in style.visibility
+//0:visible:display
+//1:hidden:hidden
+function styleVisibility(o, state)
+{
+	o.style.visibility = state == 0 ? "visible" : "hidden";
+}
+//Current coordinate position
+let x=0;
+let y=0;
+o1.addEventListener("click", () => 
+{
+	//left
+	judgeMove(0);
+});
+o2.addEventListener("click", () => 
+{
+	//right
+	judgeMove(1);
+});
+o3.addEventListener("click", () => 
+{
+	//top
+	judgeMove(2);
+});
+o4.addEventListener("click", () => 
+{
+	//down
+	judgeMove(3);
+});
+function judgeMove(direction)
+{
+	let result =0;
+	//Movement determination and coordinate update processing
+	switch(direction)
+	{
+		case 0:
+			result =judgeMoveLeftRight(-1);
+			if(result==0)x--;
+			break;
+		case 1:
+			result =judgeMoveLeftRight(1);
+			if(result==0)x++;
+			break;
+		case 2:
+			result =judgeMoveTopDown(-1);
+			if(result==0)y--;
+			break;
+		case 3:
+			result =judgeMoveTopDown(1);
+			if(result==0)y++;
+			break;
+	}
+	if(result == 1)
+	{
+		//Processing will be terminated as it is out of range.
+		alert("The selected direction is out of range.");
+		return;
+	}
+	//
+	hiddenAllArea();
+	displayArea();
+}
+//Hide everything (map layers)
+function hiddenAllArea()
+{
+	styleVisibility(m0,1);
+	styleVisibility(m1,1);
+	styleVisibility(m2,1);
+	styleVisibility(m3,1);
+}
+//Make the coordinate layer visible
+function displayArea()
+{
+	if(x == 0 && y == 0)
+	{
+		styleVisibility(m0,0);
+	}
+	else if(x == 1 && y == 0)
+	{
+		styleVisibility(m1,0);
+	}
+	else if(x == 0 && y == 1)
+	{
+		styleVisibility(m2,0);
+	}
+	else// if(x == 1 && y == 1)
+	{
+		styleVisibility(m3,0);
+	}
+}
+//Movement judgment (left and right)
+function judgeMoveLeftRight(direction)
+{
+	let result=0;
+	let xx=x;
+	xx += direction;
+	if(xx < 0)
+	{
+		return 1;
+	}
+	if(1 < xx)
+	{
+		return 1;
+	}
+	return 0;
+}
+//Movement judgment (up and down)
+function judgeMoveTopDown(direction)
+{
+	let result=0;
+	let yy=y;
+	yy += direction;
+	if(yy < 0)
+	{
+		return 1;
+	}
+	if(1 < yy)
+	{
+		return 1;
+	}
+	return 0;
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Layer visibility toggle</div><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+//o: object
+//state: value to set in style.visibility
+//0: visible: visible
+//1: hidden: hidden
+function styleVisibility(o, state)
+{
+	o.style.visibility = state == 0 ? "visible" : "hidden";
+}
+</pre>Use style.visibility to set visible only to the layers you want to show.<br>Set other layers to hidden to make them invisible. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Movement</div>[Movement]<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Move left</td><td>Minus x coordinate</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Move right</td><td>Plus x coordinate</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Move up</td><td>Minus y coordinate</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">Move down</td><td>Increase y coordinate</td></tr></table>[Coordinates of each layer]<br><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">A</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>0</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>0</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">B</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>1</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>0</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">C</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>0</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>1</td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">D</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">x</td><td>1</td><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">y</td><td>1</td></tr></table>Let's take moving to the left as an example. <br>The judgeMoveLeftRight function is used to make it negative to move to the left. <br>The result of making the current coordinate negative<br>If it is less than 0, it is outside the frame and cannot be moved. <br>This result is received, and the x coordinate is updated if there is no problem. <br>The remaining right, up and down are also judged. <br>If it is possible to move as a result, only visible layers are displayed. <br>In this sample<br>All layers are hidden once using the hiddenAllArea function. <br>Then the displayArea function is used to display only the relevant layer. <br><br><br><br><a href="#" onclick="f2();">back</a></div><style>.containerP{position: sticky;}.layerP{width: 200px;height: 200px;position: absolute;}.layerP0{top: 0px;left: 0px;}.layerP1{top: 0px;left: 100px;}.layerP2{top: 100px;left: 0px;}.layerP3{top: 100px;left: 100px;}.container{position: sticky;}.layer{width: 200px;height: 200px;position: absolute;}.layer0{top: 0px;left: 0px;width: 200px;height: 200px;}.layer1{top: 0px;left: 0px;width: 200px;height: 200px;}.layer2{top: 0px;left: 0px;width: 200px;height: 200px;}.layer3{top: 0px;left: 0px;width: 200px;height: 200px;}.layerButton{top: 0px;left: 0px;z-index:1;}</style><script>const o1 = document.getElementById("left");const o2 = document.getElementById("right");const o3 = document.getElementById("top");const o4 = document.getElementById("down");const o1En = document.getElementById("leftEn");const o2En = document.getElementById("rightEn");const o3En = document.getElementById("topEn");const o4En = document.getElementById("downEn");o1.style.left = -25 +'px';o1.style.top = 75 +'px';o1.style.width=25+"px";o1.style.height=50+"px";o2.style.left = 200 +'px';o2.style.top = 75 +'px';o2.style.width=25+"px";o2.style.height=50+"px";o3.style.left = 75 +'px';o3.style.top = -25 +'px';o3.style.width=50+"px";o3.style.height=25+"px";o4.style.left = 75 +'px';o4.style.top = 200 +'px';o4.style.width=50+"px";o4.style.height=25+"px";o1En.style.left = -25 +'px';o1En.style.top = 75 +'px';o1En.style.width=25+"px";o1En.style.height=50+"px";o2En.style.left = 200 +'px';o2En.style.top = 75 +'px';o2En.style.width=25+"px";o2En.style.height=50+"px";o3En.style.left = 75 +'px';o3En.style.top = -25 +'px';o3En.style.width=50+"px";o3En.style.height=25+"px";o4En.style.left = 75 +'px';o4En.style.top = 200 +'px';o4En.style.width=50+"px";o4En.style.height=25+"px";const m0 = document.getElementById("map0");const m1 = document.getElementById("map1");const m2 = document.getElementById("map2");const m3 = document.getElementById("map3");styleVisibility(m1,1);styleVisibility(m2,1);styleVisibility(m3,1);const m0En = document.getElementById("map0En");const m1En = document.getElementById("map1En");const m2En = document.getElementById("map2En");const m3En = document.getElementById("map3En");styleVisibility(m1En,1);styleVisibility(m2En,1);styleVisibility(m3En,1);function styleVisibility(o, state){o.style.visibility = state == 0 ? "visible" : "hidden";}let x=0;let y=0;o1.addEventListener("click", () => {judgeMove(0,0);});o2.addEventListener("click", () => {judgeMove(1,0);});o3.addEventListener("click", () => {judgeMove(2,0);});o4.addEventListener("click", () => {judgeMove(3,0);});o1En.addEventListener("click", () => {judgeMove(0,1);});o2En.addEventListener("click", () => {judgeMove(1,1);});o3En.addEventListener("click", () => {judgeMove(2,1);});o4En.addEventListener("click", () => {judgeMove(3,1);});function judgeMove(direction,lang){let result =0;switch(direction){case 0:result =judgeMoveLeftRight(-1);if(result==0)x--;break;case 1:result =judgeMoveLeftRight(1);if(result==0)x++;break;case 2:result =judgeMoveTopDown(-1);if(result==0)y--;break;case 3:result =judgeMoveTopDown(1);if(result==0)y++;break;}if(result == 1){if(lang==0){alert("選択した方向は範囲外です。");}else{alert("The selected direction is out of range.");}return;}hiddenAllArea();displayArea();}function hiddenAllArea(){styleVisibility(m0,1);styleVisibility(m1,1);styleVisibility(m2,1);styleVisibility(m3,1);styleVisibility(m0En,1);styleVisibility(m1En,1);styleVisibility(m2En,1);styleVisibility(m3En,1);}function displayArea(){if(x == 0 && y == 0){styleVisibility(m0,0);styleVisibility(m0En,0);}else if(x == 1 && y == 0){styleVisibility(m1,0);styleVisibility(m1En,0);}else if(x == 0 && y == 1){styleVisibility(m2,0);styleVisibility(m2En,0);}else{styleVisibility(m3,0);styleVisibility(m3En,0);}}function judgeMoveLeftRight(direction){let result=0;let xx=x;xx += direction;if(xx < 0){return 1;}if(1 < xx){return 1;}return 0;}function judgeMoveTopDown(direction){let result=0;let yy=y;yy += direction;if(yy < 0){return 1;}if(1 < yy){return 1;}return 0;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
