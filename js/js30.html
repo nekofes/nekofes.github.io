@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">キャラ移動による画面切り替え</td></tr><tr><td>移動による画面を切り替える例</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">サンプル</div><table><tr><td><div class="container" style="background-color:palegoldenrod;width: 250px;height: 250px;"><div class="layer layer1" id="chick"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><div class="layer layer2" id="map0" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">0</div><div class="layer layer2" id="map1" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">1</div><div class="layer layer2" id="map2" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">2</div><div class="layer layer2" id="map3" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">3</div><div class="layer layer2" id="map4" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">4</div><div class="layer layer2" id="map5" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">5</div><div class="layer layer2" id="map6" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">6</div><div class="layer layer2" id="map7" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">7</div><div class="layer layer2" id="map8" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">8</div><div class="layer layer2" id="map9" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">9</div><div class="layer layer2" id="map10" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">10</div><div class="layer layer2" id="map11" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">11</div><div class="layer layer2" id="map12" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">12</div><div class="layer layer2" id="map13" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">13</div><div class="layer layer2" id="map14" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">14</div><div class="layer layer2" id="map15" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">15</div><div class="layer layer2" id="map16" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">16</div><div class="layer layer2" id="map17" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">17</div><div class="layer layer2" id="map18" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">18</div><div class="layer layer2" id="map19" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">19</div><div class="layer layer2" id="map20" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">20</div><div class="layer layer2" id="map21" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">21</div><div class="layer layer2" id="map22" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">22</div><div class="layer layer2" id="map23" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">23</div><div class="layer layer2" id="map24" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">24</div><div class="layer layer2" id="map25" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">25</div><div class="layer layer2" id="map26" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">26</div><button class="layer layer3" id="b1">次へ</button><button class="layer layer4" id="b2">戻る</button></div></td></tr></table><br><br>ひよこが移動することにより、マップを切り替えるサンプルです。<br>[HTML]<br><textarea id="t1" rows=34 cols=170>
+<div class="container" style="background-color:palegoldenrod;width: 250px;height: 250px;">
+	<div class="layer layer1" id="chick">
+		<img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;">
+	</div>
+	<div class="layer layer2" id="map0" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">0</div>
+	<div class="layer layer2" id="map1" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">1</div>
+	<div class="layer layer2" id="map2" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">2</div>
+	<div class="layer layer2" id="map3" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">3</div>
+	<div class="layer layer2" id="map4" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">4</div>
+	<div class="layer layer2" id="map5" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">5</div>
+	<div class="layer layer2" id="map6" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">6</div>
+	<div class="layer layer2" id="map7" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">7</div>
+	<div class="layer layer2" id="map8" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">8</div>
+	<div class="layer layer2" id="map9" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">9</div>
+
+	<div class="layer layer2" id="map10" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">10</div>
+	<div class="layer layer2" id="map11" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">11</div>
+	<div class="layer layer2" id="map12" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">12</div>
+	<div class="layer layer2" id="map13" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">13</div>
+	<div class="layer layer2" id="map14" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">14</div>
+	<div class="layer layer2" id="map15" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">15</div>
+	<div class="layer layer2" id="map16" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">16</div>
+	<div class="layer layer2" id="map17" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">17</div>
+	<div class="layer layer2" id="map18" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">18</div>
+	<div class="layer layer2" id="map19" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">19</div>
+
+	<div class="layer layer2" id="map20" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">20</div>
+	<div class="layer layer2" id="map21" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">21</div>
+	<div class="layer layer2" id="map22" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">22</div>
+	<div class="layer layer2" id="map23" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">23</div>
+	<div class="layer layer2" id="map24" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">24</div>
+	<div class="layer layer2" id="map25" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">25</div>
+	<div class="layer layer2" id="map26" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">26</div>
+
+	<button class="layer layer3" id="b1">次へ</button>
+	<button class="layer layer4" id="b2">戻る</button>
+</div>
+</textarea>[CSS]<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 250px;
+	height: 250px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+	z-index:1;
+}
+.layer2{
+	top: 0px;
+	left: 0px;
+}
+.layer3{
+	top: 250px;
+	left: 0px;
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+.layer4{
+	top: 250px;
+	left: 150px;
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+</pre>[javascript]<br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+//マップ座標
+const aryX=[200,200,200,200,200,150,100, 50,  0,   200,150,100, 50,  0,  0,  0,  0, 50,100,150,200,200,     0, 50,100,100,100];
+const aryY=[0  , 50,100,150,200,200,200,200,200,   200,200,200,200,200,150,100, 50, 50, 50, 50, 50,100,   100,100,100, 50,  0];
+let index = 0;
+let x=0;
+let y=0;
+mapA();
+//ひよこの位置
+chickPosition();
+//map A
+function mapA()
+{
+	hiddenAllMap();
+	displayMap(0,8);
+	displayMap(22,26);
+}
+//map B
+function mapB()
+{
+	hiddenAllMap();
+	displayMap(9,21);
+}
+//ひよこの位置
+function chickPosition()
+{
+	const chick = document.getElementById("chick");
+	chick.style.left = aryX[index] +'px';
+	chick.style.top = aryY[index] +'px';
+}
+//マップ表示
+function displayMap(startIndex,endIndex)
+{
+	for(i=startIndex; i <= endIndex; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "visible";
+		map.style.left = aryX[i] +'px';
+		map.style.top = aryY[i] +'px';
+	}
+}
+//マップ非表示
+function hiddenAllMap()
+{
+	for(i=0; i < aryX.length; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "hidden";
+	}
+}
+const b1 = document.getElementById("b1");
+b1.addEventListener("click", () => 
+{
+	moveChick(1);
+});
+const b2 = document.getElementById("b2");
+b2.addEventListener("click", () => 
+{
+	moveChick(-1);
+});
+//ひよこ移動
+function moveChick(direction)
+{
+	index += direction;
+	if(index >= aryX.length)
+	{
+		index = aryX.length - 1;
+	}
+	if(index<0)
+	{
+		index =0;
+	}
+	switch(index)
+	{
+		case 8:
+		case 22:
+			mapA();
+			break;
+		case 9:
+		case 21:
+			mapB();
+			break;
+	}
+	chickPosition();
+}
+</pre>[画面切り替え処理]<br><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+switch(index)
+{
+	case 8:
+	case 22:
+		mapA();
+		break;
+	case 9:
+	case 21:
+		mapB();
+		break;
+}
+</pre>例えば<br>マップAの画面のマス目「8」から「9」に切り替わるとき<br>画面がマップBに切り替わる処理を入れています。<br>マップBの画面のマス目「21」から「22」に切り替わるとき<br>画面がマップAに切り替わる処理を入れています。<br><br>マップの表示を一度クリアしてから<br>指定したマップの情報のみ表示しています。<br>[マップの表示を一度クリア]<br><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+function hiddenAllMap()
+{
+	for(i=0; i < aryX.length; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "hidden";
+	}
+}
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">map.style.visibility = "hidden";</div>「style.visibility」に「hidden」を設定することでマップのdivタグを非表示にしています。<br><br>[指定したマップの情報を表示]<br><pre id="codeBlock５" class="prettyprint linenums;lang-js;">
+function displayMap(startIndex,endIndex)
+{
+	for(i=startIndex; i <= endIndex; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "visible";
+		map.style.left = aryX[i] +'px';
+		map.style.top = aryY[i] +'px';
+	}
+}
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">map.style.visibility = "visible";</div>「style.visibility」に「visible」を設定することでマップのdivタグを表示状態にします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">map.style.left = aryX[i] +'px';<br>map.style.top = aryY[i] +'px';</div>divタグを座標を指定して移動することで表示します。<br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Screen switching by moving the character</td></tr><tr><td>Example of switching screens by moving</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">sample</div><table><tr><td><div class="container" style="background-color:palegoldenrod;width: 250px;height: 250px;"><div class="layer layer1" id="chickEn"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><div class="layer layer2" id="map0En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">0</div><div class="layer layer2" id="map1En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">1</div><div class="layer layer2" id="map2En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">2</div><div class="layer layer2" id="map3En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">3</div><div class="layer layer2" id="map4En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">4</div><div class="layer layer2" id="map5En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">5</div><div class="layer layer2" id="map6En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">6</div><div class="layer layer2" id="map7En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">7</div><div class="layer layer2" id="map8En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">8</div><div class="layer layer2" id="map9En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">9</div><div class="layer layer2" id="map10En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">10</div><div class="layer layer2" id="map11En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">11</div><div class="layer layer2" id="map12En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">12</div><div class="layer layer2" id="map13En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">13</div><div class="layer layer2" id="map14En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">14</div><div class="layer layer2" id="map15En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">15</div><div class="layer layer2" id="map16En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">16</div><div class="layer layer2" id="map17En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">17</div><div class="layer layer2" id="map18En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">18</div><div class="layer layer2" id="map19En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">19</div><div class="layer layer2" id="map20En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">20</div><div class="layer layer2" id="map21En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">21</div><div class="layer layer2" id="map22En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">22</div><div class="layer layer2" id="map23En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">23</div><div class="layer layer2" id="map24En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">24</div><div class="layer layer2" id="map25En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">25</div><div class="layer layer2" id="map26En" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">26</div><button class="layer layer3" id="b1En">NEXT</button><button class="layer layer4" id="b2En">BACK</button></div></td></tr></table><br><br>This is an example of switching maps by moving the chick. <br>[HTML]<br><textarea id="t1" rows=34 cols=170>
+<div class="container" style="background-color:palegoldenrod;width: 250px;height: 250px;">
+	<div class="layer layer1" id="chick">
+		<img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;">
+	</div>
+	<div class="layer layer2" id="map0" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">0</div>
+	<div class="layer layer2" id="map1" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">1</div>
+	<div class="layer layer2" id="map2" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">2</div>
+	<div class="layer layer2" id="map3" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">3</div>
+	<div class="layer layer2" id="map4" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">4</div>
+	<div class="layer layer2" id="map5" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">5</div>
+	<div class="layer layer2" id="map6" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">6</div>
+	<div class="layer layer2" id="map7" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">7</div>
+	<div class="layer layer2" id="map8" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">8</div>
+	<div class="layer layer2" id="map9" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">9</div>
+
+	<div class="layer layer2" id="map10" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">10</div>
+	<div class="layer layer2" id="map11" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">11</div>
+	<div class="layer layer2" id="map12" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">12</div>
+	<div class="layer layer2" id="map13" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">13</div>
+	<div class="layer layer2" id="map14" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">14</div>
+	<div class="layer layer2" id="map15" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">15</div>
+	<div class="layer layer2" id="map16" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">16</div>
+	<div class="layer layer2" id="map17" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">17</div>
+	<div class="layer layer2" id="map18" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">18</div>
+	<div class="layer layer2" id="map19" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">19</div>
+
+	<div class="layer layer2" id="map20" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">20</div>
+	<div class="layer layer2" id="map21" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">21</div>
+	<div class="layer layer2" id="map22" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">22</div>
+	<div class="layer layer2" id="map23" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">23</div>
+	<div class="layer layer2" id="map24" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">24</div>
+	<div class="layer layer2" id="map25" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">25</div>
+	<div class="layer layer2" id="map26" style="background-color:seagreen;width: 50px;height: 50px;display:flex;justify-content:center;align-items:center;">26</div>
+
+	<button class="layer layer3" id="b1">NEXT</button>
+	<button class="layer layer4" id="b2">BACK</button>
+</div>
+</textarea>[CSS]<br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 250px;
+	height: 250px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+	z-index:1;
+}
+.layer2{
+	top: 0px;
+	left: 0px;
+}
+.layer3{
+	top: 250px;
+	left: 0px;
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+.layer4{
+	top: 250px;
+	left: 150px;
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+</pre>[javascript]<br><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+//Map Coordinates
+const aryX=[200,200,200,200,200,150,100, 50,  0,   200,150,100, 50,  0,  0,  0,  0, 50,100,150,200,200,     0, 50,100,100,100];
+const aryY=[0  , 50,100,150,200,200,200,200,200,   200,200,200,200,200,150,100, 50, 50, 50, 50, 50,100,   100,100,100, 50,  0];
+let index = 0;
+let x=0;
+let y=0;
+mapA();
+//Chick position
+chickPosition();
+//map A
+function mapA()
+{
+	hiddenAllMap();
+	displayMap(0,8);
+	displayMap(22,26);
+}
+//map B
+function mapB()
+{
+	hiddenAllMap();
+	displayMap(9,21);
+}
+//Chick position
+function chickPosition()
+{
+	const chick = document.getElementById("chick");
+	chick.style.left = aryX[index] +'px';
+	chick.style.top = aryY[index] +'px';
+}
+//Map display
+function displayMap(startIndex,endIndex)
+{
+	for(i=startIndex; i <= endIndex; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "visible";
+		map.style.left = aryX[i] +'px';
+		map.style.top = aryY[i] +'px';
+	}
+}
+//Map hidden
+function hiddenAllMap()
+{
+	for(i=0; i < aryX.length; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "hidden";
+	}
+}
+const b1 = document.getElementById("b1");
+b1.addEventListener("click", () => 
+{
+	moveChick(1);
+});
+const b2 = document.getElementById("b2");
+b2.addEventListener("click", () => 
+{
+	moveChick(-1);
+});
+//Chick moving
+function moveChick(direction)
+{
+	index += direction;
+	if(index >= aryX.length)
+	{
+		index = aryX.length - 1;
+	}
+	if(index<0)
+	{
+		index =0;
+	}
+	switch(index)
+	{
+		case 8:
+		case 22:
+			mapA();
+			break;
+		case 9:
+		case 21:
+			mapB();
+			break;
+	}
+	chickPosition();
+}
+</pre>[Screen switching process]<br><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+switch(index)
+{
+	case 8:
+	case 22:
+		mapA();
+		break;
+	case 9:
+	case 21:
+		mapB();
+		break;
+}
+</pre>For example,<br>When the square on the Map A screen changes from "8" to "9",<br>the screen switches to Map B. <br>When the square on the Map B screen changes from "21" to "22",<br>the screen switches to Map A. <br><br>The map display is cleared once,<br>and only the information of the specified map is displayed. <br>[Clear the map display once]<br><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+function hiddenAllMap()
+{
+	for(i=0; i < aryX.length; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "hidden";
+	}
+}
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">map.style.visibility = "hidden";</div>The map div tag is hidden by setting "style.visibility" to "hidden". <br><br>[Show the specified map information]<br><pre id="codeBlock５" class="prettyprint linenums;lang-js;">
+function displayMap(startIndex,endIndex)
+{
+	for(i=startIndex; i <= endIndex; i++)
+	{
+		const map = document.getElementById("map"+i);
+		map.style.visibility = "visible";
+		map.style.left = aryX[i] +'px';
+		map.style.top = aryY[i] +'px';
+	}
+}
+</pre><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">map.style.visibility = "visible";</div>By setting "style.visibility" to "visible", the map div tag will be displayed. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">map.style.left = aryX[i] +'px';<br>map.style.top = aryY[i] +'px';</div>The div tag is displayed by specifying the coordinates and moving it. <br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><style>.container{position: sticky;}.layer{width: 250px;height: 250px;position: absolute;}.layer1{top: 0px;left: 0px;z-index:1;}.layer2{top: 0px;left: 0px;}.layer3{top: 250px;left: 0px;width: 100px;height: 30px;z-index:2;}.layer4{top: 250px;left: 150px;width: 100px;height: 30px;z-index:2;}</style><script>const aryX=[200,200,200,200,200,150,100, 50,  0,   200,150,100, 50,  0,  0,  0,  0, 50,100,150,200,200,     0, 50,100,100,100];const aryY=[0  , 50,100,150,200,200,200,200,200,   200,200,200,200,200,150,100, 50, 50, 50, 50, 50,100,   100,100,100, 50,  0];let index = 0;let x=0;let y=0;mapA();chickPosition();function mapA(){hiddenAllMap();displayMap(0,8);displayMap(22,26);}function mapB(){hiddenAllMap();displayMap(9,21);}function chickPosition(){const chick = document.getElementById("chick");chick.style.left = aryX[index] +'px';chick.style.top = aryY[index] +'px';const chickEn = document.getElementById("chickEn");chickEn.style.left = aryX[index] +'px';chickEn.style.top = aryY[index] +'px';}function displayMap(startIndex,endIndex){for(i=startIndex; i <= endIndex; i++){const map = document.getElementById("map"+i);map.style.visibility = "visible";map.style.left = aryX[i] +'px';map.style.top = aryY[i] +'px';const mapEn = document.getElementById("map"+i+"En");mapEn.style.visibility = "visible";mapEn.style.left = aryX[i] +'px';mapEn.style.top = aryY[i] +'px';}}function hiddenAllMap(){for(i=0; i < aryX.length; i++){const map = document.getElementById("map"+i);map.style.visibility = "hidden";const mapEn = document.getElementById("map"+i+"En");mapEn.style.visibility = "hidden";}}const b1 = document.getElementById("b1");b1.addEventListener("click", () => {moveChick(1);});const b2 = document.getElementById("b2");b2.addEventListener("click", () => {moveChick(-1);});const b1En = document.getElementById("b1En");b1En.addEventListener("click", () => {moveChick(1);});const b2En = document.getElementById("b2En");b2En.addEventListener("click", () => {moveChick(-1);});function moveChick(direction){index += direction;if(index >= aryX.length){index = aryX.length - 1;}if(index<0){index =0;}switch(index){case 8:case 22:mapA();break;case 9:case 21:mapB();break;}chickPosition();}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
