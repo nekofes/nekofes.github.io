@@ -2,7 +2,7 @@
 element.insertAdjacentHTML(position, text)
 </textarea><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[第1引数] 位置の指定</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">beforebegin</td><td>elementの前に追加</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">afterbegin</td><td>elementの子要素の先頭に追加</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">beforeend</td><td>elementの子要素の最後に追加</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">afterend</td><td>elementの後に追加</td></tr></table><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[第2引数] 出力文字列</div>(例)<br><textarea id="t1" rows=2 cols=86>
 '<p style="background-color:rgb(245 255 250 / 1.0);text-align:center;">sample</p>'
-</textarea><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[insertAdjacentHTML使用例]</div>getElementByIdで指定したオブジェクトのノードに<br>指定した位置に出録したい文字列を追加します。<br>(例)<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;">
+</textarea><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[insertAdjacentHTML使用例]</div>getElementByIdで指定したオブジェクトのノードに<br>指定した位置に出力したい文字列を追加します。<br>(例)<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;">
 let element = document.getElementById('xxx');
 element.insertAdjacentHTML('beforebegin', '&lt;p&gt;sample&lt;/p&gt;');
 </pre><br>上記のサンプルを次のように実装しています。<br>(例)<br>divタグを準備して<br>広告のような宣伝タグを表示したい例<br><br>[divタグの例]<br><textarea id="t1" rows=3 cols=20>
