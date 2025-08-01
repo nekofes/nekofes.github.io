@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return true;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">配列要素の削除</td></tr><tr><td>配列の指定したインデックス要素の削除をする処理</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+let ary=[1,2,3,4,5];
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+let removeIndex=1;
+ary=ary.filter((_,i)=>i!== removeIndex);
+console.log("[result]");
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+</pre>[結果]<br>i:0 ary:1<br>i:1 ary:2<br>i:2 ary:3<br>i:3 ary:4<br>i:4 ary:5<br>[result]<br>i:0 ary:1<br>i:1 ary:3<br>i:2 ary:4<br>i:3 ary:5<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">ary=ary.filter((_,i)=>i!== removeIndex);</div>filterメソッドを使い、削除したいインデックスしたいデータを除くデータをary配列に入れ直しています。<br>removeIndexには1を指定しています。<br>配列インデックスは0から始まります。<br>filterの引数に使用している「i」がインデックスと一致するremoveIndexが削除対象となります。<br>したがって2番目の要素を削除対象としています。<br><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+let ary=[1,2,3,4,5];
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+let removeArray=[2,4];
+ary=ary.filter((_,i) => !removeArray.includes(i));
+console.log("[result]");
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+</pre>[結果]<br>i:0 ary:1<br>i:1 ary:2<br>i:2 ary:3<br>i:3 ary:4<br>i:4 ary:5<br>[result]<br>i:0 ary:1<br>i:1 ary:2<br>i:2 ary:4<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">ary=ary.filter((_,i) => !removeArray.includes(i));</div>複数の削除したいデータを指定するため配列を準備します。<br>この例ではremoveArray配列です。<br>配列に格納されているデータと一致する要素は除外対象となります。<br>削除対象の配列には、削除したいインデックス位置を指定します。<br>filterの引数に使用している「i」と一致するremoveArray配列のインデックスが削除対象となります。<br>したがって3番目と5番目のデータを削除します。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Deleting an array element</td></tr><tr><td>Deletes the specified index element from the array.</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+let ary=[1,2,3,4,5];
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+let removeIndex=1;
+ary=ary.filter((_,i)=>i!== removeIndex);
+console.log("[result]");
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+</pre>[result]<br>i:0 ary:1<br>i:1 ary:2<br>i:2 ary:3<br>i:3 ary:4<br>i:4 ary:5<br>[result]<br>i:0 ary:1<br>i:1 ary:3<br>i:2 ary:4<br>i:3 ary:5<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">ary=ary.filter((_,i)=>i!== removeIndex);</div>The filter method is used to repopulate the ary array with the data excluding the indexed data to be deleted. <br>The removeIndex is set to 1. <br>Array indexes start from 0. <br>The removeIndex whose index matches the "i" used in the filter argument will be the element to be deleted. <br>Therefore, the second element is the element to be deleted. <br><br><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+let ary=[1,2,3,4,5];
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+let removeArray=[2,4];
+ary=ary.filter((_,i) => !removeArray.includes(i));
+console.log("[result]");
+for(i=0; i < ary.length; i++)
+{
+	console.log("i:"+i+" ary:"+ary[i]);
+}
+</pre>[result]<br>i:0 ary:1<br>i:1 ary:2<br>i:2 ary:3<br>i:3 ary:4<br>i:4 ary:5<br>[result]<br>i:0 ary:1<br>i:1 ary:2<br>i:2 ary:4<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">ary=ary.filter((_,i) => !removeArray.includes(i));</div>Prepare an array to specify multiple pieces of data to delete. <br>In this example, use the removeArray array. <br>Elements that match the data stored in the array will be excluded. <br>Specify the index position of the array to delete. <br>The index in the removeArray array that matches the "i" argument used in filter will be deleted. <br>Therefore, the third and fifth pieces of data will be deleted. <br><br><br><br><a href="#" onclick="f2();">back</a></div><script>let ary=[1,2,3,4,5];for(i=0; i < ary.length; i++){console.log("i:"+i+" ary:"+ary[i]);}let removeIndex=1;ary=ary.filter((_,i)=>i!== removeIndex);console.log("[result]");for(i=0; i < ary.length; i++){console.log("i:"+i+" ary:"+ary[i]);}let ary2=[1,2,3,4,5];for(i=0;i<ary2.length;i++){console.log("i:"+i+" ary2:"+ary2[i]);}let removeArray=[2,4];ary2=ary2.filter((_,i)=> !removeArray.includes(i));console.log("[result]");for(i=0;i<ary2.length;i++){console.log("i:"+i+" ary2:"+ary2[i]);}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
