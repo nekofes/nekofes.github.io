@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return true;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">buttonタグを枠なし背景なしの透過色にする</td></tr><tr><td>透過色ボタンに変更する処理</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">border: none; background-color: transparent;</div><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">border: none</div>枠線を非表示にします。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">background-color: transparent</div>背景色を透過色にします。<br><br><br><div style="word-break: break-word;width:400px;background-color:aliceblue;">[サンプル]</div><table><tr><td><button id="b1" class="btn_clear">1</td><td><button id="b2" class="btn_border_color_none">2</td><td><button id="b3" class="btn_border_color_green">3</td><td><button id="b4" class="btn_border_none_color_green">4</td></tr></table>[ボタンを選択した結果]<br><label id="lbl1"></label><br>[HTML]<br><textarea id="text" rows=10 cols=100>
+<table>
+<tr>
+<td><button id="b1" class="btn_clear">1</td>
+<td><button id="b2" class="btn_border_color_none">2</td>
+<td><button id="b3" class="btn_border_color_green">3</td>
+<td><button id="b4" class="btn_border_none_color_green">4</td>
+</tr>
+</table>
+[ボタンを選択した結果]<br>
+<label id="lbl1"></label>
+</textarea><br><br>[CSS]<br><textarea id="text2" rows=7 cols=80>
+.btn_clear 
+{
+	border: none;
+	background-color: transparent;
+	width:100px;
+	height:100px;
+}
+.btn_border_color_none
+{
+	background-color: transparent;
+	width:100px;
+	height:100px;
+}
+.btn_border_color_green
+{
+	background-color: rgb(34 139 34 / 0.7);
+	width:100px;
+	height:100px;
+}
+.btn_border_none_color_green
+{
+	border: none;
+	background-color: rgb(34 139 34 / 0.7);
+	width:100px;
+	height:100px;
+}
+</textarea><br><br>[javascript]<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("b1");
+const b2 = document.getElementById("b2");
+const b3 = document.getElementById("b3");
+const b4 = document.getElementById("b4");
+b1.addEventListener("click", () => 
+{
+	tapButton(1);
+});
+b2.addEventListener("click", () => 
+{
+	tapButton(2);
+});
+b3.addEventListener("click", () => 
+{
+	tapButton(3);
+});
+b4.addEventListener("click", () => 
+{
+	tapButton(4);
+});
+function tapButton(no)
+{
+	let text = "";
+	switch(no)
+	{
+		case 1:
+			text ="枠線なし/背景色なし";
+			break;
+		case 2:
+			text ="枠線あり/背景色なし";
+			break;
+		case 3:
+			text ="枠線あり/背景色あり";
+			break;
+		case 4:
+			text ="枠線なし/背景色あり";
+			break;
+	}
+	const lbl1 = document.getElementById("lbl1");
+	lbl1.innerText = text;
+}
+</pre><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Set the button tag to a transparent color with no border or background</td></tr><tr><td>Process to change to transparent color button</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">border: none; background-color: transparent;</div><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">border: none</div>Hide the border. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">background-color: transparent</div>Set the background color to transparent. <br><br><br><div style="word-break: break-word;width:400px;background-color:aliceblue;">[sample]</div><table><tr><td><button id="b1En" class="btn_clear">1</td><td><button id="b2En" class="btn_border_color_none">2</td><td><button id="b3En" class="btn_border_color_green">3</td><td><button id="b4En" class="btn_border_none_color_green">4</td></tr></table>[Result of selecting the button]<br><label id="lbl1En"></label><br>[HTML]<br><textarea id="text" rows=10 cols=100>
+<table>
+<tr>
+<td><button id="b1" class="btn_clear">1</td>
+<td><button id="b2" class="btn_border_color_none">2</td>
+<td><button id="b3" class="btn_border_color_green">3</td>
+<td><button id="b4" class="btn_border_none_color_green">4</td>
+</tr>
+</table>
+[Result of selecting the button]<br>
+<label id="lbl1"></label>
+</textarea><br><br>[CSS]<br><textarea id="text2" rows=7 cols=80>
+.btn_clear 
+{
+	border: none;
+	background-color: transparent;
+	width:100px;
+	height:100px;
+}
+.btn_border_color_none
+{
+	background-color: transparent;
+	width:100px;
+	height:100px;
+}
+.btn_border_color_green
+{
+	background-color: rgb(34 139 34 / 0.7);
+	width:100px;
+	height:100px;
+}
+.btn_border_none_color_green
+{
+	border: none;
+	background-color: rgb(34 139 34 / 0.7);
+	width:100px;
+	height:100px;
+}
+</textarea><br><br>[javascript]<br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("b1");
+const b2 = document.getElementById("b2");
+const b3 = document.getElementById("b3");
+const b4 = document.getElementById("b4");
+b1.addEventListener("click", () => 
+{
+	tapButton(1);
+});
+b2.addEventListener("click", () => 
+{
+	tapButton(2);
+});
+b3.addEventListener("click", () => 
+{
+	tapButton(3);
+});
+b4.addEventListener("click", () => 
+{
+	tapButton(4);
+});
+function tapButton(no)
+{
+	let text = "";
+	switch(no)
+	{
+		case 1:
+			text ="No border/No background color";
+			break;
+		case 2:
+			text ="With border/No background color";
+			break;
+		case 3:
+			text ="With border/with background color";
+			break;
+		case 4:
+			text ="No border/with background color";
+			break;
+	}
+	const lbl1 = document.getElementById("lbl1");
+	lbl1.innerText = text;
+}
+</pre><br><br><a href="#" onclick="f2();">back</a></div><style>.btn_clear {border: none;background-color: transparent;width:100px;height:100px;}.btn_border_color_none{background-color: transparent;width:100px;height:100px;}.btn_border_color_green{background-color: rgb(34 139 34 / 0.7);width:100px;height:100px;}.btn_border_none_color_green{border: none;background-color: rgb(34 139 34 / 0.7);width:100px;height:100px;}</style><script>const b1 = document.getElementById("b1");const b2 = document.getElementById("b2");const b3 = document.getElementById("b3");const b4 = document.getElementById("b4");b1.addEventListener("click", () => {tapButton(1,0);});b2.addEventListener("click", () => {tapButton(2,0);});b3.addEventListener("click", () => {tapButton(3,0);});b4.addEventListener("click", () => {tapButton(4,0);});const b1En = document.getElementById("b1En");const b2En = document.getElementById("b2En");const b3En = document.getElementById("b3En");const b4En = document.getElementById("b4En");b1En.addEventListener("click", () => {tapButton(1,1);});b2En.addEventListener("click", () => {tapButton(2,1);});b3En.addEventListener("click", () => {tapButton(3,1);});b4En.addEventListener("click", () => {tapButton(4,1);});function tapButton(no,lang){let text = "";if(lang==0){switch(no){case 1:text ="枠線なし/背景色なし";break;case 2:text ="枠線あり/背景色なし";break;case 3:text ="枠線あり/背景色あり";break;case 4:text ="枠線なし/背景色あり";break;}const lbl1 = document.getElementById("lbl1");lbl1.innerText = text;}else{switch(no){case 1:text ="No border/No background color";break;case 2:text ="With border/No background color";break;case 3:text ="With border/with background color";break;case 4:text ="No border/with background color";break;}const lbl1En = document.getElementById("lbl1En");lbl1En.innerText = text;}}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/css/index.html?lang=0';}else{url='/css/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/css/css1.html?lang=0';}else{url='/css/css1.html?lang=1';}break;case 2:if(lang==0){url='/css/css2.html?lang=0';}else{url='/css/csss2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
