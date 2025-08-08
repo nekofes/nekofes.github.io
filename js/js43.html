@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">厳密な型変換による判定</td></tr><tr><td>===(厳密等価演算子)と==(抽象等価演算子)の判定について</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+console.log("===(厳密等価演算子)を使用したテスト");
+console.log("結果を数字で判定");
+resultOfDivTest1(10, 2, 0);
+console.log("結果を文字列で判定");
+resultOfDivTest1(10, 2, "0");
+function resultOfDivTest1(num1, num2, judge)
+{
+	if(num1 % num2 === judge)
+	{
+		//trueのケース
+		console.log("true");
+	}
+	else
+	{
+		//falseのケース
+		console.log("false");
+	}
+}
+
+console.log("==(抽象等価演算子)を使用したテスト");
+console.log("結果を数字で判定");
+resultOfDivTest2(10, 2, 0);
+console.log("結果を文字列で判定");
+resultOfDivTest2(10, 2, "0");
+function resultOfDivTest2(num1, num2, judge)
+{
+	if(num1 % num2 == judge)
+	{
+		//trueのケース
+		console.log("true");
+	}
+	else
+	{
+		//falseのケース
+		console.log("false");
+	}
+}
+/*
+[結果]
+
+===(厳密等価演算子)を使用したテスト
+結果を数字で判定
+true
+結果を文字列で判定
+false
+==(抽象等価演算子)を使用したテスト
+結果を数字で判定
+true
+結果を文字列で判定
+true
+*/
+</pre><br>コーディングをすると判定箇所を変数にして動的に判定をするため<br>===(厳密等価演算子)を使った判定にしないと、疲れているときなどは、間違いに気づかないまま<br>単体テストなどを通過してしまい、あとから大変なことになることがあります。<br>このようなバグに注意するためにも、<br>意図した結果と異なる可能性があるため、===(厳密等価演算子)を使用することが推奨されます。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">== (抽象等価演算子)</div>比較する際、自動的に型を変換して比較します。<br>10を2で割った剰余は0ですよね。<br>この例だと、"0" == 0 は true になります。<br>これは文字列 "0" が数値の 0 に変換されて比較されるためです。<br>この自動的な型変換は、予期せぬ結果を生む可能性があり、バグの原因になることがあります。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">=== (厳密等価演算子)</div>=== は型変換を行わずに、値と型を厳密に比較します。<br>"0" === 0 は false になります。<br>なぜなら、文字列と数値は型が異なるため、=== では等しくないと判断されるからです。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Strict type conversion</td></tr><tr><td>About determining === (strict equality operator) and == (abstract equality operator)</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+console.log("Testing with === (strict equality operator)");
+console.log("Results are judged numerically");
+resultOfDivTest1(10, 2, 0);
+console.log("Determine the result by string");
+resultOfDivTest1(10, 2, "0");
+function resultOfDivTest1(num1, num2, judge)
+{
+	if(num1 % num2 === judge)
+	{
+		//True Case
+		console.log("true");
+	}
+	else
+	{
+		//The false case
+		console.log("false");
+	}
+}
+
+console.log("Testing with == (abstract equality operator)");
+console.log("Results are judged numerically");
+resultOfDivTest2(10, 2, 0);
+console.log("Determine the result by string");
+resultOfDivTest2(10, 2, "0");
+function resultOfDivTest2(num1, num2, judge)
+{
+	if(num1 % num2 == judge)
+	{
+		//True Case
+		console.log("true");
+	}
+	else
+	{
+		//The false case
+		console.log("false");
+	}
+}
+/*
+[result]
+
+Test using === (strict equality operator)
+Test the result as a number
+true
+Test the result as a string
+false
+Test using == (abstract equality operator)
+Test the result as a number
+true
+Test the result as a string
+true
+*/
+</pre><br>When coding, variables are used to dynamically evaluate variables.<br>If you don't use the === (strict equality operator) for the evaluation, you may make a mistake when you're tired and pass a unit test without realizing it.<br>This can lead to serious problems later.<br>To avoid bugs like this,<br>it is recommended to use the === (strict equality operator) because the results may differ from what you intended.<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">== (Abstract Equality Operator)</div>When comparing, the type is automatically converted.<br>The remainder when 10 is divided by 2 is 0, right?<br>In this example, "0" == 0 is true.<br>This is because the string "0" is converted to the numeric value 0 for comparison.<br>This automatic type conversion can produce unexpected results and can cause bugs. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">=== (strict equality operator)</div>=== strictly compares the value and type without type conversion. <br>"0" === 0 is false. <br>This is because strings and numbers are different types, so === determines they are not equal. <br><br><br><br><a href="#" onclick="f2();">back</a></div><script>console.log("===(厳密等価演算子)を使用したテスト");console.log("結果を数字で判定");resultOfDivTest1(10, 2, 0);console.log("結果を文字列で判定");resultOfDivTest1(10, 2, "0");function resultOfDivTest1(num1, num2, judge){if(num1 % num2 === judge){console.log("true");}else{console.log("false");}}console.log("==(抽象等価演算子)を使用したテスト");console.log("結果を数字で判定");resultOfDivTest2(10, 2, 0);console.log("結果を文字列で判定");resultOfDivTest2(10, 2, "0");function resultOfDivTest2(num1, num2, judge){if(num1 % num2 == judge){console.log("true");}else{console.log("false");}}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
