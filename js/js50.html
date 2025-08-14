@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">ページのローディング中表示</td></tr><tr><td>ローディングアイコンを表示することによりユーザビリティを期待する方法</td></tr></table><br>ホームページを表示したと仮定します。<br>画像や他の処理により、ページのすべてが表示されるまで<br>一定の時間を超えるとユーザーレスポンシビリティが良くないと判断されます。<br>例えば、<br>画像などを表示する場合、<br>画像の大きさや枚数を減らすなどの調整をすることで改善を期待できますが、<br>”現在、表示中です...”というメッセージを<br>ページの表示が終わるまでユーザーに通知する方法があります。<br><br>例えば、ローディングアイコン(くるくる回る画像)と表示中を知らせるメッセージを<br>ページ表示中にユーザーにわかりやすいように表示する方法です。<br><br>[サンプル]<br><textarea id="t1" rows=30 cols=86  style="background-color:rgb(100 149 237 / 0.2);">
+<style>
+.w1{
+	position: fixed;
+	z-index:1;
+}
+.w2{
+	position: fixed;
+	height:30px;
+	z-index:1;
+}
+</style>
+
+<div id="waiting">
+	<div class="w1" id="loading">
+		<img src="loading.gif" style="width:100px;height:100px;">
+	</div>
+	<div class="w2" id="msg">
+		please wait a moment ...
+	</div>
+</div>
+
+<script>
+
+let width = window.innerWidth;
+
+let height = window.innerHeight;
+
+let x = (width - 100) / 2;
+let y = (height - (100 + 30)) / 2;
+
+const loading = document.getElementById("loading");
+loading.style.left = x +'px';
+loading.style.top = y +'px';
+
+const msg = document.getElementById("msg");
+
+const computedStyle=getComputedStyle(msg);
+let msgWidth=parseInt(computedStyle.width);
+x = (width - msgWidth) / 2;
+
+y += 100;
+
+msg.style.left = x +'px';
+msg.style.top = y +'px';
+
+window.onload=function()
+{
+
+const waiting = document.getElementById("waiting");
+waiting.style.display="none";
+}
+</script></script>
+</textarea><br><br>[CSS]<br>positionをfixedにすることで、表示中のHTML画面の上(被せるよう)に<br>ローディングアイコンやメッセージなどを表示させます。<br>このサンプルでは、z-indexを使用して表示中のHTML要素の上に表示させています。<br><br>[divタグ]<br>(1)ローディングアイコン<br>(2)メッセージ<br>を設定しています。<br>位置調整をするため、divタグにidを設定しています。<br><br>[javascript]<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">let width = window.innerWidth;<br></div>画面の幅の取得します。<br><br>(1)ローディングアイコン<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x = (画面幅 - アイコンの幅) / 2;</div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">y = (画面高さ - (アイコンの高さ + divの高さ)) / 2;</div>上記のようにアイコンを表示するためのx座標およびy座標を計算します。<br><br>(2)メッセージ<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const msg = document.getElementById("msg");<br>const computedStyle=getComputedStyle(msg);<br>let msgWidth=parseInt(computedStyle.width);<br></div>getComputedStyleメソッドとwidthプロパティでブラウザが計算した最終的な幅を取得します。<br>parseIntとしているのは、pxで値を返すため、他の数値と計算するためint型にキャストしています。<br><br>ローディングアイコンは、下記のサイトでダウンロードできます。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「CMAN」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]CMAN【フリーアイコン】</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://sozai.cman.jp/' TARGET='_blank'><font color='#333399'><b>URL[https://sozai.cman.jp/][クリックすると開きます])</b></font></a></td></tr></table><br>このサイトの下記URLでローディングアイコンを掲載してくださっています。<br>色、方向など指定を好きに設定できるので、重宝できるサイトと思います。<br>[URL]<br><a href='https://sozai.cman.jp/icon/runtime/circle/' TARGET='_blank'>CMAN【フリーアイコン】 くるくる回る</a><br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">display loading page</td></tr><tr><td>how to expect usability using display loading icon</td></tr></table><br>Let's say you're viewing a homepage. <br>If it takes longer than a certain amount of time for the entire page to display due to images and other processing, it is considered to be poor user responsiveness. <br>example,<br>When displaying images, etc., <br>you can improve the experience by reducing the size or number of images, but <br>there is also a way to notify users by displaying a "Currently displaying..." message<br>until the page finishes loading. <br><br>For example, you can display a loading icon (a spinning image) and a message informing users that the page is loading. <br>This is a way to clearly display a loading icon (a spinning image) and a message informing users that the page is loading. <br>This is a way to clearly display a loading icon (a spinning image) and a message informing users that the page is loading while the page is loading. <br><br>[Sample]<br><textarea id="t1" rows=30 cols=86  style="background-color:rgb(100 149 237 / 0.2);">
+<style>
+.w1{
+	position: fixed;
+	z-index:1;
+}
+.w2{
+	position: fixed;
+	height:30px;
+	z-index:1;
+}
+</style>
+
+<div id="waiting">
+	<div class="w1" id="loading">
+		<img src="loading.gif" style="width:100px;height:100px;">
+	</div>
+	<div class="w2" id="msg">
+		please wait a moment ...
+	</div>
+</div>
+
+<script>
+
+let width = window.innerWidth;
+
+let height = window.innerHeight;
+
+let x = (width - 100) / 2;
+let y = (height - (100 + 30)) / 2;
+
+const loading = document.getElementById("loading");
+loading.style.left = x +'px';
+loading.style.top = y +'px';
+
+const msg = document.getElementById("msg");
+
+const computedStyle=getComputedStyle(msg);
+let msgWidth=parseInt(computedStyle.width);
+x = (width - msgWidth) / 2;
+
+y += 100;
+
+msg.style.left = x +'px';
+msg.style.top = y +'px';
+
+window.onload=function()
+{
+
+const waiting = document.getElementById("waiting");
+waiting.style.display="none";
+}
+</script></script>
+</textarea><br><br>[CSS]<br>By setting the position to fixed, you can display a loading icon, message, etc. on top of (overlaying) the currently displayed HTML screen. <br>In this sample, z-index is used to display them on top of the currently displayed HTML element. <br><br>[div tag]<br>(1) Loading icon<br>(2) Message<br>Settings are made. <br>An id is set for the div tag to adjust the position. <br><br>[javascript]<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">let width = window.innerWidth;<br></div>Get the screen width.<br><br>(1) Loading icon<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x = (screen width - icon width) / 2;</div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">y = (screen height - (icon height + div height)) / 2;</div>Calculate the x and y coordinates for displaying the icon as shown above.<br><br>(2) Message<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const msg = document.getElementById("msg");<br>const computedStyle=getComputedStyle(msg);<br>let msgWidth=parseInt(computedStyle.width);<br></div>Use the getComputedStyle method and width property to obtain the final width calculated by the browser. <br>The parseInt method returns a value in pixels, so it is cast to an int type for calculation with other numerical values. <br><br>You can download the loading icon from the following website. <br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgments]</div>We are using images from "CMAN" with permission. <br>Thank you. <br><table><tr><td colspan=2>[URL]CMAN【Free Icon】</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://sozai.cman.jp/' TARGET='_blank'><font color='#333399'><b>URL[https://sozai.cman.jp/][Click to open])</b></font></a></td></tr></table><br>This site offers loading icons at the URL below. <br>You can customize the color, orientation, and other settings to your liking, making this a very useful site. <br>[URL]<br><a href='https://sozai.cman.jp/icon/runtime/circle/' TARGET='_blank'>CMAN【Free Icon】 Spin around</a><br><br><br><a href="#" onclick="f2();">back</a></div><style>.scrollable-div {width: 400px;height: 150px;overflow-y: scroll;user-select: none;/* Firefoxの場合、以下のプロパティも追加 */-moz-user-select: none;/* Safari, Chrome, Edgeの場合、以下のプロパティも追加 */-webkit-user-select: none;/* IE/Edgeの場合、以下のプロパティも追加 */-ms-user-select: none;}</style>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
