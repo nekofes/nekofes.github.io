@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">カラーコード変換</td></tr><tr><td>HEXとRGB</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><button id="b1">赤色をHEXに変更</button><br><button id="b2">赤色をRGBに変更</button><br><button id="b3">赤色をHEXに変更(透過色:50%)</button><br><button id="b4">赤色をRGBに変更(透過色:50%)</button><br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">コード</div><div id="code"></div><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">色</div><div id="bkcolor">[ ここに色が表示されます ]</div><br><textarea id="t1" rows=11 cols=80>
+<button id="b1">赤色をHEXに変更</button><br>
+<button id="b2">赤色をRGBに変更</button><br>
+<button id="b3">赤色をHEXに変更(透過色:50%)</button><br>
+<button id="b4">赤色をRGBに変更(透過色:50%)</button><br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">コード</div>
+<div id="code"></div>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">色</div>
+<div id="bkcolor">[ ここに色が表示されます ]</div>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("b1");
+b1.addEventListener('click', () =>
+{
+	//赤色をHEXに変更
+	convertCode(0, 0);
+});
+const b2 = document.getElementById("b2");
+b2.addEventListener('click', () =>
+{
+	//赤色をRGBに変更
+	convertCode(1, 0);
+});
+const b3 = document.getElementById("b3");
+b3.addEventListener('click', () =>
+{
+	//赤色をHEXに変更(透過色:50%)
+	convertCode(0, 1);
+});
+const b4 = document.getElementById("b4");
+b4.addEventListener('click', () =>
+{
+	//赤色をRGBに変更(透過色:50%)
+	convertCode(1, 1);
+});
+const code = document.getElementById("code");
+const bkcolor = document.getElementById("bkcolor");
+function convertCode(type, alpha)
+{
+	const r = 255;
+	const g = 0;
+	const b = 0;
+	const a = alpha == 0 ? 1.0 : 0.5;
+	let rgbString = "";
+	if(type == 1)//rgba
+	{
+		rgbString = rgbaToHex(r, g, b, a, 1);//hex
+		rgbString = hex8ToRgba(rgbString);
+	}
+	else
+	{
+		rgbString = rgbaToHex(r, g, b, a, 0);//hex
+	}
+	code.innerText = rgbString;
+	bkcolor.style.backgroundColor = rgbString;
+}
+
+function rgbaToHex(r, g, b, a, option)
+{
+	const toHex = val => 
+	{
+		const h = val.toString(16).toUpperCase();
+		return h.length === 1 ? "0"+h : h;
+	};
+	// a: 0～1 を 0～255 に変換
+	const aa = Math.round(a * 255);
+	let tmp = "";
+	if(option == 0)
+	{
+		tmp = "#" + toHex(r) + toHex(g) + toHex(b);
+	}
+	else
+	{
+		tmp = "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);	
+	}
+	return tmp;
+}
+function hex8ToRgba(hex) 
+{
+	hex = hex.replace('#', '');
+	const r = parseInt(hex.slice(0,2), 16);
+	const g = parseInt(hex.slice(2,4), 16);
+	const b = parseInt(hex.slice(4,6), 16);
+	const a = parseInt(hex.slice(6,8), 16) / 255;
+	return `rgb(${r} ${g} ${b} / ${a.toFixed(2)})`;
+}
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">tmp = "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);</div>Uint8Array.prototype.toHex()メソッド<br>このサンプルでは、RGBをカラーコードのHEXに変換するため、toHexメソッドを使っています。<br>Uint8Arrayオブジェクトにバイトデータを16進数表記の文字列に変換するために使われます。<br><br>カラーコードは#似続けて6桁の16進数(透過色は8桁)で表現します。<br>toHex()メソッドは、すべてのブラウザでサポートされているわけではないため非推奨となっているようです。<br>この場合、toString(16)を使用するといいらしいです。<br>(例)<br>const r =255;<br>const rHex = r.toString(16);//ff<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const r = parseInt(hex.slice(0,2), 16);</div>16進数表記の文字列hexから最初の2文字を取り出します。<br>それを10進数の整数に変換します。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">hex.slice(0,2)</div>hexには#を取り除いた16進数の文字列が入っています。<br>hexをslice関数を使用して文字列を範囲を指定して取得した結果が16進数なので<br>parseIntの第2引数に16と設定しています。<br>そしてparseIntで16進数を10進数の整数に変換しています。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Color Code Conversion</td></tr><tr><td>HEX and RGB</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><button id="b1En">Change Red to HEX</button><br><button id="b2En">Change Red to RGB</button><br><button id="b3En">Change Red to HEX (Transparency: 50%)</button><br><button id="b4En">Change Red to RGB (Transparency: 50%)</button><br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Code</div><div id="codeEn"></div><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Color</div><div id="bkcolorEn">[ Color appears here ]</div><br><textarea id="t1" rows=11 cols=80>
+<button id="b1">Change Red to HEX</button><br>
+<button id="b2">Change Red to RGB</button><br>
+<button id="b3">Change Red to HEX (Transparency: 50%)</button><br>
+<button id="b4">Change Red to RGB (Transparency: 50%)</button><br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Code</div>
+<div id="code"></div>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Color</div>
+<div id="bkcolor">[Color appears here]</div>
+</textarea><br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("b1");
+b1.addEventListener('click', () =>
+{
+	//Change red to HEX
+	convertCode(0, 0);
+});
+const b2 = document.getElementById("b2");
+b2.addEventListener('click', () =>
+{
+	//Change red to RGB
+	convertCode(1, 0);
+});
+const b3 = document.getElementById("b3");
+b3.addEventListener('click', () =>
+{
+	//Change red to HEX (Transparent color: 50%)
+	convertCode(0, 1);
+});
+const b4 = document.getElementById("b4");
+b4.addEventListener('click', () =>
+{
+	//Change red to RGB (Transparent color: 50%)
+	convertCode(1, 1);
+});
+const code = document.getElementById("code");
+const bkcolor = document.getElementById("bkcolor");
+function convertCode(type, alpha)
+{
+	const r = 255;
+	const g = 0;
+	const b = 0;
+	const a = alpha == 0 ? 1.0 : 0.5;
+	let rgbString = "";
+	if(type == 1)//rgba
+	{
+		rgbString = rgbaToHex(r, g, b, a, 1);//hex
+		rgbString = hex8ToRgba(rgbString);
+	}
+	else
+	{
+		rgbString = rgbaToHex(r, g, b, a, 0);//hex
+	}
+	code.innerText = rgbString;
+	bkcolor.style.backgroundColor = rgbString;
+}
+
+function rgbaToHex(r, g, b, a, option)
+{
+	const toHex = val => 
+	{
+		const h = val.toString(16).toUpperCase();
+		return h.length === 1 ? "0"+h : h;
+	};
+	// a: Convert 0-1 to 0-255
+	const aa = Math.round(a * 255);
+	let tmp = "";
+	if(option == 0)
+	{
+		tmp = "#" + toHex(r) + toHex(g) + toHex(b);
+	}
+	else
+	{
+		tmp = "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);	
+	}
+	return tmp;
+}
+function hex8ToRgba(hex) 
+{
+	hex = hex.replace('#', '');
+	const r = parseInt(hex.slice(0,2), 16);
+	const g = parseInt(hex.slice(2,4), 16);
+	const b = parseInt(hex.slice(4,6), 16);
+	const a = parseInt(hex.slice(6,8), 16) / 255;
+	return `rgb(${r} ${g} ${b} / ${a.toFixed(2)})`;
+}
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">tmp = "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);</div>Uint8Array.prototype.toHex() Method<br>This sample uses the toHex method to convert RGB to a HEX color code. <br>This method is used to convert byte data in a Uint8Array object to a hexadecimal string. <br><br>Color codes are expressed as six hexadecimal digits (eight digits for transparent colors). <br>The toHex() method is deprecated because it is not supported by all browsers. <br>In this case, it is recommended to use toString(16). <br>(Example)<br>const r = 255;<br>const rHex = r.toString(16);//ff<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const r = parseInt(hex.slice(0,2), 16);</div>Extract the first two characters from the hexadecimal string hex. <br>Convert it to a decimal integer. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">hex.slice(0,2)</div>hex contains the hexadecimal string with the # removed. <br>The slice function uses hex to specify a string range and returns a hexadecimal value.<br>The second argument of parseInt is set to 16.<br>Then, parseInt converts the hexadecimal value to a decimal integer.<br><br><br><br><a href="#" onclick="f2();">back</a></div><script>const b1 = document.getElementById("b1");b1.addEventListener('click', () =>{convertCode(0, 0);});const b2 = document.getElementById("b2");b2.addEventListener('click', () =>{convertCode(1, 0);});const b3 = document.getElementById("b3");b3.addEventListener('click', () =>{convertCode(0, 1);});const b4 = document.getElementById("b4");b4.addEventListener('click', () =>{convertCode(1, 1);});const code = document.getElementById("code");const bkcolor = document.getElementById("bkcolor");const b1En = document.getElementById("b1En");b1En.addEventListener('click', () =>{convertCode(0, 0);});const b2En = document.getElementById("b2En");b2En.addEventListener('click', () =>{convertCode(1, 0);});const b3En = document.getElementById("b3En");b3En.addEventListener('click', () =>{convertCode(0, 1);});const b4En = document.getElementById("b4En");b4En.addEventListener('click', () =>{convertCode(1, 1);});const codeEn = document.getElementById("codeEn");const bkcolorEn = document.getElementById("bkcolorEn");function convertCode(type, alpha){const r = 255;const g = 0;const b = 0;const a = alpha == 0 ? 1.0 : 0.5;let rgbString = "";if(type == 1){rgbString = rgbaToHex(r, g, b, a, 1);rgbString = hex8ToRgba(rgbString);}else{rgbString = rgbaToHex(r, g, b, a, 0);}code.innerText = rgbString;bkcolor.style.backgroundColor = rgbString;codeEn.innerText = rgbString;bkcolorEn.style.backgroundColor = rgbString;}function rgbaToHex(r, g, b, a, option){const toHex = val => {const h = val.toString(16).toUpperCase();return h.length === 1 ? "0"+h : h;};const aa = Math.round(a * 255);let tmp = "";if(option == 0){tmp = "#" + toHex(r) + toHex(g) + toHex(b);}else{tmp = "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa)}return tmp;}function hex8ToRgba(hex) {hex = hex.replace('#', '');const r = parseInt(hex.slice(0,2), 16);const g = parseInt(hex.slice(2,4), 16);const b = parseInt(hex.slice(4,6), 16);const a = parseInt(hex.slice(6,8), 16) / 255;return `rgb(${r} ${g} ${b} / ${a.toFixed(2)})`;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
