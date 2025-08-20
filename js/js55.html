@@ -1,0 +1,330 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">言語切替</div></td></tr><tr><td><div id="n3">日本語と英語の切り替えサンプル</div></td></tr></table><br><div id="n4" style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><br><table><tr><td><img src="../o/i3/nawmin_sample2.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d1"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample4.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d2"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample2.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d3"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample5.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d4"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample2.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d5"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample3.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d6"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample2.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d7"></div></td></tr><tr><td><img src="../o/i3/nawmin_sample4.png" style="width:100px;height:100px;"></td></tr><tr><td><div id="d8"></div></td></tr></table><br>[HTML]<br><textarea id="t1" rows=11 cols=80>
+<table>
+<tr>
+<td><img src="nawmin_sample2.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d1"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample4.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d2"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample2.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d3"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample5.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d4"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample2.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d5"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample3.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d6"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample2.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d7"></div></td>
+</tr>
+
+<tr>
+<td><img src="nawmin_sample4.png" style="width:100px;height:100px;"></td>
+</tr>
+<tr>
+<td><div id="d8"></div></td>
+</tr>
+</table>
+</textarea><br><div id="h1"><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const story = {
+  ja: {
+    d1: `
+こんにちは
+`,
+    d2: `
+おや、どうしたんだい？
+`,
+    d3: `
+お腹へっちゃって
+`,
+    d4: `
+野菜はどう？
+`,
+    d5: `
+それは、ちょっと
+`,
+    d6: `
+あぁ、そういえばこれ拾ったんだった。&lt;br&gt;
+（どんぐりを差し出す）
+`,
+    d7: `
+いいの？&lt;br&gt;
+ありがとう
+`,
+    d8: `
+どういたしまして&lt;br&gt;
+(こうしてくまさん森へ帰っていきました。)
+`
+  },
+  en: {
+    d1: `
+Hello
+`,
+    d2: `
+Hey, what's wrong?
+`,
+    d3: `
+I'm hungry
+`,
+    d4: `
+What about vegetables?
+`,
+    d5: `
+That's a bit
+`,
+    d6: `
+Ah, that reminds me, I picked this up. &lt;br&gt;
+ (Hands over the acorn)
+`,
+    d7: `
+Is that okay?&lt;br&gt;
+Thank you
+`,
+    d8: `
+You're welcome.&lt;br&gt;
+(And so the bear returned to the forest.)
+`
+  }
+};
+const text = {
+  ja: {
+n1:"戻る",
+n2:"言語切替",
+n3:"日本語と英語の切り替えサンプル",
+n4:"[サンプル]",
+n5:"戻る",
+  },
+  en: {
+n1:"back",
+n2:"change language",
+n3:"change japanese and english sample",
+n4:"[sample]",
+n5:"back",
+  }
+};
+
+// まとめて反映したいとき
+function applyStoryAll(lang, divIds) {
+  divIds.forEach((id) => applyStory(lang, id));
+}
+function applyTextAll(lang, divIds) {
+  divIds.forEach((id) => applyText(lang, id));
+}
+
+// (1) 取得：langとdivのidを渡してHTML文字列を返す
+function getStory(lang, divId) {
+  // 言語がなければ日本語にフォールバック、該当idがなければ空文字
+  return (story[lang] && story[lang][divId]) ?? (story.ja && story.ja[divId]) ?? '';
+}
+
+// (2) 反映：langとdivのidを渡してDOMに流し込む
+function applyStory(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerHTML = getStory(lang, divId);
+}
+
+// (1) 取得：langとdivのidを渡してHTML文字列を返す
+function getText(lang, divId) {
+  // 言語がなければ日本語にフォールバック、該当idがなければ空文字
+  return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';
+}
+// (2) 反映：langとdivのidを渡してDOMに流し込む
+function applyText(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerText = getText(lang, divId);
+}
+//ストーリー
+const ary = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"];
+//各説明
+const ary2 = ["n1", "n2", "n3", "n4", "n5"];
+</pre></div><div id="h2"><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+const story = {
+  ja: {
+    d1: `
+こんにちは
+`,
+    d2: `
+おや、どうしたんだい？
+`,
+    d3: `
+お腹へっちゃって
+`,
+    d4: `
+野菜はどう？
+`,
+    d5: `
+それは、ちょっと
+`,
+    d6: `
+あぁ、そういえばこれ拾ったんだった。&lt;br&gt;
+（どんぐりを差し出す）
+`,
+    d7: `
+いいの？&lt;br&gt;
+ありがとう
+`,
+    d8: `
+どういたしまして&lt;br&gt;
+(こうしてくまさん森へ帰っていきました。)
+`
+  },
+  en: {
+    d1: `
+Hello
+`,
+    d2: `
+Hey, what's wrong?
+`,
+    d3: `
+I'm hungry
+`,
+    d4: `
+What about vegetables?
+`,
+    d5: `
+That's a bit
+`,
+    d6: `
+Ah, that reminds me, I picked this up. &lt;br&gt;
+ (Hands over the acorn)
+`,
+    d7: `
+Is that okay?&lt;br&gt;
+Thank you
+`,
+    d8: `
+You're welcome.&lt;br&gt;
+(And so the bear returned to the forest.)
+`
+  }
+};
+const text = {
+  ja: {
+n1:"戻る",
+n2:"言語切替",
+n3:"日本語と英語の切り替えサンプル",
+n4:"[サンプル]",
+v5:"戻る",
+  },
+  en: {
+n1:"back",
+n2:"change language",
+n3:"change japanese and english sample",
+n4:"[sample]",
+n5:"back",
+  }
+};
+
+// When you want to reflect all at once
+function applyStoryAll(lang, divIds) {
+  divIds.forEach((id) => applyStory(lang, id));
+}
+function applyTextAll(lang, divIds) {
+  divIds.forEach((id) => applyText(lang, id));
+}
+
+// (1) Get: Pass lang and div id to return HTML string
+function getStory(lang, divId) {
+  // If no language is available, it will fall back to Japanese. If no corresponding ID is available, it will be empty.
+  return (story[lang] && story[lang][divId]) ?? (story.ja && story.ja[divId]) ?? '';
+}
+
+// (2) Reflect: Pass lang and div id and insert into DOM
+function applyStory(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerHTML = getStory(lang, divId);
+}
+
+// (1) Get: Pass lang and div id to return HTML string
+function getText(lang, divId) {
+  // If no language is available, it will fall back to Japanese. If no corresponding ID is available, it will be empty.
+  return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';
+}
+// (2) Reflect: Pass lang and div id and insert into DOM
+function applyText(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerText = getText(lang, divId);
+}
+//story
+const ary = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"];
+//Each explanation
+const ary2 = ["n1", "n2", "n3", "n4", "n5"];
+</pre></div><br><div id="h5">言語別に切り替えるための配列をクラスで準備します。</div><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+const story = {
+  ja: {
+    d1: `
+こんにちは
+`,
+    d2: `
+おや、どうしたんだい？
+`,
+...
+  },
+  en: {
+    d1: `
+Hello
+`,
+...
+`,
+    d8: `
+You're welcome.&lt;br&gt;
+(And so the bear returned to the forest.)
+`
+  }
+};
+</pre><div id="h3">言語別としてjpとenで分類し、その内部で各データをd1からd8までにわけています。<br>このd1からd8はdivタグのidに対応させています。<br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+function getStory(lang, divId) {
+  // 言語がなければ日本語にフォールバック、該当idがなければ空文字
+  return (story[lang] && story[lang][divId]) ?? (story.ja && story.ja[divId]) ?? '';
+}
+function applyStory(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerHTML = getStory(lang, divId);
+}
+</pre></div><div id="h4">The data is categorized by language (jp or en), and each data item is then divided into d1 to d8. <br>These d1 to d8 correspond to the div tag IDs. <br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+function getStory(lang, divId) {
+  // If no language is available, it will fall back to Japanese. If no corresponding ID is available, it will be empty.
+  return (story[lang] && story[lang][divId]) ?? (story.ja && story.ja[divId]) ?? '';
+}
+function applyStory(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerHTML = getStory(lang, divId);
+}
+</pre></div><div id="h6">このサンプルではonloadイベントで<br>チェックボックスから判定した言語を<br>applyStoryAll(lang, divIds)メソッドで実行しています。<br><br>引数の配列全てに対して<br>applyStoryメソッドを実行することで各divに表示したいデータを<br>クラス配列から受け取って表示する仕組みとなっています。<br><br>applyStory(lang, divId)メソッドで指定のdivに表示するコントロールを<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const el = document.getElementById(divId);</div>で宣言しています。<br>次にdivに設定する内容をgetStoryから受け取ります。<br>getStory(lang, divId)メソッドのlangに取得したい言語jpもしくはenが入ります。<br>指定した言語に一致するクラス配列のデータを受け取ります。<br>この言語に一致するものが存在しない場合は、日本語をデフォルトとして返します。<br></div><div id="h7">In this sample, the onload event executes the applyStoryAll(lang, divIds) method, using the language determined from the checkbox. <br><br>By executing the applyStory method for the entire argument array, the data to be displayed in each div is retrieved from the class array and displayed. <br><br>The applyStory(lang, divId) method declares the control to be displayed in the specified div: <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const el = document.getElementById(divId);</div>Next, the content to be set in the div is retrieved from getStory. <br>The lang parameter of the getStory(lang, divId) method is set to the desired language, either jp or en. <br>The data in the class array that matches the specified language is received. <br>If no match for this language exists, Japanese will be returned as the default. <br></div><br><div id="h8"><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table></div><div id="h9"><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table></div><br><br><a id="n5" href='#' onClick="f2();">戻る</a><script>const story = {  ja: {    d1: `こんにちは`,    d2: `おや、どうしたんだい？`,    d3: `お腹へっちゃって`,    d4: `野菜はどう？`,    d5: `それは、ちょっと`,    d6: `あぁ、そういえばこれ拾ったんだった。<br>（どんぐりを差し出す）`,    d7: `いいの？<br>ありがとう`,    d8: `どういたしまして<br>(こうしてくまさん森へ帰っていきました。)`  },  en: {    d1: `Hello`,    d2: `Hey, what's wrong?`,    d3: `I'm hungry`,    d4: `What about vegetables?`,    d5: `That's a bit`,    d6: `Ah, that reminds me, I picked this up. <br> (Hands over the acorn)`,    d7: `Is that okay?<br>Thank you`,    d8: `You're welcome.<br>(And so the bear returned to the forest.)`  }};const text = {  ja: {n1:"戻る",n2:"言語切替",n3:"日本語と英語の切り替えサンプル",n4:"[サンプル]",n5:"戻る",  },  en: {n1:"back",n2:"change language",n3:"change japanese and english sample",n4:"[sample]",n5:"back",  }};function applyStoryAll(lang, divIds) {  divIds.forEach((id) => applyStory(lang, id));}function applyTextAll(lang, divIds) {  divIds.forEach((id) => applyText(lang, id));}function getStory(lang, divId) {    return (story[lang] && story[lang][divId]) ?? (story.ja && story.ja[divId]) ?? '';}function applyStory(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;  el.innerHTML = getStory(lang, divId);}function getText(lang, divId) {    return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;  el.innerText = getText(lang, divId);}const ary = ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"];const ary2 = ["n1", "n2", "n3", "n4", "n5"];</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');const h5=document.getElementById('h5');const h6=document.getElementById('h6');const h8=document.getElementById('h8');const h9=document.getElementById('h9');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";h6.style.display="none";h7.style.display="block";h8.style.display="none";h9.style.display="block";h5.innerText="Prepare an array in the class to switch between languages.";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";h6.style.display="block";h7.style.display="none";h8.style.display="block";h9.style.display="none";h5.innerText="言語別に切り替えるための配列をクラスで準備します。";}f4();applyStoryAll(lang==0?"jp":"en", ary);applyTextAll(lang==0?"jp":"en", ary2);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
