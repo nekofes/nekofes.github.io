@@ -1,0 +1,766 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">色の選択<div></td></tr><tr><td><div id="n3">マウスで色を選択してください。<div></td></tr></table><canvas id="colorCanvas" width="256" height="256"></canvas><br><div id="n4">[青の濃度を変更すると基調とする色を変更できます]</div><label for="blueSlider">Blue:</label><input type="range" id="blueSlider" min="0" max="255" value="128"><span id="blueValueText">128</span><br><br><div id="n5">透過色:</div><input type="range" id="slider" min="0" max="100" value="100"><div id="sliderValue">1.00</div><br><table><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">HEX</td><td><div id="hex"></div></td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">RGB</td><td><div id="rgb"></div></td></tr><tr><td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">colorCode</td><td><div id="colorCode"></div></td></tr></table><br>[HTML]<br><div id="d1"><textarea id="t1" rows=15 cols=80>
+<canvas id="colorCanvas" width="256" height="256"></canvas>
+<br>
+<div id="n4">[青の濃度を変更すると基調とする色を変更できます]</div>
+<label for="blueSlider">Blue:</label>
+<input type="range" id="blueSlider" min="0" max="255" value="128">
+<span id="blueValueText">128</span>
+<br>
+<br>
+<div id="n5">透過色:</div><input type="range" id="slider" min="0" max="100" value="100">
+<div id="sliderValue">1.00</div>
+<br>
+<table>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">HEX</td>
+<td><div id="hex"></div></td>
+</tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">RGB</td>
+<td><div id="rgb"></div></td>
+</tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">colorCode</td>
+<td><div id="colorCode"></div></td>
+</tr>
+</table>
+</textarea></div><div id="d2"><textarea id="t1" rows=15 cols=80>
+<canvas id="colorCanvas" width="256" height="256"></canvas>
+<br>
+<div id="n4">[You can change the base color by changing the blue density]</div>
+<label for="blueSlider">Blue:</label>
+<input type="range" id="blueSlider" min="0" max="255" value="128">
+<span id="blueValueText">128</span>
+<br>
+<br>
+<div id="n5">Transparency:</div><input type="range" id="slider" min="0" max="100" value="100">
+<div id="sliderValue">1.00</div>
+<br>
+<table>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">HEX</td>
+<td><div id="hex"></div></td>
+</tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">RGB</td>
+<td><div id="rgb"></div></td>
+</tr>
+<tr>
+<td style="background-color:rgb(245 255 250 / 1.0);text-align:left;">colorCode</td>
+<td><div id="colorCode"></div></td>
+</tr>
+</table>
+</textarea></div><br><div id="d3"><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const text = {
+  jp: {
+n1:"戻る",
+n2:"色の選択",
+n3:"マウスで色を選択してください。",
+n4:"[青の濃度を変更すると基調とする色を変更できます]",
+n5:"透過色:",
+n6:"戻る",
+  },
+  en: {
+n1:"back",
+n2:"choose color",
+n3:"choose color with tap",
+n4:"[change blue density and change whole color]",
+n5:"transmitted color",
+n6:"back",
+  }
+};
+
+const text2 = {
+  jp: {
+d5:
+`
+使用する色は256色です。<br>
+rgb関数は0から始まるので0から255までの数字を範囲として使用します。<br>
+ピクセル単位でRGB値をマッピングします。<br>
+fillRect(x, y, 1, 1) を使って、1ピクセルずつ色を塗ります。<br>
+横軸が赤(R)、縦軸が緑(G)、青(B)を基調として色の幅を変更します。<br>
+`,
+d6:
+`
+クリック位置の色判定
+`,
+d7:
+`
+getBoundingClientRect() でキャンバスの位置を取得します。<br>
+マウス座標から相対位置を計算します。<br>
+getImageData(x, y, 1, 1) でそのピクセルのRGBA値を取得します。<br>
+RGB値を表示用のテキストに変換して、HTMLに表示しています。<br>
+`,
+d8:
+`
+値を最小値〜最大値の範囲内に制限（クランプ） する関数です。<br>
+canvasの座標にマイナスや範囲外の大きさの数字が設定された場合<br>
+画像データの取得に失敗してしまいます。<br>
+このエラーを避けるためマイナスは強制的に0に変換する。<br>
+canvas.widthを超える値はcanvas.width - 1に制限します。<br>
+`,
+d9:
+`
+上記はCanvas2DのgetImageData の連続使用をするとキャンパスを読み取る情報量が多くなるため
+最適化をする必要があります。
+このため、下記のように willReadFrequently属性にtrueを設定することで解決できます。
+`,
+d10:
+`
+内部的なバッファの扱いが読み取り中心の用途に最適化されて、パフォーマンスが向上します。<br>
+`,
+d11:
+`
+HTML5のCanvas要素上で、指定された座標(cx, cy)の1x1ピクセルの色情報を取得しています。<br>
+`,
+d12:
+`
+Canvasの2Dコンテキストオブジェクトです
+`,
+d13:
+`
+Canvasの指定された矩形領域のピクセルデータを取得します。<br>
+[cx/cy]<br>
+取得するピクセルの左上のx, y座標です。<br>
+[1, 1]<br>
+ここでは1x1ピクセルを指定しています。<br>
+`,
+d14:
+`
+このdataプロパティは、Uint8ClampedArrayという型付き配列で、ピクセルデータを格納しています。<br>
+配列の要素は、[R, G, B, A, R, G, B, A, ...]の順に並んでいます。<br>
+それぞれの値は0から255の範囲で、R, G, B, Aは赤、緑、青、アルファ（透明度）を表します。﻿<br>
+`,
+d15:
+`
+ユーザーがドラッグ操作をしているとき、<br>
+Canvas外にポインタが出ても引き続きCanvasにイベントを集中させることができます。<br>
+`,
+d16:
+`
+確保した PointerCaptureを解放します。<br>
+解放することで Canvas 以外の要素でもポインター操作を受け取れるようになります。<br>
+try...catchをつけているのは、一部ブラウザや状況でpointerId 無効になることがあるようなので、安全に処理するためです。<br>
+`,
+d17:
+`
+タッチ・マウスなどの操作が 離されたとき。処理の終了などに使います。
+`,
+d18:
+`
+操作が 外的要因でキャンセルされたとき（例：他のUIに奪われるケース）
+`,
+d19:
+`
+ポインタが 要素の外へ出たとき（mouseenter の逆）
+`
+  },
+en: {
+d5:
+`
+256 colors are used. <br>
+The rgb function starts at 0, so the range is 0 to 255. <br>
+RGB values are mapped pixel by pixel. <br>
+fillRect(x, y, 1, 1) is used to fill each pixel. <br>
+The horizontal axis is red (R), and the vertical axis is green (G) and blue (B). The color width is adjusted based on the horizontal axis. <br>
+`,
+d6:
+`
+Determine the color of the click position.
+`,
+d7:
+`
+Get the canvas position using getBoundingClientRect(). <br>
+Calculate the relative position from the mouse coordinates. <br>
+Get the RGBA value of that pixel using getImageData(x, y, 1, 1). <br>
+The RGB values are converted to text for display and displayed in HTML. <br>
+`,
+d8:
+`
+This function clamps the value within a minimum and maximum range. <br>
+If a negative value or an out-of-range number is set for the canvas coordinates,<br>
+retrieval of image data will fail. <br>
+To avoid this error, negative values are forcibly converted to 0. <br>
+Values exceeding canvas.width are limited to canvas.width - 1. <br>
+`,
+d9:
+`
+The above requires optimization because repeated use of Canvas2D's getImageData() results in a large amount of data being read from the canvas.
+This can be resolved by setting the willReadFrequently attribute to true as shown below.
+`,
+d10:
+`
+This optimizes internal buffer handling for read-intensive applications, improving performance. <br>
+`,
+d11:
+`
+Retrieves color information for a 1x1 pixel at the specified coordinates (cx, cy) on an HTML5 Canvas element. <br>
+`,
+d12:
+`
+Canvas 2D context object.
+`,
+d13:
+`
+Retrieves pixel data for a specified rectangular area of the Canvas. <br>
+[cx/cy]<br>
+The x, y coordinates of the upper left corner of the pixel to be acquired. <br>
+[1, 1]<br>
+Here, a 1x1 pixel is specified. <br>
+`,
+d14:
+`
+This data property is a typed array called Uint8ClampedArray, which stores pixel data. <br>
+The elements of the array are arranged in the order [R, G, B, A, R, G, B, A, ...]. <br>
+Each value ranges from 0 to 255, with R, G, B, and A representing red, green, blue, and alpha (transparency). ﻿<br>
+`,
+d15:
+`
+When the user is dragging,<br>
+even if the pointer moves outside the Canvas, events can continue to be concentrated on the Canvas. <br>
+`,
+d16:
+`
+Release the allocated PointerCapture. <br>
+Releasing this allows elements other than the Canvas to receive pointer operations. <br>
+The try...catch loop is used to ensure safety, as pointerId may become invalid in some browsers and situations. <br>
+`,
+d17:
+`
+When a touch or mouse operation is released. Used to terminate processing.
+`,
+d18:
+`
+When an operation is canceled by an external factor (e.g., when the operation is seized by another UI).
+`,
+d19:
+`
+When the pointer leaves an element (the opposite of mouseenter).
+`
+}
+};
+// まとめて反映したいとき（任意）
+function applyTextAll(lang, divIds) {
+  divIds.forEach((id) => applyText(lang, id));
+}
+
+// (1) 取得：langとdivのidを渡してHTML文字列を返す
+function getText(lang, divId) {
+  // 言語がなければ日本語にフォールバック、該当idがなければ空文字
+  return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';
+}
+// (2) 反映：langとdivのidを渡してDOMに流し込む
+function applyText(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerText = getText(lang, divId);
+}
+//各説明
+const ary = ["n1", "n2", "n3", "n4", "n5", "n6"];
+
+// まとめて反映したいとき（任意）
+function applyTextAll2(lang, divIds) {
+  divIds.forEach((id) => applyText2(lang, id));
+}
+
+// (1) 取得：langとdivのidを渡してHTML文字列を返す
+function getText2(lang, divId) {
+  // 言語がなければ日本語にフォールバック、該当idがなければ空文字
+  return (text2[lang] && text2[lang][divId]) ?? (text2.ja && text2.ja[divId]) ?? '';
+}
+// (2) 反映：langとdivのidを渡してDOMに流し込む
+function applyText2(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerText = getText2(lang, divId);
+}
+//各説明
+const ary2 = ["d5", "d6", "d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14", "d15", "d16", "d17", "d18", "d19"];
+
+const canvas = document.getElementById('colorCanvas');
+//const ctx = canvas.getContext('2d');
+//[警告]
+//Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: 
+//下記のようにtrueを設定すると
+//内部的なバッファの扱いが読み取り中心の用途に最適化されて、パフォーマンスが向上します
+//※警告が解消されます
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
+const blueSlider = document.getElementById('blueSlider');
+const blueValueText = document.getElementById('blueValueText');
+const slider = document.getElementById('slider');
+const sliderText = document.getElementById('sliderValue');
+
+let blueValue = 128;     // 青を基調とした値
+let alpha = 1.0;         // 透過（0〜1）
+let isDragging = false;  // ドラッグ判定
+let cx = 0, cy = 0;      // 現在座標
+
+// 0〜最大-1 にクランプ
+//値を最小値〜最大値の範囲内に制限（クランプ） する関数
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+// グラデーション再描画
+function drawGradient() 
+{
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	// キャンバスにも透過を反映したい場合は globalAlpha を使用（したくない場合は 1 にする）
+	//ctx.globalAlpha = alpha; // ← キャンバスに透過を反映。不要なら 1 に。
+
+	for (let y = 0; y < 256; y++) 
+	{
+		for (let x = 0; x < 256; x++) 
+		{
+			// ここは rgb でも rgba でもOK。globalAlpha を使うなら rgb で十分。
+			ctx.fillStyle = `rgb(${x}, ${y}, ${blueValue})`;
+			ctx.fillRect(x, y, 1, 1);
+		}
+	}
+	//ctx.globalAlpha = 1; // 他の描画へ影響させないため戻す
+}
+
+// イベントから色を取得＆表示
+function updateColorAtEvent(event) 
+{
+	const rect = canvas.getBoundingClientRect();
+	const px = event.clientX - rect.left;
+	const py = event.clientY - rect.top;
+	cx = clamp(Math.floor(px), 0, canvas.width - 1);
+	cy = clamp(Math.floor(py), 0, canvas.height - 1);
+	changeColor();
+}
+
+// 選択色の表示更新
+function changeColor()
+{
+	// 範囲外防止のためクランプ済み座標を使用
+	const imageData = ctx.getImageData(cx, cy, 1, 1).data;
+	const r = imageData[0], g = imageData[1], b = imageData[2];
+	
+	const rgbString = `rgb(${r} ${g} ${b} / ${alpha.toFixed(2)})`;
+	document.getElementById("rgb").textContent = rgbString;
+	document.getElementById("hex").textContent = rgbaToHex(r, g, b, alpha);
+	const sample = document.getElementById("colorCode");
+	sample.style.backgroundColor = rgbString;
+	sample.textContent = "サンプルカラー";
+}
+
+// RGBA → 8桁HEX
+function rgbaToHex(r, g, b, a)
+{
+	const toHex = v => v.toString(16).toUpperCase().padStart(2, '0');
+	const aa = Math.round(a * 255);
+	return "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);
+}
+
+// Pointer Events（mouse/touch 共通）
+canvas.addEventListener('pointerdown', e => {
+	isDragging = true;
+	//ユーザーがドラッグ操作をしているとき、Canvas外にポインタが出ても 引き続きその Canvas にイベントを集中させる ことができます
+	canvas.setPointerCapture(e.pointerId);
+	updateColorAtEvent(e);
+});
+
+canvas.addEventListener('pointermove', e => {
+	if (!isDragging) return;     // ← ドラッグ中のみ更新
+	updateColorAtEvent(e);
+});
+
+function endDrag(e)
+{
+	if (!isDragging) return;
+	updateColorAtEvent(e);// 指を離した位置で最終更新
+	isDragging = false;
+	//PointerCaptureを解放します。
+	try { canvas.releasePointerCapture(e.pointerId); } catch {}
+}
+//タッチ・マウスなどの操作が 離されたとき
+canvas.addEventListener('pointerup', endDrag);
+//操作が外的要因でキャンセルされたとき（例：他のUIに奪われた）
+canvas.addEventListener('pointercancel', endDrag);
+//ポインタが要素の外へ出たとき（mouseenter の逆）
+canvas.addEventListener('pointerleave', e => {
+	// キャンバス外に出たときに更新したくない場合は何もしない
+	// 途中で確定したいなら endDrag(e) を呼ぶ
+});
+
+// スライダー（透過）
+alpha = parseFloat(sliderText.innerText); // 初期 1.00
+slider.value = 100;//1.00 * 100
+slider.addEventListener("input", function(){
+	alpha = parseFloat(slider.value) / 100;
+	sliderText.innerText = alpha.toFixed(2);
+	// パレットにも透過を反映するなら再描画
+	//drawGradient();
+	// 現在選択点の表示も更新
+	changeColor();
+});
+
+// Blue スライダー
+blueSlider.addEventListener('input', e => {
+	blueValue = +e.target.value;
+	blueValueText.textContent = blueValue;
+	drawGradient();
+	changeColor();
+});
+
+// 初期描画
+drawGradient();
+changeColor();
+</pre></div><div id="d4"><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const text = {
+  jp: {
+n1:"戻る",
+n2:"色の選択",
+n3:"マウスで色を選択してください。",
+n4:"[青の濃度を変更すると基調とする色を変更できます]",
+n5:"透過色:",
+n6:"戻る",
+  },
+  en: {
+n1:"back",
+n2:"choose color",
+n3:"choose color with tap",
+n4:"[change blue density and change whole color]",
+n5:"transmitted color",
+n6:"back",
+  }
+};
+
+const text2 = {
+  jp: {
+d5:
+`
+使用する色は256色です。<br>
+rgb関数は0から始まるので0から255までの数字を範囲として使用します。<br>
+ピクセル単位でRGB値をマッピングします。<br>
+fillRect(x, y, 1, 1) を使って、1ピクセルずつ色を塗ります。<br>
+横軸が赤(R)、縦軸が緑(G)、青(B)を基調として色の幅を変更します。<br>
+`,
+d6:
+`
+クリック位置の色判定
+`,
+d7:
+`
+getBoundingClientRect() でキャンバスの位置を取得します。<br>
+マウス座標から相対位置を計算します。<br>
+getImageData(x, y, 1, 1) でそのピクセルのRGBA値を取得します。<br>
+RGB値を表示用のテキストに変換して、HTMLに表示しています。<br>
+`,
+d8:
+`
+値を最小値〜最大値の範囲内に制限（クランプ） する関数です。<br>
+canvasの座標にマイナスや範囲外の大きさの数字が設定された場合<br>
+画像データの取得に失敗してしまいます。<br>
+このエラーを避けるためマイナスは強制的に0に変換する。<br>
+canvas.widthを超える値はcanvas.width - 1に制限します。<br>
+`,
+d9:
+`
+上記はCanvas2DのgetImageData の連続使用をするとキャンパスを読み取る情報量が多くなるため
+最適化をする必要があります。
+このため、下記のように willReadFrequently属性にtrueを設定することで解決できます。
+`,
+d10:
+`
+内部的なバッファの扱いが読み取り中心の用途に最適化されて、パフォーマンスが向上します。<br>
+`,
+d11:
+`
+HTML5のCanvas要素上で、指定された座標(cx, cy)の1x1ピクセルの色情報を取得しています。<br>
+`,
+d12:
+`
+Canvasの2Dコンテキストオブジェクトです
+`,
+d13:
+`
+Canvasの指定された矩形領域のピクセルデータを取得します。<br>
+[cx/cy]<br>
+取得するピクセルの左上のx, y座標です。<br>
+[1, 1]<br>
+ここでは1x1ピクセルを指定しています。<br>
+`,
+d14:
+`
+このdataプロパティは、Uint8ClampedArrayという型付き配列で、ピクセルデータを格納しています。<br>
+配列の要素は、[R, G, B, A, R, G, B, A, ...]の順に並んでいます。<br>
+それぞれの値は0から255の範囲で、R, G, B, Aは赤、緑、青、アルファ（透明度）を表します。﻿<br>
+`,
+d15:
+`
+ユーザーがドラッグ操作をしているとき、<br>
+Canvas外にポインタが出ても引き続きCanvasにイベントを集中させることができます。<br>
+`,
+d16:
+`
+確保した PointerCaptureを解放します。<br>
+解放することで Canvas 以外の要素でもポインター操作を受け取れるようになります。<br>
+try...catchをつけているのは、一部ブラウザや状況でpointerId 無効になることがあるようなので、安全に処理するためです。<br>
+`,
+d17:
+`
+タッチ・マウスなどの操作が 離されたとき。処理の終了などに使います。
+`,
+d18:
+`
+操作が 外的要因でキャンセルされたとき（例：他のUIに奪われるケース）
+`,
+d19:
+`
+ポインタが 要素の外へ出たとき（mouseenter の逆）
+`
+  },
+en: {
+d5:
+`
+256 colors are used. <br>
+The rgb function starts at 0, so the range is 0 to 255. <br>
+RGB values are mapped pixel by pixel. <br>
+fillRect(x, y, 1, 1) is used to fill each pixel. <br>
+The horizontal axis is red (R), and the vertical axis is green (G) and blue (B). The color width is adjusted based on the horizontal axis. <br>
+`,
+d6:
+`
+Determine the color of the click position.
+`,
+d7:
+`
+Get the canvas position using getBoundingClientRect(). <br>
+Calculate the relative position from the mouse coordinates. <br>
+Get the RGBA value of that pixel using getImageData(x, y, 1, 1). <br>
+The RGB values are converted to text for display and displayed in HTML. <br>
+`,
+d8:
+`
+This function clamps the value within a minimum and maximum range. <br>
+If a negative value or an out-of-range number is set for the canvas coordinates,<br>
+retrieval of image data will fail. <br>
+To avoid this error, negative values are forcibly converted to 0. <br>
+Values exceeding canvas.width are limited to canvas.width - 1. <br>
+`,
+d9:
+`
+The above requires optimization because repeated use of Canvas2D's getImageData() results in a large amount of data being read from the canvas.
+This can be resolved by setting the willReadFrequently attribute to true as shown below.
+`,
+d10:
+`
+This optimizes internal buffer handling for read-intensive applications, improving performance. <br>
+`,
+d11:
+`
+Retrieves color information for a 1x1 pixel at the specified coordinates (cx, cy) on an HTML5 Canvas element. <br>
+`,
+d12:
+`
+Canvas 2D context object.
+`,
+d13:
+`
+Retrieves pixel data for a specified rectangular area of the Canvas. <br>
+[cx/cy]<br>
+The x, y coordinates of the upper left corner of the pixel to be acquired. <br>
+[1, 1]<br>
+Here, a 1x1 pixel is specified. <br>
+`,
+d14:
+`
+This data property is a typed array called Uint8ClampedArray, which stores pixel data. <br>
+The elements of the array are arranged in the order [R, G, B, A, R, G, B, A, ...]. <br>
+Each value ranges from 0 to 255, with R, G, B, and A representing red, green, blue, and alpha (transparency). ﻿<br>
+`,
+d15:
+`
+When the user is dragging,<br>
+even if the pointer moves outside the Canvas, events can continue to be concentrated on the Canvas. <br>
+`,
+d16:
+`
+Release the allocated PointerCapture. <br>
+Releasing this allows elements other than the Canvas to receive pointer operations. <br>
+The try...catch loop is used to ensure safety, as pointerId may become invalid in some browsers and situations. <br>
+`,
+d17:
+`
+When a touch or mouse operation is released. Used to terminate processing.
+`,
+d18:
+`
+When an operation is canceled by an external factor (e.g., when the operation is seized by another UI).
+`,
+d19:
+`
+When the pointer leaves an element (the opposite of mouseenter).
+`
+}
+};
+// When you want to reflect all at once (optional)
+function applyTextAll(lang, divIds) {
+  divIds.forEach((id) => applyText(lang, id));
+}
+
+// (1) Get: Pass lang and div id to return HTML string
+function getText(lang, divId) {
+  // If no language is available, it will fall back to Japanese. If no corresponding ID is available, it will be empty.
+  return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';
+}
+// (2) Reflect: Pass lang and div id and insert into DOM
+function applyText(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerText = getText(lang, divId);
+}
+//Each explanation
+const ary = ["n1", "n2", "n3", "n4", "n5", "n6"];
+
+// When you want to reflect all at once (optional)
+function applyTextAll2(lang, divIds) {
+  divIds.forEach((id) => applyText2(lang, id));
+}
+
+// (1) Get: Pass lang and div id to return HTML string
+function getText2(lang, divId) {
+  // If no language is available, it will fall back to Japanese. If no corresponding ID is available, it will be empty.
+  return (text2[lang] && text2[lang][divId]) ?? (text2.ja && text2.ja[divId]) ?? '';
+}
+// (2) Reflect: Pass lang and div id and insert into DOM
+function applyText2(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerText = getText2(lang, divId);
+}
+//Each explanation
+const ary2 = ["d5", "d6", "d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14", "d15", "d16", "d17", "d18", "d19"];
+
+const canvas = document.getElementById('colorCanvas');
+//const ctx = canvas.getContext('2d');
+//[caveat]
+//Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: 
+//Setting this to true as shown below
+//Optimizes internal buffer handling for read-centric use, improving performance.
+//※This will resolve the warning.
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
+const blueSlider = document.getElementById('blueSlider');
+const blueValueText = document.getElementById('blueValueText');
+const slider = document.getElementById('slider');
+const sliderText = document.getElementById('sliderValue');
+
+let blueValue = 128; // Blue-based value
+let alpha = 1.0; // Transparency (0 to 1)
+let isDragging = false; // Drag detection
+let cx = 0, cy = 0; // Current coordinates
+
+// Clamp to 0 to a maximum of -1
+// Function to clamp the value within the minimum and maximum range
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+// Gradient redraw
+function drawGradient() 
+{
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	// If you want transparency to be reflected on the canvas, use globalAlpha (set it to 1 if you don't want it to).
+	//ctx.globalAlpha = alpha; // ← Reflects transparency to the canvas. Set it to 1 if you don't want it to be reflected.
+	for (let y = 0; y < 256; y++) 
+	{
+		for (let x = 0; x < 256; x++) 
+		{
+			// Either rgb or rgba is OK here. If you use globalAlpha, rgb is sufficient.
+			ctx.fillStyle = `rgb(${x}, ${y}, ${blueValue})`;
+			ctx.fillRect(x, y, 1, 1);
+		}
+	}
+	//ctx.globalAlpha = 1; // Return to the original state so that it does not affect other drawings.
+}
+
+// Get and display color from event
+function updateColorAtEvent(event) 
+{
+	const rect = canvas.getBoundingClientRect();
+	const px = event.clientX - rect.left;
+	const py = event.clientY - rect.top;
+	cx = clamp(Math.floor(px), 0, canvas.width - 1);
+	cy = clamp(Math.floor(py), 0, canvas.height - 1);
+	changeColor();
+}
+
+// Update the display of the selected color
+function changeColor()
+{
+	// Use clamped coordinates to prevent out-of-range
+	const imageData = ctx.getImageData(cx, cy, 1, 1).data;
+	const r = imageData[0], g = imageData[1], b = imageData[2];
+	
+	const rgbString = `rgb(${r} ${g} ${b} / ${alpha.toFixed(2)})`;
+	document.getElementById("rgb").textContent = rgbString;
+	document.getElementById("hex").textContent = rgbaToHex(r, g, b, alpha);
+	const sample = document.getElementById("colorCode");
+	sample.style.backgroundColor = rgbString;
+	sample.textContent = "Sample Color";
+}
+
+// RGBA → 8-digit HEX
+function rgbaToHex(r, g, b, a)
+{
+	const toHex = v => v.toString(16).toUpperCase().padStart(2, '0');
+	const aa = Math.round(a * 255);
+	return "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);
+}
+
+// Pointer Events（mouse/touch common）
+canvas.addEventListener('pointerdown', e => {
+	isDragging = true;
+	//When the user is performing a drag operation, events can continue to be focused on the Canvas even if the pointer moves outside of that Canvas.
+	canvas.setPointerCapture(e.pointerId);
+	updateColorAtEvent(e);
+});
+
+canvas.addEventListener('pointermove', e => {
+	if (!isDragging) return;     // ← Update only while dragging
+	updateColorAtEvent(e);
+});
+
+function endDrag(e)
+{
+	if (!isDragging) return;
+	updateColorAtEvent(e);// Last update when you release your finger
+	isDragging = false;
+	//Releases the PointerCapture.
+	try { canvas.releasePointerCapture(e.pointerId); } catch {}
+}
+//When a touch, mouse, or other operation is released
+canvas.addEventListener('pointerup', endDrag);
+//When the operation is canceled by an external factor (e.g., taken over by another UI)
+canvas.addEventListener('pointercancel', endDrag);
+//When the pointer leaves the element (the opposite of mouseenter)
+canvas.addEventListener('pointerleave', e => {
+	// If you don't want to update when you leave the canvas, do nothing.
+	// If you want to confirm midway, call endDrag(e)
+});
+
+// Slider (transparent)
+alpha = parseFloat(sliderText.innerText); // Initial value: 1.00
+slider.value = 100;//1.00 * 100
+slider.addEventListener("input", function(){
+	alpha = parseFloat(slider.value) / 100;
+	sliderText.innerText = alpha.toFixed(2);
+	// Redraw if you want to reflect transparency in the palette
+	//drawGradient();
+	// The display of the currently selected point is also updated.
+	changeColor();
+});
+
+// Blue slider
+blueSlider.addEventListener('input', e => {
+	blueValue = +e.target.value;
+	blueValueText.textContent = blueValue;
+	drawGradient();
+	changeColor();
+});
+
+// Initial drawing
+drawGradient();
+changeColor();
+</pre></div><div id="d5">使用する色は256色です。<br>rgb関数は0から始まるので0から255までの数字を範囲として使用します。<br>ピクセル単位でRGB値をマッピングします。<br>fillRect(x, y, 1, 1) を使って、1ピクセルずつ色を塗ります。<br>横軸が赤(R)、縦軸が緑(G)、青(B)を基調として色の幅を変更します。<br></div><script>const d5=document.getElementById('d5');d5.innerHTML='using color are 256 colors.<br>rdb function use range 0 to 255 reason of start from 0.<br>it mapping rgb value with px unit.<br>using fillRect(x, y, 1, 1) method paint per byb 1 px.<br>横軸が赤(R)、縦軸が緑(G)、青(B)を基調として色の幅を変更します。<br>';</script></script><br><div id="d6" style="background-color:rgb(245 255 250 / 1.0);text-align:left;">クリック位置の色判定</div><div id="d7">getBoundingClientRect() でキャンバスの位置を取得します。<br>マウス座標から相対位置を計算します。<br>getImageData(x, y, 1, 1) でそのピクセルのRGBA値を取得します。<br>RGB値を表示用のテキストに変換して、HTMLに表示しています。<br></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }</div><div id="d8">値を最小値〜最大値の範囲内に制限（クランプ） する関数です。<br>canvasの座標にマイナスや範囲外の大きさの数字が設定された場合<br>画像データの取得に失敗してしまいます。<br>このエラーを避けるためマイナスは強制的に0に変換する。<br>canvas.widthを超える値はcanvas.width - 1に制限します。<br></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const ctx = canvas.getContext('2d');</div><div id="d9">上記はCanvas2DのgetImageData の連続使用をするとキャンパスを読み取る情報量が多くなるため最適化をする必要があります。このため、下記のように willReadFrequently属性にtrueを設定することで解決できます。</div><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const ctx = canvas.getContext("2d", { willReadFrequently: true });</div><div id="d10">内部的なバッファの扱いが読み取り中心の用途に最適化されて、パフォーマンスが向上します。<br></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const imageData = ctx.getImageData(cx, cy, 1, 1).data;</div><div id="d11">HTML5のCanvas要素上で、指定された座標(cx, cy)の1x1ピクセルの色情報を取得しています。<br></div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">ctx</td><td><div id="d12">Canvasの2Dコンテキストオブジェクトです</div></td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">getImageData(cx, cy, 1, 1)</td><td><div id="d13">Canvasの指定された矩形領域のピクセルデータを取得します。<br>[cx/cy]<br>取得するピクセルの左上のx, y座標です。<br>[1, 1]<br>ここでは1x1ピクセルを指定しています。<br></div></td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">.data</td><td><div id="d14">このdataプロパティは、Uint8ClampedArrayという型付き配列で、ピクセルデータを格納しています。<br>配列の要素は、[R, G, B, A, R, G, B, A, ...]の順に並んでいます。<br>それぞれの値は0から255の範囲で、R, G, B, Aは赤、緑、青、アルファ（透明度）を表します。﻿<br></div></td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">canvas.setPointerCapture(e.pointerId);</div><div id="d15">ユーザーがドラッグ操作をしているとき、<br>Canvas外にポインタが出ても引き続きCanvasにイベントを集中させることができます。<br></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">try { canvas.releasePointerCapture(e.pointerId); } catch {}</div><div id="d16">確保した PointerCaptureを解放します。<br>解放することで Canvas 以外の要素でもポインター操作を受け取れるようになります。<br>try...catchをつけているのは、一部ブラウザや状況でpointerId 無効になることがあるようなので、安全に処理するためです。<br></div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">canvas.addEventListener('pointerup', endDrag);<br>canvas.addEventListener('pointercancel', endDrag);<br>canvas.addEventListener('pointerleave', e => {<br>});<br></div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pointerup</td><td><div id="d17">タッチ・マウスなどの操作が 離されたとき。処理の終了などに使います。</div></td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pointercancel</td><td><div id="d18">操作が 外的要因でキャンセルされたとき（例：他のUIに奪われるケース）</div></td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">pointerleave</td><td><div id="d19">ポインタが 要素の外へ出たとき（mouseenter の逆）</div></td></tr></table><br><br><a id="n6" href='#' onClick="f2();">戻る</a><style>.scrollable-div {width: 400px;height: 150px;overflow-y: scroll;user-select: none;/* Firefoxの場合、以下のプロパティも追加 */-moz-user-select: none;/* Safari, Chrome, Edgeの場合、以下のプロパティも追加 */-webkit-user-select: none;/* IE/Edgeの場合、以下のプロパティも追加 */-ms-user-select: none;}</style><script>const text = {  jp: {n1:"戻る",n2:"色の選択",n3:"マウスで色を選択してください。",n4:"[青の濃度を変更すると基調とする色を変更できます]",n5:"透過色:",n6:"戻る",  },  en: {n1:"back",n2:"choose color",n3:"choose color with tap",n4:"[change blue density and change whole color]",n5:"transmitted color",n6:"back",  }};const text2 = {  jp: {d5:`使用する色は256色です。<br>rgb関数は0から始まるので0から255までの数字を範囲として使用します。<br>ピクセル単位でRGB値をマッピングします。<br>fillRect(x, y, 1, 1) を使って、1ピクセルずつ色を塗ります。<br>横軸が赤(R)、縦軸が緑(G)、青(B)を基調として色の幅を変更します。<br>`,d6:`クリック位置の色判定`,d7:`getBoundingClientRect() でキャンバスの位置を取得します。<br>マウス座標から相対位置を計算します。<br>getImageData(x, y, 1, 1) でそのピクセルのRGBA値を取得します。<br>RGB値を表示用のテキストに変換して、HTMLに表示しています。<br>`,d8:`値を最小値〜最大値の範囲内に制限（クランプ） する関数です。<br>canvasの座標にマイナスや範囲外の大きさの数字が設定された場合<br>画像データの取得に失敗してしまいます。<br>このエラーを避けるためマイナスは強制的に0に変換する。<br>canvas.widthを超える値はcanvas.width - 1に制限します。<br>`,d9:`上記はCanvas2DのgetImageData の連続使用をするとキャンパスを読み取る情報量が多くなるため最適化をする必要があります。このため、下記のように willReadFrequently属性にtrueを設定することで解決できます。`,d10:`内部的なバッファの扱いが読み取り中心の用途に最適化されて、パフォーマンスが向上します。<br>`,d11:`HTML5のCanvas要素上で、指定された座標(cx, cy)の1x1ピクセルの色情報を取得しています。<br>`,d12:`Canvasの2Dコンテキストオブジェクトです`,d13:`Canvasの指定された矩形領域のピクセルデータを取得します。<br>[cx/cy]<br>取得するピクセルの左上のx, y座標です。<br>[1, 1]<br>ここでは1x1ピクセルを指定しています。<br>`,d14:`このdataプロパティは、Uint8ClampedArrayという型付き配列で、ピクセルデータを格納しています。<br>配列の要素は、[R, G, B, A, R, G, B, A, ...]の順に並んでいます。<br>それぞれの値は0から255の範囲で、R, G, B, Aは赤、緑、青、アルファ（透明度）を表します。﻿<br>`,d15:`ユーザーがドラッグ操作をしているとき、<br>Canvas外にポインタが出ても引き続きCanvasにイベントを集中させることができます。<br>`,d16:`確保した PointerCaptureを解放します。<br>解放することで Canvas 以外の要素でもポインター操作を受け取れるようになります。<br>try...catchをつけているのは、一部ブラウザや状況でpointerId 無効になることがあるようなので、安全に処理するためです。<br>`,d17:`タッチ・マウスなどの操作が 離されたとき。処理の終了などに使います。`,d18:`操作が 外的要因でキャンセルされたとき（例：他のUIに奪われるケース）`,d19:`ポインタが 要素の外へ出たとき（mouseenter の逆）`  },en: {d5:`256 colors are used. <br>The rgb function starts at 0, so the range is 0 to 255. <br>RGB values are mapped pixel by pixel. <br>fillRect(x, y, 1, 1) is used to fill each pixel. <br>The horizontal axis is red (R), and the vertical axis is green (G) and blue (B). The color width is adjusted based on the horizontal axis. <br>`,d6:`Determine the color of the click position.`,d7:`Get the canvas position using getBoundingClientRect(). <br>Calculate the relative position from the mouse coordinates. <br>Get the RGBA value of that pixel using getImageData(x, y, 1, 1). <br>The RGB values are converted to text for display and displayed in HTML. <br>`,d8:`This function clamps the value within a minimum and maximum range. <br>If a negative value or an out-of-range number is set for the canvas coordinates,<br>retrieval of image data will fail. <br>To avoid this error, negative values are forcibly converted to 0. <br>Values exceeding canvas.width are limited to canvas.width - 1. <br>`,d9:`The above requires optimization because repeated use of Canvas2D's getImageData() results in a large amount of data being read from the canvas.This can be resolved by setting the willReadFrequently attribute to true as shown below.`,d10:`This optimizes internal buffer handling for read-intensive applications, improving performance. <br>`,d11:`Retrieves color information for a 1x1 pixel at the specified coordinates (cx, cy) on an HTML5 Canvas element. <br>`,d12:`Canvas 2D context object.`,d13:`Retrieves pixel data for a specified rectangular area of the Canvas. <br>[cx/cy]<br>The x, y coordinates of the upper left corner of the pixel to be acquired. <br>[1, 1]<br>Here, a 1x1 pixel is specified. <br>`,d14:`This data property is a typed array called Uint8ClampedArray, which stores pixel data. <br>The elements of the array are arranged in the order [R, G, B, A, R, G, B, A, ...]. <br>Each value ranges from 0 to 255, with R, G, B, and A representing red, green, blue, and alpha (transparency). ﻿<br>`,d15:`When the user is dragging,<br>even if the pointer moves outside the Canvas, events can continue to be concentrated on the Canvas. <br>`,d16:`Release the allocated PointerCapture. <br>Releasing this allows elements other than the Canvas to receive pointer operations. <br>The try...catch loop is used to ensure safety, as pointerId may become invalid in some browsers and situations. <br>`,d17:`When a touch or mouse operation is released. Used to terminate processing.`,d18:`When an operation is canceled by an external factor (e.g., when the operation is seized by another UI).`,d19:`When the pointer leaves an element (the opposite of mouseenter).`}};function applyTextAll(lang, divIds) {  divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {    return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;    el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6"];function applyTextAll2(lang, divIds) {  divIds.forEach((id) => applyText2(lang, id));}function getText2(lang, divId) {    return (text2[lang] && text2[lang][divId]) ?? (text2.ja && text2.ja[divId]) ?? '';}function applyText2(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;    el.innerHTML = getText2(lang, divId);}const ary2 = ["d5", "d6", "d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14", "d15", "d16", "d17", "d18", "d19"];</script></script><script>const canvas = document.getElementById('colorCanvas');const ctx = canvas.getContext("2d", { willReadFrequently: true });const blueSlider = document.getElementById('blueSlider');const blueValueText = document.getElementById('blueValueText');const slider = document.getElementById('slider');const sliderText = document.getElementById('sliderValue');let blueValue = 128;     let alpha = 1.0;         let isDragging = false;  let cx = 0, cy = 0;      function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }function drawGradient() {ctx.clearRect(0, 0, canvas.width, canvas.height);for (let y = 0; y < 256; y++) {for (let x = 0; x < 256; x++) {ctx.fillStyle = `rgb(${x}, ${y}, ${blueValue})`;ctx.fillRect(x, y, 1, 1);}}}function updateColorAtEvent(event) {const rect = canvas.getBoundingClientRect();const px = event.clientX - rect.left;const py = event.clientY - rect.top;cx = clamp(Math.floor(px), 0, canvas.width - 1);cy = clamp(Math.floor(py), 0, canvas.height - 1);changeColor();}function changeColor(){const imageData = ctx.getImageData(cx, cy, 1, 1).data;const r = imageData[0], g = imageData[1], b = imageData[2];const rgbString = `rgb(${r} ${g} ${b} / ${alpha.toFixed(2)})`;document.getElementById("rgb").textContent = rgbString;document.getElementById("hex").textContent = rgbaToHex(r, g, b, alpha);const sample = document.getElementById("colorCode");sample.style.backgroundColor = rgbString;sample.textContent = "サンプルカラー";}function rgbaToHex(r, g, b, a){const toHex = v => v.toString(16).toUpperCase().padStart(2, '0');const aa = Math.round(a * 255);return "#" + toHex(r) + toHex(g) + toHex(b) + toHex(aa);}canvas.addEventListener('pointerdown', e => {isDragging = true;canvas.setPointerCapture(e.pointerId);updateColorAtEvent(e);});canvas.addEventListener('pointermove', e => {if (!isDragging) return;     updateColorAtEvent(e);});function endDrag(e){if (!isDragging) return;updateColorAtEvent(e);isDragging = false;try { canvas.releasePointerCapture(e.pointerId); } catch {}}canvas.addEventListener('pointerup', endDrag);canvas.addEventListener('pointercancel', endDrag);canvas.addEventListener('pointerleave', e => {});alpha = parseFloat(sliderText.innerText); slider.value = 100;slider.addEventListener("input", function(){alpha = parseFloat(slider.value) / 100;sliderText.innerText = alpha.toFixed(2);changeColor();});blueSlider.addEventListener('input', e => {blueValue = +e.target.value;blueValueText.textContent = blueValue;drawGradient();changeColor();});drawGradient();changeColor();</script></script>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const d1=document.getElementById('d1');const d2=document.getElementById('d2');const d3=document.getElementById('d3');const d4=document.getElementById('d4');let lang=obj.value;if(lang==1){d1.style.display="none";d2.style.display="block";d3.style.display="none";d4.style.display="block";}else{d1.style.display="block";d2.style.display="none";d3.style.display="block";d4.style.display="none";}f4();applyTextAll(lang==0?"jp":"en", ary);applyTextAll2(lang==0?"jp":"en", ary2);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
