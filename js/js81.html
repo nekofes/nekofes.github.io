@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">Promise.all()</div></td></tr><tr><td><div id="n3">Promise.all()</div></td></tr></table><br><div id="n4">複数のPromiseをまとめます。複数の独立した非同期タスクがすべて完了してから次の処理に進む準備をします。Promiseが成功すると結果を配列として返します。失敗するとエラーを返します。</div><br><div id="n5">[サンプル]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+//[test 1]
+const time10 = async () => { await sleep(10); console.log('10s'); };
+const time30 = async () => { await sleep(30); console.log('30s'); };
+const time60 = async () => { await sleep(60); console.log('60s'); };
+Promise.all([
+	time30,
+	time60,
+	time10
+	])
+    .then(function(messege){
+        console.log(messege)
+    })
+    .catch(function(reason) {
+        console.log(reason)
+    });
+
+console.log("--------------");
+
+//[test 2]
+const func = (t) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (t > 0) {
+        resolve(`${t}sec`);
+      } else {
+        reject('specify second');
+      }
+    }, t * 1000);
+  })
+}
+
+Promise.all([func(3), func(1), func(2)])
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((result) => {
+    console.log(result);
+  });
+
+//[result]
+/*
+--------------
+(3) [ƒ, ƒ, ƒ]
+0: async () => { await sleep(30); console.log('30s'); }
+1: async () => { await sleep(60); console.log('60s'); }
+2: async () => { await sleep(10); console.log('10s'); }
+length: 3
+(3) ['3sec', '1sec', '2sec']
+0: "3sec"
+1: "1sec"
+2: "2sec"
+length: 3
+*/
+</pre><br><div id="n6">Promise.allに指定したメソッドを配列で指定します。<br>すべての処理を終了するとthen<br>途中で失敗するとcatch<br>を実行します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">非同期処理の実行速度向上</div>直列処理（順番に実行）ではなく並列処理（同時に実行）を行うことで、<br>全体の実行時間を短縮できます。﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">依存関係のある処理には使わない</div>1つ目のAPIの結果を2つ目のAPIで利用するなど、<br>非同期処理が互いに依存している場合は Promise.all() を使わず、<br>await を使って順番に処理する必要があります。﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">エラーハンドリング</div>1つのPromiseが失敗すると全体が失敗するため、<br>部分的な失敗を許容したい場合はPromise.allSettled()を使用します。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><script>const time10 = async () => { await sleep(10); console.log('10s'); };const time30 = async () => { await sleep(30); console.log('30s'); };const time60 = async () => { await sleep(60); console.log('60s'); };Promise.all([time30,time60,time10])    .then(function(messege){        console.log(messege)    })    .catch(function(reason) {        console.log(reason)    });console.log("--------------");const func = (t) => {  return new Promise((resolve, reject) => {    setTimeout(() => {      if (t > 0) {        resolve(`${t}sec`);      } else {        reject('specify second');      }    }, t * 1000);  })}Promise.all([func(3), func(1), func(2)])  .then((result) => {    console.log(result);  })  .catch((result) => {    console.log(result);  });</script></script><script>const text = {  ja: {n1:"戻る",n2:"Promise.all()",n3:"Promise.all()",n4:`複数のPromiseをまとめます。複数の独立した非同期タスクがすべて完了してから次の処理に進む準備をします。Promiseが成功すると結果を配列として返します。失敗するとエラーを返します。`,n5:`[サンプル]`,n6:`Promise.allに指定したメソッドを配列で指定します。<br>すべての処理を終了するとthen<br>途中で失敗するとcatch<br>を実行します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">非同期処理の実行速度向上</div>直列処理（順番に実行）ではなく並列処理（同時に実行）を行うことで、<br>全体の実行時間を短縮できます。﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">依存関係のある処理には使わない</div>1つ目のAPIの結果を2つ目のAPIで利用するなど、<br>非同期処理が互いに依存している場合は Promise.all() を使わず、<br>await を使って順番に処理する必要があります。﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">エラーハンドリング</div>1つのPromiseが失敗すると全体が失敗するため、<br>部分的な失敗を許容したい場合はPromise.allSettled()を使用します。<br>`,n7:"戻る",  },  en: {n1: "back",n2: "Promise.all()",n3: "Promise.all()",n4: `Combines multiple promises.Prepare to proceed to the next process only after all independent asynchronous tasks have completed.If a promise is successful, the result is returned as an array.If it fails, an error is returned.`,n5: `[Sample]`,n6: `Specify the methods specified for Promise.all as an array. <br>Executes then when all processing is complete.<br>If any processing fails, executes catch.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Improved asynchronous processing speed</div>By performing parallel processing (executing simultaneously) instead of serial processing (executing sequentially),<br>the overall execution time can be reduced.﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Do not use for dependent processes.</div>If asynchronous processes depend on each other, such as using the results of one API in a second API,<br>Do not use Promise.all().<br>You must process them sequentially using await. ﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Error Handling</div>Since a single Promise's failure causes the entire Promise to fail,<br>use Promise.allSettled() if you want to tolerate partial failures.<br>`,n7:"back",}};function applyTextAll(lang, divIds) {  divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {    return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;  el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];function handleButtonClick(e) {const btn = e.currentTarget;const {id} = btn.dataset;test(id);} function test(id){console.log("id:"+id);const result = document.getElementById("result");result.innerText = "button id:"+id;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;f4();console.log("lang:"+lang);applyTextAll(lang==0?"jp":"en", ary);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
