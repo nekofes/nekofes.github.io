@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Sitemap: https://nekofes.github.io/sitemap/sitemap_https.xml
 Sitemap: https://nekofes.github.io/sitemap.xml
 User-agent: Google-adstxt
 Disallow:
