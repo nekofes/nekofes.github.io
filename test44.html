@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax サンプル</title>
+</head>
+<body>
+
+    <h1>ユーザー情報の取得</h1>
+    <button id="sendArrayButton">ユーザー情報を取得</button>
+    <div id="result"></div>
+
+<script>
+document.getElementById('sendArrayButton').addEventListener('click', () => {
+    const dataToSend = {
+        name: '田中',
+        ages: [20, 30, 40], // 配列
+        hobbies: ['読書', '映画', '登山'], // 配列
+        details: {             // オブジェクトの中に配列
+            favoriteColors: ['青', '緑'],
+            languages: ['JavaScript', 'PHP', 'Python']
+        }
+    };
+
+    fetch('https://ss1.xrea.com/app.s17.xrea.com/test4.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend), // JavaScriptオブジェクトをJSON文字列に変換
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('ネットワークエラーが発生しました');
+        }
+        return response.json(); // PHPからのJSONレスポンスをJavaScriptオブジェクトに変換
+    })
+    .then(data => {
+        console.log('PHPからのレスポンス:', data);
+        // レスポンスの表示例
+        const resultDiv = document.getElementById('result');
+        if (data.status === 'success') {
+            resultDiv.innerHTML = `
+                <p>名前: ${data.receivedData.name}</p>
+                <p>年齢: ${data.receivedData.ages.join(', ')}</p>
+                <p>趣味: ${data.receivedData.hobbies.join(', ')}</p>
+                <p>お気に入りの色: ${data.receivedData.details.favoriteColors.join(', ')}</p>
+            `;
+        } else {
+            resultDiv.textContent = `エラー: ${data.message}`;
+        }
+    })
+    .catch(error => {
+        console.error('Fetchエラー:', error);
+        document.getElementById('result').textContent = `リクエストに失敗しました: ${error.message}`;
+    });
+});
+</script>
+</body>
+</html>
