@@ -1,0 +1,543 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">移動によってキャラクターが枠に消えていく状態に推移</td></tr><tr><td>レイヤーを使って非表示エリアをつくり、キャラクターがその場所に移動するため隠れるように見える状態となります。</td></tr></table><br><br><br><table><tr><td style="width:50px"></td><td><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer layer1" id="c0"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><div class="layer layer1" id="c1"><img id="img" src="../o/i3/nawmin_sample14.png" style="width:50px;height:50px;"></div><div class="layer layer1" id="c2"><img id="img" src="../o/i3/nawmin_sample16.png" style="width:50px;height:50px;"></div><button id="b0" class="layer btn">ひよこ</button><button id="b1" class="layer btn">わし</button><button id="b2" class="layer btn">ばった</button><button id="btnReset" class="layer btn">リセット</button><label id="lbl0" class="layer lbl1" style="background-color:gold"></label><label id="lbl1" class="layer lbl1" style="background-color:tomato"></label><label id="lbl2" class="layer lbl2" style="background-color:honeydew"></label><label id="lbl3" class="layer lbl2" style="background-color:thistle"></label></div></td> <td style="width:50px"></td></tr></table><br><br><br><br><br><br><script></script></script>[HTML/CSS]<br><textarea id="t1" rows=15 cols=80>
+<table>
+<tr>
+<td style="width:50px">
+</td>
+<td>
+	<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+		<div class="layer layer1" id="c0">
+			<img id="img" src="nawmin_sample10.png" style="width:50px;height:50px;">
+		</div>
+		<div class="layer layer1" id="c1">
+			<img id="img" src="nawmin_sample14.png" style="width:50px;height:50px;">
+		</div>
+		<div class="layer layer1" id="c2">
+			<img id="img" src="nawmin_sample16.png" style="width:50px;height:50px;">
+		</div>
+		<button id="b0" class="layer btn">ひよこ</button>
+		<button id="b1" class="layer btn">わし</button>
+		<button id="b2" class="layer btn">ばった</button>
+		<button id="btnReset" class="layer btn">リセット</button>
+		<label id="lbl0" class="layer lbl1" style="background-color:gold"></label>
+		<label id="lbl1" class="layer lbl1" style="background-color:tomato"></label>
+		<label id="lbl2" class="layer lbl2" style="background-color:honeydew"></label>
+		<label id="lbl3" class="layer lbl2" style="background-color:thistle"></label>
+	</div>
+</td> 
+<td style="width:50px">
+</td>
+</tr>
+</table>
+<style>
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 150px;
+	z-index:1;
+}
+.layer2{
+	width: 50px;
+	height: 50px;
+	background-color:seagreen;
+}
+.btn{
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+.lbl1{
+	width:50px;
+	height:200px;
+	z-index:2;
+}
+.lbl2{
+	width:200px;
+	height:50px;
+	z-index:2;
+}
+</style>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+let characters = [
+  { id: 0, x: 150, y:   0 },
+  { id: 1, x:   0, y:  50 },
+  { id: 2, x: 150, y: 100 },
+];
+let intervalId0;
+let intervalId1;
+let intervalId2;
+characterPositionAll();
+function characterPositionAll()
+{
+	for(i=0;i<3;i++)
+	{
+		characterPosition(i);
+	}
+}
+function characterPosition(i)
+{
+	// 配列から該当するキャラクターを探す
+	const character = characters.find(char => char.id === i);
+	// キャラクターが見つかった場合、座標を更新
+	if (character) 
+	{
+		const obj = document.getElementById("c"+i);
+		obj.style.left = character.x + 'px';
+		obj.style.top  = character.y + 'px';
+	}
+}
+function move(id)
+{
+	let x = 0;
+	let y = 0;
+	let direction = 0;
+	const character = characters.find(char => char.id === id);
+	//キャラクターが見つかった場合、座標を取得
+	if (character) 
+	{
+		x = character.x;
+		y = character.y;
+	}
+	let flg = 0;
+	if(id==0)
+	{
+		intervalId0 = setInterval(() => 
+		{
+			x-= 10;
+			if(x<=-50)
+			{
+				x=-50;
+				flg=1;
+			}
+			character.x = x;
+			character.y = y;
+			characterPosition(id);
+			// 止める条件
+			if (flg==1) 
+			{
+				alert("end:"+id);
+				clearInterval(intervalId0);
+				return;
+			}
+		}, 1000);
+	}
+	else if(id==1)
+	{
+		intervalId1 = setInterval(() => 
+		{
+			x += 10;
+			if(x>=200)
+			{
+				x=200;
+				flg=1;
+			}
+			character.x = x;
+			character.y = y;
+			characterPosition(id);
+			// 止める条件
+			if (flg==1) 
+			{
+				alert("end:"+id);
+				clearInterval(intervalId1);
+				return;
+			}
+		}, 1000);
+	}
+	else if(id==2)
+	{
+		intervalId2 = setInterval(() => 
+		{
+			x-= 10;
+			if(x<=-50)
+			{
+				x=-50;
+				flg=1;
+			}
+			character.x = x;
+			character.y = y;
+			characterPosition(id);
+			// 止める条件
+			if (flg==1) 
+			{
+				alert("end:"+id);
+				clearInterval(intervalId2);
+				return;
+			}
+		}, 1000);
+	}
+
+}
+// キャラクターの座標を更新する関数
+function updateCharacterPosition(id, newX, newY) 
+{
+	// 配列から該当するキャラクターを探す
+	const character = characters.find(char => char.id === id);
+	
+	// キャラクターが見つかった場合、座標を更新
+	if (character) 
+	{
+		character.x = newX;
+		character.y = newY;
+	}
+}
+const b0 = document.getElementById("b0");
+const b1 = document.getElementById("b1");
+const b2 = document.getElementById("b2");
+const btnReset = document.getElementById("btnReset");
+b0.style.left = '0px';
+b0.style.top  = '250px';
+b1.style.left = '100px';
+b1.style.top  = '250px';
+b2.style.left = '200px';
+b2.style.top  = '250px';
+btnReset.style.left = '0px';
+btnReset.style.top  = '280px';
+
+const lbl0 = document.getElementById("lbl0");
+const lbl1 = document.getElementById("lbl1");
+const lbl2 = document.getElementById("lbl2");
+const lbl3 = document.getElementById("lbl3");
+lbl0.style.left = '-50px';
+lbl0.style.top  = '0px';
+lbl1.style.left = '200px';
+lbl1.style.top  = '0px';
+lbl2.style.left = '0px';
+lbl2.style.top  = '-50px';
+lbl3.style.left = '0px';
+lbl3.style.top  = '200px';
+
+
+b0.addEventListener("click", () => 
+{
+	move(0);
+});
+b1.addEventListener("click", () => 
+{
+	move(1);
+});
+b2.addEventListener("click", () => 
+{
+	move(2);
+});
+btnReset.addEventListener("click", () => 
+{
+	let x =0;
+	for(i=0;i<3;i++)
+	{
+		switch(i)
+		{
+			case 0:
+				clearInterval(intervalId0);
+				x=150;
+				break;
+			case 1:
+				clearInterval(intervalId1);
+				x=0;
+				break;
+			case 2:
+				clearInterval(intervalId2);
+				x=150;
+				break;
+		}
+		updateCharacterPosition(i, x, i*50);
+	}
+	characterPositionAll();
+});
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.lbl1{<br>&nbsp;&nbsp;width:50px;<br>&nbsp;&nbsp;height:200px;<br>&nbsp;&nbsp;z-index:2;<br>}<br>.lbl2{<br>&nbsp;&nbsp;width:200px;<br>&nbsp;&nbsp;height:50px;<br>&nbsp;&nbsp;z-index:2;<br>}<br></div>レイヤーで「z-index:2」としているのでキャラクターが隠れる状態となります。<br><br><br>[ひよこが隠れる例]<br><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+intervalId0 = setInterval(() => 
+{
+	x-= 10;
+	if(x<=-50)
+	{
+		x=-50;
+		flg=1;
+	}
+	character.x = x;
+	character.y = y;
+	characterPosition(id);
+	// 止める条件
+	if (flg==1) 
+	{
+		alert("end:"+id);
+		clearInterval(intervalId0);
+		return;
+	}
+}, 1000);
+</pre>x座標を-10としていくことで1秒ごとに左側に移動していきます。<br>x座標が-50未満になったら、タイマーを停止しています。<br>x座標が0から-50に移動していく際、<br>ひよこはレイヤーのz-indexの順番のため隠れるため<br>徐々に消えるように見えます。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">As the character moves, they disappear into the frame.</td></tr><tr><td>Use layers to create hidden areas, and the character will move into those areas so they appear hidden.</td></tr></table><br><br><br><table><tr><td style="width:50px"></td><td><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;"><div class="layer layer1" id="c0En"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><div class="layer layer1" id="c1En"><img id="img" src="../o/i3/nawmin_sample14.png" style="width:50px;height:50px;"></div><div class="layer layer1" id="c2En"><img id="img" src="../o/i3/nawmin_sample16.png" style="width:50px;height:50px;"></div><button id="b0En" class="layer btn">chick</button><button id="b1En" class="layer btn">eagle</button><button id="b2En" class="layer btn">grasshopper</button><button id="btnResetEn" class="layer btn">Reset</button><label id="lbl0En" class="layer lbl1" style="background-color:gold"></label><label id="lbl1En" class="layer lbl1" style="background-color:tomato"></label><label id="lbl2En" class="layer lbl2" style="background-color:honeydew"></label><label id="lbl3En" class="layer lbl2" style="background-color:thistle"></label></div></td> <td style="width:50px"></td></tr></table><br><br><br><br><br><br><script></script></script>[HTML/CSS]<br><textarea id="t1" rows=15 cols=80>
+<table>
+<tr>
+<td style="width:50px">
+</td>
+<td>
+	<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+		<div class="layer layer1" id="c0">
+			<img id="img" src="nawmin_sample10.png" style="width:50px;height:50px;">
+		</div>
+		<div class="layer layer1" id="c1">
+			<img id="img" src="nawmin_sample14.png" style="width:50px;height:50px;">
+		</div>
+		<div class="layer layer1" id="c2">
+			<img id="img" src="nawmin_sample16.png" style="width:50px;height:50px;">
+		</div>
+		<button id="b0" class="layer btn">chick</button>
+		<button id="b1" class="layer btn">eagle</button>
+		<button id="b2" class="layer btn">grasshopper</button>
+		<button id="btnReset" class="layer btn">Reset</button>
+		<label id="lbl0" class="layer lbl1" style="background-color:gold"></label>
+		<label id="lbl1" class="layer lbl1" style="background-color:tomato"></label>
+		<label id="lbl2" class="layer lbl2" style="background-color:honeydew"></label>
+		<label id="lbl3" class="layer lbl2" style="background-color:thistle"></label>
+	</div>
+</td> 
+<td style="width:50px">
+</td>
+</tr>
+</table>
+<style>
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 150px;
+	z-index:1;
+}
+.layer2{
+	width: 50px;
+	height: 50px;
+	background-color:seagreen;
+}
+.btn{
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+.lbl1{
+	width:50px;
+	height:200px;
+	z-index:2;
+}
+.lbl2{
+	width:200px;
+	height:50px;
+	z-index:2;
+}
+</style>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+let characters = [
+  { id: 0, x: 150, y:   0 },
+  { id: 1, x:   0, y:  50 },
+  { id: 2, x: 150, y: 100 },
+];
+let intervalId0;
+let intervalId1;
+let intervalId2;
+characterPositionAll();
+function characterPositionAll()
+{
+	for(i=0;i<3;i++)
+	{
+		characterPosition(i);
+	}
+}
+function characterPosition(i)
+{
+	// Search for the corresponding character in the sequence
+	const character = characters.find(char => char.id === i);
+	// If the character is found, update the coordinates.
+	if (character) 
+	{
+		const obj = document.getElementById("c"+i);
+		obj.style.left = character.x + 'px';
+		obj.style.top  = character.y + 'px';
+	}
+}
+function move(id)
+{
+	let x = 0;
+	let y = 0;
+	let direction = 0;
+	const character = characters.find(char => char.id === id);
+	//If the character is found, get the coordinates
+	if (character) 
+	{
+		x = character.x;
+		y = character.y;
+	}
+	let flg = 0;
+	if(id==0)
+	{
+		intervalId0 = setInterval(() => 
+		{
+			x-= 10;
+			if(x<=-50)
+			{
+				x=-50;
+				flg=1;
+			}
+			character.x = x;
+			character.y = y;
+			characterPosition(id);
+			// Stop conditions
+			if (flg==1) 
+			{
+				alert("end:"+id);
+				clearInterval(intervalId0);
+				return;
+			}
+		}, 1000);
+	}
+	else if(id==1)
+	{
+		intervalId1 = setInterval(() => 
+		{
+			x += 10;
+			if(x>=200)
+			{
+				x=200;
+				flg=1;
+			}
+			character.x = x;
+			character.y = y;
+			characterPosition(id);
+			// Stop conditions
+			if (flg==1) 
+			{
+				alert("end:"+id);
+				clearInterval(intervalId1);
+				return;
+			}
+		}, 1000);
+	}
+	else if(id==2)
+	{
+		intervalId2 = setInterval(() => 
+		{
+			x-= 10;
+			if(x<=-50)
+			{
+				x=-50;
+				flg=1;
+			}
+			character.x = x;
+			character.y = y;
+			characterPosition(id);
+			// Stop conditions
+			if (flg==1) 
+			{
+				alert("end:"+id);
+				clearInterval(intervalId2);
+				return;
+			}
+		}, 1000);
+	}
+
+}
+// A function to update the character's coordinates
+function updateCharacterPosition(id, newX, newY) 
+{
+	// Search for the corresponding character in the sequence
+	const character = characters.find(char => char.id === id);
+	
+	// If the character is found, update the coordinates.
+	if (character) 
+	{
+		character.x = newX;
+		character.y = newY;
+	}
+}
+const b0 = document.getElementById("b0");
+const b1 = document.getElementById("b1");
+const b2 = document.getElementById("b2");
+const btnReset = document.getElementById("btnReset");
+b0.style.left = '0px';
+b0.style.top  = '250px';
+b1.style.left = '100px';
+b1.style.top  = '250px';
+b2.style.left = '200px';
+b2.style.top  = '250px';
+btnReset.style.left = '0px';
+btnReset.style.top  = '280px';
+
+const lbl0 = document.getElementById("lbl0");
+const lbl1 = document.getElementById("lbl1");
+const lbl2 = document.getElementById("lbl2");
+const lbl3 = document.getElementById("lbl3");
+lbl0.style.left = '-50px';
+lbl0.style.top  = '0px';
+lbl1.style.left = '200px';
+lbl1.style.top  = '0px';
+lbl2.style.left = '0px';
+lbl2.style.top  = '-50px';
+lbl3.style.left = '0px';
+lbl3.style.top  = '200px';
+
+
+b0.addEventListener("click", () => 
+{
+	move(0);
+});
+b1.addEventListener("click", () => 
+{
+	move(1);
+});
+b2.addEventListener("click", () => 
+{
+	move(2);
+});
+btnReset.addEventListener("click", () => 
+{
+	let x =0;
+	for(i=0;i<3;i++)
+	{
+		switch(i)
+		{
+			case 0:
+				clearInterval(intervalId0);
+				x=150;
+				break;
+			case 1:
+				clearInterval(intervalId1);
+				x=0;
+				break;
+			case 2:
+				clearInterval(intervalId2);
+				x=150;
+				break;
+		}
+		updateCharacterPosition(i, x, i*50);
+	}
+	characterPositionAll();
+});
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.lbl1{<br>&nbsp;&nbsp;width:50px;<br>&nbsp;&nbsp;height:200px;<br>&nbsp;&nbsp;z-index:2;<br>}<br>.lbl2{<br>&nbsp;&nbsp;width:200px;<br>&nbsp;&nbsp;height:50px;<br>&nbsp;&nbsp;z-index:2;<br>}<br></div>The layer has a z-index of 2, so the character will be hidden.<br><br><br>[Example of a chick hiding]<br><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+intervalId0 = setInterval(() => 
+{
+	x-= 10;
+	if(x<=-50)
+	{
+		x=-50;
+		flg=1;
+	}
+	character.x = x;
+	character.y = y;
+	characterPosition(id);
+	// Stop conditions
+	if (flg==1) 
+	{
+		alert("end:"+id);
+		clearInterval(intervalId0);
+		return;
+	}
+}, 1000);
+</pre>By increasing the x coordinate to -10, the chick moves to the left every second.<br>The timer stops when the x coordinate becomes less than -50.<br>As the x coordinate moves from 0 to -50,<br>the chick is hidden due to the layer's z-index order,<br>so it appears to gradually disappear.<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;"><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><style>.container{position: sticky;}.layer{width: 200px;height: 200px;position: absolute;}.layer1{top: 0px;left: 150px;z-index:1;}.layer2{width: 50px;height: 50px;background-color:seagreen;}.btn{width: 100px;height: 30px;z-index:2;}.lbl1{width:50px;height:200px;z-index:2;}.lbl2{width:200px;height:50px;z-index:2;}</style><script>let characters = [  { id: 0, x: 150, y:   0 },  { id: 1, x:   0, y:  50 },  { id: 2, x: 150, y: 100 },];let intervalId0;let intervalId1;let intervalId2;characterPositionAll();function characterPositionAll(){for(i=0;i<3;i++){characterPosition(i);}}function characterPosition(i){const character = characters.find(char => char.id === i);if (character) {const obj = document.getElementById("c"+i);obj.style.left = character.x + 'px';obj.style.top  = character.y + 'px';const objEn = document.getElementById("c"+i+"En");objEn.style.left = character.x + 'px';objEn.style.top  = character.y + 'px';}}function move(id){let x = 0;let y = 0;let direction = 0;const character = characters.find(char => char.id === id);if (character) {x = character.x;y = character.y;}let flg = 0;if(id==0){intervalId0 = setInterval(() => {x-= 10;if(x<=-50){x=-50;flg=1;}character.x = x;character.y = y;characterPosition(id);if (flg==1) {alert("end:"+id);clearInterval(intervalId0);return;}}, 1000);}else if(id==1){intervalId1 = setInterval(() => {x += 10;if(x>=200){x=200;flg=1;}character.x = x;character.y = y;characterPosition(id);if (flg==1) {alert("end:"+id);clearInterval(intervalId1);return;}}, 1000);}else if(id==2){intervalId2 = setInterval(() => {x-= 10;if(x<=-50){x=-50;flg=1;}character.x = x;character.y = y;characterPosition(id);if (flg==1) {alert("end:"+id);clearInterval(intervalId2);return;}}, 1000);}}function updateCharacterPosition(id, newX, newY) {const character = characters.find(char => char.id === id);if (character) {character.x = newX;character.y = newY;}}const b0 = document.getElementById("b0");const b1 = document.getElementById("b1");const b2 = document.getElementById("b2");const btnReset = document.getElementById("btnReset");b0.style.left = '0px';b0.style.top  = '250px';b1.style.left = '100px';b1.style.top  = '250px';b2.style.left = '200px';b2.style.top  = '250px';btnReset.style.left = '0px';btnReset.style.top  = '280px';const lbl0 = document.getElementById("lbl0");const lbl1 = document.getElementById("lbl1");const lbl2 = document.getElementById("lbl2");const lbl3 = document.getElementById("lbl3");lbl0.style.left = '-50px';lbl0.style.top  = '0px';lbl1.style.left = '200px';lbl1.style.top  = '0px';lbl2.style.left = '0px';lbl2.style.top  = '-50px';lbl3.style.left = '0px';lbl3.style.top  = '200px';const lbl0En = document.getElementById("lbl0En");const lbl1En = document.getElementById("lbl1En");const lbl2En = document.getElementById("lbl2En");const lbl3En = document.getElementById("lbl3En");lbl0En.style.left = '-50px';lbl0En.style.top  = '0px';lbl1En.style.left = '200px';lbl1En.style.top  = '0px';lbl2En.style.left = '0px';lbl2En.style.top  = '-50px';lbl3En.style.left = '0px';lbl3En.style.top  = '200px';b0.addEventListener("click", () => {move(0);});b1.addEventListener("click", () => {move(1);});b2.addEventListener("click", () => {move(2);});btnReset.addEventListener("click", () => {let x =0;for(i=0;i<3;i++){switch(i){case 0:clearInterval(intervalId0);x=150;break;case 1:clearInterval(intervalId1);x=0;break;case 2:clearInterval(intervalId2);x=150;break;}updateCharacterPosition(i, x, i*50);}characterPositionAll();});const b0En = document.getElementById("b0En");const b1En = document.getElementById("b1En");const b2En = document.getElementById("b2En");const btnResetEn = document.getElementById("btnResetEn");b0En.style.left = '0px';b0En.style.top  = '250px';b1En.style.left = '100px';b1En.style.top  = '250px';b2En.style.left = '200px';b2En.style.top  = '250px';btnResetEn.style.left = '0px';btnResetEn.style.top  = '280px';b0En.addEventListener("click", () => {move(0);});b1En.addEventListener("click", () => {move(1);});b2En.addEventListener("click", () => {move(2);});btnResetEn.addEventListener("click", () => {let x =0;for(i=0;i<3;i++){switch(i){case 0:clearInterval(intervalId0);x=150;break;case 1:clearInterval(intervalId1);x=0;break;case 2:clearInterval(intervalId2);x=150;break;}updateCharacterPosition(i, x, i*50);}characterPositionAll();});</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">スライダー</td></tr><tr><td>スライダーのmin/max/valueの値変更</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><button id="b1">min:10 max:50 value:25</button><br><button id="b2">min:0 max:100 value:50</button><br><button id="b3">minに変更</button><br><button id="b4">maxに変更</button><br><br><input type="range" id="slider" min="0" max="100" value="50"><div id="sliderValue"></div><br>[小数点のスライダー]<br><input type="range" id="sliderDecimal" min="0" max="100" value="50"><div id="sliderValueDecimal"></div><br><textarea id="t1" rows=11 cols=80>
+<button id="b1">min:10 max:50 value:25</button><br>
+<button id="b2">min:0 max:100 value:50</button><br>
+<button id="b3">minに変更</button><br>
+<button id="b4">maxに変更</button><br>
+<br>
+<input type="range" id="slider" min="0" max="100" value="50">
+<div id="sliderValue"></div>
+<br>
+[小数点のスライダー]<br>
+<input type="range" id="sliderDecimal" min="0" max="100" value="50">
+<div id="sliderValueDecimal"></div>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const slider = document.getElementById("slider");
+const sliderValue = document.getElementById("sliderValue");
+let flg=0;
+slider.addEventListener("input", function() {
+	sliderChange();
+});
+function sliderChange()
+{
+	const value = slider.value;
+	sliderValue.textContent = value;
+}
+const b1 = document.getElementById("b1");
+b1.addEventListener("click", () => 
+{
+	slider.min=0;
+	slider.max=50;
+	slider.value=25;
+	sliderChange();
+	flg = 0;
+});
+const b2 = document.getElementById("b2");
+b2.addEventListener("click", () => 
+{
+	slider.min=0;
+	slider.max=100;
+	slider.value=50;
+	sliderChange();
+	flg = 1;
+});
+const b3 = document.getElementById("b3");
+b3.addEventListener("click", () => 
+{
+	slider.value=0;
+	sliderChange();
+});
+const b4 = document.getElementById("b4");
+b4.addEventListener("click", () => 
+{
+	slider.value = flg == 0 ? 50 : 100;
+	sliderChange();
+});
+sliderChange();
+
+const sliderDecimal = document.getElementById("sliderDecimal");
+const sliderValueDecimal = document.getElementById("sliderValueDecimal");
+sliderDecimal.addEventListener("input", function() {
+	sliderDecimalChange();
+});
+function sliderDecimalChange()
+{
+  const value = sliderDecimal.value;
+  const normalizedValue = value / 100; // スライダーの値は0-100の範囲なので100で割って正規化
+  sliderValueDecimal.textContent = normalizedValue.toFixed(2); // 小数点以下2桁で表示
+}
+sliderDecimalChange();
+</pre><br>スライダーを実装するには、HTMLでinput type="range"要素を作成し、JavaScriptで値を取得・処理します。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">min</td><td>最小値を設定</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">max</td><td>最大値を設定</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">value</td><td>現在値を設定</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">slider.value = flg == 0 ? 50 : 100;</div>flg変数は下記にしています。<br>0:最大値:50<br>1:最大値:100<br>3項演算子で最大値を設定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">sliderValueDecimal.textContent = normalizedValue.toFixed(2);</div>小数点以下2桁で表示します。<br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">slider</td></tr><tr><td>Change the min/max/value of the slider</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><button id="b1En">min:10 max:50 value:25</button><br><button id="b2En">min:0 max:100 value:50</button><br><button id="b3En">Change to min</button><br><button id="b4En">Change to max</button><br><br><input type="range" id="sliderEn" min="0" max="100" value="50"><div id="sliderValueEn"></div><br>[Decimal slider]<br><input type="range" id="sliderDecimalEn" min="0" max="100" value="50"><div id="sliderValueDecimalEn"></div><br><textarea id="t1" rows=11 cols=80>
+<button id="b1">min:10 max:50 value:25</button><br>
+<button id="b2">min:0 max:100 value:50</button><br>
+<button id="b3">Change to min</button><br>
+<button id="b4">Change to max</button><br>
+<br>
+<input type="range" id="slider" min="0" max="100" value="50">
+<div id="sliderValue"></div>
+<br>
+[Decimal slider]<br>
+<input type="range" id="sliderDecimal" min="0" max="100" value="50">
+<div id="sliderValueDecimal"></div>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const slider = document.getElementById("slider");
+const sliderValue = document.getElementById("sliderValue");
+let flg=0;
+slider.addEventListener("input", function() {
+	sliderChange();
+});
+function sliderChange()
+{
+	const value = slider.value;
+	sliderValue.textContent = value;
+}
+const b1 = document.getElementById("b1");
+b1.addEventListener("click", () => 
+{
+	slider.min=0;
+	slider.max=50;
+	slider.value=25;
+	sliderChange();
+	flg = 0;
+});
+const b2 = document.getElementById("b2");
+b2.addEventListener("click", () => 
+{
+	slider.min=0;
+	slider.max=100;
+	slider.value=50;
+	sliderChange();
+	flg = 1;
+});
+const b3 = document.getElementById("b3");
+b3.addEventListener("click", () => 
+{
+	slider.value=0;
+	sliderChange();
+});
+const b4 = document.getElementById("b4");
+b4.addEventListener("click", () => 
+{
+	slider.value = flg == 0 ? 50 : 100;
+	sliderChange();
+});
+sliderChange();
+
+const sliderDecimal = document.getElementById("sliderDecimal");
+const sliderValueDecimal = document.getElementById("sliderValueDecimal");
+sliderDecimal.addEventListener("input", function() {
+	sliderDecimalChange();
+});
+function sliderDecimalChange()
+{
+  const value = sliderDecimal.value;
+  const normalizedValue = value / 100; // The slider value ranges from 0 to 100, so normalize it by dividing by 100.
+  sliderValueDecimal.textContent = normalizedValue.toFixed(2); // Displayed with two decimal places
+}
+sliderDecimalChange();
+</pre><br>To implement a slider, create an input type="range" element in HTML and retrieve and process the value using JavaScript. <br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">min</td><td>Set the minimum value</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">max</td><td>Set the maximum value</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">value</td><td>Set the current value</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">slider.value = flg == 0 ? 50 : 100;</div>The flg variable is set as follows. <br>0: Maximum value: 50<br>1: Maximum value: 100<br>Set the maximum value using a ternary operator. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">sliderValueDecimal.textContent = normalizedValue.toFixed(2);</div>Displayed with two decimal places.<br><br><br><a href="#" onclick="f2();">back</a></div><script>const slider = document.getElementById("slider");const sliderValue = document.getElementById("sliderValue");const sliderEn = document.getElementById("sliderEn");const sliderValueEn = document.getElementById("sliderValueEn");let flg=0;slider.addEventListener("input", function() {sliderChange();});function sliderChange(){const value = slider.value;sliderValue.textContent = value;}sliderEn.addEventListener("input", function() {sliderChange();});function sliderChange(){let value = slider.value;sliderValue.textContent = value;value = sliderEn.value;sliderValueEn.textContent = value;}const b1 = document.getElementById("b1");b1.addEventListener("click", () => {slider.min=0;slider.max=50;slider.value=25;sliderChange();flg = 0;});const b2 = document.getElementById("b2");b2.addEventListener("click", () => {slider.min=0;slider.max=100;slider.value=50;sliderChange();flg = 1;});const b3 = document.getElementById("b3");b3.addEventListener("click", () => {slider.value=0;sliderChange();});const b4 = document.getElementById("b4");b4.addEventListener("click", () => {slider.value=flg == 0 ? 50 : 100;sliderChange();});const b1En = document.getElementById("b1En");b1En.addEventListener("click", () => {sliderEn.min=0;sliderEn.max=50;sliderEn.value=25;sliderChange();flg = 0;});const b2En = document.getElementById("b2En");b2En.addEventListener("click", () => {sliderEn.min=0;sliderEn.max=100;sliderEn.value=50;sliderChange();flg = 1;});const b3En = document.getElementById("b3En");b3En.addEventListener("click", () => {sliderEn.value=0;sliderChange();});const b4En = document.getElementById("b4En");b4En.addEventListener("click", () => {sliderEn.value=flg == 0 ? 50 : 100;sliderChange();});sliderChange();const sliderDecimal = document.getElementById("sliderDecimal");const sliderValueDecimal = document.getElementById("sliderValueDecimal");sliderDecimal.addEventListener("input", function() {sliderDecimalChange();});function sliderDecimalChange(){  let value = sliderDecimal.value;  let normalizedValue = value / 100;   sliderValueDecimal.textContent = normalizedValue.toFixed(2);   value = sliderDecimalEn.value;  normalizedValue = value / 100;   sliderValueDecimalEn.textContent = normalizedValue.toFixed(2); }const sliderDecimalEn = document.getElementById("sliderDecimalEn");const sliderValueDecimalEn = document.getElementById("sliderValueDecimalEn");sliderDecimalEn.addEventListener("input", function() {sliderDecimalChange();});sliderDecimalChange();</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

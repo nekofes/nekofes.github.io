@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">z-indexを使用したキャラの移動</td></tr><tr><td>簡単なキャラの移動処理</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">サンプル</div><table><tr><td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td><td style="width:100px;">&nbsp;</td><td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td></tr></table><div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layer layer1"><img src="../o/i3/nawmin_sample7.png" style="width:200px;"></div>    <div class="layer layer2" id="hiyoko"><img id="img" src="../o/i3/nawmin_sample6.png" style="width:100px;height:100px;"></div></div><style>.container{position: sticky;}.layer{width: 200px;height: 200px;position: absolute;}.layer1{top: 0px;left: 0px;}.layer2{top: 100px;left: 90px;}</style><br><br><textarea id="t1" rows=17 cols=100>
+<table>
+<tr>
+<td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td style="width:100px;">&nbsp;</td>
+<td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+</tr>
+</table>
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	
+	<div class="layer layer1">
+		<img src="nawmin_sample7.png" style="width:200px;">
+	</div>
+	<div class="layer layer2" id="hiyoko">
+		<img id="img" src="nawmin_sample6.png" style="width:100px;height:100px;">
+	</div>
+</div>
+</textarea><br>[CSS]<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+}
+</pre>cssの「.layer」でpositionをabsoluteにすることで、このエリアを基準に<br>「.layer」に結びつけた小麦とひよこの配置が可能となります。<br><br>[javascript]<br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+let x=90;//キャラクターの位置(初期値はキャラの初期座標位置)
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+let leftPosition=0;//枠の左側の位置
+let rightPosition=200-100;//枠の幅 - 画像の幅
+let moveDistance=10;//移動距離
+//左へ
+b1.addEventListener("click", () => 
+{
+	moveCharacterImage(0);
+});
+//右へ
+b2.addEventListener("click", () => 
+{
+	moveCharacterImage(1);
+});
+//キャラクターの移動
+//direction:
+//0:左へ移動
+//1:右へ移動
+function moveCharacterImage(direction)
+{
+	const obj = document.getElementById("hiyoko");
+	const img = document.getElementById("img");
+	if(direction==0)
+	{
+		//画像のパスを環境にあわせて変更してください
+		img.src="nawmin_sample6.png";
+		x-=moveDistance;
+		if(x &lt; leftPosition)
+		{
+			x=-10;//微調整
+		}
+		obj.style.left =x +'px';
+	}
+	else
+	{
+		//画像のパスを環境にあわせて変更してください
+		img.src="nawmin_sample9.png";
+		x+=moveDistance;
+		if(x &gt; rightPosition)
+		{
+			x=rightPosition+5;//微調整
+		}
+		obj.style.left =x +'px';
+	}
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const obj = document.getElementById("hiyoko");</div>ひよこのレイアウトとなるdivタグです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const img = document.getElementById("img");</div>ひよこの画像オブジェクトを取得します。<br>向きによって、画像を切り替えます。<br>このサンプルでは下記の画像を使用しています。<br>左:nawmin_sample6.png<br>右:nawmin_sample9.png<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">x=-10;//微調整<br>および<br>x=rightPosition+5;//微調整</div>この微調整は画像の余白があります。<br>この余白のため左側にひよこを寄せても枠から離れた位置にみえることがあります。<br>この調整をしているのが「微調整」です。<br>右側に移動したときも、同様の考え方による調整です。<br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Moving a character using z-index</td></tr><tr><td>Simple character movement</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">sample</div><table><tr><td><a href="javascript:void(0);"><div id="btn1En"><img id="img_backEn" style="width:50px;"></div></a></td><td style="width:100px;">&nbsp;</td><td><a href="javascript:void(0);"><div id="btn2En"><img id="img_forwardEn" style="width:50px;"></div></a></td></tr></table><div class="containerEn" style="background-color:palegoldenrod;width: 200px;height: 200px;">    <div class="layerEn layer1En"><img src="../o/i3/nawmin_sample7.png" style="width:200px;"></div>    <div class="layerEn layer2En" id="hiyokoEn"><img id="imgEn" src="../o/i3/nawmin_sample6.png" style="width:100px;height:100px;"></div></div><style>.containerEn{position: sticky;}.layerEn{width: 200px;height: 200px;position: absolute;}.layer1En{top: 0px;left: 0px;}.layer2En{top: 100px;left: 90px;}</style><br><br><textarea id="t1" rows=17 cols=100>
+<table>
+<tr>
+<td><a href="javascript:void(0);"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td style="width:100px;">&nbsp;</td>
+<td><a href="javascript:void(0);"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+</tr>
+</table>
+<div class="container" style="background-color:palegoldenrod;width: 200px;height: 200px;">
+	
+	<div class="layer layer1">
+		<img src="nawmin_sample7.png" style="width:200px;">
+	</div>
+	<div class="layer layer2" id="hiyoko">
+		<img id="img" src="nawmin_sample6.png" style="width:100px;height:100px;">
+	</div>
+</div>
+</textarea><br>[CSS]<br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+.container{
+	position: sticky;
+}
+.layer{
+	width: 200px;
+	height: 200px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 0px;
+}
+.layer2{
+	top: 100px;
+	left: 90px;
+}
+</pre>By setting the position to absolute in the CSS ".layer", it becomes possible to position the wheat and chicks linked to ".layer" based on this area.<br>[javascript]<br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+let x=90;//Character position (initial value is the character's initial coordinate position)
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+let leftPosition=0;//Left position of frame
+let rightPosition=200-100;//frame width - image width
+let moveDistance=10;//Distance traveled
+//left
+b1.addEventListener("click", () => 
+{
+	moveCharacterImage(0);
+});
+//right
+b2.addEventListener("click", () => 
+{
+	moveCharacterImage(1);
+});
+//Character movement
+//direction:
+//0:Move Left
+//1:Move right
+function moveCharacterImage(direction)
+{
+	const obj = document.getElementById("hiyoko");
+	const img = document.getElementById("img");
+	if(direction==0)
+	{
+		//Please change the image path to suit your environment.
+		img.src="nawmin_sample6.png";
+		x-=moveDistance;
+		if(x &lt; leftPosition)
+		{
+			x=-10;//Fine adjustment
+		}
+		obj.style.left =x +'px';
+	}
+	else
+	{
+		//Please change the image path to suit your environment.
+		img.src="nawmin_sample9.png";
+		x+=moveDistance;
+		if(x &gt; rightPosition)
+		{
+			x=rightPosition+5;//Fine adjustment
+		}
+		obj.style.left =x +'px';
+	}
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const obj = document.getElementById("hiyoko");</div>Div tag for chick layout. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const img = document.getElementById("img");</div>Gets chick image object. <br>Image is switched depending on orientation. <br>This sample uses the following images. <br>Left: nawmin_sample6.png<br>Right: nawmin_sample9.png<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">x=-10;//narrow adjustment<br>and<br>x=rightPosition+5;//narrow adjustment</div>This narrow adjustment has a margin for the image. <br>Because of this margin, even if you move the chick to the left, it may appear to be far from the frame. <br>This adjustment is called "fine tuning." <br>When moving it to the right, the adjustment is made using the same idea. <br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>displayImage("../o/c0_1","img_back");displayImage("../o/c0_2","img_forward");displayImage("../o/c0_1","img_backEn");displayImage("../o/c0_2","img_forwardEn");function displayImage(d1,d2){fetch(d1).then(response=>response.text()).then(d=>{const i1=document.getElementById(d2);i1.src=d;i1.onload=function(){};}).catch(error=>{});}let x=90;const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");let leftPosition=0;let rightPosition=200-100;let moveDistance=10;b1.addEventListener("click", () => {moveCharacterImage(0);});b2.addEventListener("click", () => {moveCharacterImage(1);});b1En.addEventListener("click", () => {moveCharacterImage(0);});b2En.addEventListener("click", () => {moveCharacterImage(1);});function moveCharacterImage(direction){const obj = document.getElementById("hiyoko");const img = document.getElementById("img");const objEn = document.getElementById("hiyokoEn");const imgEn = document.getElementById("imgEn");if(direction==0){img.src="../o/i3/nawmin_sample6.png";imgEn.src="../o/i3/nawmin_sample6.png";x-=moveDistance;if(x<leftPosition){x=-10;}obj.style.left =x +'px';objEn.style.left =x +'px';}else{img.src="../o/i3/nawmin_sample9.png";imgEn.src="../o/i3/nawmin_sample9.png";x+=moveDistance;if(x>rightPosition){x=rightPosition+5;}obj.style.left =x +'px';objEn.style.left =x +'px';}}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

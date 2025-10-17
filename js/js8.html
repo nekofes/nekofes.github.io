@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">画像のフェードイン・フェードアウト</td></tr><tr><td>画像を切り替えるたび、フェードイン・フェードアウトをする方法</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">画像のフェードイン・フェードアウトのサンプル</div><img id="image" src="" width=300px><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[タグ]</div><textarea id="t1" rows=2 cols=50>
+<img id="image" src="" width=300px>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[CSS]</div><pre id="codeBlock1" class="prettyprint linenums;">
+#image {
+	animation :imagefade 4s infinite;
+	opacity: 0;
+}
+
+@keyframes imagefade 
+{
+	0% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+</pre>imgタグのCSSを準備します。<br>imgタグのidに対してCSSを設定するため「#タグのid」とするため「#image」として設定します。<br><div style="background-color:rgb(100 149 237 / 0.2);text-align:left;">animation</div>CSSの一括指定プロパティです。<br>スタイル間のアニメーションを適用します。<br>(例)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">animation :imagefade 4s infinite;</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">imagefade</td><td>keyframesを実行する名前</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">4s</td><td>4秒間</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">inifinite</td><td>無限ループ</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:left;">keyframes</div>keyframesはアニメーション開始から終了まで、どのようなアニメーションを実行するかを指定するCSSの文法です。<br><div style="background-color:rgb(100 149 237 / 0.2);text-align:left;">opacity</div>opacity:要素の不透明度を設定します。<br><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[Javascript]</div><pre id="codeBlock2" class="prettyprint linenums;">
+let index = 0;
+const path = "ここに画像までのパスを設定します。";
+let aryImage = ["soco-st_sample1.png", "soco-st_sample2.png", "soco-st_sample3.png", "soco-st_sample4.png", "soco-st_sample5.png"];
+let image = document.getElementById("image");
+changeImage();
+function changeImage() 
+{
+	//画像枚数を超える場合はインデックスを0にします
+	if (index == aryImage.length) index = 0;
+	//画像の場所にパス + 画像ファイル名を設定します
+	image.src = path + aryImage[index];
+	//秒数を指定
+	setTimeout("changeImage()", 4000);
+	//次のインデックスにインクリメントします
+	index++;
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const path = "ここに画像までのパスを設定します。";</div>(例)<br>ルート/img/soco-st_sample1.png<br>ルート/sample.html<br>sample.htmlから画像を取得するパスは<br>const path = "img/";<br>となります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">let aryImage = ["soco-st_sample1.png", "soco-st_sample2.png", "soco-st_sample3.png", "soco-st_sample4.png", "soco-st_sample5.png"];</div>使用する画像を配列に格納しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (index == aryImage.length) index = 0;</div>「aryImage.length」は画像配列の個数で、このサンプルでは5を返します。<br>indexは0から始まる配列要素を指定するために使用しているインデックスの値です。<br>indexの値は0から始まるため、「4」が5個目の画像を指します。<br>そのためindexの値が5になったら先頭の0にリセットします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">image.src = path + aryImage[index];</div>getElementByIdで取得したオブジェクトの画像プロパティに画像情報を設定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">setTimeout("changeImage()", 4000);</div>タイマーで4秒後にchangeImageを実行します<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>画像のサンプルとして「ソコスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]ソコスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://soco-st.com' TARGET='_blank'><font color='#333399'><b>URL[https://soco-st.com][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Fade in and out images</td></tr><tr><td>How to fade in and out every time you switch images</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Image fade in/out example</div><img id="image_en" src="" width=300px><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[tag]</div><textarea id="t2" rows=2 cols=50>
+<img id="image" src="" width=300px>
+</textarea><br><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[CSS]</div><pre id="codeBlock3" class="prettyprint linenums;">
+#image {
+	animation :imagefade 4s infinite;
+	opacity: 0;
+}
+
+@keyframes imagefade 
+{
+	0% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+</pre>Prepare CSS for the img tag.<br>To set CSS for the img tag's id, set it as "#tagid" and "#image". <br><div style="background-color:rgb(100 149 237 / 0.2);text-align:left;">animation</div>a shorthand property for CSS.<br>applies animation between styles.<br>ex.)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">animation :imagefade 4s infinite;</div><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">imagefade</td><td>Name to execute keyframes</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">4s</td><td>4seconds</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:center;">inifinite</td><td>Infinite Loop</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:left;">keyframes</div>keyframes is a CSS grammar that specifies what kind of animation to perform from the start to the end of the animation.<br><div style="background-color:rgb(100 149 237 / 0.2);text-align:left;">opacity</div>opacity:Set the opacity of an element.<br><br><br><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[Javascript]</div><pre id="codeBlock4" class="prettyprint linenums;">
+let index = 0;
+const path = "This is where put the path to image.";
+let aryImage = ["soco-st_sample1.png", "soco-st_sample2.png", "soco-st_sample3.png", "soco-st_sample4.png", "soco-st_sample5.png"];
+let image = document.getElementById("image");
+changeImage();
+function changeImage() 
+{
+	//If the number of images is exceeded, set the index to 0.
+	if (index == aryImage.length) index = 0;
+	//Set the path to the image location + image filename
+	image.src = path + aryImage[index];
+	//Specify the number of seconds
+	setTimeout("changeImage()", 4000);
+	//Increment to the next index
+	index++;
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const path = "Set the path to the image.";</div>ex.)<br>ROOT/img/soco-st_sample1.png<br>ROOT/sample.html<br>Path to get image from sample.html<br>const path = "img/";<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">let aryImage = ["soco-st_sample1.png", "soco-st_sample2.png", "soco-st_sample3.png", "soco-st_sample4.png", "soco-st_sample5.png"];</div>The images to be used are stored in an array.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (index == aryImage.length) index = 0;</div>"aryImage.length" is the number of elements in the image array.<br>In this sample, it returns 5.<br>index is the index value used to specify the array element, starting from 0.<br>Since the index value starts from 0, "4" refers to the fifth image.<br>Therefore, when the index value becomes 5,<br>it is reset to the begining 0.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">image.src = path + aryImage[index];</div>Set image information to the image property of the object obtained with getElementById.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">setTimeout("changeImage()", 4000);</div>timer will execute changeImage method after 4 seconds.<br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>image sample used are from "illustration by soco-st.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]soco-st.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://soco-st.com' TARGET='_blank'><font color='#333399'><b>URL[https://soco-st.com][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><style>#image {animation :imagefade 4s infinite;opacity: 0;}#image_en {animation :imagefade 4s infinite;opacity: 0;}@keyframes imagefade {0% {opacity: 0;}25% {opacity: 1;}50% {opacity: 1;}75% {opacity: 0;}100% {opacity: 0;}}</style><script>let index = 0;const path = "../o/i3/";let aryImage = ["soco-st_sample1.png", "soco-st_sample2.png", "soco-st_sample3.png", "soco-st_sample4.png", "soco-st_sample5.png"];let image = document.getElementById("image");let image_en = document.getElementById("image_en");changeImage();function changeImage() {if (index == aryImage.length) index = 0;image.src = path + aryImage[index];image_en.src = path + aryImage[index];setTimeout("changeImage()", 4000);index++;}</script></script>  <script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });  </script>  </script>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

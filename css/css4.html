@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">折り返し、改行</td></tr><tr><td>折り返し、改行について</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">word-break</div><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">word-break:break-word</div>単語を基準に折り返しをします。<br>調べたところ、この値は非推奨のようで、互換性のために残されているようです。﻿<br><br>[サンプル]<br><div style="word-break: break-word;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div>上記のサンプルをみてもわかるように、単語を考慮して折り返しをします。<br><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="word-break: break-word;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">word-break:break-all</div>指定された横幅にあわせた改行をします。<br>[サンプル]<br><div style=word-break:break-all;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div>上記のサンプルをみてもわかるように、単語を考慮せず、横幅にあわせた折り返しをします。<br><br><pre id="codeBlock2" class="prettyprint linenums;">
+&lt;div style=word-break:break-all;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">overflow-wrap</div>単語の途中で改行してでも要素内に収まるように折り返します。<br>[サンプル]<br><div style="overflow-wrap: anywhere;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="overflow-wrap: anywhere;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">white-space</div>空白文字を起点とした折り返し処理です。<br>[サンプル]<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">white-space: normal</div>連続する空白文字を1つの空白として扱い、テキストを折り返します<br><br><div style="white-space: normal;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="white-space: normal;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">white-space: pre-wrap</div>連続する空白文字をそのまま表示し、テキストを折り返します。<br><br><div style="white-space: pre-wrap;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="white-space: pre-wrap;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">white-space: nowrap</div>テキストを折り返さずに表示します。<br><br><div style="white-space: nowrap;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="white-space: nowrap;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">display: inline-block</div>親要素の幅に合わせてテキストを折り返します﻿。<br><br>[サンプル]<br><br><div style="display: inline-block;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><br><br><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="display: inline-block;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">Wrapping and line breaks</td></tr><tr><td>About wrapping and line breaks</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">word-break</div><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">word-break:break-word</div>Wraps based on words. <br>After looking into it, this value seems to be deprecated and is left for compatibility.﻿<br><br>[Sample]<br><div style="word-break: break-word;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div>As you can see from the sample above, word wrapping is done with consideration for words. <br><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="word-break: break-word;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">word-break:break-all</div>Inserts line breaks to fit the specified width.<br>[Sample]<br><div style=word-break:break-all;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div>As you can see from the sample above, the text wrapping is done based on the width, without considering the words. <br><br><pre id="codeBlock2" class="prettyprint linenums;">
+&lt;div style=word-break:break-all;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">overflow-wrap</div>It will wrap text so that it fits within the element even if it breaks the text in the middle of a word.<br>[Sample]<br><div style="overflow-wrap: anywhere;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="overflow-wrap: anywhere;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">white-space</div>This is wrapping processing starting from whitespace characters.<br>[Sample]<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">white-space: normal</div>Consecutive whitespace characters are treated as one space, and text is wrapped.<br><br><div style="white-space: normal;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="white-space: normal;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">white-space: pre-wrap</div>Displays consecutive whitespace characters as is and wraps the text. <br><br><div style="white-space: pre-wrap;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="white-space: pre-wrap;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">white-space: nowrap</div>Displays text without wrapping. <br><br><div style="white-space: nowrap;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="white-space: nowrap;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">display: inline-block</div>Wraps text to fit the width of the parent element.<br><br>[Sample]<br><br><div style="display: inline-block;width:300px;background-color:aliceblue;">To execute this process, we use "setInterval".setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).setInterval returns a positive integer return value (ID) that identifies the timer.*Normally, this is a positive integer value starting from 1.</div><br><br><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;div style="display: inline-block;width:300px;background-color:aliceblue;"&gt;
+To execute this process, we use "setInterval".
+setInterval is a timer that repeatedly executes a callback function at a specified interval (milliseconds).
+setInterval returns a positive integer return value (ID) that identifies the timer.
+*Normally, this is a positive integer value starting from 1.
+&lt;/div&gt;
+</pre><br><br><a href="#" onclick="f2();">back</a></div><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/css/index.html?lang=0';}else{url='/css/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/css/css1.html?lang=0';}else{url='/css/css1.html?lang=1';}break;case 2:if(lang==0){url='/css/css2.html?lang=0';}else{url='/css/csss2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

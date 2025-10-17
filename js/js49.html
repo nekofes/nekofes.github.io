@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return true;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">半円の弧を通り上から下に動く</td></tr><tr><td>左側の半円が終わったら右側の半円を動くサンプル</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><div class="container">  <div class="layer layer1" id="chick">    <img src="../o/i3/nawmin_sample10.png" width="50" height="50">  </div><label class="layer wall" id="wall"></label>  <button class="layer btn" id="stop">停止</button></div><br><br>[HTML/CSS]<br><textarea id="t1" rows=15 cols=80>
+<div class="container">
+  <div class="layer layer1" id="chick">
+    <img src="../o/i3/nawmin_sample10.png" width="50" height="50">
+  </div>
+	<label class="layer wall" id="wall"></label>
+  <button class="layer btn" id="stop">停止</button>
+</div>
+<style>
+.container {
+  position: sticky;
+  width: 300px;
+  height: 300px;
+  background-color: palegoldenrod;
+}
+
+.layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.layer1 {
+	z-index: 1;
+}
+.wall{
+	width: 300px;
+	height: 50px;
+	background-color:white;
+	z-index: 2;
+}
+.btn {
+	z-index: 2;
+	width: 300px;
+}
+</style>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const chick = document.getElementById('chick');
+const stopBtn = document.getElementById('stop');
+const wall = document.getElementById('wall');
+//停止ボタン
+stopBtn.style.left = 0 + 'px';
+stopBtn.style.top = 300 + 'px';
+//下側の白色の壁(下枠に移動したキャラが徐々に見えなくなるようにするため)
+wall.style.left = 0 + 'px';
+wall.style.top = 300 + 'px';
+let stop = 0;//[0]動作可能 [1]停止
+let still = 0;//[0]未実行 [1]実行中
+let animId = null;
+//開始角度と終了角度
+const startAngleLeft = -Math.PI / 2;// 上端（北）を指す角度
+let thetaLeft = startAngleLeft;
+//右側の半円に使用
+const startAngleRight = -Math.PI  / 2; // 上端
+const endAngleRight  = Math.PI  / 2; // 下端
+//左側の半円に使用
+const endAngleLeft = startAngleLeft - Math.PI;
+let thetaRight = startAngleRight;
+//角度増分
+const speed = 0.02;
+let cx = 50;
+let cy = 50;
+const r = 50;
+//キャラの初期位置
+chick.style.left = 50 + 'px';
+chick.style.top = 50 + 'px';
+let direction = 0;
+//再帰的にアニメーションを呼び出し
+requestAnimationFrame(test);
+//上下移動
+function test()
+{
+	//キャラクター（小さな円）を描画
+	if(direction == 0)
+	{
+		//左
+		x = cx + r * Math.cos(thetaLeft);
+		y = cy + r * Math.sin(thetaLeft);
+	}
+	else
+	{
+		//右
+		x = cx + r * Math.cos(thetaRight);
+		y = cy + r * Math.sin(thetaRight);
+	}
+	//キャラクターの位置を更新
+	chick.style.left = x + 'px';
+	chick.style.top = y + 'px';
+	//角度を更新し、ゴールに達するまでループ
+	//左
+	if(direction == 0)
+	{
+		if (thetaLeft > endAngleLeft) 
+		{
+			thetaLeft -= speed;
+		}
+		else
+		{
+			thetaLeft = startAngleLeft;
+			//次のy座標
+			//50:r(半径)の高さの分だけ下にします
+			cy=y+50;
+			direction=1;
+		}
+	}
+	else
+	{
+		//右
+		if (thetaRight < endAngleRight) 
+		{
+			thetaRight += speed;
+		}
+		else
+		{
+			thetaRight = startAngleRight;
+			//次のy座標
+			//50:キャラの高さの分だけ下にします
+			cy = y + 50;
+			direction = 0;
+		}
+	}
+	if(y<300)
+	{
+		//再帰的にアニメーションを呼び出し
+		animId=requestAnimationFrame(test);
+	}
+}
+
+//停止ボタン
+stopBtn.addEventListener('click', () =>
+{
+	cancelAnimationFrame(animId);
+});
+</pre>「円のパラメータ表示」を使って、ひよこを半円ずつ（左半円→右半円→左半円…）上から下へと連結させて動かしています。<br>円周上の点は角度で表します。<br>上端は中心から半径 (r) だけ上です。<br>この位置から開始します。<br><br>半円を上端から下端までたどるには、角度の開始・終了と増減方向を決めます。<br>次の半円も「終点＝次の半円の始点」になるように円の中心を半径分だけ下げます。<br>左半円が終わると、ひよこはその円の「下端」にいます。<br>次の半円（右半円）も「上端からスタート」させたいので、<br>終点＝次の上端にするため、次の中心は終点より半径rだけ下に置きます。<br><br>次の中心は終点のy座標にrを加算した位置に置きます。<br>これでつなぎ目がなく、連続的に動かします。<br><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+if(direction == 0)
+{
+	//左
+	x = cx + r * Math.cos(thetaLeft);
+	y = cy + r * Math.sin(thetaLeft);
+}
+</pre>下記のステップのように上から左側に90度の弧を描いて動くための座標を準備します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">x = cx + r * Math.cos(thetaLeft);<br>y = cy + r * Math.sin(thetaLeft);<br></div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.con(θ)</div>直角三角形の、ある角度θに対する底辺の長さを斜辺の長さで割った値です。<br>cos(θ) = 底辺 / 斜辺<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.sin(θ)</div>直角三角形の、ある角度θに対する対辺の長さを斜辺の長さで割った値です。<br>sin(θ) = 対辺 / 斜辺<br><br>円の中心を原点として、半径rの円を考えると<br>円周上の任意の点(x, y)は、原点からの距離が常にrであるという条件を満たします。<br>この点を原点からの角度θを表すとき、下記の式で表せます。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x座標</div>r(半径) * cos(θ)<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">y座標</div>r(半径) * sin(θ)<br><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+if(direction == 0)
+{
+	if (thetaLeft > endAngleLeft) 
+	{
+		thetaLeft -= speed;
+	}
+	else
+	{
+		thetaLeft = startAngleLeft;
+		//次のy座標
+		//50:r(半径)の高さの分だけ下にします
+		cy=y+50;
+		direction=1;
+	}
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (thetaLeft > endAngleLeft)</div>半弧を動き終わるまでという条件です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">thetaLeft -= speed;</div>角度を小さくします。<br>※右側は増加していきます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">direction=1;</div>右側に判定処理を設定します。<br>右側の考え方は左側と同じです。<br><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+if(y<300)
+{
+	//再帰的にアニメーションを呼び出し
+	animId=requestAnimationFrame(test);
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">animId=requestAnimationFrame(test);</div>下の枠に移動していないので、再度キャラを移動するtest関数を実行させます。<br>下枠に隠れた場合は、そのまま処理を関数を終了するので、処理が終了します。<br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+stopBtn.addEventListener('click', () =>
+	{
+	cancelAnimationFrame(animId);
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cancelAnimationFrame(animId);</div>requestAnimationFrameの戻り値のidを指定してキャンセルすることができます。<br><br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Moves from top to bottom through a semicircular arc</td></tr><tr><td>After the left semicircle is completed, move the right semicircle.</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><div class="container">  <div class="layer layer1" id="chickEn">    <img src="../o/i3/nawmin_sample10.png" width="50" height="50">  </div><label class="layer wall" id="wallEn"></label>  <button class="layer btn" id="stopEn">stop</button></div><br><br>[HTML/CSS]<br><textarea id="t1" rows=15 cols=80>
+<div class="container">
+  <div class="layer layer1" id="chick">
+    <img src="../o/i3/nawmin_sample10.png" width="50" height="50">
+  </div>
+	<label class="layer wall" id="wall"></label>
+  <button class="layer btn" id="stop">stop</button>
+</div>
+<style>
+.container {
+  position: sticky;
+  width: 300px;
+  height: 300px;
+  background-color: palegoldenrod;
+}
+
+.layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.layer1 {
+	z-index: 1;
+}
+.wall{
+	width: 300px;
+	height: 50px;
+	background-color:white;
+	z-index: 2;
+}
+.btn {
+	z-index: 2;
+	width: 300px;
+}
+</style>
+</textarea><br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+const chick = document.getElementById('chick');
+const stopBtn = document.getElementById('stop');
+const wall = document.getElementById('wall');
+//stop button
+stopBtn.style.left = 0 + 'px';
+stopBtn.style.top = 300 + 'px';
+//The white wall at the bottom (to make characters that move to the bottom frame gradually disappear from view)
+wall.style.left = 0 + 'px';
+wall.style.top = 300 + 'px';
+let stop = 0;//[0] Operational [1] Stopped
+let still = 0;//[0] Not running [1] Running
+let animId = null;
+//Start and end angles
+const startAngleLeft = -Math.PI / 2;// Angle pointing to the top (north)
+let thetaLeft = startAngleLeft;
+//Used for the right semicircle
+const startAngleRight = -Math.PI  / 2; // top end
+const endAngleRight  = Math.PI  / 2; // v
+//Used for the left semicircle
+const endAngleLeft = startAngleLeft - Math.PI;
+let thetaRight = startAngleRight;
+//Angle Increment
+const speed = 0.02;
+let cx = 50;
+let cy = 50;
+const r = 50;
+//Character's initial position
+chick.style.left = 50 + 'px';
+chick.style.top = 50 + 'px';
+let direction = 0;
+//Recursively calling animations
+requestAnimationFrame(test);
+//Up and down movement
+function test()
+{
+	//Draw a character (small circle)
+	if(direction == 0)
+	{
+		//left
+		x = cx + r * Math.cos(thetaLeft);
+		y = cy + r * Math.sin(thetaLeft);
+	}
+	else
+	{
+		//right
+		x = cx + r * Math.cos(thetaRight);
+		y = cy + r * Math.sin(thetaRight);
+	}
+	//Update character position
+	chick.style.left = x + 'px';
+	chick.style.top = y + 'px';
+	//Update the angle and loop until the goal is reached
+	//left
+	if(direction == 0)
+	{
+		if (thetaLeft > endAngleLeft) 
+		{
+			thetaLeft -= speed;
+		}
+		else
+		{
+			thetaLeft = startAngleLeft;
+			//Next y coordinate
+			//50:Lower it by the height of a radius
+			cy=y+50;
+			direction=1;
+		}
+	}
+	else
+	{
+		//right
+		if (thetaRight < endAngleRight) 
+		{
+			thetaRight += speed;
+		}
+		else
+		{
+			thetaRight = startAngleRight;
+			//Next y coordinate
+			//50:Lower it by the height of the character
+			cy = y + 50;
+			direction = 0;
+		}
+	}
+	if(y<300)
+	{
+		//Recursively calling animations
+		animId=requestAnimationFrame(test);
+	}
+}
+
+//Stop button
+stopBtn.addEventListener('click', () =>
+{
+	cancelAnimationFrame(animId);
+});
+</pre>Using "Circle Parametric Display," the chick moves in connected semicircles from top to bottom (left semicircle → right semicircle → left semicircle, etc.).<br>Points on the circumference are represented by angles.<br>The top end is a radius (r) above the center.<br>We'll start from this position.<br><br>To trace the semicircle from top to bottom, we decide the start and end angles and the direction of increase/decrease.<br>For the next semicircle, we also lower the center of the circle by the radius so that the end point = the start point of the next semicircle.<br>When the left semicircle ends, the chick will be at the bottom of that circle.<br>We want the next semicircle (right semicircle) to also start from the top,<br>so the end point = the next top point, so the next center is placed a radius r below the end point.<br><br>The next center is placed where r is added to the y coordinate of the end point.<br>This allows for seamless, continuous movement.<br><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+if(direction == 0)
+{
+	//left
+	x = cx + r * Math.cos(thetaLeft);
+	y = cy + r * Math.sin(thetaLeft);
+}
+</pre>Prepare the coordinates to move in a 90-degree arc from top to left as shown in the steps below.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">x = cx + r * Math.cos(thetaLeft);<br>y = cy + r * Math.sin(thetaLeft);<br></div><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.con(θ)</div>In a right triangle, cos(θ) is the length of the base divided by the length of the hypotenuse for a given angle θ. <br>cos(θ) = base / hypotenuse<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.sin(θ)</div>This is the length of the base of a right triangle at an angle θ divided by the length of the hypotenuse. <br>cos(θ) = Base / Hypotenuse<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Math.sin(θ)</div>This is the length of the opposite side of a right triangle at an angle θ divided by the length of the hypotenuse. <br>sin(θ) = Opposite Side / Hypotenuse<br><br>Consider a circle with radius r, with its center at the origin.<br>Any point (x, y) on the circumference satisfies the condition that its distance from the origin is always r. <br>The angle θ from this point to the origin can be expressed using the following formula. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x coordinate</div>r(radius) * cos(θ)<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">y-coordinate</div>r(radius) * sin(θ)<br><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+if(direction == 0)
+{
+	if (thetaLeft > endAngleLeft) 
+	{
+		thetaLeft -= speed;
+	}
+	else
+	{
+		thetaLeft = startAngleLeft;
+		//Next y coordinate
+		//50:Lower it by the height of a radius
+		cy=y+50;
+		direction=1;
+	}
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (thetaLeft > endAngleLeft)</div>The condition is to complete the half arc. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">thetaLeft -= speed;</div>Decrease the angle. <br>*The right side increases. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">direction=1;</div>Set the judgment process on the right side. <br>The concept on the right side is the same as on the left side. <br><br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+if(y<300)
+{
+	//Recursively calling animations
+	animId=requestAnimationFrame(test);
+}
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">animId=requestAnimationFrame(test);</div>Since the character has not yet moved to the bottom frame, we run the test function to move the character again. <br>If the character is hidden by the bottom frame, the function will simply terminate processing, and the process will end. <br><pre id="codeBlockxxx" class="prettyprint linenums;lang-js;">
+stopBtn.addEventListener('click', () =>
+	{
+	cancelAnimationFrame(animId);
+});
+</pre><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cancelAnimationFrame(animId);</div>You can cancel an animation by specifying the id returned by requestAnimationFrame.<br><br><br><br><a href="#" onclick="f2();">back</a></div><style>.container {  position: sticky;  width: 300px;  height: 300px;  background-color: palegoldenrod;}.layer {position: absolute;top: 0;left: 0;}.layer1 {z-index: 1;}.wall{width: 300px;height: 50px;background-color:white;z-index: 2;}.btn {z-index: 2;width: 300px;}</style><script>const chick     = document.getElementById('chick');const stopBtn   = document.getElementById('stop');const wall   = document.getElementById('wall');const chickEn     = document.getElementById('chickEn');const stopBtnEn   = document.getElementById('stopEn');const wallEn   = document.getElementById('wallEn');stopBtn.style.left = 0 + 'px';stopBtn.style.top = 300 + 'px';stopBtnEn.style.left = 0 + 'px';stopBtnEn.style.top = 300 + 'px';wall.style.left = 0 + 'px';wall.style.top = 300 + 'px';wallEn.style.left = 0 + 'px';wallEn.style.top = 300 + 'px';let stop = 0;let still=0;let animId= null;const startAngleLeft = -Math.PI / 2;let thetaLeft = startAngleLeft;const startAngleRight = -Math.PI  / 2; const endAngleRight  =  Math.PI  / 2; const endAngleLeft =  startAngleLeft - Math.PI;let thetaRight = startAngleRight;const speed = 0.02;let cx = 50;let cy = 50;const r = 50;chick.style.left = 50 + 'px';chick.style.top = 50 + 'px';chickEn.style.left = 50 + 'px';chickEn.style.top = 50 + 'px';let direction = 0;requestAnimationFrame(test);function test(){if(direction == 0){x = cx + r * Math.cos(thetaLeft);y = cy + r * Math.sin(thetaLeft);}else{x = cx + r * Math.cos(thetaRight);y = cy + r * Math.sin(thetaRight);}chick.style.left = x + 'px';chick.style.top = y + 'px';chickEn.style.left = x + 'px';chickEn.style.top = y + 'px';if(direction == 0){if (thetaLeft > endAngleLeft) {thetaLeft -= speed;}else{thetaLeft = startAngleLeft;cy=y+50;direction=1;}}else{if (thetaRight < endAngleRight) {thetaRight += speed;}else{thetaRight = startAngleRight;cy = y + 50;direction = 0;}}if(y<300){animId=requestAnimationFrame(test);}}stopBtn.addEventListener('click', () =>{cancelAnimationFrame(animId);});stopBtnEn.addEventListener('click', () =>{cancelAnimationFrame(animId);});</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

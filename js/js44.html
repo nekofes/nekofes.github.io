@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">requestAnimationFrameを使用した文字の表示</td></tr><tr><td>文を1文字ずつ表示して、さいごにすべての文字列を表示するサンプルです。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><img src="../o/i3/nawmin_sample13.png" style="width:50px;"><div id="test1"></div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+let str ="吾輩は猫である";
+function stringAnimate(str) 
+{
+	let lastTime =0;
+	let index = 0;
+	//currentTime:アニメーション開始からの経過時間
+	function animate(currentTime)
+	{
+		//経過時間を計算
+		const timeElapsed = currentTime - lastTime;
+		//0.6秒を経過したら、if文のステップを実行
+		if(timeElapsed > 600)
+		{
+			const test = document.getElementById('test1');
+			if (index < str.length) 
+			{
+				//指定のインデックス位置から1文字を取得
+				test.innerText=str.substring(index,index+1);
+				//次の計測をするため差し替えます
+				lastTime = currentTime;
+				//次のインデックス位置にインクリメントします
+				index++;
+				requestAnimationFrame(animate);// 次のフレームで再度実行
+			}
+			else
+			{
+				//さいごに、すべての文字列を表示します
+				test.innerText=str;
+			}
+		}
+		else
+		{
+			requestAnimationFrame(animate);// 次のフレームで再度実行
+		}
+	}
+	requestAnimationFrame(animate);
+}
+
+// アニメーション開始
+stringAnimate(str);
+</pre>requestAnimationFrameは画像をスムーズに動かすためのメソッドですが<br>今回は文を表示するサンプルとして使用しました。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">stringAnimate(str);</div>str変数に実行したい文を入れます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(animate)</div>requestAnimationFrameが実行されます。<br>実行したいメソッドを通知することで、このサンプルではanimateメソッドが実行されます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const timeElapsed = currentTime - lastTime;</div>このサンプルでは0.6秒ごとに1文字を表示切替する仕様にしています。<br>経過時間を計算して次の1文字を表示するタイミングを取得します。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if (index < str.length) </div>1文字を表示する判定処理です。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">lastTime = currentTime;</div>この処理により、現在時間(currentTime)をlastTimeに差し替えることで<br>次の計算の準備をします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(animate);</div>この処理をすることで、再帰実行をします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">else</div>if (index < str.length)のelseです。<br>1文字ずつすべて表示し終えたので、この仕様では、さいごにすべての文字列を表示させます。<br>そして、これで処理が終わりなので、requestAnimationFrameは実行していません。<br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Displaying characters using requestAnimationFrame</td></tr><tr><td>This is an example that displays a sentence character by character and then displays the entire string at the end.</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><img src="../o/i3/nawmin_sample13.png" style="width:50px;"><div id="test1En"></div><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+let str ="I Am a Cat";
+function stringAnimate(str) 
+{
+	let lastTime =0;
+	let index = 0;
+	//currentTime:Time elapsed since the start of the animation
+	function animate(currentTime)
+	{
+		//Calculate elapsed time
+		const timeElapsed = currentTime - lastTime;
+		//After 0.6 seconds have passed, execute the step in the if statement
+		if(timeElapsed > 600)
+		{
+			const test = document.getElementById('test1');
+			if (index < str.length) 
+			{
+				//Gets one character from the specified index position.
+				test.innerText=str.substring(index,index+1);
+				//Replace for next measurement
+				lastTime = currentTime;
+				//Increments to the next index position
+				index++;
+				requestAnimationFrame(animate);// Run again next frame
+			}
+			else
+			{
+				//Finally, display all the strings.
+				test.innerText=str;
+			}
+		}
+		else
+		{
+			requestAnimationFrame(animate);// Run again next frame
+		}
+	}
+	requestAnimationFrame(animate);
+}
+
+// Animation Start
+stringAnimate(str);
+</pre>requestAnimationFrame is a method used to smoothly animate an image.<br>In this example, we used it to display a statement.<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">stringAnimate(str);</div>Enter the statement you want to execute in the str variable.<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(animate)</div>requestAnimationFrame is executed.<br>In this example, the animate method is executed by notifying the desired method. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const timeElapsed = currentTime - lastTime;</div>This sample is set to display one character every 0.6 seconds. <br>Calculate the elapsed time to determine the timing to display the next character. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if (index < str.length)</div>This is the process to determine whether to display one character. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">lastTime = currentTime;</div>This process replaces the current time (currentTime) with lastTime<br>to prepare for the next calculation. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(animate);</div>This process enables recursive execution. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">else</div>This is the else part of if (index < str.length). <br>Since all characters have been displayed one by one, this specification displays the entire string at the end. <br>Since this is the end of the process, requestAnimationFrame is not executed. <br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><script>f3();f0();const obj=document.getElementById('lang');let tmp = obj.value;let str =tmp ==0 ? "吾輩は猫である" : "I Am a Cat";function stringAnimate(str) {let lastTime =0;let index = 0;function animate(currentTime){const timeElapsed = currentTime - lastTime;if(timeElapsed > 600){const test = document.getElementById('test1');const testEn = document.getElementById('test1En');if (index < str.length) {test.innerText=str.substring(index,index+1);testEn.innerText=str.substring(index,index+1);lastTime = currentTime;index++;requestAnimationFrame(animate);}else{test.innerText=str;testEn.innerText=str;}}else{requestAnimationFrame(animate);}}requestAnimationFrame(animate);}stringAnimate(str);        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

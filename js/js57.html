@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">ボタンイベントリスナー</div></td></tr><tr><td><div id="n3">イベントの実装方法</div></td></tr></table><br><div id="n4" style="background-color:rgb(245 255 250 / 1.0);text-align:center;">同じ処理系統のボタンを「共通クラス」でまとめ、1つの関数で実行</div><span id="n5"></span><div id="result1"></div><div id="group1"><button class="b1" data-id="1">button 1</button><button class="b1" data-id="2">button 2</button><button class="b1" data-id="3">button 3</button></div>[HTML]<br><textarea id="t1" rows=6 cols=80>
+<span id="n5"></span><div id="result1"></div>
+<div id="group1">
+	<button class="b1" data-id="1">button 1</button>
+	<button class="b1" data-id="2">button 2</button>
+	<button class="b1" data-id="3">button 3</button>
+</div>
+</textarea><br><div id="h1"><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+document.querySelectorAll('.b1').forEach(btn => 
+{
+	btn.addEventListener('click', handleButtonClick);
+});
+
+function handleButtonClick(e) 
+{
+	const btn = e.currentTarget;//クリックされたボタン要素
+	const {id} = btn.dataset;//data-id を取得
+	//console.log('clicked id:', id);
+	//共通処理を実装します
+	test1(id);
+}
+
+function test1(id)
+{
+	const result1 = document.getElementById("result1");
+	result1.innerHTML = "button id:"+id;
+}
+
+</pre></div><div id="h2"><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+document.querySelectorAll('.b1').forEach(btn => 
+{
+	btn.addEventListener('click', handleButtonClick);
+});
+
+function handleButtonClick(e) 
+{
+	const btn = e.currentTarget;//The button element that was clicked
+	const {id} = btn.dataset;//Get data-id
+	//console.log('clicked id:', id);
+	//Implement common processing
+	test1(id);
+}
+
+function test1(id)
+{
+	const result1 = document.getElementById("result1");
+	result1.innerHTML = "button id:"+id;
+}
+
+</pre></div><div id="n11">同じ処理をするボタングループです。<br>ボタン固有情報は data-xxx属性を使用します。<br>HTML Living Standardで「カスタムデータ属性」として正式に定義されています。<br>「data-」の後は 英小文字とハイフン で記述します。<br> element.dataset.名前で取得できます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">button class="b1"</div>「class="b1"」と3個のボタンのclassのidをすべて共通にします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">document.querySelectorAll('.b1').forEach(btn => </div>同じclass idについて「addEventListener」でイベントを実行させます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const {id} = btn.dataset;</div>datasetで「data-id」の結果を返します。<br></div><br><br><div id="n6" style="background-color:rgb(245 255 250 / 1.0);text-align:center;">動作ごとに関数をマッピング</div><span id="n7"></span><div id="result2"></div><div id="group2"><button data-action="btn1" data-id="0">button 1</button><button data-action="btn2" data-id="1">button 2</button><button data-action="btn3" data-id="2">button 3</button></div>[HTML]<br><textarea id="t1" rows=6 cols=80>
+<span id="n7"></span><div id="result2"></div>
+<div id="group2">
+	<button data-action="btn1" data-id="0">button 1</button>
+	<button data-action="btn2" data-id="1">button 2</button>
+	<button data-action="btn3" data-id="2">button 3</button>
+</div>
+</textarea><br><div id="h3"><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+const actions = 
+{
+	btn1(btn, e) 
+	{
+		const id = btn.dataset.id;
+		test2(1, id);
+	},
+	btn2(btn, e) 
+	{
+		const id = btn.dataset.id;
+		test2(2, id);
+	},
+	btn3(btn, e) 
+	{
+		const id = btn.dataset.id;
+		test2(3, id);
+	},
+};
+function test2(no, id)
+{
+	const result2 = document.getElementById("result2");
+	result2.innerHTML = "button no:" + no +" id:" + id;
+}
+document.querySelectorAll('button[data-action]').forEach(btn => 
+{
+	btn.addEventListener('click', e => 
+	{
+		const { action } = e.currentTarget.dataset;
+		const fn = actions[action];
+		if (fn) fn(e.currentTarget, e);
+	});
+});
+</pre></div><div id="h4"><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+const actions = 
+{
+	btn1(btn, e) 
+	{
+		const id = btn.dataset.id;
+		test2(1, id);
+	},
+	btn2(btn, e) 
+	{
+		const id = btn.dataset.id;
+		test2(2, id);
+	},
+	btn3(btn, e) 
+	{
+		const id = btn.dataset.id;
+		test2(3, id);
+	},
+};
+function test2(no, id)
+{
+	const result2 = document.getElementById("result2");
+	result2.innerHTML = "button no:" + no +" id:" + id;
+}
+document.querySelectorAll('button[data-action]').forEach(btn => 
+{
+	btn.addEventListener('click', e => 
+	{
+		const { action } = e.currentTarget.dataset;
+		const fn = actions[action];
+		if (fn) fn(e.currentTarget, e);
+	});
+});
+</pre></div><div id="n12"><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const actions = <br>{<br>...<br>};<br></div>ボタンを実行したあとの関数をオブジェクト(配列)にまとめています。<br><br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">document.querySelectorAll('button[data-action]').forEach(btn => </div>button[data-action]からCSSセレクタで「data-action 属性を持つ&lt;button&gt; 要素」を全部取得します。<br><br><div id="n7" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const fn = actions[action];</div>actionにはe.currentTarget.datasetで一致する名前が入ります。<br>actions配列から一致する関数をfnに格納します。<br>fnが存在する関数であればボタンのdata-actionに紐づいた関数を実行します。<br></div><br><div id="n8" style="background-color:rgb(245 255 250 / 1.0);text-align:center;">イベントデリゲーション</div><span id="n9"></span><div id="result3"></div><div id="group3"><button data-action="button1" data-id="0">button 1</button><button data-action="button2" data-id="1">button 2</button><button data-action="button3" data-id="2">button 3</button></div>[HTML]<br><textarea id="t1" rows=6 cols=80>
+<span id="n9"></span><div id="result3"></div>
+<div id="group3">
+	<button data-action="button1" data-id="0">button 1</button>
+	<button data-action="button2" data-id="1">button 2</button>
+	<button data-action="button3" data-id="2">button 3</button>
+</div>
+</textarea><br><div id="h5"><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+const actions2 = 
+{
+	button1(btn, e) {test3(1);},
+	button2(btn, e) {test3(2);},
+	button3(btn, e) {test3(3);},
+};
+function test3(no)
+{
+	const result3 = document.getElementById("result3");
+	result3.innerHTML = "button no:" + no;
+}
+const group3 = document.getElementById('group3');
+
+group3.addEventListener('click', e => 
+{
+	const btn = e.target.closest('button[data-action]');
+	if (!btn || !group3.contains(btn)) return; // 外側のクリックは無視
+	
+	const fn = actions2[btn.dataset.action];
+	if (fn) fn(btn, e);
+});
+</pre></div><div id="h6"><a href="javascript:void(0);" id="copy23" class="copy-button" data-target="codeBlock23">copy</a><pre id="codeBlock23" class="prettyprint linenums;lang-js;">
+const actions2 = 
+{
+	button1(btn, e) {test3(1);},
+	button2(btn, e) {test3(2);},
+	button3(btn, e) {test3(3);},
+};
+function test3(no)
+{
+	const result3 = document.getElementById("result3");
+	result3.innerHTML = "button no:" + no;
+}
+const group3 = document.getElementById('group3');
+
+group3.addEventListener('click', e => 
+{
+	const btn = e.target.closest('button[data-action]');
+	if (!btn || !group3.contains(btn)) return; // Ignore outside clicks
+	
+	const fn = actions2[btn.dataset.action];
+	if (fn) fn(btn, e);
+});
+</pre></div><div id="n13">data-* にグループ化して一つにまとめ、各ボタンの関数を配列化してグループ化したイベントから各ボタンの関数を実行します。<br><br>closest('button[data-action]') <br>button[data-action]はCSSセレクタです。<br>closestは、選択した要素から始めて親方向に向かって一番近いセレクタ一致要素を返します。<br><br>buttonタグをformタグ内に配置すると、<br>既定では type="submit" として扱われ、フォームが送信（submit イベント）されます。<br>送信させたくないなら、type="button" を明示してください。<br>(例)<br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;button type="button" data-action="button1" data-id="0"&gt;button 1&lt;/button&gt;</div></div><br><br><br><a id="n10" href='#' onClick="f2();">戻る</a><script>const text = {  ja: {n1:"戻る",n2:"ボタンイベントリスナー",n3:"イベントの実装方法",n4:"同じ処理系統のボタンを「共通クラス」でまとめ、1つの関数で実行",n5:"結果",n6:"動作ごとに関数をマッピング",n7:"結果",n8:"イベントデリゲーション",n9:"結果",n10:"戻る",n11:`同じ処理をするボタングループです。<br>ボタン固有情報は data-xxx属性を使用します。<br>HTML Living Standardで「カスタムデータ属性」として正式に定義されています。<br>「data-」の後は 英小文字とハイフン で記述します。<br> element.dataset.名前で取得できます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">button class="b1"</div>「class="b1"」と3個のボタンのclassのidをすべて共通にします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">document.querySelectorAll('.b1').forEach(btn => </div>同じclass idについて「addEventListener」でイベントを実行させます。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const {id} = btn.dataset;</div>datasetで「data-id」の結果を返します。<br>`,n12:`<div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const actions = <br>{<br>...<br>};<br></div>ボタンを実行したあとの関数をオブジェクト(配列)にまとめています。<br><br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">document.querySelectorAll('button[data-action]').forEach(btn => </div>button[data-action]からCSSセレクタで「data-action 属性を持つ&lt;button&gt; 要素」を全部取得します。<br><br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const fn = actions[action];</div>actionにはe.currentTarget.datasetで一致する名前が入ります。<br>actions配列から一致する関数をfnに格納します。<br>fnが存在する関数であればボタンのdata-actionに紐づいた関数を実行します。<br>`,n13:`data-* にグループ化して一つにまとめ、各ボタンの関数を配列化してグループ化したイベントから各ボタンの関数を実行します。<br><br>closest('button[data-action]') <br>button[data-action]はCSSセレクタです。<br>closestは、選択した要素から始めて親方向に向かって一番近いセレクタ一致要素を返します。<br><br>buttonタグをformタグ内に配置すると、<br>既定では type="submit" として扱われ、フォームが送信（submit イベント）されます。<br>送信させたくないなら、type="button" を明示してください。<br>(例)<br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;button type="button" data-action="button1" data-id="0"&gt;button 1&lt;/button&gt;</div>`,  },  en: {n1: "Back",n2: "Button Event Listener",n3: "Event Implementation Method",n4: "Group buttons with the same processing type into a \"Common Class\" and execute them with a single function",n5: "Result",n6: "Mapping a Function for Each Action",n7: "Result",n8: "Event Delegation",n9: "Result",n10: "Back",n11: `A group of buttons that perform the same processing.<br>Button-specific information uses the data-xxx attribute.<br>Formally defined as a "Custom Data Attribute" in the HTML Living Standard.<br>The text after "data-" must be lowercase and followed by a hyphen.<br>Can be retrieved using element.dataset.name. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">button class="b1"</div>Set the class ID for all three buttons to the same value: "class="b1"". <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">document.querySelectorAll('.b1').forEach(btn =></div>Execute the event with "addEventListener" for the same class ID.<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const {id} = btn.dataset;</div>Return the results of "data-id" in dataset.<br>`,n12:`<div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const actions = <br>{<br>...<br>};<br></div>The functions to be executed after the button is executed are stored in an object (array). <br><br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">document.querySelectorAll('button[data-action]').forEach(btn =></div>The CSS selector for button[data-action] retrieves all "&lt;button&gt; elements with the data-action attribute." <br><br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">const fn = actions[action];</div>action contains a name that matches e.currentTarget.dataset. <br>The matching function from the actions array is stored in fn. <br>If fn is a function, it executes the function associated with the button's data-action. <br>`,n13:`Groups data-* into a single entity, organizes the functions of each button into an array, and executes each button's function from the grouped event. <br><br>closest('button[data-action]') <br>button[data-action] is a CSS selector. <br>closest returns the closest selector-matching element, starting from the selected element and working its way up the parent. <br><br>When a button tag is placed within a form tag, <br>By default, it is treated as type="submit" and the form is submitted (submit event). <br>If you do not want it to be submitted, explicitly specify type="button". <br>(Example) <br><div id="n6" style="background-color:rgb(75 0 130 / 0.2);text-align:left;">&lt;button type="button" data-action="button1" data-id="0"&gt;button 1&lt;/button&gt;</div>`,}};function applyTextAll(lang, divIds) {  divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {    return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;  el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13"];</script></script><script>document.querySelectorAll('.b1').forEach(btn => {btn.addEventListener('click', handleButtonClick);});function handleButtonClick(e) {const btn = e.currentTarget;const {id} = btn.dataset;test1(id);}function test1(id){const result1 = document.getElementById("result1");result1.innerHTML = "button id:"+id;}const actions = {btn1(btn, e) {const id = btn.dataset.id;test2(1, id);},btn2(btn, e) {const id = btn.dataset.id;test2(2, id);},btn3(btn, e) {const id = btn.dataset.id;test2(3, id);},};function test2(no, id){const result2 = document.getElementById("result2");result2.innerHTML = "button no:" + no +" id:" + id;}document.querySelectorAll('button[data-action]').forEach(btn => {btn.addEventListener('click', e => {const { action } = e.currentTarget.dataset;const fn = actions[action];if (fn) fn(e.currentTarget, e);});});const actions2 = {button1(btn, e) {test3(1);},button2(btn, e) {test3(2);},button3(btn, e) {test3(3);},};function test3(no){const result3 = document.getElementById("result3");result3.innerHTML = "button no:" + no;}const group3 = document.getElementById('group3');group3.addEventListener('click', e => {const btn = e.target.closest('button[data-action]');if (!btn || !group3.contains(btn)) return; const fn = actions2[btn.dataset.action];if (fn) fn(btn, e);});</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');const h5=document.getElementById('h5');const h6=document.getElementById('h6');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";h5.style.display="none";h6.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";h5.style.display="block";h6.style.display="none";}f4();console.log("lang:"+lang);applyTextAll(lang==0?"jp":"en", ary);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

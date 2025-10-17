@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return true;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">左右移動および上下移動</td></tr><tr><td>requestAnimationFrameを使用したサンプル</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[サンプル]</div><table><tr><td style="width:50px"></td><td><div class="container" style="background-color:palegoldenrod;"><div class="layer layer1" id="c0"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><button id="leftright" class="layer btn">左右移動</button><button id="updown" class="layer btn">上下移動</button><button id="stop" class="layer btn">停止</button></div></td> <td style="width:50px"></td></tr></table><br><br>[HTML/CSS]<br><textarea id="t1" rows=15 cols=80>
+<table>
+<tr>
+<td style="width:50px">
+</td>
+<td>
+	<div class="container" style="background-color:palegoldenrod;">
+		<div class="layer layer1" id="c0">
+			<img id="img" src="nawmin_sample10.png" style="width:50px;height:50px;">
+		</div>
+		<button id="leftright" class="layer btn">左右移動</button>
+		<button id="updown" class="layer btn">上下移動</button>
+		<button id="stop" class="layer btn">停止</button>
+	</div>
+</td> 
+<td style="width:50px">
+</td>
+</tr>
+</table>
+<style>
+.container{
+	width: 300px;
+	height: 300px;
+	position: sticky;
+}
+.layer{
+	width: 300px;
+	height: 300px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 150px;
+	z-index:1;
+}
+.layer2{
+	width: 50px;
+	height: 50px;
+	background-color:seagreen;
+}
+.btn{
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+</style>
+</textarea><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b0 = document.getElementById('leftright');
+const b1 = document.getElementById('updown');
+const b2 = document.getElementById('stop');
+//左右移動
+b0.addEventListener("click", () => 
+{
+	if(still==1)
+	{
+		return;
+	}
+	stop=0;
+	still=1;
+	requestAnimationFrame(moveLeftRight);
+});
+//上下移動
+b1.addEventListener("click", () => 
+{
+	if(still==1)
+	{
+		return;
+	}
+	stop=0;
+	still=1;
+	requestAnimationFrame(moveUpDown);
+});
+b2.addEventListener("click", () => 
+{
+	stop=1;
+});
+b0.style.left = 0 + 'px';
+b0.style.top = 300 + 'px';
+b1.style.left = 100 + 'px';
+b1.style.top = 300 + 'px';
+b2.style.left = 200 + 'px';
+b2.style.top = 300 + 'px';
+
+const chick = document.getElementById('c0');
+let x = 0;
+let y = 0;
+let direction = 1; // 1: 右(下), -1: 左(上)
+let speed = 1;
+let maxX = 300;
+let maxY = 300;
+let stop = 0;//[0]動作可能 [1]停止
+let still=0;//[0]未実行 [1]実行中
+x=100;
+y=100;
+chickInit();
+//ひよこ初期位置
+function chickInit()
+{
+	chick.style.left = 100 + 'px';
+	chick.style.top = 100 + 'px';
+}
+//上下移動
+function moveUpDown()
+{
+	if(stop==1)
+	{
+		still=0;
+		return;
+	}
+	// 左右移動
+	y += speed * direction;
+
+	// 画面端に到達したら方向転換
+	if (y+50 >= maxY || y <= 0) 
+	{
+		direction *= -1;
+	}
+	chick.style.left = x + 'px';
+	chick.style.top = y + 'px';
+	
+	requestAnimationFrame(moveUpDown);
+}
+//左右移動
+function moveLeftRight() 
+{
+	if(stop==1)
+	{
+		still=0;
+		return;
+	}
+	// 左右移動
+	x += speed * direction;
+	// 画面端に到達したら方向転換
+	if (x+50 >= maxX || x <= 0) 
+	{
+		direction *= -1;
+	}
+	chick.style.left = x + 'px';
+	chick.style.top = y + 'px';
+	
+	requestAnimationFrame(moveLeftRight);
+}
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if(still==1)<br>{<br>&nbsp;&nbsp;return;<br>}<br></div>still変数はボタンの実行中かどうか?を判定する変数として使用しています。<br>左右移動ボタンもしくは上下移動ボタンを実行中は実行しないように制御しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function moveUpDown()</div>上下方向の処理を実行する関数です。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">y += speed * direction;</div>y座標を変更することで上下移動の座標を変更します。<br>1:下方向<br>-1:上方向<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if (y+50 >= maxY || y <= 0) </div>「y+50 >= maxY」は下方向の判定処理で画面下の枠を超えるかどうか？<br>「y <= 0」は上方向の判定処理で画面上の枠を超えるかどうか？<br>の判定をしています。<br>判定でtrueを返したら上なら下へ、下なら上へ方向転換をします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(moveUpDown);</div>処理は繰り返し、動作を継続させるためrequestAnimationFrameで指定の関数を実行させます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function moveLeftRight()</div>左右方向の処理を実行する関数です。<br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x += speed * direction;</div>x座標を変更することで上下移動の座標を変更します。<br>1:右方向<br>-1:左方向<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if (x+50 >= maxX || x <= 0) </div>「x+50 >= maxX」は右方向の判定処理で画面右の枠を超えるかどうか？<br>「x <= 0」は左方向の判定処理で画面左の枠を超えるかどうか？<br>の判定をしています。<br>判定でtrueを返したら左なら右へ、右なら左へ方向転換をします。<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(moveLeftRight);</div>処理は繰り返し、動作を継続させるためrequestAnimationFrameで指定の関数を実行させます。<br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[謝辞]</div>「イラスト：農民イラスト」さんの画像を使用させていただいております。<br>ありがとうございます。<br><table><tr><td colspan=2>[URL]イラスト：農民イラスト</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][クリックすると開きます])</b></font></a></td></tr></table><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Left/right and up/down movement</td></tr><tr><td>Sample using requestAnimationFrame</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:center;">[sample]</div><table><tr><td style="width:50px"></td><td><div class="container" style="background-color:palegoldenrod;"><div class="layer layer1" id="c0En"><img id="img" src="../o/i3/nawmin_sample10.png" style="width:50px;height:50px;"></div><button id="leftrightEn" class="layer btn">Move left/right</button> <button id="updownEn" class="layer btn">Move up/down</button> <button id="stopEn" class="layer btn">Stop</button></div></td> <td style="width:50px"></td></tr></table><br><br>[HTML/CSS]<br><textarea id="t1" rows=15 cols=80>
+<table>
+<tr>
+<td style="width:50px">
+</td>
+<td>
+	<div class="container" style="background-color:palegoldenrod;">
+		<div class="layer layer1" id="c0">
+			<img id="img" src="nawmin_sample10.png" style="width:50px;height:50px;">
+		</div>
+		<button id="leftrightEn" class="layer btn">Move left/right</button> 
+		<button id="updownEn" class="layer btn">Move up/down</button> 
+		<button id="stopEn" class="layer btn">Stop</button>
+	</div>
+</td> 
+<td style="width:50px">
+</td>
+</tr>
+</table>
+<style>
+.container{
+	width: 300px;
+	height: 300px;
+	position: sticky;
+}
+.layer{
+	width: 300px;
+	height: 300px;
+	position: absolute;
+}
+.layer1{
+	top: 0px;
+	left: 150px;
+	z-index:1;
+}
+.layer2{
+	width: 50px;
+	height: 50px;
+	background-color:seagreen;
+}
+.btn{
+	width: 100px;
+	height: 30px;
+	z-index:2;
+}
+</style>
+</textarea><br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+const b0 = document.getElementById('leftright');
+const b1 = document.getElementById('updown');
+const b2 = document.getElementById('stop');
+//Move left/right
+b0.addEventListener("click", () => 
+{
+	if(still==1)
+	{
+		return;
+	}
+	stop=0;
+	still=1;
+	requestAnimationFrame(moveLeftRight);
+});
+//Move up/down
+b1.addEventListener("click", () => 
+{
+	if(still==1)
+	{
+		return;
+	}
+	stop=0;
+	still=1;
+	requestAnimationFrame(moveUpDown);
+});
+b2.addEventListener("click", () => 
+{
+	stop=1;
+});
+b0.style.left = 0 + 'px';
+b0.style.top = 300 + 'px';
+b1.style.left = 100 + 'px';
+b1.style.top = 300 + 'px';
+b2.style.left = 200 + 'px';
+b2.style.top = 300 + 'px';
+
+const chick = document.getElementById('c0');
+let x = 0;
+let y = 0;
+let direction = 1; // 1: Right (bottom), -1: Left (top)
+let speed = 1;
+let maxX = 300;
+let maxY = 300;
+let stop = 0; //[0] Operational [1] Stopped
+let still = 0; //[0] Not yet executed [1] Running
+x=100;
+y=100;
+chickInit();
+//Chick initial position
+function chickInit()
+{
+	chick.style.left = 100 + 'px';
+	chick.style.top = 100 + 'px';
+}
+//Up and down movement
+function moveUpDown()
+{
+	if(stop==1)
+	{
+		still=0;
+		return;
+	}
+	// Left and right movement
+	y += speed * direction;
+
+	// Change direction when you reach the edge of the screen
+	if (y+50 >= maxY || y <= 0) 
+	{
+		direction *= -1;
+	}
+	chick.style.left = x + 'px';
+	chick.style.top = y + 'px';
+	
+	requestAnimationFrame(moveUpDown);
+}
+//Left and right movement
+function moveLeftRight() 
+{
+	if(stop==1)
+	{
+		still=0;
+		return;
+	}
+	// Left and right movement
+	x += speed * direction;
+	// Change direction when you reach the edge of the screen
+	if (x+50 >= maxX || x <= 0) 
+	{
+		direction *= -1;
+	}
+	chick.style.left = x + 'px';
+	chick.style.top = y + 'px';
+	
+	requestAnimationFrame(moveLeftRight);
+}
+</pre><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if(still==1)<br>{<br>&nbsp;&nbsp;return;<br>}<br></div>The still variable is used to determine whether the button is currently being executed. <br>This function prevents execution while the left/right or up/down buttons are being executed. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function moveUpDown()</div>This function performs up/down operations. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">y += speed * direction;</div>Changing the y coordinate changes the up/down movement coordinate. <br>1: Downward<br>-1: Upward<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if (y+50 >= maxY || y <= 0)</div>"y+50 >= maxY" determines whether the bottom edge of the screen will be exceeded in the downward direction. <br>"y <= 0" determines whether the top edge of the screen will be exceeded in the upward direction. <br>This checks the following. <br>If the check returns true, the direction will change to downward if the direction is upward, or to upward if the direction is downward. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(moveUpDown);</div>The process repeats, and the specified function is executed in requestAnimationFrame to continue the movement. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function moveLeftRight()</div>This function executes left-right movement. <br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">x += speed * direction;</div>Changing the x coordinate changes the coordinate for up-down movement. <br>1: Rightward<br>-1: Leftward<br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">if (x+50 >= maxX || x <= 0)</div>"x+50 >= maxX" determines whether the direction goes beyond the right border of the screen. <br>"x <= 0" determines whether the direction goes beyond the left border of the screen. <br>This checks whether the direction goes beyond the left border of the screen. <br>If the check returns true, the direction changes to the right if it is left, or to the left if it is right. <br><br><div style="background-color:rgb(75 0 130 / 0.2);text-align:left;">requestAnimationFrame(moveLeftRight);</div>The process repeats, and the specified function is executed by requestAnimationFrame to continue the action. <br><br><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">[Acknowledgements]</div>images used are from "illustration by nawmin.com"<br>Thank you very much.<br><table><tr><td colspan=2>[URL]illustration by nawmin.com</td></tr><tr><td colspan=2 style='word-break:break-all'><a href='https://nawmin.stores.jp' TARGET='_blank'><font color='#333399'><b>URL[https://nawmin.stores.jp][click to open the homepage])</b></font></a></td></tr></table><br><br><a href="#" onclick="f2();">back</a></div><style>.container{width: 300px;height: 300px;position: sticky;}.layer{width: 300px;height: 300px;position: absolute;}.layer1{top: 0px;left: 150px;z-index:1;}.layer2{width: 50px;height: 50px;background-color:seagreen;}.btn{width: 100px;height: 30px;z-index:2;}</style><script>const b0 = document.getElementById('leftright');const b1 = document.getElementById('updown');const b2 = document.getElementById('stop');const b0En = document.getElementById('leftrightEn');const b1En = document.getElementById('updownEn');const b2En = document.getElementById('stopEn');b0.addEventListener("click", () => {if(still==1){console.log("not execute");return;}stop=0;still=1;requestAnimationFrame(moveLeftRight);});b1.addEventListener("click", () => {if(still==1){console.log("not execute");return;}stop=0;still=1;requestAnimationFrame(moveUpDown);});b2.addEventListener("click", () => {stop=1;});b0En.addEventListener("click", () => {if(still==1){console.log("not execute");return;}stop=0;still=1;requestAnimationFrame(moveLeftRight);});b1En.addEventListener("click", () => {if(still==1){console.log("not execute");return;}stop=0;still=1;requestAnimationFrame(moveUpDown);});b2En.addEventListener("click", () => {stop=1;});b0.style.left = 0 + 'px';b0.style.top = 300 + 'px';b1.style.left = 100 + 'px';b1.style.top = 300 + 'px';b2.style.left = 200 + 'px';b2.style.top = 300 + 'px';b0En.style.left = 0 + 'px';b0En.style.top = 300 + 'px';b1En.style.left = 100 + 'px';b1En.style.top = 300 + 'px';b2En.style.left = 200 + 'px';b2En.style.top = 300 + 'px';const chick = document.getElementById('c0');const chickEn = document.getElementById('c0En');let x = 0;let y = 0;let direction = 1; let speed = 1;let maxX = 300;let maxY = 300;let stop = 0;let still=0;x=100;y=100;chickInit();function chickInit(){chick.style.left = 100 + 'px';chick.style.top = 100 + 'px';chickEn.style.left = 100 + 'px';chickEn.style.top = 100 + 'px';}function moveUpDown(){if(stop==1){still=0;return;}y += speed * direction;if (y+50 >= maxY || y <= 0) {direction *= -1;console.log("course in!! direction:"+direction);}chick.style.left = x + 'px';chick.style.top = y + 'px';chickEn.style.left = x + 'px';chickEn.style.top = y + 'px';requestAnimationFrame(moveUpDown);}function moveLeftRight() {if(stop==1){still=0;return;}x += speed * direction;if (x+50 >= maxX || x <= 0) {direction *= -1;console.log("course in!! direction:"+direction);}chick.style.left = x + 'px';chick.style.top = y + 'px';chickEn.style.left = x + 'px';chickEn.style.top = y + 'px';requestAnimationFrame(moveLeftRight);}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

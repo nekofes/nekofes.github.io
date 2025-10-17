@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">base64を使った文字列のエンコード・デコード</td></tr><tr><td>btoaとatob関数を使用します。(Unicode文字を扱う場合は、事前処理が必要です)</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">base64を使った文字列のエンコード</div><br><button id="btn1">エンコード</button><br>[変換前の文字列]<br><div id="encode" style="background-color:rgb(245 255 250 / 1.0);text-align:left;">101匹のネコ</div><br>[変換後の文字列]<br><div id="encode2" style="background-color:rgb(75 0 130 / 0.2);text-align:left;"></div><br><button id="btn2">デコード</button><br>[変換前の文字列]<br><div id="decode" style="background-color:rgb(245 255 250 / 1.0);text-align:left;">MTAx5Yy544Gu44ON44Kz</div><br>[変換後の文字列]<br><div id="decode2" style="background-color:rgb(75 0 130 / 0.2);text-align:left;"></div><br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+b1.addEventListener("click", () => 
+{
+	const objIn = document.getElementById("encode");
+	const objOut = document.getElementById("encode2");
+	let data = objIn.innerText;
+	data = base64Encode(data);
+	objOut.innerText = data;
+});
+b2.addEventListener("click", () => 
+{
+	const objIn = document.getElementById("decode");
+	const objOut = document.getElementById("decode2");
+	let data = objIn.innerText;
+	data = base64Decode(data);
+	objOut.innerText = data;
+});
+
+function base64Encode(data) 
+{
+	//Unicode文字列をUint8Arrayに変換
+	const utf8Encode = new TextEncoder();
+	const uint8Array = utf8Encode.encode(data);
+	
+	//Uint8ArrayをLatin-1文字列に変換
+	let latin1String = '';
+	for (let i = 0; i < uint8Array.length; i++) 
+	{
+		latin1String += String.fromCharCode(uint8Array[i]);
+	}
+
+	//Latin-1文字列をbase64エンコード
+	return btoa(latin1String);
+}
+
+function base64Decode(data) 
+{
+	try 
+	{
+		//base64文字列をLatin-1文字列にデコード
+		const latin1String = atob(data);
+		
+		//Latin-1文字列をUint8Arrayに変換
+		const uint8Array = new Uint8Array(latin1String.length);
+		for (let i = 0; i < latin1String.length; i++) 
+		{
+			uint8Array[i] = latin1String.charCodeAt(i);
+		}
+	
+		//Uint8ArrayをUTF-8文字列にデコード
+		const utf8Decode = new TextDecoder();
+		return utf8Decode.decode(uint8Array);
+	
+	} 
+	catch (error) 
+	{
+		console.error("base64デコードエラー:", error);
+		return null;
+	}
+}
+</pre><br>JavaScriptで文字列をbase64にエンコードおよびデコードするには、btoa関数およびatob関数を使用します。<br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">btoa関数</td><td>バイナリデータをbase64エンコードされたASCII文字列に変換する関数です。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">atob関数</td><td>base64エンコードされたASCII文字列を元のバイナリデータにデコードする関数です。</td></tr></table>※btoa関数はASCII文字のみを直接処理できるため、日本語などのUnicode文字を扱う場合は、事前に適切な処理が必要です。﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const utf8Encode = new TextEncoder();</div>TextEncoder()<br>文字列をUTF-8でエンコードされたUint８Arrayに変換するオブジェクトです。<br>このUint8Arrayをbase64エンコーディングすることで、バイナリデータをテキスト形式に変換します。<br><br>base64エンコードしたデータは、元のデータよりもサイズが約33%増加します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">String.fromCharCode</div>UTF-16のコードユニットに対応する文字列に変換します。<br>String.fromCharCodeの引数は複数個可能ですが、このサンプルでは1個ずつ、変換しています。<br>配列に1文字ずつ変換した結果を変数に連結しています。<br>その結果をbtoaでbase64にエンコードしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Uint8Array</div>Uint8Arrayは、8ビット符号なし整数値の配列を表す型です。<br>TextDecoderクラスのdecode関数の引数には、base64でエンコードされたバイナリデータのUint8Arrayを渡すことでデコード変換をします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const uint8Array = new Uint8Array(latin1String.length);</div>このサンプルでは、使用するエリア分だけ配列要素を準備しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">uint8Array[i] = latin1String.charCodeAt(i);</div>atob関数でデコードした文字列を文字の長さを左から順に<br>1文字ずつcharCodeAt関数でUnicodeを数字に変換した結果を<br>Uint8Array配列の要素に格納しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const utf8Decode = new TextDecoder();<br>return utf8Decode.decode(uint8Array);</div>TextDecoderクラスのdecode関数の引数に変換したUint8Array配列を渡し、<br>デコードした結果を返しています。<br><br>[ポイント]<br>上記処理をしている理由は、<br>btoa関数とatob関数は、直接Unicode文字列を扱うことができないためです。﻿<br>TextEncoderとTextDecoderを使用して、<br>Unicode文字列をUint8Arrayに変換し、<br>Latin-1文字列に変換することで、btoa() でエンコードできるようにする必要があります。﻿<br>base64エンコードは、バイナリデータをテキスト形式で表現するための方法です。﻿<br><br>Latin-1(ISO-8859-1)は、Unicodeの最初の256文字に対応する文字エンコーディングです。<br>Unicode文字列をLatin-1文字として解釈して、各文字を1バイトの値に変換するために使用しています。<br><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);">Encoding and decoding strings using base64</td></tr><tr><td>Use the btoa and atob functions.(pre-process them if you are dealing with Unicode characters)</td></tr></table><br><div style="background-color:rgb(100 149 237 / 0.2);text-align:center;">Encoding and decoding strings using base64</div><br><button id="btn1En">encode</button><br>[String before conversion]<br><div id="encodeEn" style="background-color:rgb(245 255 250 / 1.0);text-align:left;">101 Cats</div><br>[String after conversion]<br><div id="encode2En" style="background-color:rgb(75 0 130 / 0.2);text-align:left;"></div><br><button id="btn2En">Decode</button><br>[String before conversion]<br><div id="decodeEn" style="background-color:rgb(245 255 250 / 1.0);text-align:left;">MTAxIENhdHM=</div><br>[String after conversion]<br><div id="decode2En" style="background-color:rgb(75 0 130 / 0.2);text-align:left;"></div><br><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+b1.addEventListener("click", () => 
+{
+	const objIn = document.getElementById("encode");
+	const objOut = document.getElementById("encode2");
+	let data = objIn.innerText;
+	data = base64Encode(data);
+	objOut.innerText = data;
+});
+b2.addEventListener("click", () => 
+{
+	const objIn = document.getElementById("decode");
+	const objOut = document.getElementById("decode2");
+	let data = objIn.innerText;
+	data = base64Decode(data);
+	objOut.innerText = data;
+});
+
+function base64Encode(data) 
+{
+	//Convert Unicode String to Uint8Array
+	const utf8Encode = new TextEncoder();
+	const uint8Array = utf8Encode.encode(data);
+	
+	//Uint8ArrayをLatin-1 Convert to String
+	let latin1String = '';
+	for (let i = 0; i < uint8Array.length; i++) 
+	{
+		latin1String += String.fromCharCode(uint8Array[i]);
+	}
+
+	//Base64 encode a Latin-1 string
+	return btoa(latin1String);
+}
+
+function base64Decode(data) 
+{
+	try 
+	{
+		//Decode a base64 string to a Latin-1 string
+		const latin1String = atob(data);
+		
+		//Decode a base64 string to a Latin-1 string
+		const uint8Array = new Uint8Array(latin1String.length);
+		for (let i = 0; i < latin1String.length; i++) 
+		{
+			uint8Array[i] = latin1String.charCodeAt(i);
+		}
+	
+		//Decode a Uint8Array into a UTF-8 string
+		const utf8Decode = new TextDecoder();
+		return utf8Decode.decode(uint8Array);
+	
+	} 
+	catch (error) 
+	{
+		console.error("Base64 Decoding Error:", error);
+		return null;
+	}
+}
+</pre><br>To encode and decode strings to base64 in JavaScript, use the btoa and atob functions. <br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">btoa function</td><td>This function converts binary data into a Base64-encoded ASCII string.</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">atob function</td><td>This function decodes a Base64-encoded ASCII string back to its original binary data.</td></tr></table>*The btoa function can only directly process ASCII characters, so if you are dealing with Unicode characters such as Japanese, you need to do the appropriate processing in advance.﻿<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const utf8Encode = new TextEncoder();</div>TextEncoder()<br>This object converts a string into a Uint8Array encoded in UTF-8. <br>By base64 encoding this Uint8Array, binary data is converted into text format. <br><br>The size of base64 encoded data increases by about 33% compared to the original data. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">String.fromCharCode</div>Converts into a string corresponding to a UTF-16 code unit. <br>String.fromCharCode can take multiple arguments, but in this sample, they are converted one by one. <br>The result of converting each character into an array is concatenated to a variable. <br>The result is encoded to base64 using btoa. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Uint8Array</div>Uint8Array is a type that represents an array of 8-bit unsigned integer values. <br>The decode conversion is performed by passing a Uint8Array of binary data encoded in base64 to the argument of the decode function of the TextDecoder class. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const uint8Array = new Uint8Array(latin1String.length);</div>In this sample, array elements are prepared for the area to be used. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">uint8Array[i] = latin1String.charCodeAt(i);</div>The string decoded by the atob function is sorted by character length from left to right<br>The Unicode is converted to numbers one character at a time by the charCodeAt function<br>and the results are stored in the elements of the Uint8Array array. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const utf8Decode = new TextDecoder();<br>return utf8Decode.decode(uint8Array);</div>The converted Uint8Array array is passed as an argument to the decode function of the TextDecoder class<br>and the decoded result is returned. <br><br>[Points]<br>The reason for the above processing is that<br>btoa and atob functions cannot handle Unicode strings directly. ﻿<br>You need to use TextEncoder and TextDecoder to convert the<br>Unicode string to a Uint8Array and then to a Latin-1 string so that it can be encoded with btoa(). ﻿<br>Base64 encoding is a way to represent binary data in text form. ﻿<br><br>Latin-1 (ISO-8859-1) is a character encoding that corresponds to the first 256 characters of Unicode. <br>It is used to interpret the Unicode string as a Latin-1 character and convert each character to a 1-byte value. <br><br><br><a href="#" onclick="f2();">back</a></div><script>const b1 = document.getElementById("btn1");const b2 = document.getElementById("btn2");const b1En = document.getElementById("btn1En");const b2En = document.getElementById("btn2En");b1.addEventListener("click", () => { testBase64Encode(0);});b2.addEventListener("click", () => {testBase64Decode(0);});b1En.addEventListener("click", () => { testBase64Encode(1);});b2En.addEventListener("click", () => {testBase64Decode(1);});function testBase64Encode(lang){const objIn = document.getElementById(lang==0?"encode":"encodeEn");const objOut = document.getElementById(lang==0?"encode2":"encode2En");let data = objIn.innerText;data = base64Encode(data);objOut.innerText = data;}function testBase64Decode(lang){const objIn = document.getElementById(lang==0?"decode":"decodeEn");const objOut = document.getElementById(lang==0?"decode2":"decode2En");let data = objIn.innerText;data = base64Decode(data);objOut.innerText = data;}function base64Encode(data) {const utf8Encode = new TextEncoder();const uint8Array = utf8Encode.encode(data);let latin1String = '';for (let i = 0; i < uint8Array.length; i++) {latin1String += String.fromCharCode(uint8Array[i]);}return btoa(latin1String);}function base64Decode(data) {try {const latin1String = atob(data);const uint8Array = new Uint8Array(latin1String.length);for (let i = 0; i < latin1String.length; i++) {uint8Array[i] = latin1String.charCodeAt(i);}const utf8Decode = new TextDecoder();return utf8Decode.decode(uint8Array);} catch (error) {console.error("Base64デコードエラー:", error);return null;}}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

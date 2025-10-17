@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><div id=l0><a href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">重複しています。ユーザーにより、正規ページとして選択されていませんの修正について</td></tr><tr><td>修正方法のひとつ(これで正しく修正できるとは限りません)</td></tr></table><br><div style="background-color:rgb(255 204 0 / 0.2);">canonical</div><div class="scrollable-div" style="background-color:aliceblue;">重複しています。ユーザーにより、正規ページとして選択されていません<br>https://nekofes.github.io/index.html<br>サイトマップ<br>一時的な処理エラー<br>参照元ページ<br>検出されませんでした<br>URL は、現時点でレポートされていない他のソースから認識されている可能性があります<br></div><br>このサイトでは下記のURLを重複していると考えているようでした。<br>(1) https://nekofes.github.io/<br>(2) https://nekofes.github.io/index.html<br><br>このため、canonicalを使用して正規ページを設定しました。<br>方法はページのhead部分に下記のように実装しました。<br><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;">
+&lt;link rel="canonical" href="https://nekofes.github.io/" &gt;
+</pre><br>このあと、Google Search Consoleで検証ボタンを選択して、数日待ちました。<br>[結果]<br><pre id="codeBlock2" class="prettyprint linenums;">
+ページのインデックス登録
+ページはインデックスに登録されていません: 代替ページ（適切な canonical タグあり）
+検出
+サイトマップ
+参照元サイトマップが検出されませんでした
+参照元ページ
+検出されませんでした
+URL は、現時点でレポートされていない他のソースから認識されている可能性があります
+クロール
+前回のクロール
+2025/07/26 5:17:44
+ユーザー エージェント
+スマートフォン用 Googlebot
+クロールを許可？
+はい
+ページの取得
+成功
+インデックス登録を許可？
+はい
+インデックス作成
+ユーザーが指定した正規 URL
+info
+https://nekofes.github.io/
+Google が選択した正規 URL
+
+ユーザーが指定した正規 URL と同じ
+</pre><br>[トラブルシューティング抜粋]<br><table><tr><td colspan=2 style='word-break:break-all'><a href='https://support.google.com/webmasters/answer/7440203#duplicate_page_with_proper_canonical_tag' TARGET='_blank'><font color='#333399'><b>URL[https://support.google.com/webmasters/answer/7440203#duplicate_page_with_proper_canonical_tag](クリックすると開きます[click to open the google page])</b></font></a></td></tr></table><pre id="codeBlock2" class="prettyprint linenums;">
+代替ページ（適切な canonical タグあり）
+このページは、別のページの代替
+（パソコン版正規ページの AMP ページ、パソコン版正規ページのモバイル版、またはモバイル版正規ページのパソコン版）
+としてマークされます。
+正規ページ（登録済み）へのリンクが正しく指定されているため、
+これ以上の対処は必要ありません。
+代替言語ページは Search Console で検出されません。
+</pre><br><br><a href='#' onClick="f2();">戻る</a></div><div id=l1><a href="#" onclick="f2();">back</a><br><br><table><tr><td style="font-size:150%;font-wiight:bold;background-color:rgb(143 188 143 / 0.4);">How to fix "Duplicate, submitted page not selected as canonical"</td></tr><tr><td>One way to fix it (this may not be the correct fix)</td></tr></table><br><div style="background-color:rgb(255 204 0 / 0.2);">canonical</div><div class="scrollable-div" style="background-color:aliceblue;">Duplicate. Not selected as canonical by user<br>https://nekofes.github.io/index.html<br>Sitemap<br>Temporary processing error<br>Referring page<br>Not detected<br>URL may be recognized from other sources not reported at this time<br></div><br>This site seems to consider the following URLs as duplicates. <br>(1) https://nekofes.github.io/<br>(2) https://nekofes.github.io/index.html<br><br>For this reason, we set the canonical page using canonical. <br>The method was implemented in the head part of the page as follows. <br><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;">
+&lt;link rel="canonical" href="https://nekofes.github.io/" &gt;
+</pre><br>After this, I selected the verify button in Google Search Console and waited a few days. <br>[Results]<br><pre id="codeBlock2" class="prettyprint linenums;">
+Indexing the page
+Page is not indexed: Alternate page (with proper canonical tag)
+Found
+Sitemap
+No referring sitemap found
+Referring page
+Not found
+URL may be known from other sources not currently reported
+Crawl
+Last crawl
+2025/07/26 5:17:44
+User agent
+Googlebot for smartphones
+Allow crawling?
+Yes
+Page fetch
+Success
+Allow indexing?
+Yes
+Indexing
+User-specified canonical URL
+info
+https://nekofes.github.io/
+Google-selected canonical URL
+
+Same as user-specified canonical URL
+</pre><br>[Troubleshooting excerpt]<br><table><tr><td colspan=2 style='word-break:break-all'><a href='https://support.google.com/webmasters/answer/7440203?hl=en&sjid=9486910115457019047-NC#duplicate_page_with_proper_canonical_tag' TARGET='_blank'><font color='#333399'><b>URL[https://support.google.com/webmasters/answer/7440203?hl=en&sjid=9486910115457019047-NC#duplicate_page_with_proper_canonical_tag](click to open the google page)</b></font></a></td></tr></table><pre id="codeBlock22" class="prettyprint linenums;">
+Alternate page with proper canonical tag
+
+This page is marked as an alternate of another page 
+(that is, an AMP page with a desktop canonical, or a mobile version of a desktop canonical, or the desktop version of a mobile canonical). 
+This page correctly points to the canonical page, which is indexed, so there is nothing you need to do. 
+Alternate language pages are not detected by Search Console.
+</pre><br><br><a href="#" onclick="f2();">back</a></div><style>.scrollable-div {width: 400px;height: 150px;overflow-y: scroll;user-select: none;/* Firefoxの場合、以下のプロパティも追加 */-moz-user-select: none;/* Safari, Chrome, Edgeの場合、以下のプロパティも追加 */-webkit-user-select: none;/* IE/Edgeの場合、以下のプロパティも追加 */-ms-user-select: none;}</style>    <script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');const l0=document.getElementById('l0');const l1=document.getElementById('l1');let lang=obj.value;if(lang==1){l0.style.display="none";l1.style.display="block";}else{l0.style.display="block";l1.style.display="none";}f4();}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');if(d==1){const obj=document.getElementById('lang');obj.value=d;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/tool/index.html?lang=0';}else{url='/tool/index.html?lang=1';}window.location.href=url;}    </script>    </script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>

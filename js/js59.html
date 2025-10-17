@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">hexと透過色</div></td></tr><tr><td><div id="n3">hexと透過色の計算について</div></td></tr></table><br><div id="n4">不透明な赤色を表すと下記のようになります。<br>[HEX]<br>#FF0000FF<br>[RGB]<br>rgb(255 0 0 / 1.00)<br>この赤色を透過色50%で表すと下記のようになります。<br>[HEX]<br>#FF000080<br>[RGB]<br>rgb(255 0 0 / 0.50)<br>この計算式には下記の計算をすると結果が得られました。<br>[下記プログラムの中から一部抜粋]<br>// a: 0～1 を 0～255 に変換<br>const aa = Math.round(a * 255);<br><br>この計算をみると<br>透過色50%の場合<br>aは50%に相当するので<br>aaの値は<br>0.5 * 255 = 127.5なので四捨五入をして<br>128になります、<br>toHex関数の引数に128をを設定することで16進数の80に変換してくれます。<br>これにより透過色50%の赤色はhexで表現すると<br>#FF000080<br>になります。<br><br>HEXの最後の2桁がアルファ値（0〜255）であることから<br>255で割ると、0〜1の透過率を得られます。<br></div><br><div id="h1"><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+function hexToAlpha(hex) {
+	// 先頭の # を除去
+	hex = hex.replace(/^#/, '');
+
+	// RGBだけの場合（#RRGGBB）はアルファ値なし
+	if (hex.length === 6) {
+		return 1; // 不透明
+	}
+
+	if (hex.length === 8) {
+		// 最後の2桁がアルファ値
+		const alphaHex = hex.slice(6, 8);
+		const alphaDecimal = parseInt(alphaHex, 16); // 0〜255
+		return alphaDecimal / 255; // 0〜1 に変換
+	}
+
+	throw new Error('HEXコードの形式が不正です');
+}
+
+// 使用例
+console.log(hexToAlpha('#FF0000FF')); // 1
+console.log(hexToAlpha('#FF000080')); // 0.5019607843137255
+</pre></div><div id="h2"><a href="javascript:void(0);" id="copy21" class="copy-button" data-target="codeBlock21">copy</a><pre id="codeBlock21" class="prettyprint linenums;lang-js;">
+function hexToAlpha(hex) {
+	// Remove the leading #
+	hex = hex.replace(/^#/, '');
+
+	// If there is only RGB (#RRGGBB), there is no alpha value.
+	if (hex.length === 6) {
+		return 1; // opaque
+	}
+
+	if (hex.length === 8) {
+		// The last two digits are the alpha value
+		const alphaHex = hex.slice(6, 8);
+		const alphaDecimal = parseInt(alphaHex, 16); // 0〜255
+		return alphaDecimal / 255; // Convert to 0 to 1
+	}
+
+	throw new Error('The HEX code format is invalid');
+}
+
+// Usage example
+console.log(hexToAlpha('#FF0000FF')); // 1
+console.log(hexToAlpha('#FF000080')); // 0.5019607843137255
+</pre></div><div id="n5">[ポイント]<br>parseInt(文字列, 16)で16進数を10進数に変換します。<br>0〜255の値を255で割ると 0〜1 の透過率になります。<br>50%の場合は128 / 255 ≒ 0.502となり、ほぼ0.5となります。<br><br>もし「ちょうど50%かどうか」を判定したい場合は、<br>小数点の誤差を考慮して四捨五入するといいでしょう。<br></div><pre id="codeBlockx" class="prettyprint linenums;lang-js;">
+const alpha = hexToAlpha('#FF000080');
+console.log(Math.round(alpha * 100) + '%'); // "50%"
+</pre><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><script>const text = {  ja: {n1:"戻る",n2:"hexと透過色",n3:"hexと透過色の計算について",n4:`不透明な赤色を表すと下記のようになります。<br>[HEX]<br>#FF0000FF<br>[RGB]<br>rgb(255 0 0 / 1.00)<br>この赤色を透過色50%で表すと下記のようになります。<br>[HEX]<br>#FF000080<br>[RGB]<br>rgb(255 0 0 / 0.50)<br>この計算式には下記の計算をすると結果が得られました。<br>[下記プログラムの中から一部抜粋]<br>const aa = Math.round(a * 255);<br><br>この計算をみると<br>透過色50%の場合<br>aは50%に相当するので<br>aaの値は<br>0.5 * 255 = 127.5なので四捨五入をして<br>128になります、<br>toHex関数の引数に128をを設定することで16進数の80に変換してくれます。<br>これにより透過色50%の赤色はhexで表現すると<br>#FF000080<br>になります。<br><br>HEXの最後の2桁がアルファ値（0〜255）であることから<br>255で割ると、0〜1の透過率を得られます。<br>`,n5:`[ポイント]<br>parseInt(文字列, 16)で16進数を10進数に変換します。<br>0〜255の値を255で割ると 0〜1 の透過率になります。<br>50%の場合は128 / 255 ≒ 0.502となり、ほぼ0.5となります。<br><br>もし「ちょうど50%かどうか」を判定したい場合は、<br>小数点の誤差を考慮して四捨五入するといいでしょう。<br>`,n7:"戻る",  },  en: {n1: "back",n2: "Hex and Transparent Color",n3: "Calculating Hex and Transparent Color",n4: `To represent opaque red, it looks like this: <br>[HEX]<br>#FF0000FF<br>[RGB]<br>rgb(255 0 0 / 1.00)<br>To represent this red with 50% transparency, it looks like this: <br>[HEX]<br>#FF000080<br>[RGB]<br>rgb(255 0 0 / 0.50)<br>The following calculations were performed on this formula to obtain the results. <br>[Excerpt from the program below]<br>const aa = Math.round(a * 255);<br><br>Looking at this calculation:<br>For a 50% transparent color<br>a corresponds to 50%,<br>The value of aa is<br>0.5 * 255 = 127.5, so rounding it up or down<br>gets 128.<br>Setting 128 as the argument to the toHex function converts it to 80 in hexadecimal.<br>This means that a 50% transparent red color can be expressed in hexadecimal as<br>#FF000080<br>.<br><br>Since the last two digits of the HEX value are the alpha value (0-255),<br>dividing it by 255 gives a transparency value between 0 and 1. <br>`,n5:`[Key Points]<br>Convert hexadecimal to decimal using parseInt(string, 16). <br>Divide a value between 0 and 255 by 255 to get a transparency between 0 and 1. <br>For 50%, 128 / 255 is approximately 0.502, or roughly 0.5. <br><br>If you want to determine whether the value is "exactly 50%,<br><script><script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
