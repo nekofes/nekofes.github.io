@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">update(indexedDB)</div></td></tr><tr><td><div id="n3">get()を使用した更新処理(where条件なしのケース)</div></td></tr></table><br><div id="n4">indexedDBでupdateをする処理です。<br>indexedDBではputメソッドを使用してデータを削除できます。</div><br><div id="n5">[サンプル]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+async function sampleTest(dbName, storeName) 
+{
+	const db = await databaseOpen(dbName);
+	//update
+	await runTx(db, storeName, "readwrite", (store) => 
+	{
+		for (let i = 0; i < 3; i++) 
+		{
+			const getReq = store.get(i);
+			getReq.onsuccess = () => 
+			{
+				const original = getReq.result;
+				if (original) {
+					original.f3 = "change" + (i + 1);
+					store.put(original);
+				}
+			};
+		}
+	});
+	//select all
+	const rows = await runTx(db, storeName, "readonly", (store) => 
+	{
+		return new Promise((resolve, reject) => 
+		{
+			const req = store.getAll();
+			req.onsuccess = () => resolve(req.result);
+			req.onerror = () => reject(req.error);
+		});
+	});
+	
+	rows.forEach(r => console.log(`f1:${r.f1}, f2:${r.f2}, f3:${r.f3}`));
+	db.close();
+}
+function waitForTx(tx) 
+{
+	return new Promise((resolve, reject) => 
+	{
+		tx.oncomplete = () => resolve();
+		tx.onabort = () => reject(tx.error ?? new Error("Transaction aborted"));
+		tx.onerror = () => reject(tx.error);
+	});
+}
+
+async function runTx(db, storeName, mode, work) 
+{
+	const tx = db.transaction([storeName], mode);
+	const store = tx.objectStore(storeName);
+	const result = await work(store);
+	await waitForTx(tx);
+	return result;
+}
+function databaseOpen(dbName) 
+{
+	return new Promise((resolve, reject) => 
+	{
+		const req = indexedDB.open(dbName);
+		req.onsuccess = (event) => 
+		{
+			resolve(event.target.result);
+		};
+		req.onerror = () => reject(req.error);
+	});
+}
+sampleTest("aaa", "t1");
+</pre><br><div id="n6">このサンプルではデータベースの更新処理(テーブル削除など)がなかったと仮定したものです。<br>insertでデータが入っているものと仮定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const db = await openDatabase(dbName, version, (db) =></div>データベースをopenします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!db.objectStoreNames.contains(storeName)) </div>引数にあるオブジェクトスキーマが存在しない場合は作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await runTx(db, storeName, "readwrite", (store) => </div>トランザクションの完了を待つためにupdateの処理内容をrunTxを使用して非同期処理の待機をしています。<br>runTxでは「store.put(original);」でデータの更新をします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const getReq = store.get(i);</div>オブジェクトスキーマからインデックスから行データを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const original = getReq.result;</div>onsuccessイベントでresultで取得できた行データを変数に保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">original.f3 = "change" + (i + 1);</div>このサンプルではf3フィールドを更新するので、このように値を変更しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">store.put(original);</div>変更した行データを更新します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await waitForTx(tx);</div>トランザクションの完了の結果を受け取るまで待ち状態となります。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><script></script></script><script>const text = {  ja: {n1:"戻る",n2:"update(indexedDB)",n3:"get()を使用した更新処理(where条件なしのケース)",n4:`indexedDBでupdateをする処理です。<br>indexedDBではputメソッドを使用してデータを削除できます。`,n5:`[サンプル]`,n6:`このサンプルではデータベースの更新処理(テーブル削除など)がなかったと仮定したものです。<br>insertでデータが入っているものと仮定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const db = await openDatabase(dbName, version, (db) =></div>データベースをopenします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!db.objectStoreNames.contains(storeName)) </div>引数にあるオブジェクトスキーマが存在しない場合は作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await runTx(db, storeName, "readwrite", (store) => </div>トランザクションの完了を待つためにupdateの処理内容をrunTxを使用して非同期処理の待機をしています。<br>runTxでは「store.put(original);」でデータの更新をします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const getReq = store.get(i);</div>オブジェクトスキーマからインデックスから行データを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const original = getReq.result;</div>onsuccessイベントでresultで取得できた行データを変数に保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">original.f3 = "change" + (i + 1);</div>このサンプルではf3フィールドを更新するので、このように値を変更しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">store.put(original);</div>変更した行データを更新します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await waitForTx(tx);</div>トランザクションの完了の結果を受け取るまで待ち状態となります。<br>`,n7:"戻る",  },  en: {n1: "back",n2: "update(indexedDB)",n3: "Update process using get() (without where condition)",n4: `This is an update process using indexedDB. <br>In indexedDB, you can delete data using the put method.`,n5: `[Sample]`,n6: `This sample assumes that no database updates (such as table deletion) have occurred. <br>It assumes that data has been entered using insert. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const db = await openDatabase(dbName, version, (db) =></div>Opens the database.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!db.objectStoreNames.contains(storeName))</div>Creates the object schema if it does not exist.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await runTx(db, storeName, "readwrite", (store) =></div>To wait for the transaction to complete, the update process is asynchronously queued using runTx. <br>runTx updates the data using "store.put(original);". <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const getReq = store.get(i);</div>Retrieves row data from the index in the object schema. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const original = getReq.result;</div>The row data retrieved by result in the onsuccess event is saved in a variable. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">original.f3 = "change" + (i + 1);</div>In this sample, we're updating the f3 field, so we're changing the value like this.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">store.put(original);</div>Update the changed row data.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await waitForTx(tx);</div>Wait until the transaction completion result is received.<br>`,n7:"back",}};function applyTextAll(lang, divIds) {  divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {    return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;  el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];function handleButtonClick(e) {const btn = e.currentTarget;const {id} = btn.dataset;test(id);} function test(id){console.log("id:"+id);const result = document.getElementById("result");result.innerText = "button id:"+id;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;f4();console.log("lang:"+lang);applyTextAll(lang==0?"jp":"en", ary);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
