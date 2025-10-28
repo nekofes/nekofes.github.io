@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script></script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" />  <style>    .prettyprint ol.linenums > li {      list-style-type: decimal;     }    /* お好みでボタンのスタイルも設定 */    .copy-button {      display: inline-block; /* インライン要素をブロック要素のように扱う */      padding: 2px 5px; /* リンクテキストの周りに余白を追加 */      border: 1px solid #000; /* 枠線を追加 */      border-radius: 3px; /* 角を丸くする */      text-decoration: none; /* デフォルトの下線を消す */      color: #000; /* リンクの色 */      background-color: #ffffcc; /* 背景色を黄色に */      /* 蛍光ペン風の背景色 */      /* background: linear-gradient(transparent 60%, #ffffcc 60%); */    }    .copy-button:hover {      background-color: #ffeb99; /* ホバー時の背景色 */    }  </style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">update(indexedDB)</div></td></tr><tr><td><div id="n3">カーソルを使用してすべての行を更新</div></td></tr></table><br><div id="n4">カーソルで取得したデータをレコードとして順次取り出し<br>updateを使用して更新します。<br>[一般的な目安]<br><table><tr><td>getAll()</td><td>数百件〜数千件程度<br>※getAll()は全件を一括でメモリに読み込むため、<br>データ量が多いと ブラウザのメモリを圧迫する可能性があります。</td></tr><tr><td>カーソル</td><td>数万件以上<br>特に画像やバイナリデータを含む場合は、カーソル推奨。</td></tr></table></div><br><div id="n5">[サンプル]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+async function sampleTest(dbName, storeName) 
+{
+	const db = await databaseOpen(dbName);
+	//update
+	await runTx(db, storeName, "readwrite", (store) => 
+	{
+
+		const cursorReq = store.openCursor();
+
+		cursorReq.onsuccess = (event) => 
+		{
+			const cursor = event.target.result;
+			if (cursor) {
+				const record = cursor.value;
+				record.f3 = "change" + (record.f1 + 1);
+				cursor.update(record);
+				cursor.continue();
+			}
+		};
+
+	});
+	//select all
+	const rows = await runTx(db, storeName, "readonly", (store) => 
+	{
+		return new Promise((resolve, reject) => 
+		{
+			const req = store.getAll();
+			req.onsuccess = () => resolve(req.result);
+			req.onerror = () => reject(req.error);
+		});
+	});
+	
+	rows.forEach(r => console.log(`f1:${r.f1}, f2:${r.f2}, f3:${r.f3}`));
+	db.close();
+}
+function waitForTx(tx) 
+{
+	return new Promise((resolve, reject) => 
+	{
+		tx.oncomplete = () => resolve();
+		tx.onabort = () => reject(tx.error ?? new Error("Transaction aborted"));
+		tx.onerror = () => reject(tx.error);
+	});
+}
+
+async function runTx(db, storeName, mode, work) 
+{
+	const tx = db.transaction([storeName], mode);
+	const store = tx.objectStore(storeName);
+	const result = await work(store);
+	await waitForTx(tx);
+	return result;
+}
+function databaseOpen(dbName) 
+{
+	return new Promise((resolve, reject) => 
+	{
+		const req = indexedDB.open(dbName);
+		req.onsuccess = (event) => 
+		{
+			resolve(event.target.result);
+		};
+		req.onerror = () => reject(req.error);
+	});
+}
+sampleTest("aaa", "t1");
+</pre><br><div id="n6">このサンプルではデータベースの更新処理(テーブル削除など)がなかったと仮定したものです。<br>insertでデータが入っているものと仮定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const db = await openDatabase(dbName, version, (db) =></div>データベースをopenします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!db.objectStoreNames.contains(storeName)) </div>引数にあるオブジェクトスキーマが存在しない場合は作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const req = store.getAll();</div>オブジェクトスキーマからすべてのレコードを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const cursorReq = store.openCursor();</div>オブジェクトスキーマからレコードを順番に取り出す準備をしたカーソルを生成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const cursor = event.target.result;</div>onsuccessイベントでカーソルを変数に保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const record = cursor.value;</div>カーソルの行データを取り出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">record.f3 = "change" + (record.f1 + 1);</div>行データを更新した結果をカーソルのf3フィールド変数に保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.update(record);</div>カーソルを更新します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.continue();</div>次のカーソルを呼び出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await waitForTx(tx);</div>トランザクションの完了の結果を受け取るまで待ち状態となります。<br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><script></script></script><script>const text = {  ja: {n1:"戻る",n2:"update(indexedDB)",n3:"カーソルを使用してすべての行を更新",n4:`カーソルで取得したデータをレコードとして順次取り出し<br>updateを使用して更新します。<br>[一般的な目安]<br><table><tr><td>getAll()</td><td>数百件〜数千件程度<br>※getAll()は全件を一括でメモリに読み込むため、<br>データ量が多いと ブラウザのメモリを圧迫する可能性があります。</td></tr><tr><td>カーソル</td><td>数万件以上<br>特に画像やバイナリデータを含む場合は、カーソル推奨。</td></tr></table>`,n5:`[サンプル]`,n6:`このサンプルではデータベースの更新処理(テーブル削除など)がなかったと仮定したものです。<br>insertでデータが入っているものと仮定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const db = await openDatabase(dbName, version, (db) =></div>データベースをopenします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!db.objectStoreNames.contains(storeName)) </div>引数にあるオブジェクトスキーマが存在しない場合は作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const req = store.getAll();</div>オブジェクトスキーマからすべてのレコードを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const cursorReq = store.openCursor();</div>オブジェクトスキーマからレコードを順番に取り出す準備をしたカーソルを生成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const cursor = event.target.result;</div>onsuccessイベントでカーソルを変数に保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const record = cursor.value;</div>カーソルの行データを取り出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">record.f3 = "change" + (record.f1 + 1);</div>行データを更新した結果をカーソルのf3フィールド変数に保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.update(record);</div>カーソルを更新します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.continue();</div>次のカーソルを呼び出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await waitForTx(tx);</div>トランザクションの完了の結果を受け取るまで待ち状態となります。<br>`,n7:"戻る",  },  en: {n1: "back",n2: "update(indexedDB)",n3: "Update all rows using a cursor",n4:`Sequentially extract the data retrieved with the cursor as records.<br>Update them using update. <br>[General Guideline]<br><table><tr><td>getAll()</td><td>Hundreds to thousands of records.<br>Note: getAll() loads all records into memory at once,<br>large data volumes may strain the browser's memory.</td></tr><tr><td>Cursor</td><td>Tens of thousands or more records.<br>A cursor is recommended, especially when images or binary data are included.</td></tr></table>`,n5:`[Sample]`,n6:`This sample assumes no database updates (such as table deletions) have occurred. <br>It assumes that data has been entered using insert. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const db = await openDatabase(dbName, version, (db) =></div>Opens the database.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!db.objectStoreNames.contains(storeName))</div>Creates the object schema if it does not exist.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const req = store.getAll();</div>Retrieves all records from the object schema.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const cursorReq = store.openCursor();</div>Create a cursor ready to retrieve records sequentially from the object schema. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const cursor = event.target.result;</div>Save the cursor in a variable in the onsuccess event. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const record = cursor.value;</div>Retrieve the cursor row data. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">record.f3 = "change" + (record.f1 + 1);</div>Save the updated row data in the cursor's f3 field variable.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.update(record);</div>Update the cursor.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.continue();</div>Call the next cursor.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">await waitForTx(tx);</div>Waits until the transaction completion result is received. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {  divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {    return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {  const el = document.getElementById(divId);  if (!el) return;  el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];function handleButtonClick(e) {const btn = e.currentTarget;const {id} = btn.dataset;test(id);} function test(id){console.log("id:"+id);const result = document.getElementById("result");result.innerText = "button id:"+id;}</script></script><script>        function copyCodeById(targetId) {      const codeElement = document.getElementById(targetId);      if (!codeElement) {        console.error("対象のコードブロックが見つかりません: " + targetId);        return;      }            const codeText = codeElement.innerText;      if (navigator.clipboard && navigator.clipboard.writeText) {        navigator.clipboard.writeText(codeText)          .then(() => {            console.log("コピー成功");          })          .catch(err => {            console.error("コピー中にエラーが発生しました:", err);          });      } else {        console.error("Clipboard API はこのブラウザで利用できません");      }    }        document.querySelectorAll('.copy-button').forEach(function(button) {      button.addEventListener('click', function() {        const targetId = this.getAttribute('data-target');        copyCodeById(targetId);      });    });</script></script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;f4();console.log("lang:"+lang);applyTextAll(lang==0?"jp":"en", ary);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script></script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
