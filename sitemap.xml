@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {%- comment -%}
-  {%- endcomment -%}
   {%- for page in site.pages -%}
     {%- if page.sitemap != false and page.url and page.url != '' -%}
       {%- unless page.url contains '/assets/' or page.url contains '/vendor/' or page.url contains '/node_modules/' -%}
@@ -12,8 +10,6 @@
     {%- endif -%}
   {%- endfor -%}
 
-  {%- comment -%}
-  {%- endcomment -%}
   {%- for post in site.posts -%}
     <url>
       <loc>{{ site.url }}{{ post.url }}</loc>
