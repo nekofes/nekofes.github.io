@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">group byと同様の処理</div></td></tr><tr><td><div id="n3">indexedDB</div></td></tr></table><br><div id="n4">このサンプルではgroup化するデータをあらかじめcreateIndexでまとめています。<br>このデータを使ってgroup byをした結果を返すカーソルを使用した処理となります。<br>メモリでソートをすると大きいデータの場合メモリ負荷が増え、圧迫されてしまうことから<br>複合インデックスを準備してソートをする方法となります。</div><br><div id="n5">[サンプル]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+async function testGroupBy(dbName, storeName) 
+{
+const db = await databaseOpen(dbName);
+const rows = await runTx(db, storeName, "readonly", (store) => 
+{
+return new Promise((resolve, reject) => {
+const index = store.index("f1_f2");
+const groupedData = [];
+const req = index.openCursor();
+let key = "";
+req.onsuccess = (event) => 
+{
+const cursor = event.target.result;
+if (cursor) 
+{
+const tmp = cursor.value;
+//const category = record.f1_f2;
+const category = tmp.f1 + "" + tmp.f2;
+//console.log("i:"+idx+" category:"+category);
+if (!groupedData[category]) 
+{
+groupedData.push(category);
+}
+//next record
+cursor.continue();
+} 
+else 
+{
+//cursor end
+resolve(groupedData);
+}
+};
+req.onerror = () => reject(req.error);
+});
+});
+	
+db.close();
+
+return rows;
+}
+function waitForTx(tx) 
+{
+return new Promise((resolve, reject) => 
+{
+tx.oncomplete = () => resolve();
+tx.onabort = () => reject(tx.error ?? new Error("Transaction aborted"));
+tx.onerror = () => reject(tx.error);
+});
+}
+
+async function runTx(db, storeName, mode, work) 
+{
+const tx = db.transaction([storeName], mode);
+const store = tx.objectStore(storeName);
+const result = await work(store);
+await waitForTx(tx);
+return result;
+}
+
+function openDatabase(dbName, version, upgrade) 
+{
+return new Promise((resolve, reject) => 
+{
+const req = indexedDB.open(dbName, version);
+req.onupgradeneeded = (event) => 
+{
+const db = event.target.result;
+upgrade?.(db, event);
+};
+req.onsuccess = (event) => 
+{
+resolve(event.target.result);
+};
+req.onerror = () => reject(req.error);
+});
+}
+testGroupBy("aaa", "t2")
+.then(rows => 
+{
+for(i=0;i < rows.length;i++)
+{
+console.log("i:"+i+" rows:"+rows[i]);
+}
+})
+.catch(error => {
+console.error("group by error:", error);
+});
+</pre><br><div id="n6">このサンプルでは下記のようにオブジェクトスキーマを実装しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const store = db.createObjectStore("t2", { keyPath: "f0" });<br>store.createIndex("f1", "f1", { unique: false });<br>store.createIndex("f2", "f2", { unique: false });<br>store.createIndex("f3", "f3", { unique: false });<br>store.createIndex("f4", "f4", { unique: false });<br>//追加:f1 → f2 の並び<br>store.createIndex("f1_f2", ["f1", "f2"]);<br></div>上記レイアウトを使用してカーソルを使用してブレイクしたデータを配列に格納していきます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const index = store.index("f1_f2");<br>const req = index.openCursor();</div>複合インデックスでカーソルを開きます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const category = tmp.f1 + "" + tmp.f2;</div>グループ化したものとしてf1フィールドとf2フィールドを結合したカテゴリを変数にします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!groupedData[category]) </div>配列に先ほど取得したカテゴリ変数がないか？を判定します。<br>存在しない場合は配列として追加します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.continue();</div>次のカーソルに進めます。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><script></script><script>const text = {ja: {n1:"戻る",n2:"group byと同様の処理",n3:"indexedDB",n4:`このサンプルではgroup化するデータをあらかじめcreateIndexでまとめています。<br>このデータを使ってgroup byをした結果を返すカーソルを使用した処理となります。<br>メモリでソートをすると大きいデータの場合メモリ負荷が増え、圧迫されてしまうことから<br>複合インデックスを準備してソートをする方法となります。`,n5:`[サンプル]`,n6:`このサンプルでは下記のようにオブジェクトスキーマを実装しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const store = db.createObjectStore("t2", { keyPath: "f0" });<br>store.createIndex("f1", "f1", { unique: false });<br>store.createIndex("f2", "f2", { unique: false });<br>store.createIndex("f3", "f3", { unique: false });<br>store.createIndex("f4", "f4", { unique: false });<br>store.createIndex("f1_f2", ["f1", "f2"]);<br></div>上記レイアウトを使用してカーソルを使用してブレイクしたデータを配列に格納していきます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const index = store.index("f1_f2");<br>const req = index.openCursor();</div>複合インデックスでカーソルを開きます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const category = tmp.f1 + "" + tmp.f2;</div>グループ化したものとしてf1フィールドとf2フィールドを結合したカテゴリを変数にします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!groupedData[category]) </div>配列に先ほど取得したカテゴリ変数がないか？を判定します。<br>存在しない場合は配列として追加します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.continue();</div>次のカーソルに進めます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Same processing as group by",n3: "indexedDB",n4:`In this sample, the data to be grouped is compiled in advance using createIndex. <br>This data is used to perform a group by operation, and a cursor is used to return the results. <br>Sorting in memory can increase memory load and cause memory pressure for large data sets, so <br>This method involves preparing a composite index and sorting.`,n5:`[Sample]`,n6:`In this sample, the object schema is implemented as follows: <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const store = db.createObjectStore("t2", { keyPath: "f0" });<br>store.createIndex("f1", "f1", { unique: false });<br>store.createIndex("f2", "f2", { unique: false });<br>store.createIndex("f3", "f3", { unique: false });<br>store.createIndex("f4", "f4", { unique: false });<br>store.createIndex("f1_f2", ["f1", "f2"]);<br></div>Using the above layout, we use a cursor to store the broken data into an array. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const index = store.index("f1_f2");<br>const req = index.openCursor();</div>Open a cursor with a composite index. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const category = tmp.f1 + "" + tmp.f2;</div>As a grouping, create a category variable by combining the f1 and f2 fields. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!groupedData[category])</div>Checks whether the previously obtained categorical variable exists in the array. <br>If it does not exist, it is added as an array. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">cursor.continue();</div>Advance to the next cursor. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];function handleButtonClick(e) {const btn = e.currentTarget;const {id} = btn.dataset;test(id);} function test(id){console.log("id:"+id);const result = document.getElementById("result");result.innerText = "button id:"+id;}</script><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;f4();console.log("lang:"+lang);applyTextAll(lang==0?"jp":"en", ary);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
