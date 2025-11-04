@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table border=0><tr><td><input type=radio id='r1' name='r1' value=0 onchange='f1(0);' checked><label for=0>日本語</label></td><td><input type=radio id='r1' name='r1' value=1 onchange='f1(1);'><label for=1>ENGLISH</label></td></tr></table><input type=hidden id=lang value=0><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">exists(getKey)</div></td></tr><tr><td><div id="n3">indexedDB</div></td></tr></table><br><div id="n4">getKey<br>インデックスに対して最初に一致した1件だけを返します。<br></div><br><div id="n5">[サンプル]</div><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+async function testExistsTest1(dbName, storeName, f1Value, f2Value)
+{
+	const db = await databaseOpen(dbName);
+	const result = await runTx(db, storeName, "readonly", (store) => 
+	{
+		return new Promise((resolve, reject) => 
+		{
+			const index = store.index("f1_f2");
+			//search f1 and f2 compound index
+			const request = index.getKey([f1Value, f2Value]);
+			request.onsuccess = () => 
+			{
+				//if exists record, return key is true.
+				resolve(request.result !== undefined);
+			};
+			request.onerror = () => reject(request.error);
+		});
+	});
+	
+	db.close();
+
+	return result;
+}
+function databaseOpen(dbName) 
+{
+	return new Promise((resolve, reject) => 
+	{
+		const req = indexedDB.open(dbName);
+		req.onsuccess = (event) => 
+		{
+			resolve(event.target.result);
+		};
+		req.onerror = () => reject(req.error);
+	});
+}
+function waitForTx(tx) 
+{
+	return new Promise((resolve, reject) => 
+	{
+		tx.oncomplete = () => resolve();
+		tx.onabort = () => reject(tx.error ?? new Error("Transaction aborted"));
+		tx.onerror = () => reject(tx.error);
+	});
+}
+
+async function runTx(db, storeName, mode, work) 
+{
+	const tx = db.transaction([storeName], mode);
+	const store = tx.objectStore(storeName);
+	const result = await work(store);
+	await waitForTx(tx);
+	return result;
+}
+testExistsTest1("aaa", "t2", 1, 2)
+.then(result => 
+{
+	console.log(result);
+})
+.catch(error => {
+	console.error("group by error:", error);
+});
+//[sample data]
+/*
+await runTx("aaa", "t2", "readwrite", (store) => 
+{
+	store.add({ f0: 0, f1: 1, f2: 2, f3: 1, f4: "1,2,1" });
+	store.add({ f0: 1, f1: 1, f2: 1, f3: 1, f4: "1,1,1" });
+	store.add({ f0: 2, f1: 1, f2: 3, f3: 1, f4: "1,3,1" });
+	store.add({ f0: 3, f1: 3, f2: 1, f3: 1, f4: "3,1,1" });
+	store.add({ f0: 4, f1: 3, f2: 4, f3: 1, f4: "4,4,1" });
+	store.add({ f0: 5, f1: 2, f2: 1, f3: 3, f4: "2,1,3" });
+	store.add({ f0: 6, f1: 2, f2: 1, f3: 2, f4: "2,1,2" });
+	store.add({ f0: 7, f1: 2, f2: 1, f3: 1, f4: "2,1,1" });
+});
+*/
+</pre><br><div id="n6">インデックスに対してget()もしくはgetKey()を実行すると最初に一致した1件だけを返します。<br>これを利用した存在チェックをexistsの代用できます。<br>const request = index.getKey([f1Value, f2Value]);<br>複合インデックスで検索しています。<br>request.onsuccess = () => <br>{<br>resolve(request.result !== undefined);<br>};<br>結果を返します。<br>存在しているとtrue以外はfalseを返します。<br><br>request.result !== undefined<br>一致するレコードがない場合はundefinedになります。<br>IndexedDB API の仕様で「見つからなかった場合は undefined を返す」と定義されています。<br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><script></script><script>const text = {ja: {n1:"戻る",n2:"exists(getKey)",n3:"indexedDB",n4:`getKey<br>インデックスに対して最初に一致した1件だけを返します。<br>`,n5:`[サンプル]`,n6:`インデックスに対してget()もしくはgetKey()を実行すると最初に一致した1件だけを返します。<br>これを利用した存在チェックをexistsの代用できます。<br>const request = index.getKey([f1Value, f2Value]);<br>複合インデックスで検索しています。<br>request.onsuccess = () => <br>{<br>resolve(request.result !== undefined);<br>};<br>結果を返します。<br>存在しているとtrue以外はfalseを返します。<br><br>request.result !== undefined<br>一致するレコードがない場合はundefinedになります。<br>IndexedDB API の仕様で「見つからなかった場合は undefined を返す」と定義されています。<br>`,n7:"戻る",},en: {n1: "back",n2:"exists(getKey)",n3:"indexedDB",n4:`getKey<br>Returns only the first match against the index. <br>`,n5:`[Sample]`,n6:`When executing get() or getKey() against an index, only the first match is returned. <br>This allows you to use an existence check instead of exists. <br>const request = index.getKey([f1Value, f2Value]);<br>Searching a composite index. <br>request.onsuccess = () => <br>{<br>resolve(request.result !== undefined);<br>};<br>Returns the result. <br>If a record exists, returns true; otherwise, returns false. <br><br>request.result !== undefined<br>If no matching records exist, returns undefined. <br>The IndexedDB API specification states that "if not found, undefined is returned." <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];function handleButtonClick(e) {const btn = e.currentTarget;const {id} = btn.dataset;test(id);} function test(id){console.log("id:"+id);const result = document.getElementById("result");result.innerText = "button id:"+id;}</script><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>window.onload = function() {f3();f0();};function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;f4();console.log("lang:"+lang);applyTextAll(lang==0?"jp":"en", ary);}function f4(){const obj=document.getElementById('lang');let d=obj.value;let o=document.getElementsByName('r1');if(d==0){o[0].checked=true;}else{o[1].checked=true;}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;let url="";if(lang==0){url='/js/index.html?lang=0';}else{url='/js/index.html?lang=1';}window.location.href=url;}function f5(no){const obj=document.getElementById('lang');let lang=obj.value;let url="";switch(no){case 1:if(lang==0){url='/js/js1.html?lang=0';}else{url='/js/js1.html?lang=1';}break;case 2:if(lang==0){url='/js/js2.html?lang=0';}else{url='/js/js2.html?lang=1';}break;}window.location.href=url;}</script><br><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'<tr<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'<b>著作権情報</b>	</td>	</>	<tclasp2>	<td aligleft >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームペーよびアプリ利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></body></html>
