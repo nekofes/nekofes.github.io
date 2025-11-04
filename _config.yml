@@ -2,3 +2,5 @@ title: "nekofes"
 url: "https://nekofes.github.io"
 plugins:
   - jekyll-sitemap
+last-modified-at:
+  date-format: "%Y-%m-%dT%H:%M:%S%:z"
