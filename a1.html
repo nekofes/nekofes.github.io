@@ -2,23 +2,36 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>image サンプル</title>
+  <title>Ajaxで画像取得</title>
 </head>
 <body>
+<input type="hidden" id="secKey">
+
+<img id="img1" style="width:200px;height:200px;">
+
 <script>
-const url = "https://ss1.xrea.com/app.s17.xrea.com/img/image.php?file=post.png&key=mySecretKey123";
+// ページ読み込み時にキーを取得
+window.onload = function() {
+  fetch("https://ss1.xrea.com/app.s17.xrea.com/img/getkey.php", { credentials: "include" })
+    .then(res => res.json())
+    .then(data => {
+      // hiddenに保存
+      document.getElementById("secKey").value = data.key;
 
-fetch(url)
-  .then(res => {
-    if (!res.ok) throw new Error("アクセス拒否");
-    return res.blob();
-  })
-  .then(blob => {
-    document.getElementById("img1").src = URL.createObjectURL(blob);
-  })
-  .catch(err => console.error(err));
+      // 取得したキーを使って image.php を呼び出す
+      const url = "https://ss1.xrea.com/app.s17.xrea.com/img/image.php?file=post.png&key=" + data.key;
+
+      return fetch(url, { credentials: "include" });
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("アクセス拒否");
+      return res.blob();
+    })
+    .then(blob => {
+      document.getElementById("img1").src = URL.createObjectURL(blob);
+    })
+    .catch(err => console.error("画像取得失敗:", err));
+};
 </script>
-
-<img id="img1" style="width:100px;height:100px;">
 </body>
 </html>
