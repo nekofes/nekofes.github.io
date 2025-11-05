@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>image サンプル</title>
+  <meta charset="UTF-8">
+  <title>image サンプル</title>
 </head>
 <body>
 <script>
-fetch("https://ss1.xrea.com/app.s17.xrea.com/img/image.php?file=post.png&key=mySecretKey123")
+const url = "https://ss1.xrea.com/app.s17.xrea.com/img/image.php?file=post.png&key=mySecretKey123";
+
+fetch(url)
   .then(res => {
     if (!res.ok) throw new Error("アクセス拒否");
     return res.blob();
@@ -16,6 +18,7 @@ fetch("https://ss1.xrea.com/app.s17.xrea.com/img/image.php?file=post.png&key=myS
   })
   .catch(err => console.error(err));
 </script>
+
 <img id="img1" style="width:100px;height:100px;">
 </body>
 </html>
