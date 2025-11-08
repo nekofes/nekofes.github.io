@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">単純リクエスト</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpで判定した結果をhtml側で受け取ります。<br>このサンプルでは単純リクエストの例となります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test1.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>CORS JS/PHP サンプル</title>
+</head>
+<body>
+	<h1>JavaScript (HTML) から PHP への CORS リクエスト</h1>
+	<button onclick="fetchData()">PHPからデータを取得</button>
+	<pre id="output">ボタンを選択すると、この場所に結果が表示されます。</pre>
+
+	<script>
+//この部分は下記のプログラムを参照してください
+</script>
+</body>
+</html>
+</textarea></div><!-- en --><div id=h2><textarea id="t1" rows=17 cols=80>
+[test1.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS JS/PHP Sample</title>
+</head>
+<body>
+    <h1>CORS Request from JavaScript (HTML) to PHP</h1>
+<button onclick="fetchData()">Get Data from PHP</button>
+    <pre id="output">Selecting the button will display the results here.</pre>
+
+    <script>
+    
+    </script>
+</body>
+</html>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test1.html(javascript)]
+//PHPファイルと連携するURLを指定します
+const API_URL = 'http://localhost/test1.php'; 
+
+async function fetchData() {
+	try {
+		const response = await fetch(API_URL);
+
+		// レスポンスヘッダーに "Access-Control-Allow-Origin" が含まれていなければ、
+		// ここでブラウザがエラーを発生させます。
+		if (!response.ok) {
+			throw new Error('ネットワーク応答が不正です');
+		}
+
+		const data = await response.json();
+		document.getElementById('output').textContent = 
+			'[成功] 結果:\n' + JSON.stringify(data, null, 2);
+
+	} catch (error) {
+		// CORSエラーが発生するとここに到達します
+		console.error('フェッチ操作で問題が発生しました:', error);
+		document.getElementById('output').textContent = 
+			'エラーが発生しました。' +
+			'\n（PHP側の "Access-Control-Allow-Origin" の設定を確認してください）';
+	}
+}
+[test1.php]
+// -----------------------------------------------------
+// 1. CORSヘッダーの設定 (最も重要)
+// -----------------------------------------------------
+
+//アクセスを許可するオリジンを指定します。
+//このサンプルでは、全てのオリジンからのアクセスを許可しています。
+header("Access-Control-Allow-Origin: *");
+
+//レスポンスのタイプがJSONであることをブラウザとJSに伝えます
+header("Content-Type: application/json; charset=UTF-8");
+
+
+//-----------------------------------------------------
+//2. 実際のリクエスト処理
+//-----------------------------------------------------
+
+//返すデータを設定します
+$data = array(
+	"message" => "Hello test1.html",
+	"user_id" => 1234567890,
+	"source" => "test data"
+);
+
+//データをJSON形式に変換して出力します
+echo json_encode($data);
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test1.html(javascript)]
+// Specify the URL to interact with the PHP file
+const API_URL = ‘http://localhost/test1.php’;
+
+async function fetchData() {
+    try {
+        const response = await fetch(API_URL);
+
+		// If the response header does not contain “Access-Control-Allow-Origin”,
+        // the browser will throw an error here.
+        if (!response.ok) {
+            throw new Error(‘Invalid network response’);
+        }
+
+		const data = await response.json();
+        document.getElementById(‘output’).textContent = 
+            ‘[Success] Result:\n’ + JSON.stringify(data, null, 2);
+
+    } catch (error) {
+        // Reaches here if a CORS error occurs
+        console.error(‘Problem occurred during fetch operation:’, error);
+		document.getElementById(‘output’).textContent = 
+            ‘An error occurred.’ +
+            ‘\n(Please check the “Access-Control-Allow-Origin” setting on the PHP side).’;
+    }
+}
+[test1.php]
+// --------------------------- --------------------------
+// 1. CORS header configuration (most important)
+// -----------------------------------------------------
+
+// Specifies origins allowed to access.
+// This sample allows access from all origins.
+header(“Access-Control-Allow-Origin: *”);
+
+// Informs the browser and JS that the response type is JSON
+header(“Content-Type: application/json; charset=UTF-8”);
+
+
+//------ -----------------------------------------------
+//2. Actual Request Handling
+//----------------------------------------- ------------
+
+// Set the data to return
+$data = array(
+    “message” => “Hello test1.html”,
+    “user_id” => 1234567890,
+    “source” => “test data”
+);
+
+// Convert the data to JSON format and output it
+echo json_encode($data);
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const API_URL = 'http://localhost/test1.php'; </div>PHPファイルと連携するURLを指定します<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const response = await fetch(API_URL);</div>PHPファイル (api.php) にデータ取得のAjaxリクエスト（GETメソッド）を送信します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!response.ok) {<br>throw new Error('ネットワーク応答が不正です');<br>}<br></div>レスポンスヘッダーに "Access-Control-Allow-Origin" が含まれていなければ、<br>ここでブラウザがエラーを発生させます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const data = await response.json();</div>phpから結果を受け取ります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById('output').textContent = <br>'[成功] 結果:\n' + JSON.stringify(data, null, 2);<br></div>結果を表示します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">} catch (error) {</div>失敗した場合の処理を実装します。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"単純リクエスト",n3:"ajax",n4:`ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpで判定した結果をhtml側で受け取ります。<br>このサンプルでは単純リクエストの例となります。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const API_URL = 'http:</div>PHPファイルと連携するURLを指定します<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const response = await fetch(API_URL);</div>PHPファイル (api.php) にデータ取得のAjaxリクエスト（GETメソッド）を送信します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!response.ok) {<br>throw new Error('ネットワーク応答が不正です');<br>}<br></div>レスポンスヘッダーに "Access-Control-Allow-Origin" が含まれていなければ、<br>ここでブラウザがエラーを発生させます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const data = await response.json();</div>phpから結果を受け取ります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById('output').textContent = <br>'[成功] 結果:\n' + JSON.stringify(data, null, 2);<br></div>結果を表示します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">} catch (error) {</div>失敗した場合の処理を実装します。<br><br>`,n7:"戻る",},en: {n1: "back",n2: "Simple request",n3: "Ajax",n4: `Ajax is used to make a request from the HTML side to the server. <br>The server receives the results of the PHP judgment on the HTML side. <br>This sample is an example of a simple request. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const API_URL = 'http:</div>Specify the URL to connect to the PHP file.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const response = await fetch(API_URL);</div>Send an Ajax request (GET method) to the PHP file (api.php) to retrieve data. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!response.ok) {<br>throw new Error('Invalid network response');<br>}<br></div>If the response header does not include "Access-Control-Allow-Origin",<br>the browser will throw an error here. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const data = await response.json();</div>Receive the result from PHP. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById('output').textContent = <br>'[Success] Result:\n' + JSON.stringify(data, null, 2);<br></div>Display the results. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">} catch (error) {</div>Implement handling in case of failure. <br><br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
