@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">プリフライトリクエスト</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpで判定した結果をhtml側で受け取ります。<br>このサンプルではプリフライトリクエストの例となります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test2.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax サンプル</title>
+</head>
+<body>
+
+	<h1>ユーザー情報の取得</h1>
+	<button id="fetchButton">ユーザー情報を取得</button>
+	<div id="result"></div>
+
+<script>
+//この部分は下記のプログラムを参照してください
+</script>
+</body>
+</html>
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax Sample</title>
+</head>
+<body>
+
+	<h1>Retrieve User Information</h1>
+    <button id="fetchButton">Retrieve User Information</button>
+    <div id="result"></div>
+
+<script>
+    
+</script>
+</body>
+</html>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test2.html(javascript)]
+document.getElementById('fetchButton').addEventListener('click', () => {
+	const resultDiv = document.getElementById('result');
+	resultDiv.textContent = '読み込み中...';
+
+	fetch('http://localhost/test2.php', {
+		method: 'POST',
+		headers: {
+		'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ id: 123 }),
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('ネットワークエラーが発生しました');
+		}
+		return response.json();
+	})
+	.then(data => {
+		if (data.status === 'success') 
+		{
+			resultDiv.innerHTML = `
+				&lt;p&gt;名前: ${data.user.name}&lt;/p&gt;
+				&lt;p&gt;年齢: ${data.user.age}&lt;/p&gt;
+			`;
+		} 
+		else 
+		{
+			resultDiv.textContent = `エラー: ${data.message}`;
+		}
+	})
+	.catch(error => {
+		console.error('Fetchエラー:', error);
+		resultDiv.textContent = `リクエストに失敗しました: ${error.message}`;
+	});
+});
+[test2.php]
+//CORSを許可する
+header("Access-Control-Allow-Origin: *"); // すべてのオリジンを許可（セキュリティ的に注意）
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+ 
+// プリフライトリクエストならここで終了
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+	http_response_code(200);
+	exit;
+}
+ 
+// レスポンスの形式をJSONに設定
+header('Content-Type: application/json');
+ 
+// POSTされたJSONデータを取得
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true);
+ 
+// データを検証
+if (!isset($data['id'])) 
+{
+	echo json_encode(['status' => 'error', 'message' => 'ユーザーIDが指定されていません。']);
+	exit;
+}
+ 
+$id = $data['id'];
+ 
+// ダミーのデータ処理
+if ($id === 123) 
+{
+	$user = [
+		'name' => '山田 花子',
+		'age' => 20
+	];
+	echo json_encode(['status' => 'success', 'user' => $user]);
+} 
+else 
+{
+	echo json_encode(['status' => 'error', 'message' => '指定されたユーザーが見つかりません。']);
+}
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test2.html(javascript)]
+document.getElementById(‘fetchButton’).addEventListener(‘click’, () => {
+    const resultDiv = document.getElementById(‘result’);
+    resultDiv.textContent = ‘Loading...’;
+
+	fetch(‘http://localhost/test2.php’, {
+    method: ‘POST’,
+    headers: {
+        ‘Content-Type’: ‘application/json’,
+    },
+    body: JSON.stringify({ id: 123 }),
+})
+	.then(response => {
+    if (!response.ok) {
+        throw new Error(‘Network error occurred’);
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === ‘success’) {
+        resultDiv.innerHTML = `
+				&lt;p&gt;Name: ${data.user.name}&lt;/p&gt;
+				&lt;p&gt;Age: ${data.user.age}&lt;/p&gt;
+            `;
+        } 
+        else 
+        {
+            resultDiv.textContent = `Error: ${data.message}`;
+        }
+    })
+	.catch(error => {
+        console.error(‘Fetch error:’, error);
+        resultDiv.textContent = `Request failed: ${error.message}`;
+    });
+});
+[test2.php]
+// Allow CORS
+header(“Access-Control-Allow-Origin: *”); // Allow all origins (security caution)
+header(“Access-Control-Allow-Methods: POST, GET, OPTIONS”);
+header(“Access-Control-Allow-Headers: Content-Type”);
+ 
+// Exit if this is a preflight request
+if ($_SERVER[‘REQUEST_METHOD’] === ‘OPTIONS’) {
+    http_response_code(200);
+    exit;
+}
+ 
+// Set response format to JSON
+header(‘Content-Type: application/json’);
+ 
+// Retrieve the POSTed JSON data
+$json_data = file_get_contents(“php://input”);
+$data = json_decode($json_data, true);
+ 
+// Validate the data
+if (!isset($data[‘id’])) 
+{
+    echo json_encode([‘status’ => ‘error’, ‘message’ => ‘User ID is not specified.’]);
+	exit;
+}
+ 
+$id = $data[‘id’];
+ 
+// Dummy data processing
+if ($id === 123) 
+{
+    $user = [
+        ‘name’ => ‘Hanako Yamada’,
+        ‘age’ => 20
+    ];
+	echo json_encode([‘status’ => ‘success’, ‘user’ => $user]);
+} 
+else 
+{
+    echo json_encode([‘status’ => ‘error’, ‘message’ => ‘The specified user was not found.’]);
+}
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch('http://localhost/test2.php'</div>PHPファイルと連携するURLを指定します<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">method: 'POST',</div>POST形式を指定しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">headers: {<br>'Content-Type': 'application/json',<br></div>送信するデータの形式を指定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ id: 123 }),</div>JSON.stringify:JavaScriptオブジェクトをJSON文字列に変換します。<br>{ id: 123 }<br>オブジェクト・リテラルという方法で作成された「オブジェクト」です。<br>プロパティ(フィールド)と値の組み合わせのデータを送信しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(response => {<br></div>response オブジェクトを受け取ります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return response.json();</div>データ本体を読み込む指示を出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(data => {if (data.status === 'success') </div>非同期で実行されます。<br>response.json() が完了したときに<br>引数のdata(実際に読み込まれたJSONデータ)を受け取ることができます。<br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"プリフライトリクエスト",n3:"ajax",n4:`ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpで判定した結果をhtml側で受け取ります。<br>このサンプルではプリフライトリクエストの例となります。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch('http:</div>PHPファイルと連携するURLを指定します<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">method: 'POST',</div>POST形式を指定しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">headers: {<br>'Content-Type': 'application/json',<br></div>送信するデータの形式を指定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ id: 123 }),</div>JSON.stringify:JavaScriptオブジェクトをJSON文字列に変換します。<br>{ id: 123 }<br>オブジェクト・リテラルという方法で作成された「オブジェクト」です。<br>プロパティ(フィールド)と値の組み合わせのデータを送信しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(response => {<br></div>response オブジェクトを受け取ります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return response.json();</div>データ本体を読み込む指示を出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(data => {if (data.status === 'success') </div>非同期で実行されます。<br>response.json() が完了したときに<br>引数のdata(実際に読み込まれたJSONデータ)を受け取ることができます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Preflight request",n3: "Ajax",n4: `Ajax is used to make a request from the HTML side to the server. <br>The server receives the results of the PHP evaluation on the HTML side. <br>This sample is an example of a preflight request. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch('http:</div>Specify the URL to link to the PHP file.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">method: 'POST',</div>Specifies the POST format.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">headers: {<br>'Content-Type': 'application/json',<br></div>Specifies the format of the data to be sent. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ id: 123 }),</div>JSON.stringify: Converts a JavaScript object to a JSON string. <br>{ id: 123 }<br>This is an "object" created using an object literal. <br>Data is sent as a combination of properties (fields) and values. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(response => {<br></div>Receives a response object. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return response.json();</div>Issue a command to load the data body. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(data => {if (data.status === 'success')</div>Executes asynchronously. <br>When response.json() completes, <br>you can receive the argument data (the actual JSON data loaded). <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
