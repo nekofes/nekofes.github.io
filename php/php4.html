@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">入れ子になった配列データ</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpを使用して判定した結果をhtml側に送信します。<br>このサンプルではプリフライトリクエストを使用した配列の例となります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test3.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax サンプル</title>
+</head>
+<body>
+
+	<h1>動物の情報の取得</h1>
+	<button id="sendArrayButton">動物の情報を取得</button>
+	<div id="result"></div>
+
+<script>
+document.getElementById('sendArrayButton').addEventListener('click', () => {
+const dataToSend = {
+	name: 'どうぶつ',
+	kind: ['ねこ', 'いぬ'], 
+	details: {
+color: ['白', '黒', '茶'],
+sound: ['にゃあ', 'わん']
+	}
+};
+
+fetch('http:
+	method: 'POST',
+	headers: {
+'Content-Type': 'application/json',
+	},
+	body: JSON.stringify(dataToSend), 
+})
+.then(response => {
+	if (!response.ok) {
+throw new Error('ネットワークエラーが発生しました');
+	}
+	return response.json(); 
+})
+.then(data => {
+	console.log('PHPからのレスポンス:', data);
+	
+	const resultDiv = document.getElementById('result');
+	if (data.status === 'success') {
+resultDiv.innerHTML = `
+	<p>名前: ${data.receivedData.name}</p>
+	<p>種類: ${data.receivedData.kind.join(', ')}</p>
+	<p>色: ${data.receivedData.details.color.join(', ')}</p>
+	<p>音: ${data.receivedData.details.sound.join(', ')}</p>
+`;
+	} else {
+resultDiv.textContent = `エラー: ${data.message}`;
+	}
+})
+.catch(error => {
+	console.error('Fetchエラー:', error);
+	document.getElementById('result').textContent = `リクエストに失敗しました: ${error.message}`;
+});
+});
+</script>
+</body>
+</html>
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+[test3.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax Sample</title>
+</head>
+<body>
+
+	<h1>Retrieving Animal Information</h1>
+    <button id="sendArrayButton">Retrieve Animal Information</button>
+    <div id="result"></div>
+
+<script>
+document.getElementById(‘sendArrayButton’).addEventListener(‘click’, () => {
+    const dataToSend = {
+        name: ‘Animal’,
+	kind: [‘cat’, ‘dog’], 
+        details: {
+            color: [‘white’, ‘black’, ‘brown’],
+            sound: [‘meow’, ‘woof’]
+        }
+    };
+
+fetch(‘http:
+    method: ‘POST’,
+    headers: {
+        ‘Content-Type’: ‘application/json’,
+    },
+    body: JSON.stringify(dataToSend), 
+})
+.then(response => {
+        if (!response.ok) {
+            throw new Error(‘Network error occurred’);
+        }
+        return response.json(); 
+    })
+    .then(data => {
+        console.log(‘Response from PHP:’, data);
+	
+        const resultDiv = document.getElementById(‘result’);
+        if (data.status === ‘success’) {
+            resultDiv.innerHTML = `
+                <p>Name: ${data.receivedData.name}</p>
+	<p>Type: ${data.receivedData.kind.join(‘, ’)}</p>
+                <p>Color: ${data.receivedData.details.color.join(‘, ’)}</p>
+                <p>Sound: ${data.receivedData.details.sound.join(‘, ’)}</p>
+            `;
+        } else {
+    resultDiv.textContent = `Error: ${data.message}`;
+}
+})
+.catch(error => {
+    console.error(‘Fetch error:’, error);
+    document.getElementById(‘result’).textContent = `Request failed: ${error.message}`;
+});
+});
+</textarea></div><br><!-- jp --><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test3.php]
+
+header('Content-Type: application/json');
+
+
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true); 
+
+
+if (!isset($data['name']) || !is_array($data['kind'])) {
+    echo json_encode(['status' => 'error', 'message' => 'データが不足しているか、形式が不正です。']);
+    exit;
+}
+
+
+error_log('受信データ: ' . print_r($data, true));
+
+
+$name = $data['name'];
+$kind = $data['kind']; 
+$color = $data['details']['color']; 
+$sound = $data['details']['sound']; 
+$ary1=[];
+$ary2=[];
+
+for($i=0; $i < count($sound); ++$i)
+{
+    $ary1[]=$color[$i]."色";
+}
+
+for($i=0; $i < count($sound); ++$i)
+{
+    $ary2[]=$sound[$i].$sound[$i];
+}
+
+$data["name"]="動物の種類";
+$data["kind"]=array("ねこちゃん,わんちゃん");
+$data['details']['color']=$ary1;
+$data['details']['sound']=$ary2;
+
+
+echo json_encode([
+    'status' => 'success',
+    'message' => 'データを受信しました。',
+    'receivedData' => $data 
+]);
+</pre></div><!-- en --><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test3.php]
+
+header(‘Content-Type: application/json’);
+
+
+$json_data = file_get_contents(“php:
+$data = json_decode($json_data, true); 
+
+
+if (!isset($data[‘name’]) || !is_array($data[‘kind’])) {
+    echo json_encode([‘status’ => ‘error’, ‘message’ => ‘Data is missing or invalid.’]);
+    exit;
+}
+
+
+error_log(‘Received data: ’ . print_r($data, true));
+
+
+$name = $data[‘name’];
+$kind = $data[‘kind’]; 
+$color = $data[‘details’][‘color’]; 
+$sound = $data[‘details’][‘sound’]; 
+$ary1=[];
+$ary2=[];
+
+for($i=0; $i < count($sound); ++$i)
+{
+    $ary1[]=$color[$i].“ color”;
+}
+
+for($i=0; $i < count($sound); ++$i)
+{
+    $ary2[]=$sound[$i].$sound[$i];
+}
+
+$data[“name”]=“Animal Type”;
+$data[“kind”]=array(“kitty,puppy”);
+$data[‘details’][‘color’]=$ary1;
+$data[‘details’][‘sound’]=$ary2;
+
+
+echo json_encode([
+    ‘status’ => ‘success’,
+    ‘message’ => ‘Data received.’,
+    ‘receivedData’ => $data 
+]);
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$json_data = file_get_contents("php://input");</div>POSTされたJSONデータを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!isset($data['name']) || !is_array($data['kind'])) {</div>データを検証してデータが不足しているか、形式が不正の場合はエラーを返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$name = $data['name'];<br>$kind = $data['kind']; $color = $data['details']['color']; $sound = $data['details']['sound']; </div>デコードされた連想配列を変数に置き換えています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">for($i=0; $i < count($sound); ++$i)<br>{<br>$ary1[]=$color[$i]."色";<br>}<br></div>元の値を変更した結果を配列として再格納します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">'receivedData' => $data </div>変更した結果のデータをhtmlに返します。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><!--  著作権情報 --><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><!--scriptタグのプログラムはボタンの最後に実装する必要があります。--><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"入れ子になった配列データ",n3:"ajax",n4:`ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpを使用して判定した結果をhtml側に送信します。<br>このサンプルではプリフライトリクエストを使用した配列の例となります。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$json_data = file_get_contents("php://input");</div>POSTされたJSONデータを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!isset($data['name']) || !is_array($data['kind'])) {</div>データを検証してデータが不足しているか、形式が不正の場合はエラーを返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$name = $data['name'];<br>$kind = $data['kind']; $color = $data['details']['color']; $sound = $data['details']['sound']; </div>デコードされた連想配列を変数に置き換えています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">for($i=0; $i < count($sound); ++$i)<br>{<br>$ary1[]=$color[$i]."色";<br>}<br></div>元の値を変更した結果を配列として再格納します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">'receivedData' => $data </div>変更した結果のデータをhtmlに返します。<br>`,n7:"戻る",},en: {n1: "back",n2:"Nested array data",n3:"ajax",n4:`Use ajax to send a request from the HTML side to the server.<br>The server uses PHP to process the request and sends the result back to the HTML side.<br>This sample demonstrates an array using a preflight request.<br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$json_data = file_get_contents(“php:</div>Retrieves the POSTed JSON data.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!isset($data[‘name’]) || !is_array($data[‘kind’])) {</div>Validates the data and returns an error if data is missing or the format is invalid.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$name = $data[‘name’];<br>$kind = $data[‘kind’]; $color = $data[‘details’][‘color’]; $sound = $data[‘details’][‘sound’]; </div>Replacing the decoded associative array with variables.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">for($i=0; $i < count($sound); ++$i)<br>{<br> $ary1[]=$color[$i].“color”;<br>}<br></div>The modified values ​​are stored back into the array.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">‘receivedData’ => $data </div>The modified data is returned to the HTML.<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
