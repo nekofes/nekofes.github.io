@@ -3,7 +3,11 @@ name: Build and Deploy Jekyll site
 on:
   push:
     branches:
-      - main   # ← 普段使っているブランチ名に合わせてください
+      - main
+
+concurrency:
+  group: "jekyll-pages"
+  cancel-in-progress: false
 
 jobs:
   build:
