@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">get</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpを使用して判定した結果をhtml側で受け取ります。<br>このサンプルではgetを使用したデータ表示の例となります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>GET</title>
+</head>
+<body>
+	<div>サーバーからの応答:</div>
+	<p id="result" style="border: 1px solid #ccc; padding: 10px; min-height: 20px;">
+		[結果が表示される場所]
+	</p>
+
+	<script>
+	sendData();
+	function sendData() {
+const tmp = "sample test data";
+const result = document.getElementById('result');
+
+// GETリクエストのURLを構築
+// クエリパラメータとして名前を付与
+const url = `./img/test5.php?data=${encodeURIComponent(tmp)}`;
+
+// Fetch APIを使用してGETリクエストを送信
+fetch(url)
+	.then(response => {
+// サーバーからの応答をJSONとして解析
+if (!response.ok) {
+	throw new Error('ネットワーク応答が不正です。');
+}
+return response.json();
+	})
+	.then(data => {
+// PHPから受け取ったメッセージを表示
+result.textContent = data.message;
+	})
+	.catch(error => {
+// エラー発生時の処理
+console.error('フェッチ操作に問題がありました:', error);
+result.textContent = '通信エラーが発生しました。';
+	});
+	}
+</script>
+</body>
+</html>
+</textarea></div><!-- en --><div id=h2><textarea id="t1" rows=17 cols=80>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET</title>
+</head>
+<body>
+    <div>Response from the server:</div>
+    <p id="result" style="border: 1px solid #ccc; padding: 10px; min-height: 20px;">
+        [Where the result will be displayed]
+    </p>
+
+<script>
+        sendData();
+        function sendData() {
+            const tmp = “sample test data”;
+            const result = document.getElementById(‘result’);
+
+            
+            
+const url = `./img/test5.php?data=${encodeURIComponent(tmp)}`;
+
+            
+            fetch(url)
+                .then(response => {
+                    
+if (!response.ok) {
+                        throw new Error(‘Invalid network response.’);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    
+                    result.textContent = data.message;
+	})
+                .catch(error => {
+                    
+                    console.error(‘Problem with fetch operation:’, error);
+                    result.textContent = ‘A communication error occurred.’;
+                });
+        }
+    </script>
+</body>
+</html>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+// クロスオリジンリソース共有 (CORS) 設定
+// 開発環境では全てのオリジンからのアクセスを許可するが、
+// 本番環境では特定のオリジンのみ許可するように変更することを推奨
+header('Access-Control-Allow-Origin: GET');
+
+// 返却するデータの形式がJSONであることを指定
+header('Content-Type: application/json; charset=UTF-8');
+
+// GETリクエストから 'user_name' パラメータを取得
+// $_GETはGETパラメータを格納するPHPのスーパーグローバル変数
+if (isset($_GET['data'])) {
+	$data = htmlspecialchars($_GET['data']); // クロスサイトスクリプティング (XSS) 対策
+	$message = "php側で受け取ったデータ(" . $data . ")";
+} else {
+	$message = "データが指定されていません。";
+}
+
+// レスポンスデータを連想配列として準備
+$response = [
+	'status' => 'success',
+	'message' => $message
+];
+
+// 連想配列をJSON形式に変換して出力
+echo json_encode($response);
+</pre></div><div id=h4><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+// Cross-Origin Resource Sharing (CORS) Settings
+// In development environments, allow access from all origins,
+// but it is recommended to change this to allow only specific origins in production environments
+header(‘Access-Control-Allow-Origin: GET’);
+
+// Specify that the returned data format is JSON
+header(‘Content-Type: application/json; charset=UTF-8’);
+
+// Retrieve the ‘user_name’ parameter from the GET request
+// $_GET is PHP's superglobal variable storing GET parameters
+if (isset($_GET[‘data’])) {
+    $data = htmlspecialchars($_GET[‘data’]); // Cross-site scripting (XSS) prevention
+    $message = “Data received on the PHP side: (” . $data . “)”;
+} else {
+    $message = “No data specified.”;
+}
+
+// Prepare response data as an associative array
+$response = [
+    ‘status’ => ‘success’,
+    ‘message’ => $message
+];
+
+// Convert associative array to JSON format and output
+echo json_encode($response);
+</pre><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+</pre></div><br><div id="n6">GETリクエストを受け取り<br>処理した結果をJSON形式で返しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">header('Access-Control-Allow-Origin: GET');</div>このサンプルではhtml側からGETを使用して処理しています。<br>方式には「POST, GET, OPTIONS」があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">header('Content-Type: application/json; charset=UTF-8');</div>html側でjavascriptの処理でContent-Typeがapplication/jsonと設定しているため<br>プリフライトが発生します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$message = "php側で受け取ったデータ(" . $data . ")";</div>php側で処理した結果をhtmlに返すため変数にしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$response = [<br>'status' => 'success',<br>'message' => $message<br>];<br></div>連想配列に格納して結果とhtml側で表示する内容を保存します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo json_encode($response);<br></div>結果をJSON形式で出力することでhtml側で判定及び表示に使用できるようにします。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"get",n3:"ajax",n4:`ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpを使用して判定した結果をhtml側で受け取ります。<br>このサンプルではgetを使用したデータ表示の例となります。<br>`,n5:`[サンプル]`,n6:`GETリクエストを受け取り<br>処理した結果をJSON形式で返しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">header('Access-Control-Allow-Origin: GET');</div>このサンプルではhtml側からGETを使用して処理しています。<br>方式には「POST, GET, OPTIONS」があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">header('Content-Type: application/json; charset=UTF-8');</div>html側でjavascriptの処理でContent-Typeがapplication/jsonと設定しているため<br>プリフライトが発生します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$message = "php側で受け取ったデータ(" . $data . ")";</div>php側で処理した結果をhtmlに返すため変数にしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$response = [<br>'status' => 'success',<br>'message' => $message<br>];<br></div>連想配列に格納して結果とhtml側で表示する内容を保存します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo json_encode($response);<br></div>結果をJSON形式で出力することでhtml側で判定及び表示に使用できるようにします。<br>`,n7:"戻る",},en: {n1: "back",n2:"get",n3:"ajax",n4:`Ajax is used to make a request from the HTML side to the server. <br>The server uses PHP to determine the result, and the HTML side receives it. <br>This sample demonstrates data display using get. <br>`,n5:`[Sample]`,n6:`A GET request is received<br>The processed results are returned in JSON format. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">header('Access-Control-Allow-Origin: GET');</div>This sample uses GET from the HTML side for processing. <br>Methods available are "POST", "GET", and "OPTIONS". <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">header('Content-Type: application/json; charset=UTF-8');</div>Because the JavaScript processing on the HTML side sets the Content-Type to application/json, a preflight occurs. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$message = "Data received on the PHP side (" . $data . ")";</div>The results of processing on the PHP side are saved as variables to be returned to the HTML. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$response = [<br>'status' => 'success',<br>'message' => $message<br>];<br></div>Store the results in an associative array and save the content to be displayed in HTML. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo json_encode($response);<br></div>Output the results in JSON format so that they can be used for evaluation and display in HTML. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
