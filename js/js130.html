@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">get</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpを使用して判定した結果をhtml側で受け取ります。<br>このサンプルではgetを使用したデータ表示の例となります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test5.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>GET</title>
+</head>
+<body>
+	<div>サーバーからの応答:</div>
+	<p id="result" style="border: 1px solid #ccc; padding: 10px; min-height: 20px;">
+		[結果が表示される場所]
+	</p>
+
+	<script>
+	
+</script>
+</body>
+</html>
+</textarea></div><!-- en --><div id=h2><textarea id="t1" rows=17 cols=80>
+[test5.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET</title>
+</head>
+<body>
+    <div>Response from the server:</div>
+    <p id="result" style="border: 1px solid #ccc; padding: 10px; min-height: 20px;">
+        [Place where the result is displayed]
+    </p>
+
+    <script>
+        
+    </script>
+</body>
+</html>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test5.html(javascript)]
+sendData();
+function sendData() {
+	const tmp = "sample test data";
+	const result = document.getElementById('result');
+
+	// GETリクエストのURLを構築
+	// クエリパラメータとして名前を付与
+	const url = "./img/test5.php?data=${encodeURIComponent(tmp)}";
+
+	// Fetch APIを使用してGETリクエストを送信
+	fetch(url)
+		.then(response => {
+			// サーバーからの応答をJSONとして解析
+			if (!response.ok) {
+				throw new Error('ネットワーク応答が不正です。');
+			}
+			return response.json();
+		})
+		.then(data => {
+			// PHPから受け取ったメッセージを表示
+			result.textContent = data.message;
+		})
+		.catch(error => {
+			// エラー発生時の処理
+			console.error('フェッチ操作に問題がありました:', error);
+			result.textContent = '通信エラーが発生しました。';
+		});
+}
+
+[test5.php]
+// クロスオリジンリソース共有 (CORS) 設定
+// 開発環境では全てのオリジンからのアクセスを許可するが、
+// 本番環境では特定のオリジンのみ許可するように変更することを推奨
+header('Access-Control-Allow-Origin: GET');
+
+// 返却するデータの形式がJSONであることを指定
+header('Content-Type: application/json; charset=UTF-8');
+
+// GETリクエストから 'user_name' パラメータを取得
+// $_GETはGETパラメータを格納するPHPのスーパーグローバル変数
+if (isset($_GET['data'])) {
+    $data = htmlspecialchars($_GET['data']); // クロスサイトスクリプティング (XSS) 対策
+    $message = "php側で受け取ったデータ(" . $data . ")";
+} else {
+    $message = "データが指定されていません。";
+}
+
+// レスポンスデータを連想配列として準備
+$response = [
+    'status' => 'success',
+    'message' => $message
+];
+
+// 連想配列をJSON形式に変換して出力
+echo json_encode($response);
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test5.html(javascript)]
+sendData();
+function sendData() {
+    const tmp = “sample test data”;
+    const result = document.getElementById(‘result’);
+
+    // Construct the GET request URL
+    // Append the name as a query parameter
+	const url = "./img/test5.php?data=${encodeURIComponent(tmp)}";
+
+    // Send GET request using Fetch API
+    fetch(url)
+        .then(response => {
+            // Parse server response as JSON
+            if (!response.ok) {
+				throw new Error(‘Invalid network response.’);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display the message received from PHP
+            result.textContent = data.message;
+        })
+        .catch(error => {
+            // Handle error occurrence
+			console.error(‘Problem with fetch operation:’, error);
+            result.textContent = ‘A communication error occurred.’;
+        });
+}
+
+[test5.php]
+// Cross-Origin Resource Sharing (CORS) configuration
+// In development environments, allow access from all origins,
+// but it is recommended to change this to allow only specific origins in production environments
+header(‘Access-Control-Allow-Origin: GET’);
+
+// Specify that the returned data format is JSON
+header(‘Content-Type: application/json; charset=UTF-8’);
+
+// Retrieve the ‘user_name’ parameter from the GET request
+// $_GET is PHP's superglobal variable storing GET parameters
+if (isset($_GET[‘data’])) {
+    $data = htmlspecialchars($_GET[‘data’]); // Cross-site scripting (XSS) prevention
+    $message = “Data received on the PHP side: (” . $data . “)”;
+} else {
+    $message = “No data specified.”;
+}
+
+// Prepare response data as an associative array
+$response = [
+    ‘status’ => ‘success’,
+    ‘message’ => $message
+];
+
+// Convert associative array to JSON format and output
+echo json_encode($response);
+</pre></div><br><div id="n6">$_GET変数を使った基本的な非同期通信の仕組みを示しています。JavaScriptが裏側でPHPスクリプト（test5.php?data=...）にリクエストを送信しますが、<br>現在表示されているHTMLページ(test5.html)はそのままの状態を維持します。<br>ブラウザのアドレスバーは変化しません。<br><br>GETリクエストのデータ(URLとクエリパラメータ)のサイズ<br>※ブラウザとウェブサーバによって制限されます。<br><br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">目安</td><td style="background-color:rgb(143 188 143 / 0.4);">一般的に2,000文字〜8,000文字(約2KB〜8KB)程度が安全な範囲とされています。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">理由</td><td style="background-color:rgb(143 188 143 / 0.4);">URLの長さには物理的な制限があり、これを超えるとリクエスト自体が失敗します。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">画像送信</td><td style="background-color:rgb(143 188 143 / 0.4);">GETで画像データ（Base64エンコードされたものを含む）を送信することは、<br>データ量がこの制限を容易に超えてしまうため、非推奨です。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = "./img/test5.php?data=${encodeURIComponent(tmp)}";</div>クエリパラメータを準備します。<br>今回はdataというGETパラメータの値にencodeURIComponent(tmp)を指定しています。<br>tmp変数に設定したように「sample test data」という値です。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch(url)</div>fetchのコード部分がバックグラウンドでの通信を可能にしています。<br>Fetch APIを使用してGETリクエストを送信します。<br>送信先のphpのパスは「./img/test5.php」です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return response.json();</div>データ本体を読み込む指示を出します。<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">result.textContent = data.message;</div>phpから受け取ったデータを表示します。<br>エンドユーザーがアドレスバーを見ただけでは、<br>どのようなデータがやり取りされているかを直接知ることはできません。<br>ただし、ブラウザの開発者ツールの「Network」タブを使用すると、通信履歴を容易に確認できます。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"get",n3:"ajax",n4:`ajaxを使用してhtml側からサーバーにリクエストします。<br>サーバーではphpを使用して判定した結果をhtml側で受け取ります。<br>このサンプルではgetを使用したデータ表示の例となります。<br>`,n5:`[サンプル]`,n6:`$_GET変数を使った基本的な非同期通信の仕組みを示しています。JavaScriptが裏側でPHPスクリプト（test5.php?data=...）にリクエストを送信しますが、<br>現在表示されているHTMLページ(test5.html)はそのままの状態を維持します。<br>ブラウザのアドレスバーは変化しません。<br><br>GETリクエストのデータ(URLとクエリパラメータ)のサイズ<br>※ブラウザとウェブサーバによって制限されます。<br><br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">目安</td><td style="background-color:rgb(143 188 143 / 0.4);">一般的に2,000文字〜8,000文字(約2KB〜8KB)程度が安全な範囲とされています。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">理由</td><td style="background-color:rgb(143 188 143 / 0.4);">URLの長さには物理的な制限があり、これを超えるとリクエスト自体が失敗します。</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">画像送信</td><td style="background-color:rgb(143 188 143 / 0.4);">GETで画像データ（Base64エンコードされたものを含む）を送信することは、<br>データ量がこの制限を容易に超えてしまうため、非推奨です。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">encodeURIComponent(tmp)</div>クエリパラメータを準備します。<br>今回はdataというGETパラメータの値にencodeURIComponent(tmp)を指定しています。<br>tmp変数に設定したように「sample test data」という値です。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch(url)</div>fetchのコード部分がバックグラウンドでの通信を可能にしています。<br>Fetch APIを使用してGETリクエストを送信します。<br>送信先のphpのパスは「./img/test5.php」です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return response.json();</div>データ本体を読み込む指示を出します。<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">result.textContent = data.message;</div>phpから受け取ったデータを表示します。<br>エンドユーザーがアドレスバーを見ただけでは、<br>どのようなデータがやり取りされているかを直接知ることはできません。<br>ただし、ブラウザの開発者ツールの「Network」タブを使用すると、通信履歴を容易に確認できます。<br><br>`,n7:"戻る",},en: {n1: "back",n2:"get",n3:"ajax",n4:`Ajax is used to send a request from the HTML side to the server. <br>The server uses PHP to determine the result and receives it on the HTML side. <br>This sample shows how data is displayed using get. <br>`,n5:`[Sample]`,n6:`This demonstrates basic asynchronous communication using the $_GET variable.JavaScript sends a request to the PHP script (test5.php?data=...) behind the scenes, but <br>The currently displayed HTML page (test5.html) remains unchanged. <br>The browser address bar does not change. <br><br>Size of GET request data (URL and query parameters) <br>*Limited by the browser and web server. <br><br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Guideline</td><td style="background-color:rgb(143 188 143 / 0.4);">Generally, a safe range is 2,000 to 8,000 characters (approximately 2KB to 8KB).</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Reason</td><td style="background-color:rgb(143 188 143 / 0.4);">There is a physical limit to the length of a URL, and if it exceeds this limit, the request will fail.</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Sending an Image</td><td style="background-color:rgb(143 188 143 / 0.4);">Sending image data (including Base64-encoded data) via GET is not recommended because the data volume can easily exceed this limit.</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">encodeURIComponent(tmp)</div>Prepare the query parameters. <br>In this example, encodeURIComponent(tmp) is specified as the value of the GET parameter "data." <br>The value is "sample test data," as set in the tmp variable. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch(url)</div>The fetch code enables background communication. <br>A GET request is sent using the Fetch API. <br>The destination PHP path is "./img/test5.php." <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return response.json();</div>This issues a command to load the data body.<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">result.textContent = data.message;</div>Displays the data received from PHP. <br>End users cannot directly determine what data is being exchanged just by looking at the address bar. <br>However, they can easily check the communication history by using the "Network" tab in their browser's developer tools. <br><br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
