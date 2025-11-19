@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">ファイルアップロード</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してhtml側からファイルをアップロードします。<br>サーバーではphpを使用してファイルを保存して結果をhtml側で受け取ります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test6.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>画像アップロードサンプル</title>
+</head>
+<body>
+<hr>
+<input type="file" id="file-input">
+<img id="image" >
+<pre id="file-content"></pre>
+<br>
+<button onclick="uploadFile()" >アップロード</button>
+<br>
+<h2>結果:</h2>
+<p id="result" style="border: 1px solid #ccc; padding: 10px; min-height: 20px;">
+	ファイルを選択して「アップロード」をクリックしてください。
+</p>
+
+<script>
+//この部分は下記のプログラムを参照してください
+</script>
+</body>
+</html>
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+[test6.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload Sample</title>
+</head>
+<body>
+<hr>
+<input type="file" id="file-input">
+<img id="image" >
+<pre id="file-content"></pre>
+<br>
+<button onclick="uploadFile()" >Upload</button>
+<br>
+<h2>Result:</h2>
+<p id="result" style="border: 1px solid #ccc; padding: 10px; min-height: 20px;">
+    Select a file and click “Upload”.
+</p>
+
+<script>
+    
+</script>
+</body>
+</html>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test6.html(javascript)]
+async function uploadFile() {
+    const fileInput = document.getElementById('file-input');
+    const result = document.getElementById('result');
+    const uploadedImage = document.getElementById('image');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        result.textContent = 'ファイルが選択されていません。';
+        return;
+    }
+
+    result.textContent = 'アップロード中...';
+
+    // FormDataオブジェクトを作成し、ファイルを追加します
+    // 'image'というキー名でPHPに送信します。
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        // Fetch APIでPOSTリクエストを送信します
+        const response = await fetch('./img/test6.php', {
+            method: 'POST',
+            body: formData // FormDataをそのままbodyに指定します
+        });
+
+        if (!response.ok) {
+            throw new Error('サーバーエラーが発生しました。');
+        }
+		const json = await response.json();
+		
+		if (json.status === 'success') {
+			result.textContent = 'アップロード成功: ' + json.message;
+			uploadedImage.src = json.file_url;
+			uploadedImage.style.display = 'block';
+		} else {
+			result.textContent = 'アップロード失敗: ' + json.message;
+		}
+    } catch (error) {
+        console.error('エラー:', error);
+        result.textContent = '通信エラーまたはサーバーエラーが発生しました。';
+    }
+}
+const fileInput = document.getElementById('file-input');
+const fileContentElement = document.getElementById('file-content');
+const image = document.getElementById('image');
+image.style.display = "none";
+ 
+let fileType = 0;//[0]not image [1]image
+ 
+fileInput.addEventListener('change', (event) => 
+{
+	const file = event.target.files[0];
+	if (!file) 
+	{
+		return;
+	}
+ 
+	const reader = new FileReader();
+ 
+	reader.onload = (e) => {
+		const content = e.target.result;
+		if(fileType == 0)
+		{
+			fileContentElement.textContent = content;
+			fileContentElement.style.display = "block";
+			image.style.display = "none";
+		}
+		else
+		{
+			fileContentElement.textContent = "";
+			image.src = content;
+			fileContentElement.style.display = "none";
+			image.style.display = "block";
+		}
+	};
+ 
+	reader.onerror = (e) => {
+		console.error('it occur error to load file.', e);
+		fileContentElement.textContent = 'it cannot read file.';
+	};
+	if(file.type.startsWith("image/"))
+	{
+		fileType = 1;
+		reader.readAsDataURL(file, 'UTF-8');
+	}
+	else
+	{
+		fileType = 0;
+		reader.readAsText(file);
+	}
+});
+
+[test6.php]
+header('Content-Type: application/json; charset=UTF-8');
+
+$response = [];
+$uploadDir = 'uploads/'; // 保存先ディレクトリ
+
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
+}
+
+if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    $fileTmpPath = $_FILES['image']['tmp_name'];
+    $fileName = basename($_FILES['image']['name']);//パスを除くファイル名を取得
+    $fileNameCmps = explode(".", $fileName);
+    $fileExtension = strtolower(end($fileNameCmps));
+    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+    $destPath = $uploadDir . $newFileName;
+
+    $allowedfileExtensions = array('jpg', 'png', 'gif', 'jpeg');
+    if (in_array($fileExtension, $allowedfileExtensions)) {
+        // ファイルを一時ディレクトリから指定の場所に移動
+        if (move_uploaded_file($fileTmpPath, $destPath)) {
+            $response['status'] = 'success';
+            $response['message'] = 'ファイルが正常にアップロードされました。';
+            //$response['file_url'] = $destPath; // ブラウザからアクセスできるURL
+            $response['file_url'] = 'img/' . $destPath;
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'ファイルの移動に失敗しました。ディレクトリの書き込み権限を確認してください。';
+        }
+    } else {
+        $response['status'] = 'error';
+        $response['message'] = '許可されていないファイル形式です。';
+    }
+} else {
+    $response['status'] = 'error';
+    $response['message'] = 'ファイルアップロードエラー。';
+}
+
+// JSONを返す
+echo json_encode($response);
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test6.html(javascript)]
+async function uploadFile() {
+    const fileInput = document.getElementById(‘file-input’);
+    const result = document.getElementById(‘result’);
+    const uploadedImage = document.getElementById(‘image’);
+    const file = fileInput.files[0];
+
+    if (!file) {
+    result.textContent = ‘No file selected.’;
+    return;
+}
+
+result.textContent = ‘Uploading...’;
+
+// Create a FormData object and add the file
+// Send it to PHP with the key name ‘image’.
+    const formData = new FormData();
+    formData.append(‘image’, file);
+
+    try {
+        // Send POST request using Fetch API
+        const response = await fetch(‘./img/test6.php’, {
+            method: ‘POST’,
+            body: formData // Pass FormData directly as body
+        });
+
+        if (!response.ok) {
+            throw new Error(‘Server error occurred.’);
+        }
+        const json = await response.json();
+        
+        if (json.status === ‘success’) {
+            result.textContent = ‘Upload successful: ’ + json.message;
+            uploadedImage.src = json.file_url;
+			uploadedImage.style.display = ‘block’;
+        } else {
+            result.textContent = ‘Upload failed: ’ + json.message;
+        }
+    } catch (error) {
+        console.error(‘Error:’, error);
+        result.textContent = ‘A communication error or server error occurred.’;
+    }
+}
+const fileInput = document.getElementById(‘file-input’);
+const fileContentElement = document.getElementById(‘file-content’);
+const image = document.getElementById(‘image’);
+image.style.display = “none”;
+ 
+let fileType = 0; // [0] not image [1] image
+ 
+fileInput.addEventListener(‘change’, (event) => 
+{
+    const file = event.target.files[0];
+    if (!file) 
+    {
+        return;
+    }
+ 
+    const reader = new FileReader();
+ 
+    reader.onload = (e) => {
+        const content = e.target.result;
+		if(fileType == 0)
+        {
+            fileContentElement.textContent = content;
+            fileContentElement.style.display = “block”;
+            image.style.display = “none”;
+        }
+        else
+        {
+            fileContentElement.textContent = “”;
+            image.src = content;
+			fileContentElement.style.display = “none”;
+            image.style.display = “block”;
+        }
+    };
+ 
+    reader.onerror = (e) => {
+        console.error(‘An error occurred while loading the file.’, e);
+        fileContentElement.textContent = ‘The file could not be read.’;
+    };
+	if(file.type.startsWith(“image/”))
+    {
+        fileType = 1;
+        reader.readAsDataURL(file, ‘UTF-8’);
+    }
+    else
+    {
+        fileType = 0;
+        reader.readAsText(file);
+    }
+});
+
+[test6.php]
+header(‘Content-Type: application/json; charset=UTF-8’);
+
+$response = [];
+$uploadDir = ‘uploads/’; // Destination directory
+
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
+}
+
+if (isset($_FILES[‘image’]) && $_FILES[‘image’][‘error’] === UPLOAD_ERR_OK) {
+    $fileTmpPath = $_FILES[‘image’][‘tmp_name’];
+    $fileName = basename($_FILES[‘image’][‘name’]); // Get filename without path
+    $fileNameCmps = explode(“.”, $fileName);
+    $fileExtension = strtolower(end($fileNameCmps));
+    $newFileName = md5(time() . $fileName) . ‘.’ . $fileExtension;
+    $destPath = $uploadDir . $newFileName;
+
+    $allowedfileExtensions = array(‘jpg’, ‘png’, ‘gif’, ‘jpeg’);
+    if (in_array($fileExtension, $allowedfileExtensions)) {
+        // Move file from temporary directory to specified location
+        if (move_uploaded_file($fileTmpPath, $destPath)) {
+            $response[‘status’] = ‘success’;
+            $response[‘message’] = ‘File uploaded successfully.’;
+            //$response[‘file_url’] = $destPath; // URL accessible from the browser
+            $response[‘file_url’] = ‘img/’ . $destPath;
+        } else {
+            $response[‘status’] = ‘error’;
+            $response[‘message’] = ‘Failed to move the file. Please check the directory's write permissions.’;
+        }
+    } else {
+        $response[‘status’] = ‘error’;
+        $response[‘message’] = ‘Unsupported file format.’;
+    }
+} else {
+    $response[‘status’] = ‘error’;
+    $response[‘message’] = ‘File upload error.’;
+}
+
+// Return JSON
+echo json_encode($response);
+</pre></div><br><div id="n6">input type="file" 要素とJavaScriptのFormDataを組み合わせます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const formData = new FormData();<br></div>FormData APIは、ブラウザの標準機能です。<br><br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">HTTPメソッド</td><td>HTTPリクエストのボディ</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">データの形式</td><td>multipart/form-data<br>(バイナリを含む)</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">データの構築</td><td>FormData API</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">主な用途</td><td>テキストや画像およびファイルなどの大容量をアップロード</td></tr></table><br>POST (FormData)<br>「multipart/form-data」という形式でデータが送られます。<br>一つのリクエストの中に、テキストデータや画像ファイルといった境界線を設けて、<br>複数の種類のデータを混在させて送ることができる特殊な形式です。<br>この形式により、テキストとバイナリデータ(画像)を同時に効率よく送信できます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const reader = new FileReader();</div>ファイルを読み込みこむためのオブジェクトインスタンスを生成しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.onload</div>読み込み完了の通知を行います。<br>ファイルの読み込みは非同期処理です。<br>非同期処理では処理の開始を指示する前に、<br>完了したときに何をするべきか？<br>を設定しておく必要があります。<br>そのためファイルを読み込む処理を実装する前にonloadを実装しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const content = e.target.result;</div>resultは結果の取得をするプロパティです。<br>読み込まれたファイルの内容が格納されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.readAsDataURL(file, 'UTF-8');</div>ファイルをbase64エンコードされたデータURLとして読み込みます。<br>画像などのプレビューなどに使われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.readAsText(file);</div>テキストファイルとして読み込みます。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"ファイルアップロード",n3:"ajax",n4:`ajaxを使用してhtml側からファイルをアップロードします。<br>サーバーではphpを使用してファイルを保存して結果をhtml側で受け取ります。<br>`,n5:`[サンプル]`,n6:`input type="file" 要素とJavaScriptのFormDataを組み合わせます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const formData = new FormData();<br></div>FormData APIは、ブラウザの標準機能です。<br><br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">HTTPメソッド</td><td>HTTPリクエストのボディ</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">データの形式</td><td>multipart/form-data<br>(バイナリを含む)</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">データの構築</td><td>FormData API</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">主な用途</td><td>テキストや画像およびファイルなどの大容量をアップロード</td></tr></table><br>POST (FormData)<br>「multipart/form-data」という形式でデータが送られます。<br>一つのリクエストの中に、テキストデータや画像ファイルといった境界線を設けて、<br>複数の種類のデータを混在させて送ることができる特殊な形式です。<br>この形式により、テキストとバイナリデータ(画像)を同時に効率よく送信できます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const reader = new FileReader();</div>ファイルを読み込みこむためのオブジェクトインスタンスを生成しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.onload</div>読み込み完了の通知を行います。<br>ファイルの読み込みは非同期処理です。<br>非同期処理では処理の開始を指示する前に、<br>完了したときに何をするべきか？<br>を設定しておく必要があります。<br>そのためファイルを読み込む処理を実装する前にonloadを実装しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const content = e.target.result;</div>resultは結果の取得をするプロパティです。<br>読み込まれたファイルの内容が格納されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.readAsDataURL(file, 'UTF-8');</div>ファイルをbase64エンコードされたデータURLとして読み込みます。<br>画像などのプレビューなどに使われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.readAsText(file);</div>テキストファイルとして読み込みます。<br>`,n7:"戻る",},en: {n1: "back",n2: "File Upload",n3: "Ajax",n4:`Upload a file from the HTML side using Ajax. <br>Save the file on the server using PHP and receive the results in the HTML side. <br>`,n5:`[Sample]`,n6:`Combine the input type="file" element with JavaScript FormData. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const formData = new FormData();<br></div>The FormData API is a standard browser feature. <br><br><table><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">HTTP Method</td><td>HTTP Request Body</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Data Format</td><td>multipart/form-data<br>(including binary)</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Data Construction</td><td>FormData API</td></tr><tr><td style="background-color:rgb(75 0 130 / 0.2);text-align:left;">Main Uses</td><td>Uploading large amounts of data, such as text, images, and files</td></tr></table><br>POST (FormData)<br>Data is sent in the "multipart/form-data" format. <br>This is a special format that allows you to send multiple types of data in a single request, separating them by text data and image files. <br>This format allows you to efficiently send text and binary data (images) simultaneously. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const reader = new FileReader();</div>Creates an object instance for reading a file. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.onload</div>Notifies when loading is complete. <br>File loading is an asynchronous process. <br>With asynchronous processing, you must set what to do when the process is complete before issuing a command to start the process. <br>For this reason, onload is implemented before implementing the file loading process. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const content = e.target.result;</div>result is a property used to obtain the result. <br>This property stores the contents of the loaded file. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.readAsDataURL(file, 'UTF-8');</div>Reads a file as a base64-encoded data URL. <br>Used for previewing images, etc. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">reader.readAsText(file);</div>Reads a file as a text file. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
