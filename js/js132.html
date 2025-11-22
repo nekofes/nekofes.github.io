@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">画像表示</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用してphp側から受け取った画像データを表示します。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test7.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajaxで画像取得</title>
+</head>
+<body>
+<img id="img1" style="width:200px;height:200px;">
+
+<script>
+
+</script>
+</body>
+</html>
+
+[image.php]
+<?php
+// ホスト名が特定の文字列で終わっているかチェックする
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL) 
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit("Forbidden");
+}
+
+// --- CORS 設定 ---
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+
+// 画像ファイルのパス
+$file = "post.png";
+$path = __DIR__ . "/" . $file;
+
+// ファイルが存在するかチェック
+if (!file_exists($path)) {
+    header("HTTP/1.1 404 Not Found");
+    exit("Not Found");
+}
+
+// MIMEタイプを取得
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mime  = finfo_file($finfo, $path);
+finfo_close($finfo);
+
+// ヘッダーを設定して画像を出力
+header("Content-Type: $mime");
+readfile($path);
+exit;
+?>
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+[test7.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Retrieval with Ajax</title>
+</head>
+<body>
+<img id="img1" style="width:200px;height:200px;">
+
+<script>
+
+</script>
+</body>
+</html>
+
+[image.php]
+<?php
+// Check if the hostname ends with a specific string
+$host = $_SERVER[‘HTTP_HOST’];
+$checkURL = “localhost”;
+
+if (substr($host, -strlen($checkURL)) !== $checkURL) 
+{
+    header(“HTTP/1.1 403 Forbidden”);
+    exit(“Forbidden”);
+}
+
+// --- CORS Configuration ---
+header(“Access-Control-Allow-Origin: http://localhost”);
+header(“Access-Control-Allow-Credentials: true”);
+
+// Image file path
+$file = “post.png”;
+$path = __DIR__ . “/” . $file;
+
+// Check if file exists
+if (!file_exists($path)) {
+    header(“HTTP/1.1 404 Not Found”);
+    exit(“Not Found”);
+}
+
+// Get MIME type
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mime  = finfo_file($finfo, $path);
+finfo_close($finfo);
+
+// Set headers and output image
+header(“Content-Type: $mime”);
+readfile($path);
+exit;
+?>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test7.html(javascript)]
+fetch("http://localhost/img/image.php")
+  .then(res => res.blob())
+  .then(blob => {
+    document.getElementById("img1").src = URL.createObjectURL(blob);
+  })
+  .catch(err => console.error("画像取得失敗:", err));
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test7.html(javascript)]
+fetch(“http://localhost/img/image.php”)
+  .then(res => res.blob())
+  .then(blob => {
+    document.getElementById(“img1”).src = URL.createObjectURL(blob);
+  })
+  .catch(err => console.error(“Image retrieval failed:”, err));
+</pre></div><br><div id="n6">.blob() は JavaScript の Fetch API に用意されてる関数です。<br>サーバーからのレスポンスをバイナリデータとして扱うために使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(res => res.blob())</div>.blob() は Response オブジェクトのメソッドです。<br>画像などのバイナリデータを受け取っています。<br>サーバーから返ってきたデータを Blob（バイナリ大きなオブジェクト） に変換してくれます。<br>JSONやテキストじゃないデータ<br>例えば、画像や音声などの大きなデータを扱うときに使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">URL.createObjectURL(blob);</div>この例ではphp側で<br>header("Content-Type: image/png");<br>と設定していることで画像データと認識することができます。<br>URL.createObjectURLで変換したデータをsrcプロパティに設定することで画像を表示させています。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"画像表示",n3:"ajax",n4:`ajaxを使用してphp側から受け取った画像データを表示します。`,n5:`[サンプル]`,n6:`.blob() は JavaScript の Fetch API に用意されてる関数です。<br>サーバーからのレスポンスをバイナリデータとして扱うために使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(res => res.blob())</div>.blob() は Response オブジェクトのメソッドです。<br>画像などのバイナリデータを受け取っています。<br>サーバーから返ってきたデータを Blob（バイナリ大きなオブジェクト） に変換してくれます。<br>JSONやテキストじゃないデータ<br>例えば、画像や音声などの大きなデータを扱うときに使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">URL.createObjectURL(blob);</div>この例ではphp側で<br>header("Content-Type: image/png");<br>と設定していることで画像データと認識することができます。<br>URL.createObjectURLで変換したデータをsrcプロパティに設定することで画像を表示させています。<br>`,n7:"戻る",},en: {n1: "back",n2: "Display Image",n3: "Ajax",n4:`Displays image data received from PHP using Ajax.`,n5:`[Sample]`,n6:`.blob() is a function provided by the JavaScript Fetch API. <br>Used to handle server responses as binary data. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.then(res => res.blob())</div>.blob() is a method of the Response object. <br>Receives binary data such as images. <br>Converts data returned from the server into a Blob (binary large object). <br>Data that is not JSON or text. <br>Used when handling large data such as images or audio. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">URL.createObjectURL(blob);</div>In this example, the PHP setting <br>header("Content-Type: image/png");<br>enables the PHP code to recognize the image data. <br>The image is displayed by setting the data converted by URL.createObjectURL to the src property. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
