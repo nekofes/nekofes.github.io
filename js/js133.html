@@ -1,0 +1,473 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">画像とテキストを表示</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用したストーリを表示するサンプルです。<br>ボタンを選択することでストーリー管理番号をjavascriptからphpに渡します。<br>ストーリーの画像とテキストをphp側で準備したものを受け取ります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test10.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajaxで画像取得</title>
+</head>
+<body>
+<img id="img" style="width:200px;height:200px;">
+<br>
+<div id="story" style="width:300px;">
+</div>
+<table border=0>
+<tr>
+<td><a href="javascript:void(0);" id="back"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td style="width:200px;">&nbsp;</td>
+<td><a href="javascript:void(0);" id="forward"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+</tr>
+</table>
+<input type="hidden" id="no" value=0>
+<script>
+
+</script>
+</body>
+</html>
+
+[test10.php]
+// ホスト名が特定の文字列で終わっているかチェックする
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL) 
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit("Forbidden");
+}
+
+// --- CORS 設定 ---
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+
+//pageIndexはjsから受け取るように実装すること
+// POSTされたJSONデータを取得
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true); // trueを指定すると連想配列としてデコードされる
+ 
+// 受信したデータを検証（例）
+if (!isset($data['no']) || !isset($data['lang'])) {
+    echo json_encode(['status' => 'error', 'message' => 'データが不足しているか、形式が不正です。']);
+    exit;
+}
+
+// 画像ファイルのパス
+// 受信した配列データにアクセス
+$pageIndex = $data['no'];
+$lang = $data['lang'];
+// 画像ファイル名を取得
+$story="";
+$story = storyText($lang, $pageIndex);
+
+// JSONとして返す
+header("Content-Type: application/json");
+echo json_encode([
+    'status' => 'success',
+    'story' => $story
+]);
+exit;
+//表示するストーリーテキスト
+function storyText(int $lang,int $pageIndex):string
+{
+    $story="";
+    $storyEn="";
+    switch($pageIndex)
+    {
+        case 0:
+            $story = "こんにちは";
+            $storyEn = "Hello";
+            break;
+        case 1:
+            $story = "おや、どうしたんだい？";
+            $storyEn = "Hey, what's wrong?";
+            break;
+        case 2:
+            $story = "お腹へっちゃって";
+            $storyEn = "I'm hungry";
+            break;
+        case 3:
+            $story = "野菜はどう？";
+            $storyEn = "What about vegetables?";
+            break;
+        case 4:
+            $story = "それは、ちょっと";
+            $storyEn = "That's a bit";
+            break;
+        case 5:
+            $story = "あぁ、そういえばこれ拾ったんだった。\n（どんぐりを差し出す）";
+            $storyEn = "Ah, that reminds me, I picked this up. \n (Hands over the acorn)";
+            break;
+        case 6:
+            $story = "いいの？\nありがとう";
+            $storyEn = "Is that okay?\nThank you";
+            break;
+        case 7:
+            $story = "どういたしまして\n(こうしてくまさんは森へ帰っていきました。)";
+            $storyEn = "You're welcome.\n(And so the bear returned to the forest.)";
+            break;
+    }
+    return $lang==0?$story : $storyEn;
+}
+
+[getImage.php]
+// CORS設定
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+
+// POSTされたJSONデータを取得
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true);
+
+// チェック
+if (!isset($data['no'])) {
+    header("HTTP/1.1 400 Bad Request");
+    exit("Missing parameter");
+}
+
+$pageIndex = $data['no'];
+$file = fileID($pageIndex);
+$path = __DIR__ . "/" . $file;
+
+if (!file_exists($path)) {
+    header("HTTP/1.1 404 Not Found");
+    exit("Image not found");
+}
+
+// MIMEタイプを取得して画像を返す
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mime  = finfo_file($finfo, $path);
+finfo_close($finfo);
+
+header("Content-Type: $mime");
+readfile($path);
+exit;
+
+function fileID(int $pageIndex): string {
+    switch($pageIndex) {
+        case 0: return "nawmin_sample2.png";
+        case 1: return "nawmin_sample4.png";
+        case 2: return "nawmin_sample2.png";
+        case 3: return "nawmin_sample5.png";
+        case 4: return "nawmin_sample2.png";
+        case 5: return "nawmin_sample3.png";
+        case 6: return "nawmin_sample2.png";
+        case 7: return "nawmin_sample4.png";
+        default: return "nawmin_sample2.png";
+    }
+}
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+[test10.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Get images with Ajax</title>
+</head>
+<body>
+<img id="img" style="width:200px;height:200px;">
+<br>
+<div id="story" style="width:300px;">
+</div>
+<table border=0>
+<tr>
+<td><a href="javascript:void(0);" id="back"><div id="btn1"><img id="img_back" style="width:50px;"></div></a></td>
+<td style="width:200px;">&nbsp;</td>
+<td><a href="javascript:void(0);" id="forward"><div id="btn2"><img id="img_forward" style="width:50px;"></div></a></td>
+</tr>
+</table>
+<input type="hidden" id="no" value=0>
+<script>
+
+</script>
+</body>
+</html>
+
+[test10.php]
+// Check if the host name ends with a specific string
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL) 
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit("Forbidden");
+}
+
+// --- CORS settings ---
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+
+// Implement so that pageIndex is received from js
+// Get the POSTed JSON data
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true); // Specify true to decode as an associative array
+ 
+// Validate the received data (example)
+if (!isset($data['no']) || !isset($data['lang'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Data is missing or the format is invalid.']);
+    exit;
+}
+
+// Path to the image file
+// Access the received array data
+$pageIndex = $data['no'];
+$lang = $data['lang'];
+// Get the image file name
+$story="";
+$story = storyText($lang, $pageIndex);
+
+// Return as JSON
+header("Content-Type: application/json");
+echo json_encode([
+    'status' => 'success',
+    'story' => $story
+]);
+exit;
+// Story text to be displayed
+function storyText(int $lang,int $pageIndex):string
+{
+    $story="";
+    $storyEn="";
+    switch($pageIndex)
+    {
+        case 0:
+            $story = "こんにちは";
+            $storyEn = "Hello";
+            break;
+        case 1:
+            $story = "おや、どうしたんだい？";
+            $storyEn = "Hey, what's wrong?";
+            break;
+        case 2:
+            $story = "お腹へっちゃって";
+            $storyEn = "I'm hungry";
+            break;
+        case 3:
+            $story = "野菜はどう？";
+            $storyEn = "What about vegetables?";
+            break;
+        case 4:
+            $story = "それは、ちょっと";
+            $storyEn = "That's a bit";
+            break;
+        case 5:
+            $story = "あぁ、そういえばこれ拾ったんだった。\n（どんぐりを差し出す）";
+            $storyEn = "Ah, that reminds me, I picked this up. \n (Hands over the acorn)";
+            break;
+        case 6:
+            $story = "いいの？\nありがとう";
+            $storyEn = "Is that okay?\nThank you";
+            break;
+        case 7:
+            $story = "どういたしまして\n(こうしてくまさんは森へ帰っていきました。)";
+            $storyEn = "You're welcome.\n(And so the bear returned to the forest.)";
+            break;
+    }
+    return $lang==0?$story : $storyEn;
+}
+
+[getImage.php]
+// CORS settings
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+
+// Get the POSTed JSON data
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true);
+
+// Check
+if (!isset($data['no'])) {
+    header("HTTP/1.1 400 Bad Request");
+    exit("Missing parameter");
+}
+
+$pageIndex = $data['no'];
+$file = fileID($pageIndex);
+$path = __DIR__ . "/" . $file;
+
+if (!file_exists($path)) {
+    header("HTTP/1.1 404 Not Found");
+    exit("Image not found");
+}
+
+// Get MIME type and return the image
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mime  = finfo_file($finfo, $path);
+finfo_close($finfo);
+
+header("Content-Type: $mime");
+readfile($path);
+exit;
+
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test7.html(javascript)]
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+let pageIndex=0;
+let pageMax=8;
+displayScreen();
+buttonDisplay(pageIndex);
+//戻る
+b1.addEventListener("click", () => 
+{
+	//画像を表示する
+	//ストーリーを表示する
+	//ボタンの表示有無
+	pageIndex--;
+	if(pageIndex < 0) pageIndex = 0;
+	displayScreen();
+	buttonDisplay(pageIndex);
+});
+//進む
+b2.addEventListener("click", () => 
+{
+	pageIndex++;
+	if(pageIndex >= pageMax)pageIndex = pageMax - 1;
+	displayScreen();
+	buttonDisplay();
+});
+function buttonDisplay()
+{
+	b1.style.visibility="visible";
+	b2.style.visibility="visible";
+	if(pageIndex==0)
+	{
+		b1.style.visibility="hidden";
+	}
+	if(pageIndex + 1 == pageMax)
+	{
+		b2.style.visibility="hidden";
+	}
+}
+async function displayScreen() {
+    let no = pageIndex;
+
+    // ストーリー取得
+    fetch("http://localhost/img/test10.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ no: no, lang: 0 }),
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("story").innerText = data.story;
+    });
+
+    // 画像取得（Blobとして）
+    fetch("http://localhost/img/getImage.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ no: no }),
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        document.getElementById("img").src = url;
+    })
+    .catch(err => console.error("画像取得失敗:", err));
+}
+displayImage("./img/back","img_back");
+displayImage("./img/forward","img_forward");
+function displayImage(d1,d2)
+{
+	fetch(d1)
+	.then(response=>response.text())/*テキストデータとして取得*/
+	.then(d=>{
+		/*取得したBase64データを`img`の`src`に設定*/
+		const i1=document.getElementById(d2);
+		i1.src=d;
+		/*画像の読み込みが完了したらコンソールにログを表示*/
+		i1.onload=function(){
+			/*console.log("画像の読み込みが完了しました");*/
+		};
+	})
+	.catch(error=>{
+		/*console.error("画像の取得に失敗しました",error);*/
+	});
+}
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+let pageIndex=0;
+let pageMax=8;
+displayScreen();
+buttonDisplay(pageIndex);
+// Back
+b1.addEventListener("click", () => 
+{
+    // Display the image
+    // Display the story
+    // Show/hide buttons
+    pageIndex--;
+    if(pageIndex < 0) pageIndex = 0;
+    displayScreen();
+    buttonDisplay(pageIndex);
+});
+// Forward
+b2.addEventListener("click", () => 
+{
+    pageIndex++;
+    if(pageIndex >= pageMax)pageIndex = pageMax - 1;
+    displayScreen();
+    buttonDisplay();
+});
+function buttonDisplay()
+{
+    b1.style.visibility="visible";
+    b2.style.visibility="visible";
+    if(pageIndex==0)
+    {
+        b1.style.visibility="hidden";
+    }
+    if(pageIndex + 1 == pageMax)
+    {
+        b2.style.visibility="hidden";
+    }
+}
+async function displayScreen() {
+    let no = pageIndex;
+
+    // Get story
+    fetch("http://localhost/img/test10.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ no: no, lang: 0 }),
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("story").innerText = data.story;
+    });
+
+    // Get image (as Blob)
+    fetch("http://localhost/img/getImage.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ no: no }),
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        document.getElementById("img").src = url;
+    })
+    .catch(err => console.error("Image acquisition failed:", err));
+}
+displayImage("./img/back","img_back");
+displayImage("./img/forward","img_forward");
+function displayImage(d1,d2)
+{
+    fetch(d1)
+    .then(response=>response.text())/* Retrieve as text data */
+    .then(d=>{
+        /* Set the retrieved Base64 data to `img`'s `src` */
+        const i1=document.getElementById(d2);
+        i1.src=d;
+        /* When image loading is complete, display log in console */
+        i1.onload=function(){
+            /*console.log("Image loading completed");*/
+        };
+    })
+    .catch(error=>{
+        /*console.error("Failed to retrieve image",error);*/
+    });
+}
+</pre></div><br><div id="n6">HTTPレスポンスは「1つの形式」しか返せないため2つに分けて<br>画像とストーリーのテキストを実行しています。<br>例えば、phpで<br>readfile($path)と実行して画像ファイルのバイナリデータを出力しようとします。<br>そのあとに echo json_encode(...) でJSONテキストを出力しようとしても<br>ブラウザは最初のバイナリを「画像」として処理しようとするため<br>JSONは無視されるか、壊れたデータとなります。<br>これを防ぐためにも画像を表示するphpとストーリーを表示するphpに分けて処理をしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function buttonDisplay()</div>if(pageIndex==0)<br>ページの開始のケース<br>btn1(戻るボタン)を非表示にしています。<br>if(pageIndex + 1 == pageMax)<br>ページの最後のケース<br>btn2(進むボタン)を非表示にしています。<br><br>displayScreen()はjavascriptからphpに送信をして結果を受け取る関数です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/img/test10.php", {</div>ストーリーを受け取るためのフェッチをしています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: no, lang: 0 }),</div>ここでは固定でlang([0]jp [1]en)を設定していますが、必要に応じて変更してください。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById("story").innerText = data.story;</div>phpで準備したデータを受け取りdivタグ内に表示しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/img/getImage.php", {</div>画像を取得するphpにフェッチしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: no }),</div>画像管理番号がわかればいいだけなのでnoのみを渡しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = URL.createObjectURL(blob);</div>バイナリデータとして受け取ったデータをBlobを画像として表示できるURLに変換しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById("img").src = url;</div>受け取ったデータをsrcプロパティに設定して画像を表示しています。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"画像とテキストを表示",n3:"ajax",n4:`ajaxを使用したストーリを表示するサンプルです。<br>ボタンを選択することでストーリー管理番号をjavascriptからphpに渡します。<br>ストーリーの画像とテキストをphp側で準備したものを受け取ります。<br>`,n5:`[サンプル]`,n6:`HTTPレスポンスは「1つの形式」しか返せないため2つに分けて<br>画像とストーリーのテキストを実行しています。<br>例えば、phpで<br>readfile($path)と実行して画像ファイルのバイナリデータを出力しようとします。<br>そのあとに echo json_encode(...) でJSONテキストを出力しようとしても<br>ブラウザは最初のバイナリを「画像」として処理しようとするため<br>JSONは無視されるか、壊れたデータとなります。<br>これを防ぐためにも画像を表示するphpとストーリーを表示するphpに分けて処理をしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function buttonDisplay()</div>if(pageIndex==0)<br>ページの開始のケース<br>btn1(戻るボタン)を非表示にしています。<br>if(pageIndex + 1 == pageMax)<br>ページの最後のケース<br>btn2(進むボタン)を非表示にしています。<br><br>displayScreen()はjavascriptからphpに送信をして結果を受け取る関数です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/img/test10.php", {</div>ストーリーを受け取るためのフェッチをしています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: no, lang: 0 }),</div>ここでは固定でlang([0]jp [1]en)を設定していますが、必要に応じて変更してください。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById("story").innerText = data.story;</div>phpで準備したデータを受け取りdivタグ内に表示しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/img/getImage.php", {</div>画像を取得するphpにフェッチしています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: no }),</div>画像管理番号がわかればいいだけなのでnoのみを渡しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = URL.createObjectURL(blob);</div>バイナリデータとして受け取ったデータをBlobを画像として表示できるURLに変換しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById("img").src = url;</div>受け取ったデータをsrcプロパティに設定して画像を表示しています。<br><br>`,n7:"戻る",},en: {n1: "back",n2: "Display image and text",n3: "Ajax",n4: `This is an example of displaying a story using Ajax. <br>By selecting the button, the story management number is passed from JavaScript to PHP. <br>The story image and text prepared in PHP are received. <br>`,n5: `[Sample]`,n6: `Since the HTTP response can only return one format, the image and story text are separated into two parts. <br>For example, in PHP, <br>you execute readfile($path) to output the binary data of an image file. <br>Even if you then try to output JSON text with echo json_encode(...), <br>the browser will treat the first binary as an "image," so <br>the JSON will be ignored or will become corrupted data. <br>To prevent this, the PHP that displays the image and the PHP that displays the story are processed separately. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function buttonDisplay()</div>if(pageIndex==0)<br>Start of page case<br>btn1 (back button) is hidden. <br>if(pageIndex + 1 == pageMax)<br>End of page case<br>btn2 (forward button) is hidden. <br><br>displayScreen() is a function that sends a message from JavaScript to PHP and receives the result. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/img/test10.php", {</div>Fetching to receive the story.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: no, lang: 0 }),</div>Here, lang([0]jp [1]en) is set as the default, but you can change it as needed.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById("story").innerText = data.story;</div>The data prepared in PHP is received and displayed within a div tag. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/img/getImage.php", {</div>The image is fetched from PHP. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: no }),</div>Since we only need the image management number, we only pass "no." <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = URL.createObjectURL(blob);</div>The data received as binary data is converted into a URL that can display the blob as an image. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">document.getElementById("img").src = url;</div>The received data is set to the src property and the image is displayed. <br><br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
