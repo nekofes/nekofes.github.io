@@ -1,0 +1,461 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">ajaxで画像とストーリを自動表示</div></td></tr><tr><td><div id="n3">ajax</div></td></tr></table><br><div id="n4">ajaxを使用したストーリを表示するサンプルです。<br>自動的に画像とテキストが切り替わります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test11.html]
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Ajaxで画像取得</title>
+<style>
+#img, #story {
+opacity: 0;
+transition: opacity 0.5s ease-in-out;
+display: block;
+}
+
+.visible {
+opacity: 1 !important;
+}
+</style>
+</head>
+<body>
+<img id="img" style="width:200px;height:200px; display: block;">
+<div id="story" style="width:300px; display: block;"></div>
+
+<button id="stopBtn">停止</button>
+<button id="resetBtn">リセット</button>
+
+<script>
+
+</script>
+</body>
+</html>
+
+[test11.php]
+<?php
+// ホスト名が特定の文字列で終わっているかチェックする
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL) 
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit("Forbidden");
+}
+$data = json_decode(file_get_contents("php://input"), true);
+$no = $data["no"] ?? 0;
+$lang = $data["lang"] ?? 0;
+if ($no < 0 || $no > 7) {
+  http_response_code(404);
+  exit;
+}
+
+header("Content-Type: application/json");
+echo json_encode(["story" => storyText($lang,$no)]);
+
+function storyText(int $lang,int $pageIndex):string
+{
+    $story="";
+    $storyEn="";
+    switch($pageIndex)
+    {
+        case 0:
+            $story = "こんにちは";
+            $storyEn = "Hello";
+            break;
+        case 1:
+            $story = "おや、どうしたんだい？";
+            $storyEn = "Hey, what's wrong?";
+            break;
+        case 2:
+            $story = "お腹へっちゃって";
+            $storyEn = "I'm hungry";
+            break;
+        case 3:
+            $story = "野菜はどう？";
+            $storyEn = "What about vegetables?";
+            break;
+        case 4:
+            $story = "それは、ちょっと";
+            $storyEn = "That's a bit";
+            break;
+        case 5:
+            $story = "あぁ、そういえばこれ拾ったんだった。\n（どんぐりを差し出す）";
+            $storyEn = "Ah, that reminds me, I picked this up. \n (Hands over the acorn)";
+            break;
+        case 6:
+            $story = "いいの？\nありがとう";
+            $storyEn = "Is that okay?\nThank you";
+            break;
+        case 7:
+            $story = "どういたしまして\n(こうしてくまさんは森へ帰っていきました。)";
+            $storyEn = "You're welcome.\n(And so the bear returned to the forest.)";
+            break;
+    }
+    return $lang==0?$story : $storyEn;
+}
+?>
+
+[getImage2.php]
+<?php
+// ホスト名が特定の文字列で終わっているかチェックする
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL) 
+{
+    header("HTTP/1.1 403 Forbidden");
+    exit("Forbidden");
+}
+// CORS設定
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+// JSONを受け取る
+$data = json_decode(file_get_contents("php://input"), true);
+$no = $data["no"] ?? 0;
+
+// 画像ファイル名の配列（必要に応じて調整）
+$images = [
+  "nawmin_sample2.png",
+  "nawmin_sample3.png",
+  "nawmin_sample4.png",
+  "nawmin_sample5.png",
+  "nawmin_sample2.png",
+  "nawmin_sample3.png",
+  "nawmin_sample4.png",
+  "nawmin_sample5.png"
+];
+
+// 範囲チェック
+if ($no < 0 || $no >= count($images)) {
+  http_response_code(404);
+  exit;
+}
+
+$filename = $images[$no];
+$filepath = __DIR__ . "/" . $filename;
+
+if (file_exists($filepath)) {
+  header("Content-Type: image/png");
+  readfile($filepath);
+} else {
+  http_response_code(404);
+}
+?>
+
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Getting Images via Ajax</title>
+<style>
+#img, #story {
+opacity: 0;
+transition: opacity 0.5s ease-in-out;
+display: block;
+}
+
+.visible {
+opacity: 1 !important;
+}
+</style>
+</head>
+<body>
+<img id="img" style="width:200px;height:200px; display: block;">
+<div id="story" style="width:300px; display: block;"></div>
+
+<button id="stopBtn">Stop</button>
+<button id="resetBtn">Reset</button>
+
+<script>
+
+</script>
+</body>
+</html>
+
+[test11.php]
+<?php
+// Check if the hostname ends with a specific string
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL)
+{
+	header("HTTP/1.1 403 Forbidden");
+	exit("Forbidden");
+}
+$data = json_decode(file_get_contents("php://input"), true);
+$no = $data["no"] ?? 0;
+$lang = $data["lang"] ?? 0;
+if ($no < 0 || $no > 7) {
+	http_response_code(404);
+	exit;
+}
+
+header("Content-Type: application/json");
+echo json_encode(["story" => storyText($lang,$no)]);
+
+function storyText(int $lang,int $pageIndex):string
+{
+	$story="";
+	$storyEn="";
+	switch($pageIndex)
+	{
+	case 0:
+		$story = "Hello";
+		$storyEn = "Hello";
+		break;
+	case 1:
+		$story = "Hey, what's wrong?";
+		$storyEn = "Hey, what's wrong?";
+		break;
+	case 2:
+		$story = "I'm hungry";
+		$storyEn = "I'm hungry";
+		break;
+	case 3:
+		$story = "What about vegetables?";
+		$storyEn = "What about vegetables?";
+		break;
+	case 4:
+		$story = "That's a bit";
+		$storyEn = "That's a bit";
+		break;
+	case 5:
+		$story = "Oh, that reminds me, I picked this up. (Hands over the acorn)";
+		$storyEn = "Ah, that reminds me, I picked this up. (Hands over the acorn)";
+		break;
+	case 6:
+		$story = "Is that okay? Thank you";
+		$storyEn = "Is that okay? Thank you";
+		break;
+	case 7:
+		$story = "You're welcome. (And so the bear returned to the forest.)";
+		$storyEn = "You're welcome. (And so the bear returned to the forest.)";
+		break;
+	}
+	return $lang==0?$story : $storyEn;
+}
+?>
+
+[getImage2.php]
+<?php
+// Check if the hostname ends with a specific string
+$host = $_SERVER['HTTP_HOST'];
+$checkURL = "localhost";
+
+if (substr($host, -strlen($checkURL)) !== $checkURL)
+{
+	header("HTTP/1.1 403 Forbidden");
+	exit("Forbidden");
+}
+// CORS settings
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
+// Receive JSON
+$data = json_decode(file_get_contents("php://input"), true);
+$no = $data["no"] ?? 0;
+
+// Array of image filenames (adjust as needed)
+$images = [
+"nawmin_sample2.png", 
+"nawmin_sample3.png", 
+"nawmin_sample4.png", 
+"nawmin_sample5.png", 
+"nawmin_sample2.png", 
+"nawmin_sample3.png", 
+"nawmin_sample4.png", 
+"nawmin_sample5.png"
+];
+
+// range check
+if ($no < 0 || $no >= count($images)) { 
+	http_response_code(404); 
+	exit;
+}
+
+$filename = $images[$no];
+$filepath = __DIR__ . "/" . $filename;
+
+if (file_exists($filepath)) { 
+	header("Content-Type: image/png"); 
+	readfile($filepath);
+} else { 
+	http_response_code(404);
+}
+?>
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[test11.html(javascript)]
+let pageIndex = 0;
+const pageMax = 8;
+let timerId = null; //setTimeoutのIDを保持します
+let isRunning = false;
+
+async function displayScreen() 
+{
+	if (!isRunning) return;
+	
+	console.log("ページインデックス:", pageIndex);
+	const imgEl = document.getElementById("img");
+	const storyEl = document.getElementById("story");
+	
+	imgEl.className = "";
+	storyEl.className = "";
+	
+	try {
+		const storyRes = await fetch("/img/test11.php", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ no: pageIndex, lang: 0 }),
+		});
+		const storyData = await storyRes.json();
+		console.log("ストーリー取得成功:", storyData.story);
+		storyEl.innerText = storyData.story;
+		fadeIn(storyEl);
+	} catch (e) {
+		console.error("ストーリー取得失敗:", e);
+	}
+	
+	try {
+		const imgRes = await fetch("/img/getImage2.php", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ no: pageIndex }),
+		});
+		const blob = await imgRes.blob();
+		const url = URL.createObjectURL(blob);
+		console.log("画像URL:", url);
+		imgEl.onload = () => fadeIn(imgEl);
+		imgEl.src = url;
+	} catch (e) {
+		console.error("画像取得失敗:", e);
+	}
+	
+	// 次のページへ進む前に、終了条件をチェック！
+	if (pageIndex >= pageMax - 1) {
+		console.log("自動停止します。");
+		isRunning = false;
+		return; // ここで終了！
+	}
+	
+	pageIndex++;
+	timerId = setTimeout(displayScreen, 3000);
+}
+
+function fadeIn(element) {
+	element.className = "";
+	requestAnimationFrame(() => {
+		requestAnimationFrame(() => {
+			element.classList.add("visible");
+			console.log("→ .visible クラス追加:", element.id);
+		});
+	});
+}
+
+// 停止ボタン
+document.getElementById("stopBtn").addEventListener("click", () => {
+	isRunning = false;
+	clearTimeout(timerId);
+	console.log("⏹️ 停止しました");
+});
+
+// リセットボタン
+document.getElementById("resetBtn").addEventListener("click", () => {
+	clearTimeout(timerId);
+	pageIndex = 0;
+	isRunning = true;
+	displayScreen();
+	console.log("🔄 リセットして再開！");
+});
+
+// 最初にスタート
+isRunning = true;
+displayScreen();
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+[test11.html(javascript)]
+let pageIndex = 0;
+const pageMax = 8;
+let timerId = null; //Retains the setTimeout ID
+let isRunning = false;
+
+async function displayScreen()
+{
+	if (!isRunning) return;
+	
+	console.log("Page Index:", pageIndex);
+	const imgEl = document.getElementById("img");
+	const storyEl = document.getElementById("story");
+	
+	imgEl.className = "";
+	storyEl.className = "";
+	
+	try {
+		const storyRes = await fetch("/img/test11.php", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ no: pageIndex, lang: 0 }),
+		});
+		const storyData = await storyRes.json();
+		console.log("Story successfully retrieved:", storyData.story);
+		storyEl.innerText = storyData.story;
+		fadeIn(storyEl);
+	} catch (e) {
+		console.error("Failed to retrieve story:", e);
+	}
+	
+	try {
+		const imgRes = await fetch("/img/getImage2.php", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ no: pageIndex }),
+		});
+		const blob = await imgRes.blob();
+		const url = URL.createObjectURL(blob);
+		console.log("Image URL:", url);
+		imgEl.onload = () => fadeIn(imgEl);
+		imgEl.src = url;
+	} catch (e) {
+		console.error("Failed to retrieve image:", e);
+	}
+	
+	// Check the termination condition before proceeding to the next page!
+	if (pageIndex >= pageMax - 1) {
+		console.log("Automatically pausing.");
+		isRunning = false;
+		return; // Stop here!
+	}
+	
+	pageIndex++;
+	timerId = setTimeout(displayScreen, 3000);
+}
+
+function fadeIn(element) {
+	element.className = "";
+	requestAnimationFrame(() => {
+		requestAnimationFrame(() => {
+			element.classList.add("visible");
+			console.log("→ .visible class added:", element.id);
+		});
+	});
+}
+
+// Stop button
+document.getElementById("stopBtn").addEventListener("click", () => {
+	isRunning = false;
+	clearTimeout(timerId);
+	console.log("⏹️ Stopped");
+});
+
+// Reset button
+document.getElementById("resetBtn").addEventListener("click", () => {
+	clearTimeout(timerId);
+	pageIndex = 0;
+	isRunning = true;
+	displayScreen();
+	console.log("🔄 Reset and restart!");
+});
+
+// Start at the beginning
+isRunning = true;
+displayScreen();
+</pre></div><br><div id="n6">displayScreen<br>画像とテキストを変更する関数です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">timerId = setTimeout(displayScreen, 3000);</div>次の画像とテキストを読み込んでいる場所です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyRes = await fetch("/img/test11.php", {</div>テキストを読み込むためのフェッチ処理をします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: pageIndex, lang: 0 }),</div>phpで判定するための値を送っています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyData = await storyRes.json();</div>データ本体を読み込む指示を出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">storyEl.innerText = storyData.story;</div>取得したテキストを表示します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">requestAnimationFrame(() => {<br>requestAnimationFrame(() => {<br></div>requestAnimationFrame を2回使い、ブラウザに「class変更→トランジション開始」を確実に認識させます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const imgRes = await fetch("/img/getImage2.php", {</div>画像を読み込むためフェッチします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imgEl.onload = () => fadeIn(imgEl);<br>imgEl.src = url;<br></div>イベントを登録後、srcプロパティに画像を設定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">#img, #story {<br>opacity: 0;<br>transition: opacity 0.5s ease-in-out;<br>display: block;<br>}<br></div>displayを明示しておきます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.visible {<br>opacity: 1 !important;<br>}</div>.visible に !important を追加してcssの他のスタイルに上書きされず、確実に表示されるようになります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyRes = await fetch("/img/test11.php", {</div>constを忘れて storyData = await ... だけだと、スコープ外で使えずエラーになることがあります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">isRunning = false;<br>clearTimeout(timerId);<br></div>停止ボタンの処理<br>表示のループを止める処理です。<br>isRunning変数をfalseにすることでdisplayScreen関数の<br>if (!isRunning) return;<br>制御でdisplayScreenの処理を実行しないようにしています。<br>clearTimeout<br>タイマー処理を停止しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">clearTimeout(timerId);<br>pageIndex = 0;<br>isRunning = true;<br>displayScreen();<br></div>リセットボタンの処理<br>インデックスを0に戻して、最初から再スタートする処理です。<br>clearTimeout<br>タイマー処理を停止しています。<br>pageIndexを0にすることで最初からスタートするように再設定しています。<br>isRunning変数にtrueを設定することでdisplayScreen関数で動作するようにします。<br>displayScreenを実行してリセットとして処理を再開しています。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"ajaxで画像とストーリを自動表示",n3:"ajax",n4:`ajaxを使用したストーリを表示するサンプルです。<br>自動的に画像とテキストが切り替わります。<br>`,n5:`[サンプル]`,n6:`displayScreen<br>画像とテキストを変更する関数です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">timerId = setTimeout(displayScreen, 3000);</div>次の画像とテキストを読み込んでいる場所です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyRes = await fetch("/img/test11.php", {</div>テキストを読み込むためのフェッチ処理をします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: pageIndex, lang: 0 }),</div>phpで判定するための値を送っています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyData = await storyRes.json();</div>データ本体を読み込む指示を出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">storyEl.innerText = storyData.story;</div>取得したテキストを表示します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">requestAnimationFrame(() => {<br>requestAnimationFrame(() => {<br></div>requestAnimationFrame を2回使い、ブラウザに「class変更→トランジション開始」を確実に認識させます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const imgRes = await fetch("/img/getImage2.php", {</div>画像を読み込むためフェッチします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imgEl.onload = () => fadeIn(imgEl);<br>imgEl.src = url;<br></div>イベントを登録後、srcプロパティに画像を設定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">#img, #story {<br>opacity: 0;<br>transition: opacity 0.5s ease-in-out;<br>display: block;<br>}<br></div>displayを明示しておきます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.visible {<br>opacity: 1 !important;<br>}</div>.visible に !important を追加してcssの他のスタイルに上書きされず、確実に表示されるようになります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyRes = await fetch("/img/test11.php", {</div>constを忘れて storyData = await ... だけだと、スコープ外で使えずエラーになることがあります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">isRunning = false;<br>clearTimeout(timerId);<br></div>停止ボタンの処理<br>表示のループを止める処理です。<br>isRunning変数をfalseにすることでdisplayScreen関数の<br>if (!isRunning) return;<br>制御でdisplayScreenの処理を実行しないようにしています。<br>clearTimeout<br>タイマー処理を停止しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">clearTimeout(timerId);<br>pageIndex = 0;<br>isRunning = true;<br>displayScreen();<br></div>リセットボタンの処理<br>インデックスを0に戻して、最初から再スタートする処理です。<br>clearTimeout<br>タイマー処理を停止しています。<br>pageIndexを0にすることで最初からスタートするように再設定しています。<br>isRunning変数にtrueを設定することでdisplayScreen関数で動作するようにします。<br>displayScreenを実行してリセットとして処理を再開しています。<br>`,n7:"戻る",},en: {n1: "back",n2: "Automatically display images and stories using ajax",n3: "ajax",n4: `This is a sample that displays a story using ajax. <br>Images and text change automatically. <br>`,n5: `[Sample]`,n6: `displayScreen<br>A function that changes the image and text. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">timerId = setTimeout(displayScreen, 3000);</div>This is where the next image and text are loaded. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyRes = await fetch("/img/test11.php", {</div>Performs a fetch to load the text.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({ no: pageIndex, lang: 0 }),</div>Sends a value for PHP to determine.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyData = await storyRes.json();</div>Issue a command to load the data body. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">storyEl.innerText = storyData.story;</div>Display the retrieved text. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">requestAnimationFrame(() => {<br>requestAnimationFrame(() => {<br></div>Use requestAnimationFrame twice to ensure that the browser recognizes that the class has changed and the transition has begun. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const imgRes = await fetch("/img/getImage2.php", {</div>Fetch to load the image.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imgEl.onload = () => fadeIn(imgEl);<br>imgEl.src = url;<br></div>After registering the event, set the image to the src property.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">#img, #story {<br>opacity: 0;<br>transition: opacity 0.5s ease-in-out;<br>display: block;<br>}<br></div>Specify display explicitly. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">.visible {<br>opacity: 1 !important;<br>}</div>Adding !important to .visible ensures that it is displayed without being overwritten by other CSS styles.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const storyRes = await fetch("/img/test11.php", {</div>If you forget the const and just use storyData = await ..., it may not be used outside the scope and may result in an error.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">isRunning = false;<br>clearTimeout(timerId);<br></div>Stop Button Processing<br>This process stops the display loop.<br>Setting the isRunning variable to false prevents the displayScreen function from executing its <br>if (!isRunning) return;<br>control.<br>clearTimeout<br>Timer processing is stopped.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">clearTimeout(timerId);<br>pageIndex = 0;<br>isRunning = true;<br>displayScreen();<br></div>Reset Button Processing<br>This process resets the index to 0 and restarts from the beginning. <br>clearTimeout<br>Stops timer processing. <br>Setting pageIndex to 0 resets it to start from the beginning. <br>Setting the isRunning variable to true enables the displayScreen function to work. <br>Executes displayScreen to reset and resume processing. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
