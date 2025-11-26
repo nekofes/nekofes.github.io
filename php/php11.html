@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">int型</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">phpで使用する型宣言のint型について<br>厳密な宣言で判定するために下記のようにphpの最初に宣言します。<br><textarea id="t1" rows=4 cols=50>
+<?php
+declare(strict_types=1);
+?>
+</textarea></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+  function judgeInt(int $num)
+  {
+    return $num;
+  }
+}
+$cls1 = new test1();
+$cls1->judgeInt("123");
+$cls1->judgeInt(1.23);
+
+//下記は上記クラスとは別テストと仮定します
+$value = 1;
+$value = null; // 警告なし、値は内部的に 0 として扱われる
+echo "value:".(int)$value." &lt;br&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function judgeInt(int $num)
+	{
+		return $num;
+	}
+}
+$cls1 = new test1();
+$cls1->judgeInt("123");
+$cls1->judgeInt(1.23);
+
+//Assume the following is a separate test from the above class.
+$value = 1;
+$value = null; // No warning, the value is internally treated as 0.
+echo "value:".(int)$value." &lt;br&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls1->judgeInt("123");<br></div>Fatal error: Uncaught TypeError: test1::judgeInt(): Argument #1 ($num) must be of type int, string given<br>PHP 7.0以降、厳密な型宣言（declare(strict_types=1);）を使用している場合<br>期待される型と異なる型の値が渡されるとTypeErrorが発生します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls1->judgeInt(1.23);<br></div>PHP 8以降では、floatからintへの暗黙的な変換で精度が失われる場合に警告が発生します。<br>[警告例]<br>Deprecated: Implicit conversion from float 1.23 to int loses precision<br>phpのint型の範囲<br><table><tr><td>環境</td><td>サイズ(ビット)</td><td>最大値(PHP_INT_MAX)</td></tr><tr><td>32bit</td><td>32</td><td>2,147,483,647 (約 21億)</td></tr><tr><td>64bit</td><td>64</td><td>9,223,372,036,854,775,807 (約 900京)</td></tr><tr><td>環境</td><td>サイズ(ビット)</td><td>最小値(PHP_INT_MIN)</td></tr><tr><td>64bit</td><td>64</td><td>-9,223,372,036,854,775,808 (約 -900京)</td></tr></table><br>int型をオーバーフローすると自動的にfloatにキャストされます。<br>エラーは発生しませんが下位の桁が丸められてしまい<br>正確な値が保持できなくなります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo "value:".(int)$value."&lt;br&gt;";</div>[結果]<br>value:(int)<br>$valueがnullと判定します。<br>nullを文字列変換すると空文字になります。<br>そのため$valueが空文字となり上記の結果となります。<br><br>echo "value:".$value."&lt;br&gt;";<br>[結果]<br>value:<br>$valueはnullなので空白に変換されます。<br><br></div><br><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+  private function judgeInt(int $num)
+  {
+    echo "judgeInt関数を実行しました。&lt;br&gt;";
+  }
+  function test()
+  {
+    try {
+        $this->judgeInt(1.23); // TypeError が発生します
+    } catch (TypeError $e) {
+        // ここでエラーを捕捉し、代替処理をします
+        echo "Caught TypeError: " . $e->getMessage() . PHP_EOL;
+        // 仕様的には良くないとしても、ここでデフォルト値を返すなどの回避策が可能です
+        // 例: return round(1.23);
+    } finally {
+        echo "Finally block executed (always runs).\n";
+    }
+  }
+}
+$cls2 = new test2();
+$cls2->test();
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	private function judgeInt(int $num)
+	{
+		echo "The judgeInt function was executed. &lt;br&gt;";
+	}
+	function test()
+	{
+		try {
+			$this->judgeInt(1.23); // A TypeError occurs.
+		} catch (TypeError $e) {
+			// Catch the error here and handle it accordingly.
+			echo "Caught TypeError: " . $e->getMessage() . PHP_EOL;
+			// Even though this is not technically correct, a workaround is possible, such as returning a default value.
+			// Example: return round(1.23);
+		} finally {
+		echo "Finally block executed (always runs).\n";
+		}
+	}
+}
+$cls2 = new test2();
+$cls2->test();
+</pre></div><br><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$this->judgeInt(1.23);<br></div>Caught TypeError: test2::judgeInt(): Argument #1 ($num) must be of type int<br>declare(strict_types=1);が有効な環境でnullを代入しようとすると、<br>TypeErrorが発生し、プログラムの実行が停止します。<br><br></div><br><div id=h3><a href="javascript:void(0);" id="copy3" class="copy-button" data-target="codeBlock3">copy</a><pre id="codeBlock3" class="prettyprint linenums;lang-js;">
+class test3
+{
+  private function judgeInt(int $num) 
+  {
+      echo "judgeInt関数を実行しました。&lt;br&gt;";
+  }
+  function test()
+  {
+    try {
+        $this->judgeInt(null); // Fatal error: Uncaught TypeError
+    } catch (TypeError $e) {
+        echo "エラーを捕捉しました: " . $e->getMessage();
+    }
+  }
+}
+$cls3 = new test3();
+$cls3->test();
+</pre></div><div id=h33><a href="javascript:void(0);" id="copy33" class="copy-button" data-target="codeBlock33">copy</a><pre id="codeBlock33" class="prettyprint linenums;lang-js;">
+class test3
+{
+	private function judgeInt(int $num)
+	{
+		echo "The judgeInt function was executed.&lt;br&gt;";
+	}
+	function test()
+	{
+		try {
+			$this->judgeInt(null); // Fatal error: Uncaught TypeError
+		} catch (TypeError $e) {
+			echo "Error caught: " . $e->getMessage();
+		}
+	}
+}
+$cls3 = new test3();
+$cls3->test();
+</pre></div><br><div id="n8"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$this->judgeInt(null);<br></div>test3::judgeInt(): Argument #1 ($value) must be of type int, null given,<br>declare(strict_types=1);が有効な環境でnullを代入しようとすると、<br>TypeErrorが発生し、プログラムの実行が停止します。<br><br></div><br><div id=h4><a href="javascript:void(0);" id="copy4" class="copy-button" data-target="codeBlock4">copy</a><pre id="codeBlock4" class="prettyprint linenums;lang-js;">
+class test4
+{
+  private function judgeIntNullable(?int $num):int
+  {
+    if ($num === null) {
+        echo "値はnullです。デフォルト値の0を使用します。&lt;br&gt;";
+        $num = 0;
+    }
+    return $num;
+  }
+  function test(?int $num)
+  {
+    $this->judgeIntNullable($num);
+  }
+  function judgeIntNull(int $num):int
+  {
+    if ($num === null) {
+        echo "値はnullです。デフォルト値の0を使用します。&lt;br&gt;";
+        $num = 0;
+    }
+    return $num;
+  }
+}
+$cls4 = new test4();
+echo $cls4->test(null);
+echo $cls4->judgeIntNull(null);
+</pre></div><div id=h44><a href="javascript:void(0);" id="copy44" class="copy-button" data-target="codeBlock44">copy</a><pre id="codeBlock44" class="prettyprint linenums;lang-js;">
+class test4
+{
+	private function judgeIntNullable(?int $num):int
+	{
+		if ($num === null) {
+			echo "Value is null. Using default value 0. &lt;br&gt;";
+			$num = 0;
+		}
+		return $num;
+		}
+		function test(?int $num)
+		{
+			$this->judgeIntNullable($num);
+		}
+		function judgeIntNull(int $num):int
+		{
+			if ($num === null) {
+				echo "Value is null. Using default value 0. &lt;br&gt;";
+			$num = 0;
+		}
+		return $num;
+	}
+}
+$cls4 = new test4();
+echo $cls4->test(null);
+echo $cls4->judgeIntNull(null);
+</pre></div><br><div id="n9">int型の引数にnullを渡したときにnull許容型にすることで<br>関数内部でnullに対する判定処理をすることができます。<br>[judgeIntNullableを実行した結果]<br>echo "値はnullです。デフォルト値の0を使用します。&lt;br&gt;";<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function judgeIntNull(int $num):int<br></div>Fatal error: Uncaught TypeError: test4::judgeIntNull(): Argument #1 ($num) must be of type int, null given<br>null許容型にしていないためエラーが発生します。<br><br><table><tr><td>文字列</td><td>(int)でキャストした結果</td><td>説明</td></tr><tr><td>"123"</td><td>123</td><td>全て数値なのでそのまま変換されます。</td></tr><tr><td>"123abc"</td><td>123</td><td>"123"までが数値として認識され、aで停止します。</td></tr><tr><td>"12.3"</td><td>12</td><td>小数点も数値の一部とみなされますが、(int)キャストなので小数点以下は切り捨てられます。</td></tr><tr><td>"abc123"</td><td>0</td><td>先頭が数値ではないため、結果は0になります。</td></tr><tr><td>"0"</td><td>0</td><td>0に変換されます。</td></tr><tr><td>""</td><td>0</td><td>空文字列は0に変換されます。</td></tr></table><br></div><br><div id=h5><a href="javascript:void(0);" id="copy5" class="copy-button" data-target="codeBlock5">copy</a><pre id="codeBlock5" class="prettyprint linenums;lang-js;">
+class test5
+{
+  function test($value)
+  {
+      if($value === 100)
+      {
+        echo "data is num.&lt;br&gt;";
+      }
+      else
+      {
+        echo "data is string.&lt;br&gt;";
+      }
+  }
+}
+$cls5 = new test5();
+$cls5->test("100");
+$cls5->test("100"+0);
+</pre></div><div id=h55><a href="javascript:void(0);" id="copy55" class="copy-button" data-target="codeBlock55">copy</a><pre id="codeBlock55" class="prettyprint linenums;lang-js;">
+class test5
+{ 
+	function test($value) 
+	{ 
+		if($value === 100) 
+		{ 
+			echo "data is num.&lt;br&gt;"; 
+		} 
+		else 
+		{ 
+			echo "data is string.&lt;br&gt;"; 
+		} 
+	}
+}
+$cls5 = new test5();
+$cls5->test("100");
+$cls5->test("100"+0);
+</pre></div><br><div id="n10"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls5->test("100");<br></div>インスタンス化したクラスオブジェクトから文字列数字を判定します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test($value)<br>...<br>if($value === 100)<br></div>型が不一致と判定されます。<br>[結果]<br>data is string.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls5->test("100"+0);<br></div>型が一致と判定します。<br>文字列に 0 を足すなどの算術演算を行うと、PHPの型ジャグリングにより数値に変換されます。<br>[結果]<br>data is num.<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"int型",n3:"php型宣言",n4:`phpで使用する型宣言のint型について<br>厳密な宣言で判定するために下記のようにphpの最初に宣言します。<br><textarea id="t1" rows=4 cols=50>
+<?php
+declare(strict_types=1);
+?>
+</textarea>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls1->judgeInt("123");<br></div>Fatal error: Uncaught TypeError: test1::judgeInt(): Argument #1 ($num) must be of type int, string given<br>PHP 7.0以降、厳密な型宣言（declare(strict_types=1);）を使用している場合<br>期待される型と異なる型の値が渡されるとTypeErrorが発生します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls1->judgeInt(1.23);<br></div>PHP 8以降では、floatからintへの暗黙的な変換で精度が失われる場合に警告が発生します。<br>[警告例]<br>Deprecated: Implicit conversion from float 1.23 to int loses precision<br>phpのint型の範囲<br><table><tr><td>環境</td><td>サイズ(ビット)</td><td>最大値(PHP_INT_MAX)</td></tr><tr><td>32bit</td><td>32</td><td>2,147,483,647 (約 21億)</td></tr><tr><td>64bit</td><td>64</td><td>9,223,372,036,854,775,807 (約 900京)</td></tr><tr><td>環境</td><td>サイズ(ビット)</td><td>最小値(PHP_INT_MIN)</td></tr><tr><td>64bit</td><td>64</td><td>-9,223,372,036,854,775,808 (約 -900京)</td></tr></table><br>int型をオーバーフローすると自動的にfloatにキャストされます。<br>エラーは発生しませんが下位の桁が丸められてしまい<br>正確な値が保持できなくなります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo "value:".(int)$value."&lt;br&gt;";</div>[結果]<br>value:(int)<br>$valueがnullと判定します。<br>nullを文字列変換すると空文字になります。<br>そのため$valueが空文字となり上記の結果となります。<br><br>echo "value:".$value."&lt;br&gt;";<br>[結果]<br>value:<br>$valueはnullなので空白に変換されます。<br><br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$this->judgeInt(1.23);<br></div>Caught TypeError: test2::judgeInt(): Argument #1 ($num) must be of type int<br>declare(strict_types=1);が有効な環境でnullを代入しようとすると、<br>TypeErrorが発生し、プログラムの実行が停止します。<br><br>`,n8:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$this->judgeInt(null);<br></div>test3::judgeInt(): Argument #1 ($value) must be of type int, null given,<br>declare(strict_types=1);が有効な環境でnullを代入しようとすると、<br>TypeErrorが発生し、プログラムの実行が停止します。<br><br>`,n9:`int型の引数にnullを渡したときにnull許容型にすることで<br>関数内部でnullに対する判定処理をすることができます。<br>[judgeIntNullableを実行した結果]<br>echo "値はnullです。デフォルト値の0を使用します。&lt;br&gt;";<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function judgeIntNull(int $num):int<br></div>Fatal error: Uncaught TypeError: test4::judgeIntNull(): Argument #1 ($num) must be of type int, null given<br>null許容型にしていないためエラーが発生します。<br><br><table><tr><td>文字列</td><td>(int)でキャストした結果</td><td>説明</td></tr><tr><td>"123"</td><td>123</td><td>全て数値なのでそのまま変換されます。</td></tr><tr><td>"123abc"</td><td>123</td><td>"123"までが数値として認識され、aで停止します。</td></tr><tr><td>"12.3"</td><td>12</td><td>小数点も数値の一部とみなされますが、(int)キャストなので小数点以下は切り捨てられます。</td></tr><tr><td>"abc123"</td><td>0</td><td>先頭が数値ではないため、結果は0になります。</td></tr><tr><td>"0"</td><td>0</td><td>0に変換されます。</td></tr><tr><td>""</td><td>0</td><td>空文字列は0に変換されます。</td></tr></table>`,n10:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls5->test("100");<br></div>インスタンス化したクラスオブジェクトから文字列数字を判定します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test($value)<br>...<br>if($value === 100)<br></div>型が不一致と判定されます。<br>[結果]<br>data is string.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls5->test("100"+0);<br></div>型が一致と判定します。<br>文字列に 0 を足すなどの算術演算を行うと、PHPの型ジャグリングにより数値に変換されます。<br>[結果]<br>data is num.<br><br>`,n11:"戻る",},en: {n1: "back",n2: "int type",n3: "PHP type declaration",n4: `About the int type in PHP type declarations:<br>To ensure strict declarations, declare it at the beginning of your PHP code as shown below. <br><textarea id="t1" rows=4 cols=50>
+<?php
+declare(strict_types=1);
+?>
+</textarea>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls1->judgeInt("123");<br></div>Fatal error: Uncaught TypeError: test1::judgeInt(): Argument #1 ($num) must be of type int, string given<br>As of PHP 7.0, if you are using strict type declarations (declare(strict_types=1);),<br>A TypeError occurs if a value is passed that does not match the expected type. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls1->judgeInt(1.23);<br></div>In PHP 8 and later, a warning is issued if precision is lost during implicit conversion from float to int. <br>[Warning Example]<br>Deprecated: Implicit conversion from float 1.23 to int loses precision<br>PHP int type range<br><table><tr><td>Environment</td><td>Size (bits)</td><td>Maximum Value (PHP_INT_MAX)</td></tr><tr><td>32-bit</td><td>32</td><td>2,147,483,647 (approximately 2.1 billion)</td></tr><tr><td>64-bit</td><td>64</td><td>9,223,372,036,854,775,807 (approximately 900 quintillion)</td></tr><tr><td>Environment</td><td>Size (bits)</td><td>Minimum Value (PHP_INT_MIN)</td></tr><tr><td>64bit</td><td>64</td><td>-9,223,372,036,854,775,808 (approximately -900 quintillion)</td></tr></table><br>If an int type overflows, it will automatically be cast to a float. <br>No error will be generated, but the lower digits will be rounded off, making it impossible to retain an accurate value. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo "value:".(int)$value."&lt;br&gt;";</div>[Result]<br>value:(int)<br>$value is determined to be null. <br>Converting null to a string results in an empty string. <br>As a result, $value becomes an empty string, resulting in the above result. <br><br>echo "value:".$value."&lt;br&gt;";<br>[Result]<br>value:<br>$value is null, so it is converted to a space. <br><br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$this->judgeInt(1.23);<br></div>Caught TypeError: test2::judgeInt(): Argument #1 ($num) must be of type int<br>If you attempt to assign null in an environment where declare(strict_types=1); is enabled,<br>a TypeError occurs and the program execution stops. <br><br>`,n8:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$this->judgeInt(null);<br></div>test3::judgeInt(): Argument #1 ($value) must be of type int, null given,<br>If you attempt to assign null to an int argument in an environment where declare(strict_types=1); is enabled,<br>A TypeError occurs and the program execution stops. <br><br>`,n9:`By making the int argument null-enabled when null is passed,<br>you can perform null validation within the function. <br>[Result of executing judgeIntNullable]<br>echo "Value is null. Using default value 0.&lt;br&gt;";<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function judgeIntNull(int $num):int<br></div>Fatal error: Uncaught TypeError: test4::judgeIntNull(): Argument #1 ($num) must be of type int, null given<br>An error occurs because the type is not nullable. <br><br><table><tr><td>String</td><td>Result of casting to (int)</td><td>Explanation</td></tr><tr><td>"123"</td><td>123</td><td>Since all values ​​are numeric, they are converted as is. </td></tr><tr><td>"123abc"</td><td>123</td><td>Numbers up to "123" are recognized, stopping at "a." </td></tr><tr><td>"12.3"</td><td>12</td><td>The decimal point is considered part of the number, but because it is cast to (int), the decimal point is truncated. </td></tr><tr><td>"abc123"</td><td>0</td><td>The first character is not a number, so the result is 0. </td></tr><tr><td>"0"</td><td>0</td><td>Converted to 0. </td></tr><tr><td>""</td><td>0</td><td>An empty string is converted to 0. </td></tr></table>`,n10:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls5->test("100");<br></div>Determine whether the instantiated class object is a string or a number. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test($value)<br>...<br>if($value === 100)<br></div>The type is determined to be inconsistent. <br>[Result]<br>data is string.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls5->test("100"+0);<br></div>The types match. <br>If you perform an arithmetic operation, such as adding 0 to a string, it will be converted to a number using PHP's type juggling. <br>[Result]<br>data is num.<br><br>`,n11:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');const h5=document.getElementById('h5');const h11=document.getElementById('h11');const h22=document.getElementById('h22');const h33=document.getElementById('h33');const h44=document.getElementById('h44');const h55=document.getElementById('h55');if(lang==1){h1.style.display="none";h2.style.display="none";h3.style.display="none";h4.style.display="none";h5.style.display="none";h11.style.display="block";h22.style.display="block";h33.style.display="block";h44.style.display="block";h55.style.display="block";}else{h1.style.display="block";h2.style.display="block";h3.style.display="block";h4.style.display="block";h5.style.display="block";h11.style.display="none";h22.style.display="none";h33.style.display="none";h44.style.display="none";h55.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
