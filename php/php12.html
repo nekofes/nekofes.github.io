@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">bool型</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">phpで使用する型宣言のbool型について<br>bool型は真偽値<br>true(真)またはfalse(偽)のいずれかの値のみを保持するデータ型です。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+  function judgeBool($value)
+  {
+    if($value)
+    {
+      echo "true".PHP_EOL;
+    }
+    else
+    {
+      echo "false".PHP_EOL;
+    }
+  }
+}
+echo "&lt;pre&gt;";
+$cls1 = new test1();
+echo "bool test".PHP_EOL;
+$bool = true;
+$cls1->judgeBool($bool);//true
+$bool = false;
+$cls1->judgeBool($bool);//false
+
+echo "int test".PHP_EOL;
+$int = 0;
+$cls1->judgeBool($int);//false
+$int = 1;
+$cls1->judgeBool($int);//true
+$int = 2;
+$cls1->judgeBool($int);//true
+
+echo "float test".PHP_EOL;
+$float = 0.0;
+$cls1->judgeBool($float);//false
+$float = 0.1;
+$cls1->judgeBool($float);//true
+$float = 1.0;
+$cls1->judgeBool($float);//true
+$float = 0.00;
+$cls1->judgeBool($float);//false
+$float = 0;
+$cls1->judgeBool($float);//false
+
+echo "string test".PHP_EOL;
+$str = "";
+$cls1->judgeBool($str);//false
+$str = " ";//半角SP
+$cls1->judgeBool($str);//true
+$str = "test";
+$cls1->judgeBool($str);//true
+echo "array test".PHP_EOL;
+$ary = [];
+$cls1->judgeBool($ary);//false
+$ary[] = 1;
+$cls1->judgeBool($ary);//true
+echo "null test".PHP_EOL;
+$null = null;
+$cls1->judgeBool($null);//false
+$null = "";
+$cls1->judgeBool($null);//false
+$null = " ";//半角SP
+$cls1->judgeBool($null);//true
+$null = "test";
+$cls1->judgeBool($null);//true
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function judgeBool($value) 
+	{ 
+		if($value) 
+		{ 
+			echo "true".PHP_EOL; 
+		} 
+		else 
+		{ 
+			echo "false".PHP_EOL; 
+		} 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1 = new test1();
+echo "bool test".PHP_EOL;
+$bool = true;
+$cls1->judgeBool($bool);//true
+$bool = false;
+$cls1->judgeBool($bool);//false
+
+echo "int test".PHP_EOL;
+$int = 0;
+$cls1->judgeBool($int);//false
+$int = 1;
+$cls1->judgeBool($int);//true
+$int = 2;
+$cls1->judgeBool($int);//true
+
+echo "float test".PHP_EOL;
+$float = 0.0;
+$cls1->judgeBool($float);//false
+$float = 0.1;
+$cls1->judgeBool($float);//true
+$float = 1.0;
+$cls1->judgeBool($float);//true
+$float = 0.00;
+$cls1->judgeBool($float);//false
+$float = 0;
+$cls1->judgeBool($float);//false
+
+echo "string test".PHP_EOL;
+$str = "";
+$cls1->judgeBool($str);//false
+$str = " ";//Half-width SP
+$cls1->judgeBool($str);//true
+$str = "test";
+$cls1->judgeBool($str);//true
+echo "array test".PHP_EOL;
+$ary = [];
+$cls1->judgeBool($ary);//false
+$ary[] = 1;
+$cls1->judgeBool($ary);//true
+echo "null test".PHP_EOL;
+$null = null;
+$cls1->judgeBool($null);//false
+$null = "";
+$cls1->judgeBool($null);//false
+$null = " ";//Half-width SP
+$cls1->judgeBool($null);//true
+$null = "test";
+$cls1->judgeBool($null);//true
+
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if($value)</div>trueの結果のケースです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">else</div>falseの結果のケースです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bool<br></div>falseとtrueになった判定結果が返ります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">int<br></div>0はfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">float<br></div>0.0(0)はfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">string<br></div>空文字はfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array<br></div>要素がないデータはfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null<br></div>null自身はfalse、以外はtrueと判定されます。<br>ただし、空文字など一定の値は上記通りfalseと判定されます。<br><br></div><br><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+  function test(string $value)
+  {
+    if((bool)$value)
+    {
+      echo "true".PHP_EOL;
+    }
+    else
+    {
+      echo "false".PHP_EOL;
+    }
+  }
+}
+echo "&lt;pre&gt;";
+$cls2 = new test2();
+echo "bool cast test".PHP_EOL;
+$str = "false";
+$cls2->test($str);//true
+$str = "true";
+$cls2->test($str);//true
+
+echo "int cast test".PHP_EOL;
+$bool = true;
+echo "(int)\$bool:".(int)$bool.PHP_EOL;//1
+$bool = false;
+echo "(int)\$bool:".(int)$bool.PHP_EOL;//0
+$sum = true + true + false + 0;
+echo "sum:$sum".PHP_EOL;//2
+$sum = true + true + false;
+echo "sum:$sum".PHP_EOL;//2
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+  function test(string $value)
+  {
+    if((bool)$value)
+    {
+      echo "true".PHP_EOL;
+    }
+    else
+    {
+      echo "false".PHP_EOL;
+    }
+  }
+}
+echo "&lt;pre&gt;";
+$cls2 = new test2();
+echo "bool cast test".PHP_EOL;
+$str = "false";
+$cls2->test($str);//true
+$str = "true";
+$cls2->test($str);//true
+
+echo "int cast test".PHP_EOL;
+$bool = true;
+echo "(int)\$bool:".(int)$bool.PHP_EOL;//1
+$bool = false;
+echo "(int)\$bool:".(int)$bool.PHP_EOL;//0
+$sum = true + true + false + 0;
+echo "sum:$sum".PHP_EOL;//2
+$sum = true + true + false;
+echo "sum:$sum".PHP_EOL;//2
+
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">stringのキャスト<br></div>文字列でfalseとしてboolでキャストしても<br>"false"という文字列は空ではないためtrueになります。<br>trueも同様です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">intのキャスト<br></div>trueをintでキャストすると1を返します。<br>falseをintでキャストすると0を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">trueおよびfalseを使った計算<br></div>true + true + false;<br>true:1<br>false:0<br>として判定されるため、<br>1 + 1 + 0<br>となり<br>2が返ります。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"bool型",n3:"php型宣言",n4:`phpで使用する型宣言のbool型について<br>bool型は真偽値<br>true(真)またはfalse(偽)のいずれかの値のみを保持するデータ型です。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if($value)</div>trueの結果のケースです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">else</div>falseの結果のケースです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bool<br></div>falseとtrueになった判定結果が返ります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">int<br></div>0はfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">float<br></div>0.0(0)はfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">string<br></div>空文字はfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array<br></div>要素がないデータはfalse、以外はtrueと判定されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null<br></div>null自身はfalse、以外はtrueと判定されます。<br>ただし、空文字など一定の値は上記通りfalseと判定されます。<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">stringのキャスト<br></div>文字列でfalseとしてboolでキャストしても<br>"false"という文字列は空ではないためtrueになります。<br>trueも同様です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">intのキャスト<br></div>trueをintでキャストすると1を返します。<br>falseをintでキャストすると0を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">trueおよびfalseを使った計算<br></div>true + true + false;<br>true:1<br>false:0<br>として判定されるため、<br>1 + 1 + 0<br>となり<br>2が返ります。<br>`,n8:"戻る",},en: {n1: "back",n2: "bool type",n3: "PHP type declaration",n4: `About the bool type in PHP type declarations<br>The bool type is a boolean value.<br>It is a data type that holds only the values ​​true or false. <br>`,n5: `[Sample]`,n6: `<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if($value)</div>This is the true result case. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">else</div>This is the false result case. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bool<br></div>The result is either false or true. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">int<br></div>0 is considered false, and anything else is considered true. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">float<br></div>0.0 (0) is considered false, and anything else is considered true. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">string<br></div>An empty string is considered false, and anything else is considered true. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array<br></div>Data with no elements is considered false, and anything else is considered true. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null<br></div>null itself is considered false, and anything else is considered true. <br>However, certain values, such as an empty string, are considered false as described above. <br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Casting a String<br></div>Even if you cast a string as false to a bool,<br>the string "false" is not empty, so it becomes true. <br>The same is true for true. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Casting an Int<br></div>Casting true to an int returns 1. <br>Casting false to an int returns 0. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Calculation using true and false<br></div>true + true + false;<br>true:1<br>false:0<br>Since it is evaluated as:<br>1 + 1 + 0<br>the result is<br>2 is returned. <br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
