@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">string型</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">phpで使用する型宣言のstring型について<br>string型は文字の並びを表します。<br>囲み文字によって表現するデータ型です。<br>"(ダブルコーテーション)<br>'(シングルコーテーション)<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function testLineCode()
+	{
+		echo "(1) first row.\nsecond row.".PHP_EOL;
+		/*
+		(1) first row.
+		second row.
+		*/
+		echo "(2) this is \'apple\'.".PHP_EOL;//(2) this is \'apple\'.
+	}
+	function escapeString()
+	{
+		$data = "&lt;script&gt;console.log(\"hello world\");&lt;/script&gt;";
+		echo htmlspecialchars($data, ENT_QUOTES, "UTF-8").PHP_EOL;//&lt;script>console.log("hello world");&lt;/script&gt;
+	}
+	function urlEncode()
+	{
+		echo urlencode("https://nekofes.github.io").PHP_EOL;//https%3A%2F%2Fnekofes.github.io
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls1 = new test1();
+$cls1->testLineCode();
+$cls1->escapeString();
+$cls1->urlEncode();
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function testLineCode() 
+	{ 
+		echo "(1) first row.\nsecond row.".PHP_EOL; 
+		/* 
+		(1) first row. 
+		second row. 
+		*/ 
+		echo "(2) this is \'apple\'.".PHP_EOL;//(2) this is \'apple\'. 
+	} 
+	function escapeString() 
+	{ 
+		$data = "&lt;script&gt;console.log(\"hello world\");&lt;/script&gt;"; 
+		echo htmlspecialchars($data, ENT_QUOTES, "UTF-8").PHP_EOL;//&lt;script>console.log("hello world");&lt;/script&gt; 
+	} 
+	function urlEncode() 
+	{ 
+		echo urlencode("https://nekofes.github.io").PHP_EOL;//https%3A%2F%2Fnekofes.github.io 
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls1 = new test1();
+$cls1->testLineCode();
+$cls1->escapeString();
+$cls1->urlEncode();
+
+echo "&lt;/pre&gt;";</pre></div><br><div id="n6">[エスケープシーケンス一覧]<br><table border=1><tr><td>シーケンス</td><td>説明</td><td>結果</td><td>使用例</td></tr><tr><td>\"</td><td>ダブルクォーテーション</td><td>`"</td><td>echo "彼女は\"Hello\"と言った";</td></tr><tr><td>\\</td><td>バックスラッシュ自体</td><td>\</td><td>echo "C:\\Users\\";</td></tr><tr><td>\n</td><td>改行（LF: Line Feed）</td><td>改行</td><td>echo "1\n2";</td></tr><tr><td>\r</td><td>キャリッジリターン（CR: Carriage Return）</td><td>行頭に戻る</td><td>（環境依存の挙動、通常は\nを使用）</td></tr><tr><td>\t</td><td>水平タブ</td><td>タブ文字</td><td>echo "fruit:\tapple";</td></tr><tr><td>\$</td><td>ドル記号</td><td>$</td><td>echo "price is \$10.";</td></tr><tr><td>\[0-7]{1,3}</td><td>8進数表現</td><td>ASCII/バイナリ値</td><td>echo "\101"; は "A" を出力</td></tr><tr><td>\x[0-9A-Fa-f]{1,2}</td><td>16進数表現</td><td>ASCII/バイナリ値</td><td>echo "\x41"; は "A" を出力</td></tr><tr><td>\u{xxxxxx}</td><td>Unicodeコードポイント</td><td>Unicode文字</td><td>echo "\u{3042}"; は "あ" を出力 (PHP 7以降)</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo "(1) first row.\nsecond row.".PHP_EOL;</div>[出力結果]<br>(1) first row.<br>second row.<br>「\n」は改行コードとなります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo "(2) this is \'apple\'.".PHP_EOL;</div>「\'」は「\」(エスケープ)させることでシングルコーテーションを表示させています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo htmlspecialchars($data, ENT_QUOTES, "UTF-8").PHP_EOL;</div>htmlspecialchars関数を使用することでエスケープシーケンスします。<br>[結果]<br>&lt;script&gt;console.log("hello world");&lt;/script&gt;<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo urlencode("https://nekofes.github.io").PHP_EOL;</div>urlencode関数はURLにそのまま含められない文字（スペースや日本語など）をエンコードします。<br>[結果]<br>https%3A%2F%2Fnekofes.github.io<br><br></div><br><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+function castInt()
+{
+	$str1 = "1.23";
+	$str2 = "0.5";
+	$str3 = "5\$";
+	$str4 = "5円";
+	$str5 = "num1";
+	$str6 = "hello";
+	echo "(1)".(int)$str1.PHP_EOL;//1
+	echo "(2)".(int)$str2.PHP_EOL;//0
+	echo "(3)".(int)$str3.PHP_EOL;//5
+	echo "(4)".(int)$str4.PHP_EOL;//5
+	echo "(5)".(int)$str5.PHP_EOL;//0
+	echo "(6)".(int)$str6.PHP_EOL;//0
+}
+
+function castFloatDouble()
+{
+	$str1 = "1.23";
+	$str2 = "0.5";
+	$str3 = "100";
+	echo "(1)".(float)$str1.PHP_EOL;//123
+	echo "(2)".(float)$str2.PHP_EOL;//0.5
+	echo "(3)".(float)$str3.PHP_EOL;//100
+}
+
+function castBool()
+{
+	$str1 = "";
+	$str2 = "0";
+	$str3 = "1";
+	$str4 = "00";
+	$str5 = "0.0";
+	$str6 = "1.0";
+	$str7 = "100";
+	$str8 = "hello";
+	echo "(1)".$this->boolResult((bool)$str1).PHP_EOL;//false
+	echo "(2)".$this->boolResult((bool)$str2).PHP_EOL;//false
+	echo "(3)".$this->boolResult((bool)$str3).PHP_EOL;//true
+	echo "(4)".$this->boolResult((bool)$str4).PHP_EOL;//true
+	echo "(5)".$this->boolResult((bool)$str5).PHP_EOL;//true
+	echo "(6)".$this->boolResult((bool)$str6).PHP_EOL;//true
+	echo "(7)".$this->boolResult((bool)$str7).PHP_EOL;//true
+	echo "(8)".$this->boolResult((bool)$str8).PHP_EOL;//true
+}
+private function boolResult($value):string
+{
+	return $value === true ? "true" : "false";
+}
+function castArray()
+{
+	$str = "test";
+	$ary = (array)$str;
+	$str = "a";
+	for($i=0; $i<count($ary); ++$i)
+	{
+		echo "i:$i ary:".$ary[$i].PHP_EOL;
+	}
+	//i:0 ary:test
+	echo "ary[0]:".$ary[0].PHP_EOL;//ary[0]:test
+}
+
+function castObject()
+{
+	$str = "a";
+	$obj = (object)$str;
+	var_dump($obj);
+	/*
+	object(stdClass)#3 (1) {
+	["scalar"]=>
+	string(1) "a"
+	}
+	*/
+	$index = 0;
+	foreach ($obj as $key => $value) 
+	{
+	echo "index:$index プロパティ $key の値は $value です。\n";
+	++$index;
+	}
+	//index:0 プロパティ scalar の値は a です。
+	$len = mb_strlen($str);
+	for($i=0; $i<$len; ++$i)
+	{
+		echo "i:$i obj:".mb_substr($str, $i, 1).PHP_EOL;
+	}
+	//i:0 obj:a
+
+	//下記はエラーとなる例
+	/*
+	$str = "a";
+	$obj = (object)$str;
+	for($i=0; $i<count($obj); ++$i)
+	{
+		echo "i:$i obj:".$obj[$i].PHP_EOL;
+	}
+	Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, stdClass given in path
+	Stack trace:
+	#0 /Applications/MAMP/htdocs/testXXX.php: test2->castArray()
+	#1 {main}
+	thrown in /Applications/MAMP/htdocs/testXXX.php on line lineNo
+	*/
+}
+
+function castNull()
+{
+	$str = "test";
+	$str = null;
+	echo $str ?? "this is null.".PHP_EOL;//this is null.
+	$str = "test";
+	echo $str ?? "this is null.".PHP_EOL;//test
+}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->castInt();
+$cls2->castFloatDouble();
+$cls2->castBool();
+$cls2->castArray();
+$cls2->castObject();
+$cls2->castNull();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function castInt()
+	{ 
+		$str1 = "1.23"; 
+		$str2 = "0.5"; 
+		$str3 = "5\$"; 
+		$str4 = "5 yen"; 
+		$str5 = "num1"; 
+		$str6 = "hello"; 
+		echo "(1)".(int)$str1.PHP_EOL;//1 
+		echo "(2)".(int)$str2.PHP_EOL;//0 
+		echo "(3)".(int)$str3.PHP_EOL;//5 
+		echo "(4)".(int)$str4.PHP_EOL;//5 
+		echo "(5)".(int)$str5.PHP_EOL;//0 
+		echo "(6)".(int)$str6.PHP_EOL;//0
+	}
+	
+	function castFloatDouble()
+	{ 
+		$str1 = "1.23"; 
+		$str2 = "0.5"; 
+		$str3 = "100"; 
+		echo "(1)".(float)$str1.PHP_EOL;//123 
+		echo "(2)".(float)$str2.PHP_EOL;//0.5 
+		echo "(3)".(float)$str3.PHP_EOL;//100
+	}
+	
+	function castBool()
+	{ 
+		$str1 = ""; 
+		$str2 = "0"; 
+		$str3 = "1"; 
+		$str4 = "00"; 
+		$str5 = "0.0"; 
+		$str6 = "1.0"; 
+		$str7 = "100"; 
+		$str8 = "hello"; 
+		echo "(1)".$this->boolResult((bool)$str1).PHP_EOL;//false 
+		echo "(2)".$this->boolResult((bool)$str2).PHP_EOL;//false 
+		echo "(3)".$this->boolResult((bool)$str3).PHP_EOL;//true 
+		echo "(4)".$this->boolResult((bool)$str4).PHP_EOL;//true 
+		echo "(5)".$this->boolResult((bool)$str5).PHP_EOL;//true 
+		echo "(6)".$this->boolResult((bool)$str6).PHP_EOL;//true 
+		echo "(7)".$this->boolResult((bool)$str7).PHP_EOL;//true 
+		echo "(8)".$this->boolResult((bool)$str8).PHP_EOL;//true
+	}
+	private function boolResult($value):string
+	{ 
+		return $value === true ? "true" : "false";
+	}
+	function castArray()
+	{ 
+		$str = "test"; 
+		$ary = (array)$str; 
+		$str = "a"; 
+		for($i=0; $i<count($ary); ++$i) 
+		{ 
+			echo "i:$i ary:".$ary[$i].PHP_EOL; 
+		} 
+		//i:0 ary:test 
+		echo "ary[0]:".$ary[0].PHP_EOL;//ary[0]:test
+	}
+	
+	function castObject()
+	{ 
+		$str = "a"; 
+		$obj = (object)$str; 
+		var_dump($obj); 
+		/* 
+		object(stdClass)#3 (1) { 
+		["scalar"]=> 
+		string(1) "a" 
+		} 
+		*/ 
+		$index = 0; 
+		foreach ($obj as $key => $value) 
+		{ 
+		echo "index:$index property $key The value of is $value. \n";
+		++$index;
+		}
+		/index:0 The value of the property scalar is a.
+		$len = mb_strlen($str); 
+		for($i=0; $i<$len; ++$i) 
+		{ 
+			echo "i:$i obj:".mb_substr($str, $i, 1).PHP_EOL; 
+		} 
+		//i:0 obj:a 
+		
+		//The following is an example of an error 
+		/* 
+		$str = "a"; 
+		$obj = (object)$str; 
+		for($i=0; $i<count($obj); ++$i) 
+		{ 
+			echo "i:$i obj:".$obj[$i].PHP_EOL; 
+		} 
+		Fatal error: Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, stdClass given in path 
+		Stack trace: 
+		#0 /Applications/MAMP/htdocs/testXXX.php: test2->castArray() 
+		#1 {main} 
+		thrown in /Applications/MAMP/htdocs/testXXX.php on line lineNo 
+		*/
+	}
+	
+	function castNull()
+	{ 
+	$str = "test"; 
+	$str = null; 
+	echo $str ?? "this is null.".PHP_EOL;//this is null. 
+	$str = "test"; 
+	echo $str ?? "this is null.".PHP_EOL;//test
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->castInt();
+$cls2->castFloatDouble();
+$cls2->castBool();
+$cls2->castArray();
+$cls2->castObject();
+$cls2->castNull();
+echo "&lt;/pre&gt;";</pre></div><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$str = "a";<br>$obj = (object)$str;<br>for($i=0; $i<count($obj); ++$i)<br></div>count()関数は Countable または arrayである必要があります。<br>count()関数は、要素の数を数えられる配列 (array) か、<br>または Countable インターフェースを実装したオブジェクト(例：ArrayObjectなど)しか<br>引数として受け付けません。<br>$obj の型は stdClassです。<br>stdClass は Countable ではありません。<br>stdClass はPHPの標準的な汎用オブジェクトであり、デフォルトでは要素を数える機能（Countableインターフェース）を持っていません。<br>したがって、count($obj) を実行しようとすると<br>count()関数は対象外であるためypeError を発生させて処理が停止（Fatal error）します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo $str ?? "this is null.".PHP_EOL;</div>??はnull合体演算子です。<br>判定する値がnullの場合は??の後に実行した結果を返す処理です。<br>もしも$strがnullの場合は"this is null."という結果を返すようにした書き方となります。<br>[補足]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;td&gt;echo "&#92;101"; は "A" を出力&lt;/td&gt;</div>「\」(バックスラッシュ)は「&amp;#92;」としないとHTMLエラーになることがあります。<br>[書き方の例]<br>&lt;td&gt;echo "&amp;#92;101"; は "A" を出力&lt;/td&gt;<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"string型",n3:"php型宣言",n4:`phpで使用する型宣言のstring型について<br>string型は文字の並びを表します。<br>囲み文字によって表現するデータ型です。<br>"(ダブルコーテーション)<br><td>\"</td><td>ダブルクォーテーション</td><td>"</td>echo urlencode("https:</div>urlencode関数はURLにそのまま含められない文字（スペースや日本語など）をエンコードします。<br>[結果]<br>https%3A%2F%2Fnekofes.github.io<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$str = "a";<br>$obj = (object)$str;<br>for($i=0; $i<count($obj); ++$i)<br></div>count()関数は Countable または arrayである必要があります。<br>count()関数は、要素の数を数えられる配列 (array) か、<br>または Countable インターフェースを実装したオブジェクト(例：ArrayObjectなど)しか<br>引数として受け付けません。<br>$obj の型は stdClassです。<br>stdClass は Countable ではありません。<br>stdClass はPHPの標準的な汎用オブジェクトであり、デフォルトでは要素を数える機能（Countableインターフェース）を持っていません。<br>したがって、count($obj) を実行しようとすると<br>count()関数は対象外であるためypeError を発生させて処理が停止（Fatal error）します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo $str ?? "this is null.".PHP_EOL;</div>??はnull合体演算子です。<br>判定する値がnullの場合は??の後に実行した結果を返す処理です。<br>もしも$strがnullの場合は"this is null."という結果を返すようにした書き方となります。<br>[補足]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;td&gt;echo "&#92;101"; は "A" を出力&lt;/td&gt;</div>「\」(バックスラッシュ)は「&amp;#92;」としないとHTMLエラーになることがあります。<br>[書き方の例]<br>&lt;td&gt;echo "&amp;#92;101"; は "A" を出力&lt;/td&gt;<br><br>`,n8:"戻る",},en: {n1: "back",n2: "string type",n3: "PHP type declaration",n4: `About the string type used in PHP type declarations: <br>The string type represents a sequence of characters. <br>This data type is expressed using enclosed characters. <br>" (double quote)<br><td>\"</td><td>Double quote</td><td>"</td>echo urlencode("https:</div>The urlencode function encodes characters that cannot be included directly in a URL (such as spaces and Japanese characters). <br>[Result]<br>https%3A%2F%2Fnekofes.github.io<br>`,n7:`$str = "a";<br>$obj = (object)$str;<br>for($i=0; $i<count($obj); ++$i)<br></div>The count() function must be Countable or an array. <br>The count() function only accepts as arguments an array whose elements can be counted,<br>or an object that implements the Countable interface (e.g., ArrayObject). <br>The type of $obj is stdClass. <br>stdClass is not Countable. <br>stdClass is a standard, general-purpose object in PHP, and does not have the ability to count elements (the Countable interface) by default. <br>Therefore, if you try to execute count($obj),<br>because the count() function is not supported, a typeError will occur and the process will halt (a fatal error). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">echo $str ?? "this is null.".PHP_EOL;</div>?? is the null coalescing operator. <br>If the value being evaluated is null, this returns the result of the execution after ??. <br>If $str is null, this is written to return the result "this is null." <br>[Note]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&lt;td&gt;echo "&#92;101"; outputs "A"&lt;/td&gt;</div>"\" (backslash) must be entered as "&amp;#92;", otherwise an HTML error may occur. <br>[Example]<br>&lt;td&gt;echo "&amp;#92;101"; outputs "A"&lt;/td&gt;<br><br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
