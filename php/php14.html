@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">float型</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">phpで使用する型宣言のfloat型について<br>倍精度浮動小数点数として扱われます。 <br>浮動小数点数は通常64ビットのIEEE 754倍精度フォーマットで実装されており、メモリサイズは8バイトです。<br>14桁から15桁の十進数の精度<br>環境依存となりますが、表現範囲は約1.8e308 までの範囲となります。</div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+  function test1()
+  {
+      $num1 = 0.1;
+      $num2 = 0.7;
+      $result =$num1 + $num2;
+      //環境によっては「0.7999999999999999」となることがあるようです。
+      echo "result(num1 + num2):$result".PHP_EOL;//このテスト環境:result(num1 + num2):0.8
+      $num1 = 0.100000;
+      $num2 = 0.700000;
+      $result =$num1 + $num2;
+      echo "result(num1 + num2):$result".PHP_EOL;//このテスト環境:result(num1 + num2):0.8
+      $result = bcadd("0.1", "0.7", 1);
+      echo "result(bcadd):$result".PHP_EOL;//このテスト環境:result(bcadd):0.8
+  }
+  function test2()
+  {
+    $money1 = 100.5;
+    $money2 = 50.3;
+    $multiple = 10;
+    $tmp1 =$money1 * $multiple;
+    $tmp2 =$money2 * $multiple;
+    $tmp =$tmp1 + $tmp2;
+    $total = $tmp / $multiple;
+    echo "total:$total".PHP_EOL;//total:150.8
+  }
+  function test3()
+  {
+    $num = 0.123456789;
+    echo "num:$num".PHP_EOL;//num:0.123456789
+    //フォーマット指定子（%.nf）
+    printf("%f", $num).PHP_EOL;//0.123457
+    printf("%.0f", $num).PHP_EOL;//0
+    printf("%.1f", $num).PHP_EOL;//0.1
+    printf("%.2f", $num).PHP_EOL;//0.12
+    printf("%.3f", $num).PHP_EOL;//0.123
+    printf("%.4f", $num).PHP_EOL;//0.1235
+    printf("%.5f", $num).PHP_EOL;//0.12346
+    printf("%.6f", $num).PHP_EOL;//0.123457
+    printf("%.7f", $num).PHP_EOL;//0.1234568
+  }
+}
+echo "&lt;pre&gt;";
+
+$cls1 = new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1()
+	{
+		$num1 = 0.1;
+		$num2 = 0.7;
+		$result =$num1 + $num2;
+		//Depending on the environment, the result may be "0.79999999999999999."
+		echo "result(num1 + num2):$result".PHP_EOL;//This test environment:result(num1 + num2):0.8
+		$num1 = 0.100000;
+		$num2 = 0.700000;
+		$result =$num1 + $num2;
+		echo "result(num1 + num2):$result".PHP_EOL;//This test environment:result(num1 + num2):0.8
+		$result = bcadd("0.1", "0.7", 1);
+		echo "result(bcadd):$result".PHP_EOL;//This test environment:result(bcadd):0.8
+	}
+	function test2()
+	{
+		$money1 = 100.5;
+		$money2 = 50.3;
+		$multiple = 10;
+		$tmp1 =$money1 * $multiple;
+		$tmp2 =$money2 * $multiple; 
+		$tmp =$tmp1 + $tmp2; 
+		$total = $tmp / $multiple; 
+		echo "total:$total".PHP_EOL;//total:150.8 
+	} 
+	function test3() 
+	{ 
+		$num = 0.123456789; 
+		echo "num:$num".PHP_EOL;//num:0.123456789 
+		//Format specifier (%.nf) 
+		printf("%f", $num).PHP_EOL;//0.123457 
+		printf("%.0f", $num).PHP_EOL;//0 
+		printf("%.1f", $num).PHP_EOL;//0.1 
+		printf("%.2f", $num).PHP_EOL;//0.12 
+		printf("%.3f", $num).PHP_EOL;//0.123 
+		printf("%.4f", $num).PHP_EOL;//0.1235 
+		printf("%.5f", $num).PHP_EOL;//0.12346 
+		printf("%.6f", $num).PHP_EOL;//0.123457 
+		printf("%.7f", $num).PHP_EOL;//0.1234568 
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls1 = new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">浮動小数点数の誤差により丸め誤差が生じることがあります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$num1 = 0.1;<br>$num2 = 0.7;<br>$result =$num1 + $num2;<br></div>このテスト環境では0.8でしたが<br>環境によっては「0.7999999999999999」となることがあるようです。<br>正確な計算を行う必要がある場合は、PHPのBC Math関数を使用するなど工夫が必要となります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bcadd(BC Math 関数)<br></div>$result = bcadd("0.1", "0.7", 1);<br>浮動小数点数ではなく文字列として数値を扱い、誤差なく正確な計算結果を得ることができます。<br>計算したい数値を文字列として渡します。<br>計算結果は文字列で受け取ります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2()<br></div>小数点桁数を整数にして計算後、元の桁数に戻す方法です。<br>この例では小数点1桁を10倍することで整数にしています。<br>その後、各数字の計算をした結果を<br>10倍したものをもとに戻すので10で割っています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3()<br></div>出力桁数を制御する方法です。<br>printf関数を使用したテスト結果となります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">フォーマット指定子<br>%.(桁数の数字)f<br></div>によって小数点以下の桁数を指定できます。<br></div><br><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+  function casetInt()
+  {
+    $float = 2.3;
+    $int = 8;
+    $total = $float + $int;
+    echo "total:$total".PHP_EOL;//total:10.3
+  }
+  function castString()
+  {
+    $float = 7.5;
+    $str = "2.5";
+    $total = $float + $str;
+    echo "total:$total".PHP_EOL;//total:10
+  }
+  function castBool()
+  {
+    $float =9.0;
+    $bool = true;
+    $total = $float + $bool;
+    echo "total:$total".PHP_EOL;//total:10
+  }
+  function castNull()
+  {
+    $float = 1.23;
+    $total = $float + null;
+    echo "total:$total".PHP_EOL;//total:1.23
+  }
+
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->casetInt();
+$cls2->castString();
+$cls2->castBool();
+$cls2->castNull();
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{ 
+	function caseInt() 
+	{ 
+		$float = 2.3; 
+		$int = 8; 
+		$total = $float + $int; 
+		echo "total:$total".PHP_EOL;//total:10.3 
+	} 
+	function castString() 
+	{ 
+		$float = 7.5; 
+		$str = "2.5"; 
+		$total = $float + $str; 
+		echo "total:$total".PHP_EOL;//total:10 
+	} 
+	function castBool() 
+	{ 
+		$float =9.0; 
+		$bool = true; 
+		$total = $float + $bool; 
+		echo "total:$total".PHP_EOL;//total:10 
+	} 
+	function castNull() 
+	{ 
+		$float = 1.23; 
+		$total = $float + null; 
+		echo "total:$total".PHP_EOL;//total:1.23 
+	}
+
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->casetInt();
+$cls2->castString();
+$cls2->castBool();
+$cls2->castNull();
+
+echo "&lt;/pre&gt;";</pre></div><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">int型<br></div>int型の数字をfloat型の数字と計算をした場合<br>int型はfloat型に自動変換した数字を計算します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">string型<br></div>string型の数字をfloat型の数字と計算をした場合<br>string型は自動変換した数字を計算として使用されます。<br>floatとint以外のスカラ型を計算しようとした場合も、同様に数値型への自動変換が行われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bool型<br></div>trueは1<br>falseは0<br>に自動変換します。その結果をfloat型の計算をすることになります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null型<br></div>nullは0に自動変換されます。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"float型",n3:"php型宣言",n4:`phpで使用する型宣言のfloat型について<br>倍精度浮動小数点数として扱われます。 <br>浮動小数点数は通常64ビットのIEEE 754倍精度フォーマットで実装されており、メモリサイズは8バイトです。<br>14桁から15桁の十進数の精度<br>環境依存となりますが、表現範囲は約1.8e308 までの範囲となります。`,n5:`[サンプル]`,n6:`浮動小数点数の誤差により丸め誤差が生じることがあります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$num1 = 0.1;<br>$num2 = 0.7;<br>$result =$num1 + $num2;<br></div>このテスト環境では0.8でしたが<br>環境によっては「0.7999999999999999」となることがあるようです。<br>正確な計算を行う必要がある場合は、PHPのBC Math関数を使用するなど工夫が必要となります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bcadd(BC Math 関数)<br></div>$result = bcadd("0.1", "0.7", 1);<br>浮動小数点数ではなく文字列として数値を扱い、誤差なく正確な計算結果を得ることができます。<br>計算したい数値を文字列として渡します。<br>計算結果は文字列で受け取ります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2()<br></div>小数点桁数を整数にして計算後、元の桁数に戻す方法です。<br>この例では小数点1桁を10倍することで整数にしています。<br>その後、各数字の計算をした結果を<br>10倍したものをもとに戻すので10で割っています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3()<br></div>出力桁数を制御する方法です。<br>printf関数を使用したテスト結果となります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">フォーマット指定子<br>%.(桁数の数字)f<br></div>によって小数点以下の桁数を指定できます。<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">int型<br></div>int型の数字をfloat型の数字と計算をした場合<br>int型はfloat型に自動変換した数字を計算します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">string型<br></div>string型の数字をfloat型の数字と計算をした場合<br>string型は自動変換した数字を計算として使用されます。<br>floatとint以外のスカラ型を計算しようとした場合も、同様に数値型への自動変換が行われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bool型<br></div>trueは1<br>falseは0<br>に自動変換します。その結果をfloat型の計算をすることになります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null型<br></div>nullは0に自動変換されます。<br>`,n8:"戻る",},en: {n1: "back",n2: "float type",n3: "PHP type declaration",n4:`About the float type in type declarations used in PHP<br>It is treated as a double-precision floating-point number. <br>Floating-point numbers are typically implemented in 64-bit IEEE 754 double-precision format and occupy 8 bytes of memory. <br>14 to 15 decimal digits.<br>The representation range is up to approximately 1.8e308, depending on the environment.`,n5:`[Sample]`,n6:`Rounding errors may occur due to floating-point number inaccuracies. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$num1 = 0.1;<br>$num2 = 0.7;<br>$result =$num1 + $num2;<br></div>In this test environment, the result was 0.8.<br>Depending on the environment, the result may be "0.79999999999999999." <br>If you need accurate calculations, you'll need to use PHP's BC Math functions or other methods. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bcadd (BC Math function)<br></div>$result = bcadd("0.1", "0.7", 1);<br>Treat numbers as strings instead of floating-point numbers to obtain accurate calculation results without error. <br>Pass the number you want to calculate as a string. <br>Receive the calculation result as a string. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2()<br></div>This method converts the number of decimal places to an integer, performs the calculation, and then returns it to the original number of decimal places. <br>In this example, the first decimal place is multiplied by 10 to convert it to an integer. <br>Then, we multiply the results of each calculation by 10 and divide them by 10 to return them to their original form. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3()<br></div>This is a way to control the number of digits output. <br>These are test results using the printf function. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Format specifier<br>%.(number of digits)f<br></div>You can specify the number of decimal places using the format specifier. <br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">int type<br></div>When calculating an int type number with a float type number<br>The int type number is automatically converted to a float type before the calculation. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">string type<br></div>When calculating a string type number with a float type number<br>The automatically converted string type number is used in the calculation. <br>When calculating scalar types other than float and int, automatic conversion to a numeric type is also performed. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">bool type<br></div>true is automatically converted to 1<br>false is automatically converted to 0<br>The result is then used for float calculations. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">null type<br></div>null is automatically converted to 0. <br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
