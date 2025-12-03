@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">null型</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">null型は変数が値を持っていないことを示す特別な型です。<br>値の欠如や未定義をの状態を表現するために使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[自動的にnullになるケース]<br></div>宣言のみで初期値が設定されていない変数<br>unset()関数で破棄された変数<br>値を返さない関す(return;またはreturn null;)の返り値<br>nullの書き方<br>大文字・小文字の区別はありません。<br>NULL<br>null<br>Null<br>いずれも同じ意味として扱われます。<br>一般的には小文字のnullが推奨されているようです。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test2
+{
+  //関数の引数に何も入れずに実行するとエラーになります
+  //Fatal error:  Uncaught Error: Call to undefined method test2::tes1() 
+  function test1(string $data)
+  {
+     echo "test1:".$data.PHP_EOL;
+  }
+  //null許容型を設定したケース
+  function test2(?string $data)
+  {
+    if($data === null)
+    {
+      echo "test2:null".PHP_EOL;
+    }
+    else
+    {
+      echo "test2(not null):".$data.PHP_EOL;
+    }
+  }
+  function test3(?string $data = null)
+  {
+    if($data === null)
+    {
+      echo "test3:null".PHP_EOL;
+    }
+    else
+    {
+      echo "test3(not null):".$data.PHP_EOL;
+    }
+  }
+  function test4(?string $data)
+  {
+    if(is_null($data) === true)
+    {
+      echo "test4:null".PHP_EOL;
+    }
+    else
+    {
+      echo "test4(not null):".$data.PHP_EOL;
+    }
+  }
+  function test5(string $data)
+  {
+    if($data === true)
+    {
+      echo "test5:null".PHP_EOL;
+    }
+    else
+    {
+      echo "test5(not null):".$data.PHP_EOL;
+    }
+  }
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+
+//$cls2->test1();
+//[実行結果]
+//関数の引数に何も入れずに実行するとエラーになります
+//Fatal error:  Uncaught ArgumentCountError: Too few arguments to function test2::test1(), 0 passed 
+
+//$cls2->test2();
+//[実行結果]
+//関数の引数に何も入れずに実行するとエラーになります
+//Fatal error:  Uncaught ArgumentCountError: Too few arguments to function test2::test2(), 0 passed
+
+
+$cls2->test2(null);//test2:null
+
+$data = null;//test2:null
+$cls2->test2($data);
+
+$cls2->test2("test");//test2(not null):test
+
+$cls2->test3();//test3:null
+$cls2->test3($data);//test3:null
+$cls2->test3("test");//test3(not null):test
+$cls2->test4($data);//test4:null
+//Fatal error: Uncaught TypeError: test2::test5(): Argument #1 ($data) must be of type string, null $cls2->test5($data);
+given, called
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test2
+{
+	//An error will occur if the function is executed without any arguments.
+	//Fatal error: Uncaught Error: Call to undefined method test2::tes1()
+	function test1(string $data)
+	{
+	echo "test1:".$data.PHP_EOL;
+	}
+	//Example when a nullable type is specified
+	function test2(?string $data)
+	{
+		if($data === null)
+		{
+			echo "test2:null".PHP_EOL;
+		}
+		else
+		{
+			echo "test2(not null):".$data.PHP_EOL;
+		}
+	}
+	function test3(?string $data = null)
+	{
+		if($data === null)
+		{
+			echo "test3:null".PHP_EOL;
+		}
+		else
+		{
+			echo "test3(not null):".$data.PHP_EOL;
+		}
+	}
+	function test4(?string $data)
+	{
+		if(is_null($data) === true)
+		{
+			echo "test4:null".PHP_EOL;
+		}
+		else
+		{
+			echo "test4(not null):".$data.PHP_EOL;
+		}
+	}
+	function test5(string $data)
+	{
+		if($data === true)
+		{
+			echo "test5:null".PHP_EOL;
+		}
+		else
+		{
+			echo "test5(not null):".$data.PHP_EOL;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+
+//$cls2->test1();
+//[Execution result]
+//An error occurs if the function is executed without any arguments.
+//Fatal error: Uncaught ArgumentCountError: Too few arguments to function test2::test1(), 0 passed
+
+//$cls2->test2();
+//[Execution result]
+//An error occurs if the function is executed without any arguments.
+//Fatal error: Uncaught ArgumentCountError: Too few arguments to function test2::test2(), 0 passed
+
+$cls2->test2(null);//test2:null
+
+$data = null;//test2:null
+$cls2->test2($data);
+
+$cls2->test2("test");//test2(not null):test
+
+$cls2->test3();//test3:null
+$cls2->test3($data);//test3:null
+$cls2->test3("test");//test3(not null):test
+$cls2->test4($data);//test4:null
+//Fatal error: Uncaught TypeError: test2::test5(): Argument #1 ($data) must be of type string, null $cls2->test5($data);
+given, called
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test2(null);<br></div>型も含めて厳密に比較します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test3(?string $data = null)<br></div>?(null許容型)は関数の引数に型宣言をした左につけると<br>nullも受け入れるような仕組みとなります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(is_null($data) === true)<br></div>is_null関数は、変数が厳密にnullであるかをチェックします。<br><br>php ver7.0<br>型宣言（Type Hinting）が標準でより厳密化されました。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test5(string $data)<br></div>上記関数に下記のように変数にnullを準備して関数を実行します。<br>※試した環境:php8.2<br>$data = null;<br>test5($null);<br>[結果]<br>Fatal error: Uncaught TypeError: test2::test5(): Argument #1 ($data) must be of type string, null <br>null許容型をつけないで引数にnullの入った変数を入れて実行すると上記のようにエラーになります。<br><br><br></div><br><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+  //関数の引数に何も入れずに実行するとエラーになります
+  //Fatal error:  Uncaught Error: Call to undefined method test2::test1() 
+  function test1(string $data)
+  {
+     echo "test1:".$data.PHP_EOL;
+  }
+  //null許容型を設定したケース
+  function test2(?string $data)
+  {
+    if($data === null)
+    {
+      echo "test2:null".PHP_EOL;
+    }
+    else
+    {
+      echo "test2(not null):".$data.PHP_EOL;
+    }
+  }
+  function test3(?string $data = null)
+  {
+    if($data === null)
+    {
+      echo "test3:null".PHP_EOL;
+    }
+    else
+    {
+      echo "test3(not null):".$data.PHP_EOL;
+    }
+  }
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+
+//$cls2->test1();
+//[実行結果]
+//関数の引数に何も入れずに実行するとエラーになります
+//Fatal error:  Uncaught ArgumentCountError: Too few arguments to function test2::test1(), 0 passed 
+
+//$cls2->test2();
+//[実行結果]
+//関数の引数に何も入れずに実行するとエラーになります
+//Fatal error:  Uncaught ArgumentCountError: Too few arguments to function test2::test2(), 0 passed
+
+
+$cls2->test2(null);//test2:null
+
+$data = null;//test2:null
+$cls2->test2($data);
+
+$cls2->test2("test");//test2(not null):test
+
+$cls2->test3();//test3:null
+$cls2->test3($data);//test3:null
+$cls2->test3("test");//test3(not null):test
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	//An error will occur if the function is executed without any arguments.
+	//Fatal error: Uncaught Error: Call to undefined method test2::test1()
+	function test1(string $data)
+	{
+		echo "test1:".$data.PHP_EOL;
+	}
+	//Example when a nullable type is specified
+	function test2(?string $data)
+	{
+		if($data === null)
+		{
+			echo "test2:null".PHP_EOL;
+		}
+		else
+		{
+			echo "test2(not null):".$data.PHP_EOL;
+		}
+	}
+	function test3(?string $data = null)
+	{
+		if($data === null)
+		{
+			echo "test3:null".PHP_EOL;
+		}
+		else
+		{
+			echo "test3(not null):".$data.PHP_EOL;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+
+//$cls2->test1();
+//[Execution Result]
+//An error occurs if the function is executed without any arguments.
+//Fatal error: Uncaught ArgumentCountError: Too few arguments to function test2::test1(), 0 passed
+
+//$cls2->test2();
+//[Execution Result]
+//An error occurs if the function is executed without any arguments.
+//Fatal error: Uncaught ArgumentCountError: Too few arguments to function test2::test2(), 0 passed
+
+$cls2->test2(null);//test2:null
+
+$data = null;//test2:null
+$cls2->test2($data);
+
+$cls2->test2("test");//test2(not null):test
+
+$cls2->test3();//test3:null
+$cls2->test3($data);//test3:null
+$cls2->test3("test");//test3(not null):test
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7">function test3(?string $data = null)<br>引数に何も入れずに実行するとデフォルトでnullが設定される例です。<br><br>if($data === null)<br>nullに対して厳密化するような仕組みになっているphpで<br>このような方法でnullおよびデータがない場合に対して<br>nullかどうか？を判定して<br>仕様に応じた判定処理を実装します。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"null型",n3:"php型宣言",n4:`null型は変数が値を持っていないことを示す特別な型です。<br>値の欠如や未定義をの状態を表現するために使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[自動的にnullになるケース]<br></div>宣言のみで初期値が設定されていない変数<br>unset()関数で破棄された変数<br>値を返さない関す(return;またはreturn null;)の返り値<br>nullの書き方<br>大文字・小文字の区別はありません。<br>NULL<br>null<br>Null<br>いずれも同じ意味として扱われます。<br>一般的には小文字のnullが推奨されているようです。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test2(null);<br></div>型も含めて厳密に比較します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test3(?string $data = null)<br></div>?(null許容型)は関数の引数に型宣言をした左につけると<br>nullも受け入れるような仕組みとなります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(is_null($data) === true)<br></div>is_null関数は、変数が厳密にnullであるかをチェックします。<br><br>php ver7.0<br>型宣言（Type Hinting）が標準でより厳密化されました。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test5(string $data)<br></div>上記関数に下記のように変数にnullを準備して関数を実行します。<br>※試した環境:php8.2<br>$data = null;<br>test5($null);<br>[結果]<br>Fatal error: Uncaught TypeError: test2::test5(): Argument #1 ($data) must be of type string, null <br>null許容型をつけないで引数にnullの入った変数を入れて実行すると上記のようにエラーになります。<br>`,n7:`function test3(?string $data = null)<br>引数に何も入れずに実行するとデフォルトでnullが設定される例です。<br><br>if($data === null)<br>nullに対して厳密化するような仕組みになっているphpで<br>このような方法でnullおよびデータがない場合に対して<br>nullかどうか？を判定して<br>仕様に応じた判定処理を実装します。<br>`,n8:"戻る",},en: {n1: "back",n2: "null type",n3: "PHP type declaration",n4:`The null type is a special type that indicates that a variable has no value. <br>It is used to represent the absence of a value or an undefined state. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Cases where null is automatically set]<br></div>Variables that are declared but have no initial value<br>Variables destroyed with the unset() function<br>Return value of a function that does not return a value (return; or return null;)<br>How to write null<br>Uppercase and lowercase letters are not significant. <br>NULL<br>null<br>Null<br>All are treated as equivalent. <br>Lowercase null is generally recommended. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test2(null);<br></div>Performs a strict comparison, including type. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test3(?string $data = null)<br></div>Adding ? (nullable type) to the left of the type declaration for a function argument<br>allows null to be accepted. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if(is_null($data) === true)<br></div>The is_null function checks whether a variable is strictly null. <br><br>PHP version 7.0<br>Type hinting has become stricter by default. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test5(string $data)<br></div>Prepare a null variable in the above function as shown below and execute the function. <br>※Test environment: php8.2<br>$data = null;<br>test5($null);<br>[Result]<br>Fatal error: Uncaught TypeError: test2::test5(): Argument #1 ($data) must be of type string, null <br>If you run this function without specifying a nullable type and enter a variable containing null as an argument, you will get the error shown above. <br>`,n7:`function test3(?string $data = null)<br>This is an example of how null is set by default when executed without entering any arguments. <br><br>if($data === null)<br>PHP has a mechanism for enforcing strictness against nulls.<br>This method is used to determine whether null or no data is present.<br>This method implements the determination process according to the specifications.<br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
