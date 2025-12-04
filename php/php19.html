@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">cow(copy on write)</div></td></tr><tr><td><div id="n3">メモリ解放関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">COW (Copy-On-Write:コピーオンライト)<br></div>メモリ効率を向上させるための重要な最適化メカニズムです。<br>PHPはデータを別の変数に代入したり<br>関数に値渡ししたりする際などの処理をする際、コピーをします。<br>しかし、データの変更がない等の場合はコピーが必要ありません。<br>コピーをするとメモリを使用することになるので<br>すぐにコピーをするのではなく<br>必要なときのみコピーをする仕組みです。<br><br>COWの仕組み<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[代入処理]<br></div>$aの内容を$bに代入する場合<br>データを複製する変わりに同じメモリ領域への参照(ポインタ）を共有させます。<br>zvalというデータを格納している構造体の参照カウントをインクリメントします。<br>この時点でメモリ使用量は、ほとんど増えません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[書き込み処理]<br></div>代入した$bが変更しようとしたときphpが検知します。<br>このとき初めて新しいメモリ領域に元のデータをコピーします。<br>そして新しいコピーに対して変更を適用します。<br>これにより元の$aのデータは影響を受けず、各変数が独立したデータを保持できます。<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+    function test1()
+    {
+        //$aに文字列を設定した時点で1つのデータが存在します(参照カウント:1)
+        $a = "init";
+        echo "(1)メモリ使用量: " . memory_get_usage() . " バイト\n";//(1)メモリ使用量: (例)429472 バイト
+        //この時点で$aと$bが同じメモリ領域を参照します(参照カウント:2)
+        $b = $a;
+        echo "(2)メモリ使用量: " . memory_get_usage() . " バイト\n";//(2)メモリ使用量: (例)429472 バイト
+        //$aおよび$bおよび$cは同じメモリを参照します(参照カウント:3)
+        $c = $a;
+        echo "(3)メモリ使用量: " . memory_get_usage() . " バイト\n";//(3)メモリ使用量: (例)429472 バイト
+        //この時点で$b用に新しいメモリ領域が確保され、データがコピーされます
+        //$aと$cは元のメモリ領域を参照したままとなります
+        $b .= " add";
+        echo "(4)メモリ使用量: " . memory_get_usage() . " バイト\n";//(4)メモリ使用量: (例)429512 バイト
+    }
+    function test2()
+    {
+        //[COWによるメモリ解放]
+        echo "スクリプト開始時のメモリ使用量: " . memory_get_usage() . " バイト\n";
+        
+        // 1. 大きな文字列を作成
+        $a = str_repeat('a', 1024 * 1024); // 1MBの文字列
+        echo "\$a 作成後のメモリ使用量: " . memory_get_usage() . " バイト\n";
+        // ここで約1MBメモリが増える
+        
+        // 2. COWによる代入（メモリ共有）
+        $b = $a;
+        // この時点では新しいメモリは確保されない（参照カウントが増えるだけ）
+        echo "\$b = \$a 実行後のメモリ使用量: " . memory_get_usage() . " バイト\n";
+        // メモリ使用量はほぼ変わらない
+        
+        // 3. COWの解除（書き込み発生）
+        // $b に変更を加えることで、PHPが新しいメモリ領域に$b用のコピーを作成する
+        $b[0] = 'b';
+        echo "\$b に変更を加えた後のメモリ使用量: " . memory_get_usage() . " バイト\n";
+        // ここで$bのために新たに約1MBメモリが確保されるため、合計で約2MB分のメモリが使われる
+        
+        // 4. COWによるメモリ解放の瞬間
+        // ここで、元の変数 $a を NULL に設定して破棄する
+        $a = null;
+        echo "\$a を NULL に設定した後のメモリ使用量: " . memory_get_usage() . " バイト\n";
+        // $a が参照していた元のメモリ領域の参照カウントが 0 になるため、
+        // ガベージコレクタによってそのメモリ領域が解放される。
+        // メモリ使用量が約1MB分減少し、最終的に$bが使っている約1MB分だけになる。
+        
+        // 5. スクリプト終了
+        unset($b);
+        echo "\$b を unset した後のメモリ使用量: " . memory_get_usage() . " バイト\n";
+        // $b のメモリも解放され、開始時の値に近くなる
+    }
+}
+echo "&lt;pre&gt;";
+
+$cls1 = new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+//[実行例]
+/*
+スクリプト開始時のメモリ使用量: 428008 バイト
+$a 作成後のメモリ使用量: 1480680 バイト
+$b = $a 実行後のメモリ使用量: 1480680 バイト
+$b に変更を加えた後のメモリ使用量: 2533352 バイト
+$a を NULL に設定した後のメモリ使用量: 1480680 バイト
+$b を unset した後のメモリ使用量: 428008 バイト
+*/
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1()
+	{
+		//At the time a string is set to $a, one piece of data exists (reference count: 1)
+		$a = "init";
+		echo "(1) Memory usage: " . memory_get_usage() . " bytes\n"; //(1) Memory usage: (Example) 429472 bytes
+		//At this point, $a and $b reference the same memory area (reference count: 2)
+		$b = $a;
+		echo "(2) Memory usage: " . memory_get_usage() . " bytes\n"; //(2) Memory usage: (Example) 429472 bytes
+		//$a, $b, and $c reference the same memory area (reference count: 3)
+		$c = $a;
+		echo "(3) Memory usage: " . memory_get_usage() . " bytes\n"; //(3) Memory usage: (Example) 429472 bytes
+		// At this point, a new memory area is allocated for $b and the data is copied.
+		// $a and $c continue to reference the original memory area.
+		$b .= " add";
+		echo "(4) Memory usage: " . memory_get_usage() . " bytes\n"; // (4) Memory usage: (Example) 429512 bytes
+	}
+	function test2()
+	{
+		// [Freeing memory using COW]
+		echo "Memory usage at script start: " . memory_get_usage() . " bytes\n";
+		
+		// 1. Create a large string
+		$a = str_repeat('a', 1024 * 1024); // 1MB string
+		echo "Memory usage after $a creation: " . memory_get_usage() . " bytes\n";
+		// This adds approximately 1MB of memory.
+		
+		// 2. Assignment using COW (memory sharing)
+		$b = $a;
+		// No new memory is allocated at this point (only the reference count increases).
+		
+		echo "Memory usage after executing \$b = \$a: " . memory_get_usage() . " bytes\n";
+		// Memory usage remains almost unchanged.
+		
+		/ 3. Cancel COW (write occurs)
+		/ By making changes to $b, PHP creates a copy of $b in a new memory area.
+		$b[0] = 'b';
+		echo "Memory usage after making changes to \$b: " . memory_get_usage() . " bytes\n";
+		/ At this point, approximately 1MB of new memory is allocated for $b, for a total of approximately 2MB of memory used.
+		
+		/ 4. The moment memory is freed by COW.
+		/ Here, the original variable $a is set to NULL to discard it.
+		$a = null;
+		echo "Memory usage after setting \$a to NULL: " . memory_get_usage() . " bytes\n";
+		/ $a The reference count of the original memory area referenced by becomes 0,
+		// so the garbage collector frees that memory area.
+		// Memory usage decreases by about 1 MB, and finally only about 1 MB is used by $b.
+		
+		// 5. Script End
+		unset($b);
+		echo "\Memory usage after unsetting $b: " . memory_get_usage() . " bytes\n";
+		// The memory for $b is also freed, returning it to its starting value.
+		}
+}
+echo "&lt;pre&gt;";
+
+$cls1 = new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+//[Execution Example]
+/*
+Memory usage at script start: 428008 bytes
+Memory usage after creating $a: 1480680 bytes
+Memory usage after executing $b = $a: 1480680 bytes
+Memory usage after modifying $b: 2533352 bytes
+Memory usage after setting $a to NULL: 1,480,680 bytes
+Memory usage after unsetting $b: 428,008 bytes
+*/
+</pre><br><br></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = "init";<br></div>文字列にデータを設定した時点で1つのデータが存在します。(参照カウント:1)<br>$b = $a;<br>この時点で$aと$bが同じメモリ領域を参照します(参照カウント:2)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$c = $a;<br></div>$aおよび$bおよび$cは同じメモリを参照します(参照カウント:3)<br>$b .= " add";(参照が切断され参照カウント:2)<br>この時点で$b用に新しいメモリ領域が確保され、データがコピーされます。<br>$aと$cは元のメモリ領域を参照したままとなります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br></div>$aの\変数が破棄され参照カウンタが減ります。<br>そのためガベージコレクションにより、$aのメモリ領域が解放されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">unset($b);<br></div>$bのメモリも解放されます。<br><br></div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test()
+	{
+		$a = 100;
+		$this->test2($a);
+		$a = null;
+		unset($a);
+		
+		$a =100;
+	}
+	private function test2(int $num):int
+	{
+		return $num++;
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test()
+	{
+		$a = 100;
+		$this->test2($a);
+		$a = null;
+		unset($a);
+		
+		$a =100;
+	}
+	private function test2(int $num):int
+	{
+		return $num++;
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test();
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = 100;<br></div>変数$aを作成して値100を格納します。<br>$aが参照するメモリ領域の参照カウントは1になります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2($a);<br></div>test関数を実行します。<br>$aの値が引数を通りして$numに値渡しされます。<br>引数の値渡しはデフォルトでCOW(copu on write)の対象となります。<br>関数内で$numは作成されますが<br>$aと共通されます。<br>この時点で参照カウントが2になります。<br>$numも$aも100の値となります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return $num++;<br></div>$numがインクリメントされます。<br>インクリメントするということは値が変更するということなので<br>変更する前に$num用の新しいメモリ領域にデータ100をコピーします。<br>$numは変更したため参照が切断されます。<br>そのため参照カウントは1になります。<br>そして新しい(インクリメントされた)データは101となります。<br><br>returnで値を返した後、$numは関数のスコープを抜けて破棄されます。<br>$numの参照が切断されるため参照カウントが0となり<br>データ101は即時解放されます。<br><br>関数を抜けたら元の場所に戻るので<br>$aはそのまま残っているため、参照カウントが1となります。<br>そのため、参照カウントはゼロになりません。<br><br>そのため参照カウントを0にするには<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br>もしくは<br>unset($a);<br></div>このように$aにnullを設定するか、unset関数を実行しないと<br>参照カウントが0にならないため即時解放処理は実行されません。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"cow(copy on write)",n3:"メモリ解放関連",n4:`COW (Copy-On-Write:コピーオンライト)<br></div>メモリ効率を向上させるための重要な最適化メカニズムです。<br>PHPはデータを別の変数に代入したり<br>関数に値渡ししたりする際などの処理をする際、コピーをします。<br>しかし、データの変更がない等の場合はコピーが必要ありません。<br>コピーをするとメモリを使用することになるので<br>すぐにコピーをするのではなく<br>必要なときのみコピーをする仕組みです。<br><br>COWの仕組み<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[代入処理]<br></div>$aの内容を$bに代入する場合<br>データを複製する変わりに同じメモリ領域への参照(ポインタ）を共有させます。<br>zvalというデータを格納している構造体の参照カウントをインクリメントします。<br>この時点でメモリ使用量は、ほとんど増えません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[書き込み処理]<br></div>代入した$bが変更しようとしたときphpが検知します。<br>このとき初めて新しいメモリ領域に元のデータをコピーします。<br>そして新しいコピーに対して変更を適用します。<br>これにより元の$aのデータは影響を受けず、各変数が独立したデータを保持できます。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = "init";<br></div>文字列にデータを設定した時点で1つのデータが存在します。(参照カウント:1)<br>$b = $a;<br>この時点で$aと$bが同じメモリ領域を参照します(参照カウント:2)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$c = $a;<br></div>$aおよび$bおよび$cは同じメモリを参照します(参照カウント:3)<br>$b .= " add";(参照が切断され参照カウント:2)<br>この時点で$b用に新しいメモリ領域が確保され、データがコピーされます。<br>$aと$cは元のメモリ領域を参照したままとなります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br></div>$aの\変数が破棄され参照カウンタが減ります。<br>そのためガベージコレクションにより、$aのメモリ領域が解放されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">unset($b);<br></div>$bのメモリも解放されます。<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = 100;<br></div>変数$aを作成して値100を格納します。<br>$aが参照するメモリ領域の参照カウントは1になります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2($a);<br></div>test関数を実行します。<br>$aの値が引数を通りして$numに値渡しされます。<br>引数の値渡しはデフォルトでCOW(copu on write)の対象となります。<br>関数内で$numは作成されますが<br>$aと共通されます。<br>この時点で参照カウントが2になります。<br>$numも$aも100の値となります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return $num++;<br></div>$numがインクリメントされます。<br>インクリメントするということは値が変更するということなので<br>変更する前に$num用の新しいメモリ領域にデータ100をコピーします。<br>$numは変更したため参照が切断されます。<br>そのため参照カウントは1になります。<br>そして新しい(インクリメントされた)データは101となります。<br><br>returnで値を返した後、$numは関数のスコープを抜けて破棄されます。<br>$numの参照が切断されるため参照カウントが0となり<br>データ101は即時解放されます。<br><br>関数を抜けたら元の場所に戻るので<br>$aはそのまま残っているため、参照カウントが1となります。<br>そのため、参照カウントはゼロになりません。<br><br>そのため参照カウントを0にするには<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br>もしくは<br>unset($a);<br></div>このように$aにnullを設定するか、unset関数を実行しないと<br>参照カウントが0にならないため即時解放処理は実行されません。<br>`,n8:"戻る",},en: {n1: "back",n2: "cow (copy on write)",n3: "Memory release related",n4:`COW (Copy-On-Write)<br></div>This is an important optimization mechanism for improving memory efficiency. <br>PHP copies data when assigning it to another variable or passing it by value to a function. <br>However, copying is not necessary if the data remains unchanged. <br>Copying uses memory, so this mechanism does not copy immediately, but only when necessary. <br><br>How COW Works<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Assignment Process]<br></div>When assigning the contents of $a to $b<br>Instead of duplicating the data, a reference (pointer) to the same memory area is shared. <br>Increments the reference count of the zval structure that stores the data. <br>At this point, memory usage increases very little. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Write Process]<br></div>PHP detects any attempt to change the assigned $b. <br>Only at this point does it copy the original data to a new memory location. <br>Then it applies the changes to the new copy. <br>This leaves the original data in $a unaffected, allowing each variable to retain independent data. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = "init";<br></div>When data is set in a string, one piece of data exists. (Reference count: 1)<br>$b = $a;<br>At this point, $a and $b reference the same memory area (Reference count: 2)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$c = $a;<br></div>$a, $b, and $c reference the same memory area (Reference count: 3)<br>$b .= " add"; (Reference is severed and reference count: 2)<br>At this point, a new memory area is allocated for $b and the data is copied.<br>$a and $c continue to reference the original memory area. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br></div>The $a variable is destroyed and its reference counter is decremented. <br>This causes the memory space for $a to be freed by garbage collection. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">unset($b);<br></div>The memory for $b is also freed. <br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = 100;<br></div>Create the variable $a and store the value 100 in it. <br>The reference count of the memory area referenced by $a becomes 1. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2($a);<br></div>Executes the test function. <br>The value of $a is passed to $num by value via the argument. <br>Argument value passing is subject to COW (coup on write) by default. <br>$num is created within the function, but<br>it is shared with $a. <br>At this point, the reference count becomes 2. <br>Both $num and $a become 100. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">return $num++;<br></div>$num is incremented. <br>Incrementing means changing the value, so<br>before changing it, copy the data 100 to a new memory area for $num. <br>Since $num has been changed, the reference is severed. <br>Therefore, the reference count becomes 1. <br>The new (incremented) data becomes 101. <br><br>After returning the value with return, $num leaves the function scope and is destroyed. <br>Since the reference to $num is severed, the reference count becomes 0,<br>The data 101 is immediately released. <br><br>Once the function is exited, it returns to its original location,<br>$a remains intact, so the reference count becomes 1. <br>As a result, the reference count does not become zero. <br><br>Therefore, to set the reference count to 0,<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br>or<br>unset($a);<br></div>Unless you set $a to null or execute the unset function,<br>the reference count will not reach 0, and the immediate release process will not be performed.<br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
