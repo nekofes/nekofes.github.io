@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">nullとunsetについて</div></td></tr><tr><td><div id="n3">メモリ解放関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">nullとunsetについて</div>メモリ解放のタイミングについて<br>unset関数とnullを設定する場合にはタイミングの違いがあります。<br><br><table border=1><tr><td>項目</td><td>unset()</td><td>$data = null;</td></tr><td>目的</td><td>指定した変数の割当を解除します。<br>シンボルテーブルから削除します。<br></td><td>変数にnullという特殊な値を代入します。<br>変数は存在を継続しています。<br></td></tr><td>メモリ解放</td><td>変数が参照されなくなるとガベージコレクションによって<br>非同期的にメモリが解放されます。<br></td><td>変数が保持していたデータへの参照が直ちになくなります。<br>より早くメモリが解放される可能性があります。<br></td></tr><td>CPU負荷</td><td>ガベージコレクションにま変えるため、<br>CPUサイクルは節約されます。<br></td><td>データの上書きとメモリ解放の処理が発生します。<br>CPUサイクルを消費しやすくなります。<br></td></tr><td>処理</td><td>変数自体が存在しなくなります。<br>以降、該当する変数にアクセスすると<br>Undefined variableのNoticeが発生します。<br></td><td>変数を一時的に値がない状態にしたい場合<br>オブジェクトの参照カヌンとを減らして早期にメモリを解放したい場合<br></td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[null]</div>参照を切断したい場合、変数は残ります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[unset()]</div>変数を完全に破棄したい場合<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	public $child;
+	public $name;
+	
+	public function __construct($name) {
+		$this->name = $name;
+		echo "オブジェクト {$this->name} が作成されました\n";
+	}
+	
+	// デストラクタ：オブジェクトがメモリから解放される直前に呼ばれる
+	public function __destruct() {
+		echo "オブジェクト {$this->name} が破棄されました\n";
+	}
+}
+echo "&lt;pre&gt;";
+
+$a = new test1("A");//オブジェクト A が作成されました
+$b = new test1("B");//オブジェクト B が作成されました
+
+// ----------------------------------------------------
+// 循環参照を設定
+// ----------------------------------------------------
+$a->child = $b;
+$b->child = $a;
+
+// ----------------------------------------------------
+//解放処理
+// ----------------------------------------------------
+
+$a = null;
+echo "\$a を null に設定しました。\n"; 
+//$aの参照が切断されます
+//オブジェクトAのデストラクタが呼ばれ、メモリの解放が始まります。
+
+unset($b);
+echo "\$b を unset しました。\n";
+//$bの参照が切断されます
+//オブジェクトBのデストラクタが呼ばれ、メモリ解放が完了します。
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	public $child;
+	public $name;
+	
+	public function __construct($name) 
+	{
+		$this->name = $name;
+		echo "Object {$this->name} was created\n";
+	}
+	
+	/ Destructor: Called just before an object is released from memory.
+	public function __destruct() 
+	{
+		echo "Object {$this->name} was destroyed\n";
+	}
+}
+echo "&lt;pre&gt;";
+
+$a = new test1("A"); // Object A was created.
+$b = new test1("B"); // Object B was created.
+
+// ----------------------------------------------------
+// Establish a circular reference.
+// ----------------------------------------------------
+$a->child = $b;
+$b->child = $a;
+
+// ----------------------------------------------------
+// Release process.
+// ----------------------------------------------------
+
+$a = null;
+echo "\$a to null" \n";
+//The reference to $a is broken.
+//The destructor for object A is called, and memory release begins.
+
+unset($b);
+echo "\$b has been unset. \n";
+//The reference to $b is broken.
+//The destructor for object B is called, and memory release is complete.
+echo "&lt;/pre&gt;";
+</pre><br><br></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br></div>オブジェクトAとBの間の循環参照が切断されます。<br>これにより、オブジェクトAのメモリの解放が始まります。<br>もしも、$a = null;のようにnullを設定して参照を解放しないで<br>unset($a);のみを実行した場合は<br>循環参照を即時解決できません。<br>そのため、メモリ解放が遅延する可能性があります。<br><br>このように循環参照を視野に入れるケースでは<br>参照を切断するために変数にnullを設定してから<br>unset(変数)のように実行する手順を実行する方法をとることになります。<br><br></div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test1()
+	{
+		$a = 100; // $a が 100 として存在します
+		$a++;     // $a は 101 になります
+		echo $a;  // 101 が出力されます
+		
+		unset($a); // ここで $a は完全に消滅します
+		
+		$a = null; // 新しく$aという変数をnullで宣言し直しています
+	}
+	function test2()
+	{
+		$a = 100; // $a が 100 として存在します
+		$a++;     // $a は 101 になります
+		echo $a;  // 101 が出力します
+		
+		$a = null; // $aの参照が切断されます(変数としては残っています)
+		unset($a); // 変数を削除します
+
+	}
+	function test3(int &$data)
+	{
+		$data = null;
+		unset($data);
+
+	}
+	function test4(int &$data)
+	{
+		// 値をnullにする操作だけを行う
+		$data = null;//値を消しています
+		//test3のように、ここではunsetを実行しないようにします
+		//unset($data);
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test1();
+$cls2->test2();
+$a = 100;
+$cls2->test3($a);
+$a = 101;
+$cls2->test4($a);
+unset($a);//ここで実行します
+
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test1()
+	{
+		$a = 100; // $a exists as 100
+		$a++; // $a becomes 101
+		echo $a; // 101 is output
+		
+		unset($a); // $a is completely destroyed here
+		
+		$a = null; // A new variable called $a is declared as null
+	}
+	function test2()
+	{
+		$a = 100; // $a exists as 100
+		$a++; // $a becomes 101
+		echo $a; // 101 is output
+		
+		$a = null; // The reference to $a is severed (it remains as a variable)
+		unset($a); // The variable is deleted
+	
+	}
+	function test3(int &$data)
+	{
+		$data = null;
+		unset($data);
+	
+	}
+	function test4(int &$data)
+	{
+		//Only nullify the value.
+		$data = null; //Delete the value.
+		//Unset is not executed here, as in test3.
+		//unset($data);
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test1();
+$cls2->test2();
+$a = 100;
+$cls2->test3($a);
+$a = 101;
+$cls2->test4($a);
+unset($a); //Execute here.
+
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test3($a);<br></div>$dataは引数として受け取った$aと同じ場所を見ています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data = null;<br></div>参照渡し(&)にしているため<br>$dataにnullを設定することで$aもnullに書き換えられます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">unset($data);<br></div>$dataと参照しているメモリ領域の結びつきを切断します。<br>unsetを実行することで関数内の$dataは消滅します。<br>しかし、unsetは関数内で実行されているため<br>関数外の$a変数には影響せず、$a変数自体が残ってしまします。<br>そのためtest4のようにunsetの実行は関数外で行います。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test4($a);<br></div>test4関数内でunsetは実行させません。<br>関数を実行後に、呼び出し元のスコープでunsetを実行することで<br>変数を完全に削除することができます。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"nullとunsetについて",n3:"メモリ解放関連",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">nullとunsetについて</div>メモリ解放のタイミングについて<br>unset関数とnullを設定する場合にはタイミングの違いがあります。<br><br><table border=1><tr><td>項目</td><td>unset()</td><td>$data = null;</td></tr><td>目的</td><td>指定した変数の割当を解除します。<br>シンボルテーブルから削除します。<br></td><td>変数にnullという特殊な値を代入します。<br>変数は存在を継続しています。<br></td></tr><td>メモリ解放</td><td>変数が参照されなくなるとガベージコレクションによって<br>非同期的にメモリが解放されます。<br></td><td>変数が保持していたデータへの参照が直ちになくなります。<br>より早くメモリが解放される可能性があります。<br></td></tr><td>CPU負荷</td><td>ガベージコレクションにま変えるため、<br>CPUサイクルは節約されます。<br></td><td>データの上書きとメモリ解放の処理が発生します。<br>CPUサイクルを消費しやすくなります。<br></td></tr><td>処理</td><td>変数自体が存在しなくなります。<br>以降、該当する変数にアクセスすると<br>Undefined variableのNoticeが発生します。<br></td><td>変数を一時的に値がない状態にしたい場合<br>オブジェクトの参照カヌンとを減らして早期にメモリを解放したい場合<br></td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[null]</div>参照を切断したい場合、変数は残ります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[unset()]</div>変数を完全に破棄したい場合<br><br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br></div>オブジェクトAとBの間の循環参照が切断されます。<br>これにより、オブジェクトAのメモリの解放が始まります。<br>もしも、$a = null;のようにnullを設定して参照を解放しないで<br>unset($a);のみを実行した場合は<br>循環参照を即時解決できません。<br>そのため、メモリ解放が遅延する可能性があります。<br><br>このように循環参照を視野に入れるケースでは<br>参照を切断するために変数にnullを設定してから<br>unset(変数)のように実行する手順を実行する方法をとることになります。<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test3($a);<br></div>$dataは引数として受け取った$aと同じ場所を見ています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data = null;<br></div>参照渡し(&)にしているため<br>$dataにnullを設定することで$aもnullに書き換えられます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">unset($data);<br></div>$dataと参照しているメモリ領域の結びつきを切断します。<br>unsetを実行することで関数内の$dataは消滅します。<br>しかし、unsetは関数内で実行されているため<br>関数外の$a変数には影響せず、$a変数自体が残ってしまします。<br>そのためtest4のようにunsetの実行は関数外で行います。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test4($a);<br></div>test4関数内でunsetは実行させません。<br>関数を実行後に、呼び出し元のスコープでunsetを実行することで<br>変数を完全に削除することができます。<br>`,n8:"戻る",},en: {n1: "back",n2: "About null and unset",n3: "Memory release related",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">About null and unset</div>About memory release timing<br>There is a difference in timing between using the unset function and setting null. <br><br><table border=1><tr><td>Item</td><td>unset()</td><td>$data = null;</td></tr><td>Purpose</td><td>Deallocates the specified variable. <br>Deletes it from the symbol table. <br></td><td>Assigns the special value null to the variable. <br>The variable continues to exist. <br></td></tr><td>Memory Release</td><td>When a variable is no longer referenced, memory is released asynchronously by garbage collection.<br></td><td>References to the data held by the variable are immediately released.<br>Memory may be released more quickly.<br></td></tr><td>CPU Load</td><td>By switching to garbage collection,<br>CPU cycles are saved.<br></td><td>Data is overwritten and memory is released.<br>This can consume CPU cycles.<br></td></tr><td>Processing</td><td>The variable itself will no longer exist.<br>Following this, accessing the variable will<br>an Undefined Variable Notice will be raised. <br></td><td>When you want to temporarily empty a variable.<br>When you want to reduce the reference to an object and free up memory early.<br></td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[null]</div>When you want to sever the reference, the variable remains. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[unset()]</div>If you want to completely destroy a variable<br><br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$a = null;<br></div>This breaks the circular reference between objects A and B. <br>This triggers the release of memory for object A. <br>If you execute only unset($a); without releasing the reference by setting it to null (e.g., $a = null;), the circular reference cannot be resolved immediately. <br>This may delay memory release. <br><br>When considering circular references like this,<br>To break the reference, you can set the variable to null and then execute a procedure like<br>unset(variable).<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test3($a);<br></div>$data looks in the same place as the $a received as an argument.<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data = null;<br></div>Because it's passed by reference (&),<br>setting $data to null also rewrites $a to null. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">unset($data);<br></div>This severs the connection between $data and the memory area it references. <br>Executing unset will cause $data within the function to disappear. <br>However, because unset is executed within the function, it does not affect the $a variable outside the function, and the $a variable itself remains. <br>For this reason, unset should be executed outside the function, as in test4. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$cls2->test4($a);<br></div>Unset is not executed within the test4 function. <br>After the function is executed, you can execute unset in the calling scope to completely delete the variable. <br>You can completely delete the variable by executing unset in the calling scope. <br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
