@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">参照カウント</div></td></tr><tr><td><div id="n3">メモリ解放関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">参照カウントについて</div>参照カウンタの目的はメモリ解放処理にあります。<br>カウンタがゼロになった場合はメモリが使われていない状態を示すので<br>メモリの(即時)解放を実行します。<br>phpではzvalと呼ばれるコンテナでメモリを管理しています。<br>参照カウンタは、特定の値をいくつの変数や配列要素などが<br>参照しているのか？を管理して<br>追跡できるようにした仕組みです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">参照カウンタがインクリメントするケース<br></div>値への参照が作成されるごと<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">参照カウンタがデクリメントするケース<br></div>参照が削除されるごと<br>(例)<br>変数のスコープが終了<br>unset()を実行<br>nullを設定<br><br><table border=1><tr><td>処理</td><td>参照カウンタの結果</td><td>状態</td></tr><tr><td>$data =nulll</td><td>カウンタが1減ります。</td><td>変数は存在しますが、null値を保持しています。</td></tr><tr><td>unset($data);</td><td>カウンタが1減ります。</td><td>変数自体が未定義になります。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">循環参照があるケース<br></div>unset関数を実行しても参照カウンタはゼロにはならないため<br>メモリは即時解放とはなりません。<br>そして、ガベージコレクションが実行されるのを待つことになります。<br>待たずに循環参照を解決するには、循環参照をしているいずれかに対して<br>nullで参照を切る必要があります。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	private function test2(int $num)//$numに$aが値渡しされ参照カウンタが1になります。
+	{
+		$b=0;//$bの参照カウンタが2になります($aと$numを参照)
+		$b=$num;
+		/*
+		0($b)の参照カウンタが1から0になり、参照が切断され解放されます
+		$bに$numの値である100がコピーされます
+		値0は参照カウンタが0になり、即時解放し
+		値100が$bと$numと$aの3個の参照カウンタとなります
+		*/
+		$b++;
+		/*
+		100から101にインクリメントします
+		このため100が$bから参照されなくなり、$numのみからしか参照されません
+		そして101にインクリメントした値を$bが参照します
+		値100の参照が($aと$numと$b)でしたが、$bの参照が切れ($aと$num)になり、2個の参照となります
+		値101(インクリメントによる結果)には$bが参照するので1個の参照カウンタとなります
+		*/
+		$c=$num+$b;//5
+		/*
+		$num(100)+$b(101)が計算され、結果の値201が$cに参照されます
+		値201に$cの1個の参照カウンタが発生します
+		*/
+		echo $c.PHP_EOL;//6
+		/*
+		出力処理が実行されますが、参照カウンタには変動がありません
+		*/
+		unset($c);//7
+		/*
+		$cの参照が切断され、値201を参照するものがなくなります。
+		値201は参照が切断され参照カウンタが0となり即時解放されます
+		*/
+		$num=null;
+		/*
+		値100を参照していた$aとnumのうち$numがnullにより参照の切断をされます
+		このため値100を参照している変数が$aの1個となります
+		*/
+		unset($num);
+		/*
+		$numが参照しているものはなにもありません。
+		変数が未定義となります
+		*/
+	}
+	function test1()
+	{
+		$a=100;
+		/*
+		値100がメモリに生成され、$aがそれを参照します。
+		参照カウンタが1となります
+		*/
+		$this->test2($a);
+		echo $a.PHP_EOL;
+		/*
+		test2()が呼び出されます。
+		$aの値100がtest2()の$numに「値渡し」されますが、
+    CoWにより、値100のRCは一時的に2になります。
+		*/
+		$a=null;
+		/*
+		aの参照が切れ、値100の参照が1から0になり、値100は即時解放されます。
+		*/
+		unset($a);
+		/*
+		$aにnullであり値への参照はありません
+		unsetを実行する3ことで$a変数が未定義になります
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	private function test2(int $num) //$a is passed by value to $num, and the reference counter is set to 1. {
+		$b=0; // The reference counter of $b becomes 2 (references $a and $num)
+		$b=$num;
+		/*
+		The reference counter of 0 ($b) changes from 1 to 0, and the reference is severed and released.
+		The value of $num, 100, is copied to $b.
+		The reference counter of the value 0 becomes 0 and is immediately released.
+		The value 100 becomes three reference counters: $b, $num, and $a.
+		*/
+		$b++;
+		/*
+		Increment from 100 to 101.
+		As a result, 100 is no longer referenced by $b, and is only referenced by $num.
+		And $b references the incremented value to 101.
+		The references to the value 100 were ($a, $num, and $b), but $b's reference is severed ($a and $num), so there are now two references.
+		The value 101 (the result of the increment) is referenced by $b, so there is now only one reference counter.
+		*/
+		$c=$num+$b;//5
+		/*
+		$num(100)+$b(101) is calculated, and the resulting value, 201, is referenced by $c.
+		The value 201 has a reference counter of 1 for $c.
+		*/
+		echo $c.PHP_EOL;//6
+		/*
+		The output process is executed, but the reference counter remains unchanged.
+		*/
+		unset($c);//7
+		/*
+		The reference to $c is severed, and nothing references the value 201.
+		The reference to the value 201 is severed, its reference counter drops to 0, and it is immediately released.
+		*/
+		$num=null;
+		/*
+		Of the variables $a and num that referenced the value 100, $num is nulled, causing it to lose its reference.
+		As a result, the only variable that references the value 100 is $a.
+		*/
+		unset($num);
+		/*
+		$num no longer references anything.
+		The variable becomes undefined.
+		*/
+		}
+		function test1()
+		{
+		$a=100;
+		/*
+		The value 100 is created in memory and referenced by $a.
+		The reference counter becomes 1.
+		*/
+		$this->test2($a);
+		echo $a.PHP_EOL;
+		/*
+		test2() is called.
+		The value 100 of $a is "passed by value" to $num of test2().
+		Due to CoW, the RC of 100 temporarily becomes 2.
+		*/
+		$a=null;
+		/*
+		The reference to a is lost, the reference to 100 changes from 1 to 0, and 100 is immediately released.
+		*/
+		unset($a);
+		/*
+		$a is null and there is no reference to its value.
+		Executing unset() makes the $a variable undefined.
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+$cls1=new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">通常のケースです。</div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	private function test2(int &$num)//$numは$aのエイリアスとして機能します。同じメモリ位置を指すため参照カウンタは増えません
+	{
+		$b=0;
+		/*
+		値0がメモリに生成され、$bがそれを参照します。
+		*/
+		$b=$num;
+		/*
+		$bの値が変更しています。
+		このため
+		値0の$bからの参照が切れ、値0の参照カウンタは1から0となり、即時解放します
+		$bが$num（$aのエイリアス）と同じ値100を参照し始めます。
+		値100は$numと$bの2個の参照カウンタとなります
+		*/
+		$b++;
+		/*
+		$bの値が変更されるため、書き込み時コピー(CoW)が働きます。
+		値100が複製され、新しい値101が生成されます。
+		$bは新しい値101を参照します。
+		古い値100のRCは2から1 に減少します。($a/$numのみが参照)
+		新しい値101のRCは1です。($bが参照)
+		*/
+		$c=$num+$b;
+		/*
+		$num(100)+$b(101)の計算結果(201)を$cが参照し、参照カウンタが1となります
+		値100($numが参照)の参照カウンタは1のまま
+		値101($bが参照)の参照カウンタも1のまま
+		となります
+		*/
+		echo $c.PHP_EOL;
+		/*
+		出力処理が実行されますが、参照カウンタは変更しません
+		*/
+		unset($c);
+		/*
+		$cの参照が切れるため値201の参照がなくなります。
+		そのため値201は即時解放となります
+		また、$cは未定義となります
+		*/
+		$num=null;
+		/*
+		$numは$aのエイリアスなので、$aにもnullが代入されます。
+		$aと$numの両方が値100への参照を同時に切ります。
+		値100のRCは 1 から 0 になり、即時解放されます。
+		この時点で、$aも$numも「nullという値を持つ変数」になります。
+		*/
+		unset($num);
+		/*
+    $numは$aのエイリアスなので、$numをunsetすると、$aの変数定義そのものも同時に削除されます。
+    $num（と$a）は完全に未定義状態となります。
+    関数を抜ける際、$b（値101を参照中）のスコープが終了するため、値101のRCが0になり、即時解放されます。
+		*/
+	}
+	function test1()
+	{
+		$a=100;
+		/*
+		値100を$aが参照し、参照カウンタが1になります
+		*/
+		$this->test2($a);
+		/*
+		test2の実行後、$aはtest2内でunsetされたため、完全に未定義状態になっています。
+		*/
+		echo $a;
+		/*
+		$aは未定義 (undefined variable) のため、Warning/Errorが発生し、期待通りの出力はされません。
+		*/
+		$a=null;
+		/*
+		$aはすでに未定義なので、この行は実行されません（到達不能コード）。
+		*/
+		unset($a);
+		/*
+		これも実行されません（到達不能コード）。
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test1();
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	private function test2(int &$num) //$num acts as an alias for $a. Because it points to the same memory location, the reference counter is not incremented.
+	{
+		$b=0;
+		/*
+		A value of 0 is created in memory, and $b references it.
+		*/
+		$b=$num;
+		/*
+		The value of $b changes.
+		As a result,
+		$b's reference to value 0 is broken, and its reference counter drops from 1 to 0, causing it to be immediately released.
+		$b now references the same value 100 as $num (an alias for $a).
+		The value 100 has two reference counters: $num and $b.
+		*/
+		$b++;
+		/*
+		Because the value of $b changes, copy-on-write (CoW) is triggered.
+		The value 100 is duplicated, creating a new value 101.
+		$b references the new value 101.
+		The RC of the old value 100 is decremented from 2 to 1. (Only $a/$num references)
+		The RC of the new value 101 is 1. (Referenced by $b)
+		*/
+		$c=$num+$b;
+		/*
+		$c references the result (201) of $num(100) + $b(101), and its reference counter becomes 1.
+		The reference counter of value 100 (referenced by $num) remains 1.
+		The reference counter of value 101 (referenced by $b) also remains 1.
+		
+		*/
+		echo $c.PHP_EOL;
+		/*
+		The output process is executed, but the reference counter does not change.
+		*/
+		unset($c);
+		/*
+		The reference to $c is lost, so there is no reference to value 201.
+		Therefore, value 201 is immediately released.
+		Also, $c becomes undefined.
+		*/
+		$num=null;
+		/*
+		Since $num is an alias for $a, null is assigned to $a as well.
+		Both $a and $num simultaneously cut their references to the value 100.
+		The RC of the value 100 changes from 1 to 0, and it is immediately released.
+		At this point, both $a and $num become "variables with the value null."
+		*/
+		unset($num);
+		/*
+		$num is an alias for $a, so unsetting $num also deletes the variable definition of $a.
+		$num (and $a) become completely undefined.
+		When exiting the function, the scope of $b (which is referencing the value 101) ends, so the RC of the value 101 becomes 0 and it is immediately released.
+		*/
+		}
+		function test1()
+		{
+		$a=100;
+		/*
+		$a references the value 100, and its reference counter becomes 1.
+		*/
+		$this->test2($a);
+		/*
+		After test2 is executed, $a is completely undefined because it was unset within test2.
+		*/
+		echo $a;
+		/*
+		$a is undefined (an undefined variable), so a warning/error occurs and the expected output is not produced.
+		*/
+		$a=null;
+		/*
+		$a is already undefined, so this line is not executed (unreachable code).
+		*/
+		unset($a);
+		/*
+		This line is also not executed (unreachable code).
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test1();
+
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7">参照渡しを使用したケースです。</div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"参照カウンタ",n3:"メモリ解放関連",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">参照カウントについて</div>参照カウンタの目的はメモリ解放処理にあります。<br>カウンタがゼロになった場合はメモリが使われていない状態を示すので<br>メモリの(即時)解放を実行します。<br>phpではzvalと呼ばれるコンテナでメモリを管理しています。<br>参照カウンタは、特定の値をいくつの変数や配列要素などが<br>参照しているのか？を管理して<br>追跡できるようにした仕組みです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">参照カウンタがインクリメントするケース<br></div>値への参照が作成されるごと<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">参照カウンタがデクリメントするケース<br></div>参照が削除されるごと<br>(例)<br>変数のスコープが終了<br>unset()を実行<br>nullを設定<br><br><table border=1><tr><td>処理</td><td>参照カウンタの結果</td><td>状態</td></tr><tr><td>$data =nulll</td><td>カウンタが1減ります。</td><td>変数は存在しますが、null値を保持しています。</td></tr><tr><td>unset($data);</td><td>カウンタが1減ります。</td><td>変数自体が未定義になります。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">循環参照があるケース<br></div>unset関数を実行しても参照カウンタはゼロにはならないため<br>メモリは即時解放とはなりません。<br>そして、ガベージコレクションが実行されるのを待つことになります。<br>待たずに循環参照を解決するには、循環参照をしているいずれかに対して<br>nullで参照を切る必要があります。<br>`,n5:`[サンプル]`,n6:`通常のケースです。`,n7:`参照渡しを使用したケースです。`,n8:"戻る",},en: {n1: "back",n1: "back",n2: "Reference Counters",n3: "Memory Freeing",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">About Reference Counts</div>The purpose of reference counters is to free memory. <br>When the counter reaches zero, it indicates that the memory is not being used, <br>which triggers (immediate) memory freeing. <br>PHP manages memory using a container called a zval. <br>Reference counters are a mechanism for tracking how many variables, array elements, etc. are referencing a particular value. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Cases where the reference counter is incremented<br></div>Whenever a reference to a value is created<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Cases where the reference counter is decremented<br></div>Whenever a reference is deleted<br>(Example)<br>Variable scope ends<br>Executes unset()<br>Sets to null<br><br><table border=1><tr><td>Process</td><td>Reference Counter Result</td><td>Status</td></tr><tr><td>$data =nulll</td><td>The counter is decremented by 1. </td><td>The variable exists but contains a null value. </td></tr><tr><td>unset($data);</td><td>The counter is decremented by 1. </td><td>The variable itself becomes undefined. </td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Circular References<br></div>Executing the unset function does not reset the reference counter to zero,<br>so memory is not immediately freed. <br>This means you have to wait for garbage collection to run. <br>To resolve a circular reference without waiting, you need to nullify one of the circular references. <br>`,n5:`[Sample]`,n6:`Normal case.`,n7:`This is a case where pass-by-reference is used.`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
