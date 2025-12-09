@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">zvalコンテナ</div></td></tr><tr><td><div id="n3">メモリ解放関連</div></td></tr></table><br><div id="n4">zvalコンテナはphpの変数やデータを管理しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">値<br></div>phpのデータを格納します。<br>データ型に応じてメンバーが使用されます<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">型<br></div>zvalコンテナの型です。<br><table border=1><tr><td>phpの型</td><td><内部型定数/td><td>説明</td></tr><tr><td>bool</td><td>IS_TRUE<br>IS_FALSE</td><td>PHP 7.2以降では、真偽値それぞれが個別の内部型定数を持つようになりました。<br>それ以前は IS_BOOL と zend_bool でした。</td></tr><tr><td>int</td><td>IS_LONG</td><td>整数型は内部的には常にC言語の long 型として格納されます。</td></tr><tr><td>string</td><td>IS_STRING</td><td>文字列データです。変更されるまでコピーが発生しない効率的な管理が行われます。</td></tr><tr><td>float</td><td>IS_DOUBLE</td><td>浮動小数点数は内部的にはC言語の double 型として格納されます。</td></tr><tr><td>object</td><td>IS_OBJECT</td><td>クラスのインスタンスです。zval内にオブジェクト構造体へのポインタを保持します。</td></tr><tr><td>resource</td><td>IS_RESOURCE</td><td>ファイルポインタやデータベース接続など、外部リソースへの参照を管理するための型です。</td></tr><tr><td>null</td><td>IS_NULL</td><td>値が存在しないことを示します。<br>値フィールドは使用されません。</td></tr><tr><td>array</td><td>IS_ARRAY</td><td>配列はzval内にハッシュテーブル（HashTable）構造体へのポインタを保持します。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">リファレンスカウント<br></div>zvalコンテナが変数名が参照している内容を追跡することができるようにした<br>追跡カンターです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">is_refフラグ<br></div>phpでは参照渡しが使えます。<br>その参照渡しを使った場合、フラグが立ちます。<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	/*
+	PHPは引数に & があるため、$a が指している元のzvalコンテナをそのまま $num に共有させます
+	refcountは1から2に増えます。
+	参照状態になったためis_refは1に変更します(is_refはインクリメントされることはありません)
+	*/
+	function test2(int &$num) 
+	{
+		$num++;      //4
+		/*
+		is_refフラグが1になったためCOW(Copy on write)は行われません
+		$aと$numは同じデータを見ているのではありません
+		同じメモリ領域を共有して、どちらかが変更した場合は反対も反映されるという関係となります。
+		そのため、解放処理は実行されず
+		値のみが1から2に変更します
+		refcount:2
+		is_ref:1
+		*/
+		$b=$num;     //5
+		/*
+		refcount:3
+		is_ref:1
+		*/
+		$c=$num+$b;  //6
+		/*
+		値2:
+		refcount:3(参照が$aと$numと$b)
+		is_ref:1
+		値4:(計算結果)
+		refcount:1
+		is_ref:0
+		*/
+		unset($c);   //7
+		/*
+		値2はそのまま
+		値4の参照が切断され、即時解放されます
+		値4:(計算結果)
+		refcount:0(1から0に変更)
+		is_ref:0
+
+		*/
+		$b=null;     //8
+		/*
+		nullを設定することで値2(4b)の参照が1個切断され2個から1個に変更します。
+		refcount:2(参照が$aと$num)
+		is_ref:1
+		*/
+	}
+	function test1()
+	{
+		$a=1;            //1
+		/*
+		値1を持つzvalコンテナが作成されます。
+		$aが値1を指します。
+		refcount:1
+		is_ref:0
+		*/
+		$this->test2($a);//2
+		/*
+		test2が終了すると$numがスコープから消え
+		refcountが2かｒ1に変更します
+		しかし$aという変数がzvalを参照しているため
+		is_refフラグはまだ1のままとなります。
+		refcount:1($aの分)
+		is_ref:1(zvalを参照しているため)
+		*/
+		unset($a);       //9
+		/*
+		refcount:0($aが即時解放)
+		is_ref:0
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	/*
+	Because PHP uses the & argument, the original zval container pointed to by $a is shared with $num.
+	The refcount increases from 1 to 2.
+	Because it is now a reference, is_ref changes to 1 (is_ref is never incremented).
+	*/
+	function test2(int &$num)
+	{
+		$num++; //4
+		/*
+		Since the is_ref flag is now 1, no COW (Copy on Write) is performed.
+		$a and $num do not actually view the same data.
+		They share the same memory area, and changes to either are reflected in the other.
+		Therefore, no release process is performed.
+		Only the value changes from 1 to 2.
+		refcount:2
+		is_ref:1
+		*/
+		$b=$num; //5
+		/*
+		refcount:3
+		is_ref:1
+		*/
+		$c=$num+$b; //6
+		/*
+		Value 2:
+		refcount:3 (references are $a, $num, and $b)
+		is_ref:1
+		Value 4: (calculation result)
+		refcount:1
+		is_ref:0
+		*/
+		unset($c); //7
+		/*
+		Value 2 remains the same.
+		The reference to value 4 is severed and immediately released.
+		Value 4: (calculation result)
+		refcount:0 (changes from 1 to 0)
+		is_ref:0
+		
+		*/
+		$b=null; //8
+		/*
+		By setting null, one reference to value 2 (4b) is severed, changing it from two to one.
+		refcount: 2 (references are $a and $num)
+		is_ref: 1
+		*/
+	}
+	function test1()
+	{
+		$a=1; //1
+		/*
+		A zval container with value 1 is created.
+		$a points to value 1.
+		refcount: 1
+		is_ref: 0
+		*/
+		$this->test2($a);//2
+		/*
+		When test2 ends, $num goes out of scope,
+		and the refcount changes from 2 to 1.
+		However, because the $a variable references a zval,
+		the is_ref flag remains 1.
+		refcount: 1 (for $a)
+		is_ref: 1 (because it references a zval)
+		*/
+		unset($a); //9
+		/*
+		refcount: 0 ($a is immediately released)
+		is_ref: 0
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+$cls1 = new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">参照渡しの関数を実行したケースです。</div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	/*
+	$aと$numの2個の参照カウンタ、$numは参照渡しを受け取っているので参照フラグが1となります。
+	refcount:2
+	is_ref:1
+	*/
+	function test1(int &num)//3
+	{
+		test2($num);//4
+		/*
+		test2($num); (実行前)
+		refcount:2
+		is_ref:1
+
+		このtest1関数のスコープを抜けると
+		$numが解放されるため
+		refcount:1
+		is_ref:1
+		となります
+		*/
+	}
+	/*
+	$aと$num(test1)と$num(test2)の3個の参照カウンタ
+	参照セットの状態は継続するためis_refフラグは1のままとなります。
+	refcount:3
+	is_ref:1
+	*/
+	function test2(int &num) //5
+	{
+		$num++;//6
+		/*
+		is_refが1なので、PHPは新しいzvalを作らず、既存のzvalの値10を11に書き換えます。
+		refcount:3
+		is_ref:1
+		このtest2関数のスコープを抜けると
+		$numが解放されるため
+		refcount:2
+		is_ref:1
+		となります
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$a=10;//1
+/*
+値 10 のzvalコンテナがd作成
+されます
+refcount:1
+is_ref:0
+*/
+$cls2->test1($a);//2
+/*
+test1($a); (実行前)
+refcount:1
+is_ref:0
+
+test1関数のスコープを抜けると
+refcount:1
+is_ref:1
+となります。
+is_refが1なのは
+$aという変数がzvalを参照しているためです。
+*/
+unset($a);//7
+/*
+unset関数を実行することで$aは即時解放します
+しかし、is_refは1のままとなります。
+refcount:0
+is_ref:1
+これはzvalコンテナが意図的に参照(&)した結果、複数の変数シンボルによって
+共有されている状態になった場合です。
+一度、is_refが1に設定されると参照セットとして扱います。
+このis_refが参照セットを解消するのは(1)かつ(2)の条件を満たす場合となります。
+(1)
+参照している変数だけが1個だけとなり、その変数が通常の変数に戻ったケース
+(2)
+参照している変数がすべてスコープから消えるもしくはunset()されたケース
+(例)
+$a = $a + 0;//値は変えたくないため0を加算して普通の変数とする
+もしくは
+$a =(int)$a;//キャストをすることで普通の変数とする
+このようにすると
+is_refが1から0に変更します
+また、unset($a)により参照元がゼロになり
+zvalコンテナごと解放された場合はis_refのライフサイクルも終了します。
+
+*/
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	/*
+	There are two reference counters, $a and $num. Since $num is passed by reference, the reference flag is set to 1.
+	refcount:2
+	is_ref:1
+	*/
+	function test1(int &num)//3
+	{
+		test2($num);//4
+		/*
+		test2($num); (Before execution)
+		refcount:2
+		is_ref:1
+		
+		When the scope of this test1 function leaves,
+		$num is released, so
+		refcount:1
+		is_ref:1
+		
+		*/
+	}
+	/*
+	There are three reference counters, $a, $num(test1), and $num(test2).
+	The reference set state continues, so the is_ref flag remains 1.
+	refcount:3
+	is_ref:1
+	*/
+	function test2(int &num) //5
+	{
+		$num++;//6
+		/*
+		Since is_ref is 1, PHP does not create a new zval, but instead rewrites the existing zval value 10 to 11.
+		refcount:3
+		is_ref:1
+		When the scope of this test2 function is exited,
+		$num is released,
+		so refcount:2
+		is_ref:1
+		becomes.
+		*/
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$a=10;//1
+/*
+A zval container with a value of 10 is created.
+refcount:1
+is_ref:0
+*/
+$cls2->test1($a);//2
+/*
+test1($a); (Before execution)
+refcount:1
+is_ref:0
+
+When the scope of the test1 function is exited,
+refcount:1
+is_ref:1
+becomes.
+is_ref is 1 because
+the variable $a references a zval.
+*/
+unset($a);//7
+/*
+Executing the unset function immediately releases $a.
+However, is_ref remains 1.
+refcount:0
+is_ref:1
+This occurs when a zval container is intentionally referenced (&) and is shared by multiple variable symbols.
+Once is_ref is set to 1, it is treated as a reference set.
+This is_ref will dissolve the reference set when both conditions (1) and (2) are met.
+(1)
+When only one referenced variable remains and that variable reverts to a normal variable.
+(2)
+When all referenced variables disappear from scope or are unset()ed.
+(Example)
+$a = $a + 0; // Do not change the value, so add 0 to make it a normal variable.
+or
+$a = (int)$a; // Cast to make it a normal variable.
+Doing this will change
+is_ref from 1 to 0.
+Also, unset($a) will reset the reference source to zero,
+and when the entire zval container is released, the is_ref lifecycle will also end.
+
+*/
+
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7">参照渡しの関数を実行したケースです。<br>内部で更に参照渡しの関数を実行した例です。</div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"zvalコンテナ",n3:"メモリ解放関連",n4:`zvalコンテナはphpの変数やデータを管理しています。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">値<br></div>phpのデータを格納します。<br>データ型に応じてメンバーが使用されます<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">型<br></div>zvalコンテナの型です。<br><table border=1><tr><td>phpの型</td><td><内部型定数/td><td>説明</td></tr><tr><td>bool</td><td>IS_TRUE<br>IS_FALSE</td><td>PHP 7.2以降では、真偽値それぞれが個別の内部型定数を持つようになりました。<br>それ以前は IS_BOOL と zend_bool でした。</td></tr><tr><td>int</td><td>IS_LONG</td><td>整数型は内部的には常にC言語の long 型として格納されます。</td></tr><tr><td>string</td><td>IS_STRING</td><td>文字列データです。変更されるまでコピーが発生しない効率的な管理が行われます。</td></tr><tr><td>float</td><td>IS_DOUBLE</td><td>浮動小数点数は内部的にはC言語の double 型として格納されます。</td></tr><tr><td>object</td><td>IS_OBJECT</td><td>クラスのインスタンスです。zval内にオブジェクト構造体へのポインタを保持します。</td></tr><tr><td>resource</td><td>IS_RESOURCE</td><td>ファイルポインタやデータベース接続など、外部リソースへの参照を管理するための型です。</td></tr><tr><td>null</td><td>IS_NULL</td><td>値が存在しないことを示します。<br>値フィールドは使用されません。</td></tr><tr><td>array</td><td>IS_ARRAY</td><td>配列はzval内にハッシュテーブル（HashTable）構造体へのポインタを保持します。</td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">リファレンスカウント<br></div>zvalコンテナが変数名が参照している内容を追跡することができるようにした<br>追跡カンターです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">is_refフラグ<br></div>phpでは参照渡しが使えます。<br>その参照渡しを使った場合、フラグが立ちます。<br><br>`,n5:`[サンプル]`,n6:`参照渡しの関数を実行したケースです。`,n7:`参照渡しの関数を実行したケースです。<br>内部で更に参照渡しの関数を実行した例です。`,n8:"戻る",},en: {n1: "back",n2: "zval container",n3: "Memory release related",n4:`The zval container manages PHP variables and data. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Value<br></div>Stores PHP data. <br>Members are used depending on the data type. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Type<br></div>The type of the zval container. <br><table border=1><tr><td>PHP Types</td><td><Internal Type Constants/td><td>Description</td></tr><tr><td>bool</td><td>IS_TRUE<br>IS_FALSE</td><td>In PHP 7.2 and later, each Boolean value has its own internal type constant. <br>Previously, these were IS_BOOL and zend_bool.</td></tr><tr><td>int</td><td>IS_LONG</td><td>Integer types are always stored internally as a C long type. </td></tr><tr><td>string</td><td>IS_STRING</td><td>String data. Efficient management with no copies until modified. </td></tr><tr><td>float</td><td>IS_DOUBLE</td><td>Floating-point numbers are stored internally as the C double type. </td></tr><tr><td>object</td><td>IS_OBJECT</td><td>Class instance. A pointer to the object structure is stored in a zval. </td></tr><tr><td>resource</td><td>IS_RESOURCE</td><td>This type is used to manage references to external resources, such as file pointers and database connections. </td></tr><tr><td>null</td><td>IS_NULL</td><td>Indicates that a value does not exist. <br>The value field is unused.</td></tr><tr><td>array</td><td>IS_ARRAY</td><td>An array contains a pointer to a hashtable structure within the zval. </td></tr></table><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Reference Counting<br></div>This is a tracking counter that allows zval containers to track what a variable name refers to. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">is_ref flag<br></div>PHP allows passing by reference. <br>When passing by reference, a flag is set. <br><br>`,n5:`[Sample]`,n6:`This is an example of executing a function passed by reference.`,n7:`This is an example of executing a function passed by reference. <br>This is an example of executing another function passed by reference internally.`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
