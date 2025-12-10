@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">配列型</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">配列の初期化(初期値を設定するケース)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = ['apple', 'orange', 'banana'];<br></div>または<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array('apple', 'orange', 'banana');<br></div>配列を初期化(空の配列して配列を準備するケース)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = [];</div>または<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = array();<br></div>配列のデータが入った場合のクリアおよび初期化するケース<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = [];<br></div>または<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = array();<br></div>この他に配列をクリアする方法として<br>unset()がありますが、このunsetでクリアする方法は非推奨となっています。<br>これ以外にもarray_splice()関数を使用して要素をすべて削除する方法もあります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_splice($fruits, 0, count($fruits));</div>0番目から最後まで全て削除し、空の配列にします<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	public int $num = 0;
+	public string $str = "";
+	function test1():void
+	{
+		$person = [
+			'name' => 'Taro Yamada',
+			'age' => 25,
+		];
+		$this->test2($person);
+		//関数呼び出し後の外部での age の表示
+		echo "age:" . $person['age'] . PHP_EOL;//age:25
+	}
+	//引数に値渡しを使用したケース
+	private function test2(array $ary):void
+	{
+		//関数内部で変更してみる
+		$ary['age'] = $ary['age'] + 1;
+		// $ary を使って配列の要素にアクセスする
+		echo "名前は" . $ary['name'] . PHP_EOL;//名前はTaro Yamada
+		echo "来年は" . $ary['age'] . "歳です。" . PHP_EOL;//来年は26歳です。
+	}
+	function test3():void
+	{
+		$person = [
+			'name' => 'Taro Yamada',
+			'age' => 25,
+		];
+		$this->test2($person);
+		//関数呼び出し後の外部での age の表示
+		echo "age:" . $person['age'] . PHP_EOL;//age:25
+	}
+	//引数に&(参照渡し)を使用したケース
+	private function test4(array &$ary):void
+	{
+		//関数内部で変更してみる
+		$ary['age'] = $ary['age'] + 1;
+		// $ary を使って配列の要素にアクセスする
+		echo "名前は" . $ary['name'] . PHP_EOL;//名前はTaro Yamada
+		echo "来年は" . $ary['age'] . "歳です。" . PHP_EOL;//来年は26歳です。
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();//値渡しのケース
+$cls1->test3();//参照渡しのケース
+$cls = new test1();
+$cls->num = 100;
+$cls->str = "test";
+function test5(test1 $cls)
+{
+	$cls->num = $cls->num + 1;
+	$cls->str = $cls->str . " add";
+}
+test5($cls);
+echo $cls->num.PHP_EOL;//101
+echo $cls->str.PHP_EOL;//test add
+
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	public int $num = 0;
+	public string $str = "";
+	function test1():void
+	{
+		$person = [
+		'name' => 'Taro Yamada',
+		'age' => 25,
+		];
+		$this->test2($person);
+		// Displaying age outside the function call
+		echo "age:" . $person['age'] . PHP_EOL;//age:25
+	}
+	// Example of passing arguments by value
+	private function test2(array $ary):void
+	{
+		// Try changing it inside the function
+		$ary['age'] = $ary['age'] + 1;
+		// Accessing an array element using $ary
+		echo "My name is" . $ary['name'] . PHP_EOL;//My name is Taro Yamada
+		echo "Next year I will be" . $ary['age'] . "years old." . PHP_EOL;//I'll ​​be 26 next year.
+	}
+	function test3():void
+	{
+		$person = [
+		'name' => 'Taro Yamada',
+		'age' => 25,
+		];
+		$this->test2($person);
+		// Displaying age outside the function call
+		echo "age:" . $person['age'] . PHP_EOL;//age:25
+	}
+	// Example of using & (passed by reference) as an argument
+	private function test4(array &$ary):void
+	{
+		// Try changing it within the function
+		$ary['age'] = $ary['age'] + 1;
+		// Accessing an array element using $ary
+		echo "My name is" . $ary['name'] . PHP_EOL;//My name is Taro Yamada
+		echo "Next year I will be" . $ary['age'] . "years old." . PHP_EOL;//I will be 26 next year.
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();//Pass by value
+$cls1->test3();//Pass by reference
+$cls = new test1();
+$cls->num = 100;
+$cls->str = "test";
+function test5(test1 $cls)
+{
+$cls->num = $cls->num + 1;
+$cls->str = $cls->str . " add";
+}
+test5($cls);
+echo $cls->num.PHP_EOL;//101
+echo $cls->str.PHP_EOL;//test add
+
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test1関数(値渡し)を実行したケース]<br></div>phpの関数の引数はデフォルトで値渡しとなっています。<br>そのためtest1関数が実行された場合<br>$person配列をコピーを作成します。<br>そのコピーを$aryという新しい配列変数で関数内で渡す。<br>関数内で配列内のデータを25から26に変更しても<br>値渡しであるため関数のスコープを抜けて配列に影響がありません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test3関数(参照渡し)を実行したケース]<br></div>参照渡しをすると$person配列を参照することになるため<br>関数内部で変更した結果がそのまま反映されることになります。<br>したがって、<br>関数内で配列内のデータを25から26に変更すると<br>26になった結果が関数のスコープを抜けたechoの結果で確認できます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test5(クラスをインスタンス化したオブジェクトを引数にしたケース)]<br></div>$cls = new test1();<br>クラスをインスタンス化してオブジェクトを生成します。<br>$cls->num = 100;<br>$cls->str = "test";<br>クラス内の値を変更します(プロパティの変更)<br>これらの情報のクラスオブジェクトをtest5関数の引数に渡します。<br>関数内部でクラスオブジェクトの値に変更を加えます。<br>関数のスコープを抜けて引数として渡したクラスオブジェクトを使って結果を表示すると<br>関数内部で変更した結果が反映されています。<br>これはphpではオブジェクトは常に参照渡しされるためです。<br><br>こうしてみると配列とオブジェクトとは内部処理が異なることがわかります。<br>phpの配列は順序つけられたマップ(Ordered Map)というデータ構造です。<br>内部的にはハッシュテーブルと連動していて、キーと値を効率的に紐づけています。<br>仕様としては配列を値として扱うことを基本としているようです。<br>関数に関数の外側に影響を与えないようにデータを操作できるようにしたいことがあるようです。<br>そのためクラスオブジェクトとは違い、デフォルトの動作は値渡し(コピー)となります。<br><br>そのため、配列を引数として関数内部の結果を反映したい場合は<br>&(参照渡し)を使用した引数にしてください。<br><br>配列を関数の引数に使用するとデフォルトでは値渡しになるため<br>プログラムの実装には気をつける必要があるケースもあります。<br>値渡しをするということは配列データが内部でコピーされ2倍になる可能性があるためです。<br>COW(Copy on write)を仕組みとして導入しているため<br>関数内部で配列の変更がない場合は、配列をコピーすることがないのですが、<br>データベースのテーブルからデータをselectで取得した場合<br>通常は受け取った大量の配列データは<br>表示処理などでは関数内で値を変更して使うことがよくあります。<br>関数の引数にデフォルトで配列を渡してしまうと値渡しとなるため<br>内部で配列内容が変更される可能性が高くなり<br>配列内容が変更されるとCOWの仕組みによりコピーを作ってしまします。<br>そうするとメモリを配列分追加で使ってしまう結果になります。<br>そのため、引数に参照渡しをすることで対応することも視野に入れる必要があります。<br></div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	private function test1()
+	{
+		try
+		{
+			$int = 100;
+			//Fatal error:  Uncaught TypeError: test2::testArrayArguments(): Argument #1 ($ary) must be of type array, int given, called
+			$this->testArrayArguments($int);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+		finally
+		{
+		}
+	}
+	private function test2()
+	{
+		try
+		{
+			//Fatal error:  Uncaught TypeError: test2::testArrayArguments(): Argument #1 ($ary) must be of type array, null given, called
+			$null = null;
+			$this->testArrayArguments($null);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+		finally
+		{
+		}
+	}
+	private function test3()
+	{
+		try
+		{
+			//Fatal error:  Uncaught TypeError: test2::testArrayArguments(): Argument #1 ($ary) must be of type array, string given, called
+			$str = "test";
+			$this->testArrayArguments($str);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+		finally
+		{
+		}
+	}
+	//引数に配列を使う関数
+	private function testArrayArguments(array $ary)
+	{
+		echo "execute testArrayArguments".PHP_EOL;
+	}
+	//nullable型を使用したケース
+	private function test4(?array $ary)
+	{
+		if(is_array($ary))
+		{
+			echo "配列です".PHP_EOL;
+		}
+		else
+		{
+			echo "配列ではありません".PHP_EOL;
+		}
+	}
+	private function test5(array $ary =[])
+	{
+		if(empty($ary))
+		{
+			echo "空です";
+			return;
+		}
+		foreach($ary as $data)
+		{
+			echo $data.PHP_EOL;
+		}
+	}
+	function test()
+	{
+		//$this->test1();//int
+		//$this->test2();//null
+		//$this->test3();//string
+		$int = 100;
+		//Fatal error:  Uncaught TypeError: test2::test4(): Argument #1 ($ary) must be of type ?array, int given, called
+		//$this->test4($int);
+		$ary=[];
+		$ary[]=1;
+		$ary[]=2;
+		//echoの出力結果
+		/*
+		1
+		2
+		*/
+		$this->test5($ary);
+		$ary=[];
+		$this->test5($ary);
+		//echoの出力結果
+		//空です
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{ 
+	private function test1() 
+	{ 
+		try 
+		{ 
+			$int = 100; 
+			//Fatal error: Uncaught TypeError: test2::testArrayArguments(): Argument #1 ($ary) must be of type array, int given, called 
+			$this->testArrayArguments($int); 
+		}catch(Exception $e){ 
+			echo $e->getMessage(); 
+		} 
+		finally 
+		{ 
+		} 
+	} 
+	private function test2() 
+	{ 
+		try 
+		{ 
+			//Fatal error: Uncaught TypeError: test2::testArrayArguments(): Argument #1 ($ary) must be of type array, null given, called 
+			$null = null; 
+			$this->testArrayArguments($null); 
+		}catch(Exception $e){ 
+			echo $e->getMessage(); 
+		} 
+		finally 
+		{ 
+		} 
+	} 
+	private function test3() 
+	{ 
+		try 
+		{ 
+			//Fatal error: Uncaught TypeError: test2::testArrayArguments(): Argument #1 ($ary) must be of type array, string given, called
+			$str = "test";
+			$this->testArrayArguments($str);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+		finally
+		{
+		}
+	}
+	// Function using an array as an argument
+	private function testArrayArguments(array $ary)
+	{
+		echo "execute testArrayArguments".PHP_EOL;
+	}
+	// Example using a nullable type
+	private function test4(?array $ary)
+	{
+		if(is_array($ary))
+		{
+			echo "It's an array".PHP_EOL;
+		}
+		else
+		{
+			echo "It's not an array".PHP_EOL;
+		}
+	}
+	private function test5(array $ary =[])
+	{
+		if(empty($ary))
+		{
+			echo "It's empty";
+			return;
+		}
+		foreach($ary as $data)
+		{
+			echo $data.PHP_EOL;
+		}
+	}
+	function test()
+	{
+		//$this->test1();//int
+		//$this->test2();//null
+		//$this->test3();//string
+		$int = 100;
+		//Fatal error: Uncaught TypeError: test2::test4(): Argument #1 ($ary) must be of type ?array, int given, called
+		//$this->test4($int);
+		$ary=[];
+		$ary[]=1;
+		$ary[]=2;
+		//echo output result
+		/*
+		1
+		2
+		*/
+		$this->test5($ary);
+		$ary=[];
+		$this->test5($ary);
+		//echo output result
+	//Empty
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test();
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7">配列型を引数にしている関数に配列以外を渡すとTypeErrorが発生します。<br>TypeErrorはPHP7.0以降で導入された厳密なチェック機能です。<br>これは関数が期待するデータと異なるデータが渡されることを予期せぬバグを防ぎコードの信頼性を高めることを目的としています。<br>関数が実行された瞬間に判定し、条件に一致しない場合は即時プログラムを停止します。<br>そのためnullable型を使用して配列以外のデータが入った場合の処理をすることができます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function test4(?array $ary)<br></div>今回の例ではnullableを関数のarray型の左隣に設定することで<br>配列型の変数として受け取ったデータを関数のデータとして受け取っています。<br>そして、これが配列どうか？を判定するためis_array関数で判定しています。<br>それにより関数の引数として受け取ったデータを仕様に合わせて判定することができます。<br><br>また、配列型を関数の引数として使用する場合、デフォルト値を設定することができます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function test5(array $ary =[])<br></div>この例では空の配列を配列のデフォルト値として設定しています。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"配列型",n3:"php型宣言",n4:`配列の初期化(初期値を設定するケース)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = ['apple', 'orange', 'banana'];<br></div>または<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array('apple', 'orange', 'banana');<br></div>配列を初期化(空の配列して配列を準備するケース)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = [];</div>または<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = array();<br></div>配列のデータが入った場合のクリアおよび初期化するケース<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = [];<br></div>または<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = array();<br></div>この他に配列をクリアする方法として<br>unset()がありますが、このunsetでクリアする方法は非推奨となっています。<br>これ以外にもarray_splice()関数を使用して要素をすべて削除する方法もあります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_splice($fruits, 0, count($fruits));</div>0番目から最後まで全て削除し、空の配列にします<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test1関数(値渡し)を実行したケース]<br></div>phpの関数の引数はデフォルトで値渡しとなっています。<br>そのためtest1関数が実行された場合<br>$person配列をコピーを作成します。<br>そのコピーを$aryという新しい配列変数で関数内で渡す。<br>関数内で配列内のデータを25から26に変更しても<br>値渡しであるため関数のスコープを抜けて配列に影響がありません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test3関数(参照渡し)を実行したケース]<br></div>参照渡しをすると$person配列を参照することになるため<br>関数内部で変更した結果がそのまま反映されることになります。<br>したがって、<br>関数内で配列内のデータを25から26に変更すると<br>26になった結果が関数のスコープを抜けたechoの結果で確認できます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test5(クラスをインスタンス化したオブジェクトを引数にしたケース)]<br></div>$cls = new test1();<br>クラスをインスタンス化してオブジェクトを生成します。<br>$cls->num = 100;<br>$cls->str = "test";<br>クラス内の値を変更します(プロパティの変更)<br>これらの情報のクラスオブジェクトをtest5関数の引数に渡します。<br>関数内部でクラスオブジェクトの値に変更を加えます。<br>関数のスコープを抜けて引数として渡したクラスオブジェクトを使って結果を表示すると<br>関数内部で変更した結果が反映されています。<br>これはphpではオブジェクトは常に参照渡しされるためです。<br><br>こうしてみると配列とオブジェクトとは内部処理が異なることがわかります。<br>phpの配列は順序つけられたマップ(Ordered Map)というデータ構造です。<br>内部的にはハッシュテーブルと連動していて、キーと値を効率的に紐づけています。<br>仕様としては配列を値として扱うことを基本としているようです。<br>関数に関数の外側に影響を与えないようにデータを操作できるようにしたいことがあるようです。<br>そのためクラスオブジェクトとは違い、デフォルトの動作は値渡し(コピー)となります。<br><br>そのため、配列を引数として関数内部の結果を反映したい場合は<br>&(参照渡し)を使用した引数にしてください。<br><br>配列を関数の引数に使用するとデフォルトでは値渡しになるため<br>プログラムの実装には気をつける必要があるケースもあります。<br>値渡しをするということは配列データが内部でコピーされ2倍になる可能性があるためです。<br>COW(Copy on write)を仕組みとして導入しているため<br>関数内部で配列の変更がない場合は、配列をコピーすることがないのですが、<br>データベースのテーブルからデータをselectで取得した場合<br>通常は受け取った大量の配列データは<br>表示処理などでは関数内で値を変更して使うことがよくあります。<br>関数の引数にデフォルトで配列を渡してしまうと値渡しとなるため<br>内部で配列内容が変更される可能性が高くなり<br>配列内容が変更されるとCOWの仕組みによりコピーを作ってしまします。<br>そうするとメモリを配列分追加で使ってしまう結果になります。<br>そのため、引数に参照渡しをすることで対応することも視野に入れる必要があります。<br>`,n7:`配列型を引数にしている関数に配列以外を渡すとTypeErrorが発生します。<br>TypeErrorはPHP7.0以降で導入された厳密なチェック機能です。<br>これは関数が期待するデータと異なるデータが渡されることを予期せぬバグを防ぎコードの信頼性を高めることを目的としています。<br>関数が実行された瞬間に判定し、条件に一致しない場合は即時プログラムを停止します。<br>そのためnullable型を使用して配列以外のデータが入った場合の処理をすることができます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function test4(?array $ary)<br></div>今回の例ではnullableを関数のarray型の左隣に設定することで<br>配列型の変数として受け取ったデータを関数のデータとして受け取っています。<br>そして、これが配列どうか？を判定するためis_array関数で判定しています。<br>それにより関数の引数として受け取ったデータを仕様に合わせて判定することができます。<br><br>また、配列型を関数の引数として使用する場合、デフォルト値を設定することができます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function test5(array $ary =[])<br></div>この例では空の配列を配列のデフォルト値として設定しています。<br>`,n8:"戻る",},en: {n1: "back",n2: "Array type",n3: "PHP type declaration",n4: `Array initialization (setting initial values)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = ['apple', 'orange', 'banana'];<br></div>or<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array('apple', 'orange', 'banana');<br></div>Array initialization (preparing an array with an empty array)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = [];</div>or<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = array();<br></div>Clearing and initializing an array when data has been entered<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = [];<br></div>or<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$fruits = array();<br></div>Another way to clear an array is to use<br>unset(), but this method is deprecated. <br>Another way to delete all elements is to use the array_splice() function. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_splice($fruits, 0, count($fruits));</div>Delete all elements from 0 to the end, creating an empty array. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Test1 Function (Passed by Value)] <br></div>PHP function arguments are passed by value by default. <br>Therefore, when the test1 function is executed: <br>Create a copy of the $person array. <br>Pass this copy as a new array variable called $ary within the function. <br>Even if you change the data in the array from 25 to 26 within the function,<br>because it is passed by value, the function scope will be lost and the array will not be affected. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Example of executing the test3 function (passing by reference)]<br></div>When passing by reference, the $person array will be referenced,<br>and the results of changes made within the function will be reflected as they are. <br>Therefore,<br>If you change the data in the array from 25 to 26 within the function,<br>you can confirm the result, 26, in the echo command result after the function scope is lost. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[test5 (case where an instantiated class object is used as an argument)]<br></div>$cls = new test1();<br>Instantiate the class to create an object. <br>$cls->num = 100;<br>$cls->str = "test";<br>Change the value within the class (change the property).<br>Pass the class object containing this information as an argument to the test5 function. <br>Change the value of the class object within the function. <br>When you exit the function's scope and display the results using the class object passed as an argument,<br>the changes made within the function are reflected. <br>This is because objects are always passed by reference in PHP. <br><br>You can see that arrays and objects process differently internally. <br>PHP arrays are a data structure called an ordered map. <br>Internally, they work with a hash table, efficiently associating keys with values. <br>The basic specification seems to be to treat arrays as values. <br>It seems that there are times when you want a function to be able to manipulate data without affecting the function outside. <br>For this reason, unlike class objects, the default behavior is pass-by-value (copy). <br><br>Therefore, if you want to use an array as an argument and reflect the results inside the function, <br>use the argument using & (pass by reference). <br><br>When using an array as a function argument, it is passed by value by default. <br>In some cases, care must be taken when implementing the program. <br>Passing by value means that the array data may be copied internally, potentially doubling the data. <br>Because we use COW (Copy on Write) as a mechanism,<br>if the array is not modified within the function, the array is not copied.<br>However,<br>When retrieving data from a database table using select,<br>the received large amount of array data<br>is often modified within the function for display purposes. <br>If an array is passed as a function argument by default, it is passed by value,<br>which increases the likelihood that the array contents will be modified internally.<br>If the array contents are modified, a copy will be made using the COW mechanism. <br>This results in additional memory usage for the array. <br>For this reason, you should consider passing arguments by reference. <br>`,n7:`Passing anything other than an array to a function that takes an array type as an argument raises a TypeError. <br>TypeError is a strict checking feature introduced in PHP 7.0 and later. <br>Its purpose is to prevent unexpected bugs caused by passing data different from the data expected by the function and to improve code reliability. <br>The test is made the moment the function is executed, and if the condition is not met, the program immediately stops. <br>This allows you to use the nullable type to handle cases where data other than arrays is entered. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function test4(?array $ary)<br></div>In this example, by setting nullable to the left of the array type in the function, <br>data received as an array variable is received as function data. <br>Then, the is_array function is used to determine whether this is an array. <br>This allows you to interpret data received as a function argument according to the specifications. <br><br>In addition, when using an array type as a function argument, you can set a default value. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function test5(array $ary =[])<br></div>This example sets an empty array as the default value for the array. <br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
