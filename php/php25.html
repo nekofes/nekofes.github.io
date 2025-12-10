@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">連想配列(1)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;"></div>連想配列は、データに名前（キー）を付けて管理できる便利な仕組みです。<br>キーを指定してそのキーに紐づく値を取得することで直感的なデータ構造を把握できます。<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//単体の連想配列のデータ
+	function test1()
+	{
+		$data=[
+			'name' => "tanaka",
+			'class' => 1,
+		];
+		echo "data count:".count($data).PHP_EOL;//data count:2
+		echo "data.name:".$data["name"].PHP_EOL;//data.name:tanaka
+		echo "data.class:".$data["class"].PHP_EOL;//data.class:1
+		$this->changeArray($data, "class", 2);
+		echo "data.class:".$data["class"].PHP_EOL;//data.class:2
+		$this->deleteFieldArray1($data, "name");
+		echo "data count:".count($data).PHP_EOL;//data count:1
+		$this->foreachArray($data);
+		//foreachの結果
+		//class: 2
+
+		$this->addArray($data, "age", 20);
+		//foreachの結果
+		//class: 2
+		//age: 20
+
+		$this->forTest1($data);
+		//[結果]
+		//class: 2
+		//age: 20
+
+		$this->forTest2($data);
+		//[結果]
+		//class: 2
+		//age: 20
+
+		$this->deleteFieldArray2($data, "class");
+		$this->foreachArray($data);
+		//foreachの結果
+		//age: 20
+
+		$this->deleteFieldArray2($data, "age");
+		$this->foreachArray($data);
+		//foreachの結果
+		//データがなくなったため何も表示されません
+		echo "data count:".count($data).PHP_EOL;//data count:0
+	}
+	//foreachを使った配列を読み込む方法
+	private function foreachArray(array $ary)
+	{
+		echo "foreachArray".PHP_EOL;
+		foreach ($ary as $key => $value) 
+		{
+			echo $key . ': ' . $value . PHP_EOL;
+		}
+	}
+	//指定のキーを変更
+	private function changeArray(array &$ary, string $key, int $value)
+	{
+		$ary[$key] = $value;
+	}
+	//指定のキーを削除(unsetを使用)
+	private function deleteFieldArray1(array &$ary, string $key)
+	{
+		unset($ary[$key]);
+	}
+	//指定のキーを削除(array_diff_keyを使用)
+	private function deleteFieldArray2(array &$ary, string $key)
+	{
+		// 削除したいキーのリストを新しい配列として定義
+		$keys_to_remove = [$key];
+		
+		// array_diff_key() は、第1引数の配列から第2引数に含まれるキーを取り除いた結果を返します
+		$ary = array_diff_key($ary, array_flip($keys_to_remove));
+	}
+	//指定のキーを削除(array_filterを使用)
+	private function deleteFieldArray3(array &$ary, string $removeKey)
+	{
+		$ary = array_filter(
+			$ary,
+			function ($key) use ($removeKey) {
+				// 削除したいキーと一致しなければTRUE（残す）を返す
+				return $key !== $removeKey;
+			},
+			ARRAY_FILTER_USE_KEY // キーを使ってフィルタリングするフラグ
+		);
+
+	}
+	//データを追加
+	private function addArray(array &$ary, string $key, int $value)
+	{
+		$ary[$key] = $value;
+	}
+	//配列の内部ポインタを操作しながらループします
+	//reset() と next() を使います
+	//可読性が低く、バグの原因になりやすいため、実務ではおすすめしません。
+	private function forTest1(array $ary)
+	{
+		// ポインタを最初の要素にリセット
+		reset($ary);
+		
+		// current()がfalse（またはnull, 0など）でない限りループを続行
+		for ($i = 0; current($ary) !== false; next($ary), $i++) 
+		{
+			$key = key($ary);
+			$value = current($ary);
+			echo $key . ": " . $value . PHP_EOL;
+		}
+	}
+	//array_keys() ですべてのキーを取得してからループします
+	//キーのリストを取得し、それをインデックス配列として for ループで回します。
+	private function forTest2(array $ary)
+	{
+		// すべてのキーを配列として取得
+		$keys = array_keys($ary);
+		$count = count($keys);
+		
+		for ($i = 0; $i < $count; $i++) 
+		{
+			$key = $keys[$i];
+			$value = $ary[$key];
+			echo $key . ": " . $value . PHP_EOL;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//Data of a single associative array
+	function test1()
+	{
+		$data=[
+		'name' => "tanaka",
+		'class' => 1,
+		];
+		echo "data count:".count($data).PHP_EOL;//data count:2
+		echo "data.name:".$data["name"].PHP_EOL;//data.name:tanaka
+		echo "data.class:".$data["class"].PHP_EOL;//data.class:1
+		$this->changeArray($data, "class", 2);
+		echo "data.class:".$data["class"].PHP_EOL;//data.class:2
+		$this->deleteFieldArray1($data, "name");
+		echo "data count:".count($data).PHP_EOL;//data count:1
+		$this->foreachArray($data);
+		//Result of foreach
+		//class: 2
+		
+		$this->addArray($data, "age", 20);
+		//Result of foreach
+		//Class: 2
+		//Age: 20
+		
+		$this->forTest1($data);
+		//[Result]
+		//Class: 2
+		//Age: 20
+		
+		$this->forTest2($data);
+		//[Result]
+		//Class: 2
+		//Age: 20
+		
+		$this->deleteFieldArray2($data, "class");
+		$this->foreachArray($data);
+		//Result of foreach
+		//Age: 20
+		
+		$this->deleteFieldArray2($data, "age");
+		$this->foreachArray($data);
+		//Result of foreach
+		//Nothing is displayed because there is no more data.
+		echo "data count:".count($data).PHP_EOL;//data count:0
+	}
+	//How to read an array using foreach
+	private function foreachArray(array $ary)
+	{
+		echo "foreachArray".PHP_EOL;
+		foreach ($ary as $key => $value)
+		{
+		echo $key . ': ' . $value . PHP_EOL;
+		}
+	}
+	// Change the specified key
+	private function changeArray(array &$ary, string $key, int $value)
+	{
+		$ary[$key] = $value;
+	}
+	// Delete the specified key (using unset)
+	private function deleteFieldArray1(array &$ary, string $key)
+	{
+		unset($ary[$key]);
+	}
+	// Delete the specified key (using array_diff_key)
+	private function deleteFieldArray2(array &$ary, string $key)
+	{
+		// Define a new array containing the list of keys to delete
+		$keys_to_remove = [$key];
+		
+		// array_diff_key() returns the result of removing the keys in the second argument from the array in the first argument
+		$ary = array_diff_key($ary, array_flip($keys_to_remove));
+	}
+	// Delete the specified key (using array_filter)
+	private function deleteFieldArray3(array &$ary, string $removeKey)
+	{
+		$ary = array_filter(
+		$ary,
+		function ($key) use ($removeKey) {
+		// Return TRUE (keep) if the key does not match the key to be deleted.
+		return $key !== $removeKey;
+	},
+	ARRAY_FILTER_USE_KEY // Flag to filter using the key.
+	);
+	
+	}
+	// Add data.
+	private function addArray(array &$ary, string $key, int $value)
+	{
+		$ary[$key] = $value;
+	}
+	// Loop while manipulating the array's internal pointer.
+	// Use reset() and next().
+	// Not recommended for practical use due to poor readability and prone to bugs.
+	private function forTest1(array $ary)
+	{
+		// Reset the pointer to the first element
+		reset($ary);
+		
+		// Continue looping unless current() is false (or null, 0, etc.)
+		for ($i = 0; current($ary) !== false; next($ary), $i++)
+		{
+			$key = key($ary);
+			$value = current($ary);
+			echo $key . ": " . $value . PHP_EOL;
+		}
+	}
+	// Get all keys with array_keys(), then loop
+	// Get a list of keys and use it as an index array in a for loop.
+	private function forTest2(array $ary)
+	{
+		// Get all keys as an array
+		$keys = array_keys($ary);
+		$count = count($keys);
+		
+		for ($i = 0; $i < $count; $i++)
+		{
+			$key = $keys[$i];
+			$value = $ary[$key];
+			echo $key . ": " . $value . PHP_EOL;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1 = new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;"></div><table border=1><tr><td>方法</td><td>特徴</td><td>変更の有無</td><td>推奨度合い</td></tr><tr><td>unset()</td><td>シンプルで直接的。<br>最も一般的。</td><td>はい</td><td>高</td></tr><tr><td>array_diff_key()</td><td>複数のキーを一括削除しやすい。<br>新しい配列を生成する。</td><td>いいえ</td><td>中</td></tr><tr><td>array_filter()</td><td>柔軟な条件でフィルタリングできるが、少し複雑。</td><td>いいえ</td><td>低</td></tr></table></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"連想配列(1)",n3:"配列関連",n4:`連想配列は、データに名前（キー）を付けて管理できる便利な仕組みです。<br>キーを指定してそのキーに紐づく値を取得することで直感的なデータ構造を把握できます。<br>`,n5:`[サンプル]`,n6:`<table border=1><tr><td>方法</td><td>特徴</td><td>変更の有無</td><td>推奨度合い</td></tr><tr><td>unset()</td><td>シンプルで直接的。<br>最も一般的。</td><td>はい</td><td>高</td></tr><tr><td>array_diff_key()</td><td>複数のキーを一括削除しやすい。<br>新しい配列を生成する。</td><td>いいえ</td><td>中</td></tr><tr><td>array_filter()</td><td>柔軟な条件でフィルタリングできるが、少し複雑。</td><td>いいえ</td><td>低</td></tr></table>`,n7:"戻る",},en: {n1: "back",n2: "Associative Array (1)",n3: "Array Related",n4: `Associative arrays are a convenient mechanism for managing data by assigning names (keys). <br>By specifying a key and retrieving the value associated with that key, you can intuitively understand the data structure. <br>`,n5: `[Sample]`,n6: `<table border=1><tr><td>Method</td><td>Features</td><td>Changes?</td><td>Recommendation</td></tr><tr><td>unset()</td><td>Simple and direct. <br>Most commonly used. </td><td>Yes</td><td>High</td></tr><tr><td>array_diff_key()</td><td>Easily delete multiple keys at once. <br>Creates a new array.</td><td>No</td><td>Medium</td></tr><tr><td>array_filter()</td><td>Allows flexible filtering, but is somewhat complicated.</td><td>No</td><td>Low</td></tr></table>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
