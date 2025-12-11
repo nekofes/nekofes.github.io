@@ -1,0 +1,535 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">連想配列(2)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;"></div>連想配列は、データに名前（キー）を付けて管理できる便利な仕組みです。<br>キーを指定してそのキーに紐づく値を取得することで直感的なデータ構造を把握できます。<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1()
+	{
+		$userAll=[];
+	
+		$user=[];
+		$user["name"]="yamada";
+		$user["age"]=20;
+	
+		$userAll[]= $user;
+	
+		$user=[];//追加するため配列初期化します
+		$user["name"]="tanaka";
+		$user["age"]=21;
+	
+		$userAll[] = $user;
+		print_r($userAll);
+		/*
+		Array
+		(
+			[0] => Array
+				(
+					[name] => yamada
+					[age] => 20
+				)
+		
+			[1] => Array
+				(
+					[name] => tanaka
+					[age] => 21
+				)
+		
+		)
+		*/
+		//件数の取得
+		//countを使用したケース
+		echo "count:".count($userAll).PHP_EOL;//count:2
+		//sizeofを使用したケース
+		echo "sizeof:".sizeof($userAll).PHP_EOL;//sizeof:2
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+function test1()
+{
+$userAll=[];
+
+$user=[];
+$user["name"]="yamada";
+$user["age"]=20;
+
+$userAll[]= $user;
+
+$user=[];//Initialize the array for addition
+$user["name"]="tanaka";
+$user["age"]=21;
+
+$userAll[] = $user;
+print_r($userAll);
+/*
+Array
+(
+[0] => Array
+(
+[name] => yamada
+[age] => 20
+)
+
+[1] => Array
+(
+[name] => tanaka
+[age] => 21
+)
+
+)
+*/
+/Get the number of items
+//Using count
+echo "count:".count($userAll).PHP_EOL;//count:2
+//Using sizeof
+echo "sizeof:".sizeof($userAll).PHP_EOL;//sizeof:2 
+}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">test1関数では連想配列を構造体のデータ形式に見立てて<br>配列に追加しているサンプルです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$userAll[] = $user;</div>このように連想配列を配列に追加しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];//追加するため配列初期化します<br>$user["name"]="tanaka";<br>$user["age"]=21;<br></div>このように<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];</div>としているのは、配列に同じ変数を使い回すと参照がコピーされるためです。<br>$userという配列を作っています。<br>この$user配列に値を設定して<br>$userAll[] = $user;(連想配列データを配列に追加)と実行すると<br>$userAll[0]は$userが格納されているメモリの場所(ポインタ)を参照します。<br>$user=[];のように初期化をしないで<br>$user["user"]="xxx";のようにデータを書き換えて<br>$userAll[] = $user;と実行すると<br>$userは次のデータ($userAll[1])に追加します。<br>そして、初期化をしないで行っているということは<br>上書き変更をしてしまうため、$userAll[0]が参照しているメモリ領域も同時に変更してしまいます。<br>結果として$userAll[0]と$userAll[1]は全く同じ最後に追加したデータを指すことなってしまいます。<br>この参照による代入を防ぐため<br>新しいメモリ領域を確保するため<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];</div>と初期化をしているわけです。<br><br>件数はcount関数もしくはsizeof関数で取得できます。<br>sizeof関数はcount関数のエイリアスです。<br><br></div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test1()
+	{
+		$user1=[
+		"name"=>"yamada",
+		"age"=>20
+		];
+		//参照渡し(&)によるデータの共有を舌ケース
+		$user2 = &$user1;
+		echo "user1配列".PHP_EOL;
+		print_r($user1);
+		echo "user2配列".PHP_EOL;
+		print_r($user2);
+		//[結果]
+		/*
+		user1配列
+		Array
+		(
+			[name] => yamada
+			[age] => 20
+		)
+		user2配列
+		Array
+		(
+			[name] => yamada
+			[age] => 20
+		)
+		*/
+		//ageキーの値を$user2のみ変更してみます
+		$user2["age"]=21;
+		//変更後の結果
+		echo "user1配列".PHP_EOL;
+		print_r($user1);
+		echo "user2配列".PHP_EOL;
+		print_r($user2);
+		//[結果]
+		/*
+		user1配列
+		Array
+		(
+			[name] => yamada
+			[age] => 21
+		)
+		user2配列
+		Array
+		(
+			[name] => yamada
+			[age] => 21
+		)
+		*/
+	}
+	function test2()
+	{
+		$user=[
+		"name"=>"yamada",
+		"age"=>20
+		];
+
+		$this->testArray1($user);
+		//Fatal error:  Uncaught TypeError: test2::testArray1(): Argument #1 ($ary) must be of type array, null given, called
+		//$this->testArray1(null);
+		$this->testArray2($user);
+		/*
+		Array
+		(
+			[name] => yamada
+			[age] => 20
+		)
+		*/
+		$this->testArray2(null);//ary is null
+		echo $this->checkArray(null).PHP_EOL;
+		$user_age_none=[
+		"name"=>"yamada"
+		];
+		$user_name_none=[
+		"age"=>20
+		];
+		$this->checkArray($user_age_none).PHP_EOL;
+		$this->checkArray($user_name_none).PHP_EOL;
+		$this->checkArray($user).PHP_EOL;
+	}
+	//引数の型(array)
+	private function testArray1(array $ary)
+	{
+		print_r($ary);
+	}
+	//nullable宣言
+	private function testArray2(?array $ary)
+	{
+		if($ary === null)
+		{
+			echo "array is null".PHP_EOL;
+			return;
+		}
+		print_r($ary);
+	}
+	private function checkArray(?array $ary)
+	{
+		if($ary === null)
+		{
+			echo "array is null".PHP_EOL;
+			return;
+		}
+		if(empty($ary))
+		{
+			echo "array is empty.".PHP_EOL;
+			return;
+		}
+		if(!is_array($ary))
+		{
+			echo "it is not array.".PHP_EOL;
+			return;
+		}
+		//nameキーの存在チェック
+		if (!isset($ary['name'])) 
+		{
+			echo "'name' キーがありません。".PHP_EOL;
+			return;
+		}
+		// ageキーの存在チェック
+		if (!isset($ary['age'])) 
+		{
+			echo "'age' キーがありません。".PHP_EOL;
+			return;
+		}
+		//nameの文字列判定
+		if (!is_string($ary['name'])) 
+		{
+			echo "'name' は文字列ではありません。".PHP_EOL;
+			return;
+		}
+		//ageの整数判定
+		if (!is_int($ary['age'])) 
+		{
+			echo "'age' は整数ではありません。".PHP_EOL;
+			return;
+		}
+		echo "連想配列のチェックが終わりました。";
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test1();
+$cls2->test2();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+function test1()
+{
+$user1=[
+"name"=>"yamada",
+"age"=>20
+];
+// Sharing data by reference (&)
+$user2 = &$user1;
+echo "user1Array".PHP_EOL;
+print_r($user1);
+echo "user2Array".PHP_EOL;
+print_r($user2);
+// [Result]
+/*
+user1Array
+Array
+(
+[name] => yamada
+[age] => 20
+)
+user2Array
+Array
+(
+[name] => yamada
+[age] => 20
+)
+*/
+// Change the value of the age key for $user2 only
+$user2["age"]=21;
+// Result after change
+echo "user1Array".PHP_EOL;
+print_r($user1);
+echo "user2Array".PHP_EOL; 
+print_r($user2); 
+//[result] 
+/* 
+user1 array 
+Array 
+( 
+[name] => yamada 
+[age] => 21 
+) 
+user2 array 
+Array 
+( 
+[name] => yamada 
+[age] => 21 
+) 
+*/ 
+} 
+function test2() 
+{ 
+$user=[ 
+"name"=>"yamada", 
+"age"=>20 
+]; 
+
+$this->testArray1($user); 
+//Fatal error: Uncaught TypeError: test2::testArray1(): Argument #1 ($ary) must be of type array, null given, called 
+//$this->testArray1(null); 
+$this->testArray2($user); 
+/* 
+Array 
+( 
+[name] => yamada 
+[age] => 20 
+) 
+*/ 
+$this->testArray2(null);//ary is null 
+echo $this->checkArray(null).PHP_EOL; 
+$user_age_none=[ 
+"name"=>"yamada" 
+]; 
+$user_name_none=[ 
+"age"=>20 
+]; 
+$this->checkArray($user_age_none).PHP_EOL; 
+$this->checkArray($user_name_none).PHP_EOL; 
+$this->checkArray($user).PHP_EOL; 
+} 
+//Argument type (array) 
+private function testArray1(array $ary) 
+{ 
+print_r($ary); 
+} 
+//nullable declaration 
+private function testArray2(?array $ary) 
+{ 
+if($ary === null) 
+{ 
+echo "array is null".PHP_EOL; 
+return; 
+} 
+print_r($ary); 
+} 
+private function checkArray(?array $ary) 
+{ 
+if($ary === null) 
+{ echo "array is null".PHP_EOL;
+return;
+}
+if(empty($ary))
+{
+echo "array is empty.".PHP_EOL;
+return;
+}
+if(!is_array($ary))
+{
+echo "it is not an array.".PHP_EOL;
+return;
+}
+//Check for existence of name key
+if (!isset($ary['name']))
+{
+echo "'name' key does not exist.".PHP_EOL;
+return;
+}
+//Check for existence of age key
+if (!isset($ary['age']))
+{
+echo "'age' key does not exist.".PHP_EOL;
+return;
+}
+//Check for string value of name
+if (!is_string($ary['name']))
+{
+echo "'name' is not a string.".PHP_EOL;
+return;
+}
+//Check for integer value of age
+if (!is_int($ary['age']))
+{
+echo "'age' is not an integer.".PHP_EOL;
+return;
+}
+echo "Associative array check completed.";
+}
+}
+echo "<pre>";
+
+$cls2 = new test2();
+$cls2->test1();
+$cls2->test2();
+echo "<pre>";class test2
+{
+function test1()
+{
+$user1=[
+"name"=>"yamada",
+"age"=>20
+];
+// Sharing data by reference (&)
+$user2 = &$user1;
+echo "user1Array".PHP_EOL;
+print_r($user1);
+echo "user2Array".PHP_EOL;
+print_r($user2);
+// [Result]
+/*
+user1Array
+Array
+(
+[name] => yamada
+[age] => 20
+)
+user2Array
+Array
+(
+[name] => yamada
+[age] => 20
+)
+*/
+// Change the value of the age key for $user2 only
+$user2["age"]=21;
+// Result after change
+echo "user1Array".PHP_EOL;
+print_r($user1);
+echo "user2Array".PHP_EOL; 
+print_r($user2); 
+//[result] 
+/* 
+user1 array 
+Array 
+( 
+[name] => yamada 
+[age] => 21 
+) 
+user2 array 
+Array 
+( 
+[name] => yamada 
+[age] => 21 
+) 
+*/ 
+} 
+function test2() 
+{ 
+$user=[ 
+"name"=>"yamada", 
+"age"=>20 
+]; 
+
+$this->testArray1($user); 
+//Fatal error: Uncaught TypeError: test2::testArray1(): Argument #1 ($ary) must be of type array, null given, called 
+//$this->testArray1(null); 
+$this->testArray2($user); 
+/* 
+Array 
+( 
+[name] => yamada 
+[age] => 20 
+) 
+*/ 
+$this->testArray2(null);//ary is null 
+echo $this->checkArray(null).PHP_EOL; 
+$user_age_none=[ 
+"name"=>"yamada" 
+]; 
+$user_name_none=[ 
+"age"=>20 
+]; 
+$this->checkArray($user_age_none).PHP_EOL; 
+$this->checkArray($user_name_none).PHP_EOL; 
+$this->checkArray($user).PHP_EOL; 
+} 
+//Argument type (array) 
+private function testArray1(array $ary) 
+{ 
+print_r($ary); 
+} 
+//nullable declaration 
+private function testArray2(?array $ary) 
+{ 
+if($ary === null) 
+{ 
+echo "array is null".PHP_EOL; 
+return; 
+} 
+print_r($ary); 
+} 
+private function checkArray(?array $ary) 
+{ 
+if($ary === null) 
+{ echo "array is null".PHP_EOL;
+return;
+}
+if(empty($ary))
+{
+echo "array is empty.".PHP_EOL;
+return;
+}
+if(!is_array($ary))
+{
+echo "it is not an array.".PHP_EOL;
+return;
+}
+//Check for existence of name key
+if (!isset($ary['name']))
+{
+echo "'name' key does not exist.".PHP_EOL;
+return;
+}
+//Check for existence of age key
+if (!isset($ary['age']))
+{
+echo "'age' key does not exist.".PHP_EOL;
+return;
+}
+//Check for string value of name
+if (!is_string($ary['name']))
+{
+echo "'name' is not a string.".PHP_EOL;
+return;
+}
+//Check for integer value of age
+if (!is_int($ary['age']))
+{
+echo "'age' is not an integer.".PHP_EOL;
+return;
+}
+echo "Associative array check completed.";
+}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$cls2->test1();
+$cls2->test2();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user2 = &$user1;</div>参照渡し(&)を使用して連想配列を作成した場合はメモリは同じ場所をみます。<br>そのため、どこか一部を変更すると他方の連想配列も同じ結果になります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function checkArray(?array $ary)</div>連想配列のチェック処理のサンプルです。<br>とはいっても、内部にキーがあるのか？<br>型が正しいか？程度であり<br>受け取った引数が空白だったりすると、関数の引数にarray型を設定しているため<br>エラー(TypeError)が発生します。<br>連想配列のチェック処理は状況によって必要となりますが<br>仕様として設計思想をどこまで取り込むかという視点で利用する方が良いのかもしれません。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"連想配列(2)",n3:"配列関連",n4:`連想配列は、データに名前（キー）を付けて管理できる便利な仕組みです。<br>キーを指定してそのキーに紐づく値を取得することで直感的なデータ構造を把握できます。<br>`,n5:`[サンプル]`,n6:`test1関数では連想配列を構造体のデータ形式に見立てて<br>配列に追加しているサンプルです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$userAll[] = $user;</div>このように連想配列を配列に追加しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];$user["name"]="tanaka";<br>$user["age"]=21;<br></div>このように<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];</div>としているのは、配列に同じ変数を使い回すと参照がコピーされるためです。<br>$userという配列を作っています。<br>この$user配列に値を設定して<br>$userAll[] = $user;(連想配列データを配列に追加)と実行すると<br>$userAll[0]は$userが格納されているメモリの場所(ポインタ)を参照します。<br>$user=[];のように初期化をしないで<br>$user["user"]="xxx";のようにデータを書き換えて<br>$userAll[] = $user;と実行すると<br>$userは次のデータ($userAll[1])に追加します。<br>そして、初期化をしないで行っているということは<br>上書き変更をしてしまうため、$userAll[0]が参照しているメモリ領域も同時に変更してしまいます。<br>結果として$userAll[0]と$userAll[1]は全く同じ最後に追加したデータを指すことなってしまいます。<br>この参照による代入を防ぐため<br>新しいメモリ領域を確保するため<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];</div>と初期化をしているわけです。<br><br>件数はcount関数もしくはsizeof関数で取得できます。<br>sizeof関数はcount関数のエイリアスです。<br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user2 = &$user1;</div>参照渡し(&)を使用して連想配列を作成した場合はメモリは同じ場所をみます。<br>そのため、どこか一部を変更すると他方の連想配列も同じ結果になります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function checkArray(?array $ary)</div>連想配列のチェック処理のサンプルです。<br>とはいっても、内部にキーがあるのか？<br>型が正しいか？程度であり<br>受け取った引数が空白だったりすると、関数の引数にarray型を設定しているため<br>エラー(TypeError)が発生します。<br>連想配列のチェック処理は状況によって必要となりますが<br>仕様として設計思想をどこまで取り込むかという視点で利用する方が良いのかもしれません。<br>`,n8:"戻る",},en: {n1: "back",n2: "Associative Array (2)",n3: "Array Related",n4:`Associative arrays are a convenient mechanism for managing data by assigning names (keys). <br>By specifying a key and retrieving the value associated with that key, you can intuitively understand the data structure. <br>`,n5:`[Sample]`,n6:`The test1 function treats an associative array as a structured data format and adds it to an array. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$userAll[] = $user;</div>An associative array is added to an array like this. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[]; $user["name"]="tanaka";<br>$user["age"]=21;<br></div>Like this<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];</div>This is because if you reuse the same variable in an array, the reference will be copied. <br>An array called $user is created. <br>Set values ​​in this $user array<br>If you execute $userAll[] = $user; (to add associative array data to the array),<br>$userAll[0] will reference the memory location (pointer) where $user is stored. <br>If you do not initialize it as $user=[];<br>rewrite the data as $user["user"]="xxx";<br>and execute $userAll[] = $user;<br>$user will be added to the next data ($userAll[1]). <br>And since doing so without initialization<br>will overwrite the data, the memory area referenced by $userAll[0] will also be changed. <br>As a result, $userAll[0] and $userAll[1] will point to the exact same data added last. <br>To prevent this reference assignment<br>To allocate new memory area<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user=[];</div>Initialization is performed as follows. <br><br>The number of items can be obtained using the count function or sizeof function. <br>The sizeof function is an alias for the count function. <br>`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$user2 = &$user1;</div>When creating an associative array using pass-by-reference (&), the memory location is the same. <br>Therefore, changing one part will result in the same change in the other associative array. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">private function checkArray(?array $ary)</div>This is a sample of an associative array check process. <br>But are there keys inside? <br>Is the type correct? This is about the extent of the problem.<br>If the received argument is blank, an error (TypeError) will occur because the function argument is set to array type.<br>Associative array checking may be necessary in some situations,<br>but it may be better to use it from the perspective of how much of the design philosophy is incorporated into the specifications.<br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
