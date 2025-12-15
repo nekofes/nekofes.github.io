@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">配列の追加(2)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;"></div><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">phpの配列の追加について<br></div>初期化/クリア<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = [];//初期値が空<br>$ary = [1, 2, 3];//初期値を設定する<br></div><br>解放(循環参照は、参照元を先に解放する必要があります。)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = null;<br>unset($ary);<br></div><br>配列に使う+演算子は、右側の配列の要素を左側の配列に追加しますが、<br>キーが重複する場合は左側の値が優先されます。<br><br></div><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1()
+	{
+		$ary1=[
+		"str"=>"aaa",
+		"num"=>100
+		];
+		$ary2=[
+		"str"=>"bbb",
+		"num"=>200
+		];
+		$ary3 = $ary1 + $ary2;
+		$this->foreachArray($ary3);
+/*
+key:str value:aaa
+key:num value:100
+*/
+echo "------------------".PHP_EOL;
+	}
+	function test2()
+	{
+		$ary1=[
+		"str"=>"aaa",
+		"num"=>100
+		];
+		$ary2=[
+		"str"=>"bbb",
+		"str2"=>"bbb",
+		"num"=>200,
+		"num2"=>300
+		];
+		$ary3 = $ary1 + $ary2;
+		$this->foreachArray($ary3);
+/*
+key:str value:aaa
+key:num value:100
+key:str2 value:bbb
+key:num2 value:300
+*/
+echo "------------------".PHP_EOL;
+	}
+	function test3()
+	{
+		$ary1=[
+		"str"=>"aaa",
+		"num"=>100
+		];
+		$ary2=[
+		"str"=>"bbb",
+		"str2">="bbb"
+		];
+		$ary3 = $ary1 + $ary2;
+		$this->foreachArray($ary3);
+/*
+key:str value:aaa
+key:num value:100
+key:0 value:1
+*/
+echo "------------------".PHP_EOL;
+	}
+	//foreachを使った配列を読み込む方法
+	private function foreachArray(array $ary)
+	{
+		foreach ($ary as $key => $value) 
+		{
+			echo "key:".$key . ' value:' . $value . PHP_EOL;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1() 
+	{ 
+		$ary1=[ 
+		"str"=>"aaa", 
+		"num"=>100 
+		]; 
+		$ary2=[ 
+		"str"=>"bbb", 
+		"num"=>200 
+		]; 
+		$ary3 = $ary1 + $ary2; 
+		$this->foreachArray($ary3);
+		/*
+		key:str value:aaa
+		key:num value:100
+		*/
+		echo "------------------".PHP_EOL; 
+	} 
+	function test2() 
+	{ 
+		$ary1=[ 
+		"str"=>"aaa", 
+		"num"=>100 
+		]; 
+		$ary2=[ 
+		"str"=>"bbb", 
+		"str2"=>"bbb", 
+		"num"=>200, 
+		"num2"=>300 
+		]; 
+		$ary3 = $ary1 + $ary2; $this->foreachArray($ary3);
+		/*
+		key:str value:aaa
+		key:num value:100
+		key:str2 value:bbb
+		key:num2 value:300
+		*/
+		echo "------------------".PHP_EOL;
+	}
+	function test3()
+	{
+		$ary1=[
+		"str"=>"aaa",
+		"num"=>100
+		];
+		$ary2=[
+		"str"=>"bbb",
+		"str2">="bbb"
+		];
+		$ary3 = $ary1 + $ary2;
+		$this->foreachArray($ary3);
+		/*
+		key:str value:aaa
+		key:num value:100
+		key:0 value:1
+		*/
+		echo "------------------".PHP_EOL;
+	}
+	//How to read an array using foreach
+	private function foreachArray(array $ary)
+	{
+		foreach ($ary as $key => $value) 
+	{ 
+		echo "key:".$key . ' value:' . $value . PHP_EOL; 
+	} 
+}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>test1は配列を+演算子を使用して追加する処理です。<br>左側の配列と右側の配列のキーが同じだったため<br>同じキーがあった場合は左側が優先されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2</div><br>test2は左側にないキーと値が追加されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3</div>test3は連想配列に構文エラーがあるケースです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">"num">=200<br></div>配列のキーと値のペアを示す=>演算子ではなく<br>比較演算子の>=になっています。<br>構文エラーにならないのは致命的な構文エラー(Fatal Syntax Error)であれば<br>完全に停止するのですが、<br>有効なPHPコードとして解釈され<br>有効な比較演算子として解釈してしまったためです。<br><br>「>= (以上)」を意味する比較演算子となります。<br>"str2" と "bbb" を比較すると、辞書順で "str2" の方が大きいため、この比較式は true となります。<br>PHPの true は数値の 1 として扱われます。<br>連想配列の要素に明示的なキー(=>の左側)がない場合は<br>PHPは自動的に数値キーを割り当てます。<br>最初の数値キーは0から始まる数字です。<br>PHPが実行解釈をした場合、trueの部分に対するキーが指定されていないため<br>自動的に0が割り振られてしまっているということになります。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"配列の追加",n3:"配列関連(2)",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">phpの配列の追加について<br></div>初期化/クリア<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = [];$ary = [1, 2, 3];</div><br>解放(循環参照は、参照元を先に解放する必要があります。)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = null;<br>unset($ary);<br></div><br>配列に使う+演算子は、右側の配列の要素を左側の配列に追加しますが、<br>キーが重複する場合は左側の値が優先されます。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>test1は配列を+演算子を使用して追加する処理です。<br>左側の配列と右側の配列のキーが同じだったため<br>同じキーがあった場合は左側が優先されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2</div><br>test2は左側にないキーと値が追加されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3</div>test3は連想配列に構文エラーがあるケースです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">"num">=200<br></div>配列のキーと値のペアを示す=>演算子ではなく<br>比較演算子の>=になっています。<br>構文エラーにならないのは致命的な構文エラー(Fatal Syntax Error)であれば<br>完全に停止するのですが、<br>有効なPHPコードとして解釈され<br>有効な比較演算子として解釈してしまったためです。<br><br>「>= (以上)」を意味する比較演算子となります。<br>"str2" と "bbb" を比較すると、辞書順で "str2" の方が大きいため、この比較式は true となります。<br>PHPの true は数値の 1 として扱われます。<br>連想配列の要素に明示的なキー(=>の左側)がない場合は<br>PHPは自動的に数値キーを割り当てます。<br>最初の数値キーは0から始まる数字です。<br>PHPが実行解釈をした場合、trueの部分に対するキーが指定されていないため<br>自動的に0が割り振られてしまっているということになります。<br>`,n7:"戻る",},en: {n1: "back",n2: "Adding an Array",n3: "Array Related (2)",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">About Adding an Array in PHP<br></div>Initialization/Clearing<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = []; $ary = [1, 2, 3]; </div><br>Release (Circular references must be released first.)<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = null;<br>unset($ary);<br></div><br>The + operator used with arrays adds elements from the array on the right to the array on the left.<br>If there are duplicate keys, the value on the left takes precedence. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>Test1 is a process that adds arrays using the + operator. <br>Because the keys in the arrays on the left and right are the same,<br>if there are duplicate keys, the left takes precedence. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2</div><br>Test2 adds keys and values ​​that are not on the left. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3</div>Test3 shows a syntax error in the associative array. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">"num">=200<br></div>Instead of the => operator, which indicates an array key-value pair, the comparison operator >= is used. <br>This is not a syntax error because a fatal syntax error would cause the program to stop completely, but because it was interpreted as valid PHP code. <br>This is a comparison operator meaning ">= (greater than or equal to)." <br>When comparing "str2" and "bbb", "str2" is lexicographically larger, so this comparison expression is true. <br>In PHP, true is treated as the numeric value 1. <br>If an associative array element does not have an explicit key (to the left of =>), <br>PHP automatically assigns a numeric key. <br>The first numeric key is a number starting from 0. <br>When PHP interprets the expression, since no key is specified for the true part, <br>0 is automatically assigned. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
