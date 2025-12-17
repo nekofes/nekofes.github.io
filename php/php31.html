@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">配列内検索(1)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4">配列をfor文で検索する場合<br>配列の一部をunsetで削除した場合はエラーの原因となります。<br>PHPの配列は順番が保証されています。<br>順序付きマップで実装されており、foreachは、この仕組みを利用しています。<br>そのため、for文を使用するよりforeachの方が安全に実行できます。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1()
+	{
+		$ary =[1, 2, 3];
+		$value = 3;
+		echo "searchFor(value:$value):".$this->searchFor($ary, $value).PHP_EOL;//1
+		$value = 4;
+		echo "searchFor(value:$value):".$this->searchFor($ary, $value).PHP_EOL;//0
+		$value = 3;
+		echo "searchForEach(value:$value):".$this->searchForEach($ary, $value).PHP_EOL;//1
+		$value = 4;
+		echo "searchForEach(value:$value):".$this->searchForEach($ary, $value).PHP_EOL;//0
+		$value = 3;
+		echo "searchForEachIndex(value:$value):".$this->searchForEachIndex($ary, $value).PHP_EOL;//2
+		$value = 4;
+		echo "searchForEachIndex(value:$value):".$this->searchForEachIndex($ary, $value).PHP_EOL;//-1
+	}
+	private function searchFor(array $ary, int $value):int
+	{
+		$exists = 0;
+		for($i=0; $i<count($ary); $i++)
+		{
+			if($value===$ary[$i])
+			{
+				$exists =1;
+				break;
+			}
+		}
+		return $exists;
+	}
+	private function searchForEach(array $ary, int $value):int
+	{
+		$exists = 0;
+		foreach($ary as $num)
+		{
+			if($value===$num)
+			{
+				$exists =1;
+				break;
+			}
+		}
+		return $exists;
+	}
+	private function searchForEachIndex(array $ary, int $value):int
+	{
+		$index = -1;
+		foreach($ary as $idx => $num)
+		{
+			if($value===$num)
+			{
+				$index =$idx;
+				break;
+			}
+		}
+		return $index;
+	}
+	function test2()
+	{
+		$ary =[1, 2, 3];
+		unset($ary[1]);//要素を削除
+//要素の1を削除したためエラーとなります。
+/*
+		for($i=0; $i < count($ary); $i++)
+		{
+			echo "i:$i ary:".$ary[$i].PHP_EOL;
+		}
+i:0 ary:1
+Warning:  Undefined array key 1
+*/
+		$index = 0;
+		foreach($ary as $num)
+		{
+			echo "index:$index ary:".$num.PHP_EOL;
+			$index++;
+		}
+/*
+index:0 ary:1
+index:1 ary:3
+*/
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1() 
+	{ 
+		$ary =[1, 2, 3]; 
+		$value = 3; 
+		echo "searchFor(value:$value):".$this->searchFor($ary, $value).PHP_EOL;//1 
+		$value = 4; 
+		echo "searchFor(value:$value):".$this->searchFor($ary, $value).PHP_EOL;//0 
+		$value = 3; 
+		echo "searchForEach(value:$value):".$this->searchForEach($ary, $value).PHP_EOL;//1 
+		$value = 4; 
+		echo "searchForEach(value:$value):".$this->searchForEach($ary, $value).PHP_EOL;//0 
+		$value = 3; 
+		echo "searchForEachIndex(value:$value):".$this->searchForEachIndex($ary, $value).PHP_EOL;//2 
+		$value = 4; 
+		echo "searchForEachIndex(value:$value):".$this->searchForEachIndex($ary, $value).PHP_EOL;//-1 
+	} 
+	private function searchFor(array $ary, int $value):int 
+	{ 
+		$exists = 0; 
+		for($i=0; $i<count($ary); $i++) 
+		{ 
+			if($value===$ary[$i]) 
+			{ 
+				$exists =1; 
+				break; 
+			} 
+		} 
+		return $exists; 
+	} 
+	private function searchForEach(array $ary, int $value):int 
+	{ 
+		$exists = 0; 
+		foreach($ary as $num) 
+		{ 
+			if($value===$num) 
+			{ 
+				$exists =1; 
+				break; 
+			} 
+		} 
+		return $exists; 
+	} 
+	private function searchForEachIndex(array $ary, int $value):int 
+	{ 
+		$index = -1; 
+		foreach($ary as $idx => $num)
+		{
+			if($value===$num)
+			{
+				$index = $idx;
+				break;
+			}
+		}
+		return $index;
+	}
+	function test2()
+	{
+		$ary = [1, 2, 3];
+		unset($ary[1]); //Delete element
+		//An error occurs because element 1 was deleted.
+/* 
+		for($i=0; $i < count($ary); $i++) 
+		{ 
+			echo "i:$i ary:".$ary[$i].PHP_EOL; 
+		}
+i:0 ary:1
+Warning: Undefined array key 1
+*/ 
+		$index = 0; 
+		foreach($ary as $num) 
+		{ 
+			echo "index:$index ary:".$num.PHP_EOL; 
+			$index++; 
+		}
+/*
+index:0 ary:1
+index:1 ary:3
+*/ 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">searchForEachIndex関数<br>内部インデックス番号を取得する方法です。<br><br>PHPの配列は、内部的には「順序付きマップ」として実装されています。<br>foreach は常に「配列が保持している順序」通りに処理します。<br>PHPの配列は内部的に「ハッシュテーブル」という構造を使っているため<br>for文をtest2のように実行して<br>unsetでキーを削除するとハッシュテーブルの問い合わせが失敗します。<br>そのため、問い合わせたキーがないためエラーを返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">PHPの内部イメージ</div>データの順番は双方向連結リストの順番を保持しており<br>前のデータや次のデータという内容を把握できるようになっています。<br>そのため、unsetでキーを削除しても破番を飛ばして次のデータと結びます。<br>インデック:0<br>インデック:1(欠番)<br>インデック:2<br>この場合、インデック:0→インデック:2<br>という順番に移動します。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"配列内検索(1)",n3:"配列関連",n4:`配列をfor文で検索する場合<br>配列の一部をunsetで削除した場合はエラーの原因となります。<br>PHPの配列は順番が保証されています。<br>順序付きマップで実装されており、foreachは、この仕組みを利用しています。<br>そのため、for文を使用するよりforeachの方が安全に実行できます。<br>`,n5:`[サンプル]`,n6:`searchForEachIndex関数<br>内部インデックス番号を取得する方法です。<br><br>PHPの配列は、内部的には「順序付きマップ」として実装されています。<br>foreach は常に「配列が保持している順序」通りに処理します。<br>PHPの配列は内部的に「ハッシュテーブル」という構造を使っているため<br>for文をtest2のように実行して<br>unsetでキーを削除するとハッシュテーブルの問い合わせが失敗します。<br>そのため、問い合わせたキーがないためエラーを返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">PHPの内部イメージ</div>データの順番は双方向連結リストの順番を保持しており<br>前のデータや次のデータという内容を把握できるようになっています。<br>そのため、unsetでキーを削除しても破番を飛ばして次のデータと結びます。<br>インデック:0<br>インデック:1(欠番)<br>インデック:2<br>この場合、インデック:0→インデック:2<br>という順番に移動します。<br>`,n7:"戻る",},en: {n1: "back",n2: "Search within an array (1)",n3: "Array related",n4:`When searching an array with a for statement<br>Deleting part of an array with unset will cause an error. <br>PHP arrays are guaranteed to be in order. <br>They are implemented as an ordered map, and foreach utilizes this mechanism. <br>Therefore, using foreach is safer than using a for statement. <br>`,n5:`[Sample]`,n6:`searchForEachIndex function<br>This is a method for obtaining the internal index number. <br><br>PHP arrays are internally implemented as an "ordered map." <br>foreach always processes the data in the "order stored in the array." <br>PHP arrays internally use a structure called a "hash table." <br>Executing a for statement like test2<br>Deleting a key with unset will cause the hash table query to fail. <br>As a result, an error is returned because the queried key does not exist. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">PHP Internal Image</div>The order of the data is maintained in the order of a doubly linked list.<br>It is possible to understand the contents of the previous and next data. <br>Therefore, even if you delete a key with unset, the data will skip the missing number and be linked to the next data. <br>Index: 0<br>Index: 1 (missing number)<br>Index: 2<br>In this case, the data will move from index: 0 to index: 2<br>in this order. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
