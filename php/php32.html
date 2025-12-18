@@ -1,0 +1,354 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">配列内検索(2)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4">値やキーを探す関数として下記の関数があります。<table border=1><tr><td>関数</td><td>使用可能バージョン</td><td>内容</td></tr><tr><td>in_array()</td><td>4.0.0+</td><td>値が配列内にあるかを true / false で返します。</td></tr><tr><td>array_search()</td><td>4.0.5+</td><td>値が見つかった場合にそのキーを返し、見つからない場合は false を返します</td></tr><tr><td>array_find()</td><td>8.4+</td><td>自由な「条件」<br>その要素の 値</td></tr></table></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//in_array
+	function test1()
+	{
+		$ary=[1,"2",3];
+		$this->judgeInArray($ary, 2, false, "(int)");//memo:(int) value:2 true
+		$this->judgeInArray($ary, 2, true, "(int)");//memo:(int) value:2 false
+		$this->judgeInArray($ary, "2", true, "(string)");//memo:(string) value:2 true
+	}
+	//in_array判定処理
+	//ary:判定する配列
+	//option:型を比較するかどうか？
+	//false:比較しない
+	//true:比較する
+	private function judgeInArray(array $ary, $value, bool $option, string $memo)
+	{
+		if(in_array($value, $ary, $option))
+		{
+			echo "memo:$memo value:$value true".PHP_EOL;
+		}
+		else
+		{
+			echo "memo:$memo value:$value false".PHP_EOL;
+		}
+	}
+	//array_search
+	function test2()
+	{
+		$ary=[
+			"key1" => 1,
+			"key2" => 2,
+			"key3" => 3
+		];
+		$this->judgeArraySearch($ary, 2, false, "(int)");//memo:(int) value:2 true
+		$this->judgeArraySearch($ary, 2, true, "(int)");//memo:(int) value:2 true
+		$this->judgeArraySearch($ary, "2", true, "(string)");//memo:(string) value:2 false
+
+		//ver8.4以降
+/*
+		$user_roles = [
+			'admin' => '管理者',
+			'editor' => '編集者',
+			'guest' => '閲覧者'
+		];
+		
+		$key = array_search('編集者', $user_roles);
+		// $key の中身は 'editor' になる
+*/
+	}
+	//array_search判定処理
+	//ary:判定する配列
+	//option:型を比較するかどうか？
+	//false:比較しない
+	//true:比較する
+	private function judgeArraySearch(array $ary, $value, bool $option, string $memo)
+	{
+		if(array_search($value, $ary, $option))
+		{
+			echo "memo:$memo value:$value true".PHP_EOL;
+		}
+		else
+		{
+			echo "memo:$memo value:$value false".PHP_EOL;
+		}
+	}
+	//array_find
+	function test3()
+	{
+		$ary =[1, 10, 100];
+		//ver8.2のためarray_find()の代替処理としてjudgeArrayFind関数で判定
+		//このサンプルでは>(より大きいか？)を判定するサンプルです
+		$this->judgeArrayFind($ary, 10, fn($data, $value) => $value > $data, false, "(int)");//memo:(int) Result: FOUND(value:100)
+//judgeArrayFindInArrayElementAll
+/*
+memo:(int) checked_value:1 -> false
+memo:(int) checked_value:10 -> false
+memo:(int) checked_value:100 -> true
+*/
+		$this->judgeArrayFind($ary, 10, fn($data, $value) =>  $value > $data, true, "(int)");//memo:(int) Result: FOUND(value:100)
+//judgeArrayFindInArrayElementAll
+/*
+memo:(int) checked_value:1 -> false
+memo:(int) checked_value:10 -> false
+memo:(int) checked_value:100 -> true
+*/
+		$this->judgeArrayFind($ary, "10", fn($data, $value) =>  $value > $data, true, "(string)");//memo:(string) Result: NOT FOUND
+//judgeArrayFindInArrayElementAll
+/*
+memo:(string) checked_value:1 -> false
+memo:(string) checked_value:10 -> false
+memo:(string) checked_value:100 -> false
+*/
+		//ver8.4以降
+/*
+		$users = [
+			['id' => 1, 'name' => '田中', 'score' => 70],
+			['id' => 2, 'name' => '佐藤', 'score' => 95], // ← これを探したい
+			['id' => 3, 'name' => '鈴木', 'score' => 85],
+		];
+		
+		// スコアが90点以上の最初のユーザー情報を取得
+		$result = array_find($users, function($user) {
+			return $user['score'] >= 90;
+		});
+		
+		// $result の中身: ['id' => 2, 'name' =>佐藤', 'score' => 95]
+*/
+	}
+	//array_find判定処理
+	//ary:判定する配列
+	//data:判定に使用するデータ
+	//fn:コールバック関数
+	//option:型を比較するかどうか？
+	//false:比較しない
+	//true:比較する
+	private function judgeArrayFind(array $ary, $data, callable $fn, bool $option, string $memo)
+	{
+		$foundValue = null;
+		$type = get_debug_type($data);
+	
+		foreach ($ary as $value) {
+			// 型チェックが有効な場合、型が一致しなければこの要素はスキップ
+			if ($option === true && get_debug_type($value) !== $type) {
+				continue; 
+			}
+	
+			// コールバック関数で条件判定
+			if ($fn($data, $value)) {
+				$foundValue = $value; // 見つかった値を保持
+				break; // 見つかったのでループ終了
+			}
+		}
+	
+		// 全てのループが終わった後の判定
+		if ($foundValue !== null) {
+			echo "memo:$memo Result: FOUND(value:$foundValue)" . PHP_EOL;
+		} else {
+			echo "memo:$memo Result: NOT FOUND" . PHP_EOL;
+		}
+		return $foundValue;
+	}
+	private function judgeArrayFindInArrayElementAll(array $ary, $data, callable $fn, bool $option, string $memo)
+	{
+		$found = null;
+		$type = get_debug_type($data);
+		$flg = 0;
+		foreach ($ary as $value)
+		{
+			$match = false;
+			
+			// 型と条件の両方をチェック
+			if ($option === true) {
+				if (get_debug_type($value) === $type && $fn($data, $value))
+				{
+					$match = true;
+				}
+			} else {
+				if ($fn($data, $value))
+				{
+					$match = true;
+				}
+			}
+		
+			// 全要素の結果を出す
+			$status = $match ? "true" : "false";
+			echo "memo:$memo checked_value:$value -> $status" . PHP_EOL;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//in_array
+	function test1()
+	{
+		$ary=[1,"2",3];
+		$this->judgeInArray($ary, 2, false, "(int)"); //memo:(int) value:2 true
+		$this->judgeInArray($ary, 2, true, "(int)"); //memo:(int) value:2 false
+		$this->judgeInArray($ary, "2", true, "(string)"); //memo:(string) value:2 true
+	}
+	//in_array judgment process
+	//ary: Array to be judged
+	//option: Whether to compare types?
+	//false: don't compare 
+	//true: compare 
+	private function judgeInArray(array $ary, $value, bool $option, string $memo) 
+	{ 
+		if(in_array($value, $ary, $option)) 
+		{ 
+			echo "memo:$memo value:$value true".PHP_EOL; 
+		} 
+		else 
+		{ 
+			echo "memo:$memo value:$value false".PHP_EOL; 
+		} 
+	} 
+	//array_search 
+	function test2() 
+	{ 
+		$ary=[ 
+		"key1" => 1, 
+		"key2" => 2, 
+		"key3" => 3 
+		]; 
+		$this->judgeArraySearch($ary, 2, false, "(int)");//memo:(int) value:2 true 
+		$this->judgeArraySearch($ary, 2, true, "(int)");//memo:(int) value:2 true $this->judgeArraySearch($ary, "2", true, "(string)"); //memo:(string) value:2 false
+		
+		//Version 8.4 and later
+/*
+		$user_roles = [
+		'admin' => 'Administrator',
+		'editor' => 'Editor',
+		'guest' => 'Viewer'
+		];
+		
+		$key = array_search('Editor', $user_roles);
+		// The value of $key will be 'editor'
+*/
+	}
+	//array_search judgment process
+	//ary: Array to be judged
+	//option: Whether to compare types?
+	//false: Do not compare
+	//true: Compare
+	private function judgeArraySearch(array $ary, $value, bool $option, string $memo)
+	{
+		if(array_search($value, $ary, $option))
+		{
+			echo "memo:$memo value:$value true".PHP_EOL;
+		}
+		else
+		{
+			echo "memo:$memo value:$value false".PHP_EOL;
+		}
+	}
+	//array_find
+	function test3()
+	{
+		$ary =[1, 10, 100];
+		//In version 8.2, the judgeArrayFind function is used as an alternative to array_find().
+		//This sample tests for > (greater than)
+		$this->judgeArrayFind($ary, 10, fn($data, $value) => $value > $data, false, "(int)"); //memo:(int) Result: FOUND(value:100)
+		//judgeArrayFindInArrayElementAll
+/*
+		memo:(int) checked_value:1 -> false
+		memo:(int) checked_value:10 -> false
+		memo:(int) checked_value:100 -> true
+*/ 
+		$this->judgeArrayFind($ary, 10, fn($data, $value) => $value > $data, true, "(int)");//memo:(int) Result: FOUND(value:100)
+		//judgeArrayFindInArrayElementAll
+/*
+		memo:(int) checked_value:1 -> false
+		memo:(int) checked_value:10 -> false
+		memo:(int) checked_value:100 -> true
+*/ 
+		$this->judgeArrayFind($ary, "10", fn($data, $value) => $value > $data, true, "(string)"); // memo:(string) Result: NOT FOUND
+		//judgeArrayFindInArrayElementAll
+/*
+		memo:(string) checked_value:1 -> false
+		memo:(string) checked_value:10 -> false
+		memo:(string) checked_value:100 -> false
+*/
+		//Version 8.4 and later
+/*
+		$users = [
+		['id' => 1, 'name' => 'Tanaka', 'score' => 70],
+		['id' => 2, 'name' => 'Sato', 'score' => 95], // ← Search for this
+		['id' => 3, 'name' => 'Suzuki', 'score' => 85],
+		];
+		
+		// Get the first user with a score of 90 or higher
+		$result = array_find($users, function($user) {
+		return $user['score'] >= 90;
+		});
+		
+		// Contents of $result: ['id' => 2, 'name' => Sato', 'score' => 95]
+*/
+		}
+		//array_find judgment process
+		//ary: Array to be judged
+		//data: Data to use for judgment
+		//fn: Callback function
+		//option: Whether to compare types?
+		//false: Do not compare
+		//true: Compare
+		private function judgeArrayFind(array $ary, $data, callable $fn, bool $option, string $memo)
+		{
+			$foundValue = null;
+			$type = get_debug_type($data);
+			
+			foreach ($ary as $value) {
+				// If type checking is enabled, skip this element if the type does not match.
+				if ($option === true && get_debug_type($value) !== $type) {
+				continue;
+			}
+			
+			// Test the condition using the callback function.
+			if ($fn($data, $value)) {
+				$foundValue = $value; // Keep the found value.
+				break; // End the loop because a value was found.
+			}
+		}
+		
+		// Test after all loops have finished.
+		if ($foundValue !== null) {
+			echo "memo:$memo Result: FOUND(value:$foundValue)" . PHP_EOL;
+		} else {
+			echo "memo:$memo Result: NOT FOUND" . PHP_EOL;
+		}
+		return $foundValue;
+	}
+	private function judgeArrayFindInArrayElementAll(array $ary, $data, callable $fn, bool $option, string $memo)
+	{
+		$found = null;
+		$type = get_debug_type($data);
+		$flg = 0;
+		foreach ($ary as $value)
+		{
+			$match = false;
+			
+			/ Check both type and condition
+			if ($option === true) {
+				if (get_debug_type($value) === $type && $fn($data, $value))
+				{
+				$match = true;
+				}
+			} else {
+				if ($fn($data, $value))
+				{
+				$match = true;
+				}
+			}
+		
+			/ Retrieve results for all elements
+			$status = $match ? "true" : "false"; 
+			echo "memo:$memo checked_value:$value -> $status" . PHP_EOL; 
+		} 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">phpでコールバックを使用する場合は<br>function<br>fn<br>のいずれかで実装する必要があります。<br>get_debug_type()はPHP 8.0以降で使用可能です。<br>より正確な型名を返します。<br>従来の gettype() が抱えていた「現代のPHP開発とのズレ」を解消し、<br>より開発者が期待する直感的な情報を返せるようになっています。<br>(例)<br><br><table border=1><tr><td>データ</td><td>gettype()</td><td>get_debug_type()<br>※php ver 8.0以降</td></tr><tr><td>100</td><td>integer</td><td>int</td></tr><tr><td>1.5</td><td>double</td><td>float</td></tr><tr><td>new DateTime()</td><td>object</td><td>DateTime</td></tr><tr><td>fopen("test.txt", "r")</td><td>resource</td><td>resource(steam)</td></tr></table></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"配列内検索(2)",n3:"配列関連",n4:`値やキーを探す関数として下記の関数があります。<table border=1><tr><td>関数</td><td>使用可能バージョン</td><td>内容</td></tr><tr><td>in_array()</td><td>4.0.0+</td><td>値が配列内にあるかを true / false で返します。</td></tr><tr><td>array_search()</td><td>4.0.5+</td><td>値が見つかった場合にそのキーを返し、見つからない場合は false を返します</td></tr><tr><td>array_find()</td><td>8.4+</td><td>自由な「条件」<br>その要素の 値</td></tr></table>`,n5:`[サンプル]`,n6:`phpでコールバックを使用する場合は<br>function<br>fn<br>のいずれかで実装する必要があります。<br>get_debug_type()はPHP 8.0以降で使用可能です。<br>より正確な型名を返します。<br>従来の gettype() が抱えていた「現代のPHP開発とのズレ」を解消し、<br>より開発者が期待する直感的な情報を返せるようになっています。<br>(例)<br><br><table border=1><tr><td>データ</td><td>gettype()</td><td>get_debug_type()<br>※php ver 8.0以降</td></tr><tr><td>100</td><td>integer</td><td>int</td></tr><tr><td>1.5</td><td>double</td><td>float</td></tr><tr><td>new DateTime()</td><td>object</td><td>DateTime</td></tr><tr><td>fopen("test.txt", "r")</td><td>resource</td><td>resource(steam)</td></tr></table>`,n7:"戻る",},en: {n1: "back",n2: "Array Search (2)",n3: "Array Related",n4:`The following functions are available for searching values ​​and keys.<table border=1><tr><td>Function</td><td>Available Version</td><td>Content</td></tr><tr><td>in_array()</td><td>4.0.0+</td><td>Returns true/false whether a value is in an array. </td></tr><tr><td>array_search()</td><td>4.0.5+</td><td>Returns the key if the value is found, or false if not.</td></tr><tr><td>array_find()</td><td>8.4+</td><td>Free "condition"<br>Value of that element</td></tr></table>`,n5:`[Sample]`,n6:`When using callbacks in PHP, you must implement either a <br>function<br>fn<br><br>get_debug_type() is available in PHP 8.0 and later. <br>Returns a more accurate type name. <br>This resolves the "inconsistency with modern PHP development" that the previous gettype() had, <br>and now returns more intuitive information that developers expect. <br>(Example)<br><br><table border=1><tr><td>Data</td><td>gettype()</td><td>get_debug_type()<br>※php ver 8.0 or later</td></tr><tr><td>100</td><td>integer</td><td>int</td></tr><tr><td>1.5</td><td>double</td><td>float</td></tr><tr><td>new DateTime()</td><td>object</td><td>DateTime</td></tr><tr><td>fopen("test.txt", "r")</td><td>resource</td><td>resource(steam)</td></tr></table>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
