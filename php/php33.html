@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">get_debug_type</div></td></tr><tr><td><div id="n3">php型宣言</div></td></tr></table><br><div id="n4">get_debug_typeについて<br>直感的で正確な名前（例：クラス名など）を返します。<br><br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1()
+	{
+		$tmp = [];
+		$tmp[]="100";
+		$cls = new stdClass();
+		$this->judgeType("123");//value is numeric :123
+		$this->judgeType("test");//value is string :test
+		$this->judgeType(123);//value is numeric :123
+		$this->judgeType(1.23);//value is numeric :1.23
+		$this->judgeType($tmp);//value is array
+		$this->judgeType(null);//value is null
+		$this->judgeType($cls);//value is other type
+	}
+	private function judgeType($value)
+	{
+		if(is_numeric($value) === true)
+		{
+			echo "value is numeric :$value".PHP_EOL;
+		}
+		else if(is_string($value) === true)
+		{
+			echo "value is string :$value".PHP_EOL;
+		}
+		else if(is_int($value) === true)
+		{
+			echo "value is int :$value".PHP_EOL;
+		}
+		else if(is_float($value) === true)
+		{
+			echo "value is float :$value".PHP_EOL;
+		}
+		else if(is_array($value) === true)
+		{
+			echo "value is array".PHP_EOL;
+		}
+		else if(is_null($value) === true)
+		{
+			echo "value is null".PHP_EOL;
+		}
+		else
+		{
+			echo "value is other type".PHP_EOL;
+		}
+
+	}
+	function test2()
+	{
+		$tmp = [];
+		$tmp[]="100";
+		$cls = new stdClass();
+		$this->judgeTypePHPFunction("123", "123[string]");
+		$this->judgeTypePHPFunction("test", "test[string]");
+		$this->judgeTypePHPFunction(123, "123[int]");
+		$this->judgeTypePHPFunction(1.23, "123[float]");
+		$this->judgeTypePHPFunction($tmp, "array");
+		$this->judgeTypePHPFunction(null, "null");
+		$this->judgeTypePHPFunction($cls, "class");
+		$this->judgeTypePHPFunction(fopen("memo.txt", "r"), "fopen");
+		//[結果]
+		/*
+		get_debug_type(123[string]):string
+		gettype(123[string]):string
+		get_debug_type(test[string]):string
+		gettype(test[string]):string
+		get_debug_type(123[int]):int
+		gettype(123[int]):integer
+		get_debug_type(123[float]):float
+		gettype(123[float]):double
+		get_debug_type(array):array
+		gettype(array):array
+		get_debug_type(null):null
+		gettype(null):NULL
+		get_debug_type(class):stdClass
+		gettype(class):object
+		get_debug_type(fopen):resource (stream)
+		gettype(fopen):resource
+		*/
+	}
+	private function judgeTypePHPFunction($value ,string $memo)
+	{
+		echo "get_debug_type($memo):".get_debug_type($value).PHP_EOL;
+		echo "gettype($memo):".gettype($value).PHP_EOL;
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1() 
+	{ 
+		$tmp = []; 
+		$tmp[]="100"; 
+		$cls = new stdClass(); 
+		$this->judgeType("123");//value is numeric :123 
+		$this->judgeType("test");//value is string :test 
+		$this->judgeType(123);//value is numeric :123 
+		$this->judgeType(1.23);//value is numeric :1.23 
+		$this->judgeType($tmp);//value is array 
+		$this->judgeType(null);//value is null 
+		$this->judgeType($cls);//value is other type 
+	} 
+	private function judgeType($value) 
+	{ 
+		if(is_numeric($value) === true) 
+		{ 
+			echo "value is numeric :$value".PHP_EOL; 
+		} 
+		else if(is_string($value) === true) 
+		{ 
+			echo "value is string :$value".PHP_EOL; 
+		} 
+		else if(is_int($value) === true) 
+		{ 
+			echo "value is int :$value".PHP_EOL; 
+		} 
+		else if(is_float($value) === true) 
+		{ 
+			echo "value is float :$value".PHP_EOL; 
+		} 
+		else if(is_array($value) === true) 
+		{ 
+			echo "value is array".PHP_EOL; 
+		} 
+		else if(is_null($value) === true) 
+		{ 
+			echo "value is null".PHP_EOL; 
+		} 
+		else 
+		{ 
+			echo "value is other type".PHP_EOL; 
+		} 
+	
+	} 
+	function test2() 
+	{ 
+		$tmp = []; 
+		$tmp[]="100"; 
+		$cls = new stdClass(); $this->judgeTypePHPFunction("123", "123[string]"); 
+		$this->judgeTypePHPFunction("test", "test[string]"); 
+		$this->judgeTypePHPFunction(123, "123[int]"); 
+		$this->judgeTypePHPFunction(1.23, "123[float]"); 
+		$this->judgeTypePHPFunction($tmp, "array"); 
+		$this->judgeTypePHPFunction(null, "null"); 
+		$this->judgeTypePHPFunction($cls, "class"); 
+		$this->judgeTypePHPFunction(fopen("memo.txt", "r"), "fopen"); 
+		//[result] 
+		/* 
+		get_debug_type(123[string]):string 
+		gettype(123[string]):string get_debug_type(test[string]):string 
+		gettype(test[string]):string 
+		get_debug_type(123[int]):int 
+		gettype(123[int]):integer 
+		get_debug_type(123[float]):float 
+		gettype(123[float]):double 
+		get_debug_type(array):array 
+		gettype(array):array 
+		get_debug_type(null):null 
+		gettype(null):NULL 
+		get_debug_type(class):stdClass 
+		gettype(class):object 
+		get_debug_type(fopen):resource (stream) 
+		gettype(fopen):resource 
+		*/ 
+	} 
+	private function judgeTypePHPFunction($value ,string $memo) 
+	{ 
+		echo "get_debug_type($memo):".get_debug_type($value).PHP_EOL; 
+		echo "gettype($memo):".gettype($value).PHP_EOL; 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">get_debug_type($var) (推奨)<br></div>PHP 8.0以降で利用可能です。<br>gettype よりも直感的で正確な名前（例：クラス名など）を返すため、現在のPHP開発ではこちらが推奨されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">gettype($var)<br></div>古くからある関数で、"integer" や "string" などの文字列を返します。<br>ただし、歴史的経緯により浮動小数点数が "double" と返されるなど、現在の慣習と異なる場合があります。<br>デバッグや型判定の文字列取得には gettype よりも get_debug_type が推奨されています。<br>これは、クラス名などをより自然な形で返してくれるためです。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"get_debug_type",n3:"php型宣言",n4:`get_debug_typeについて<br>直感的で正確な名前（例：クラス名など）を返します。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">get_debug_type($var) (推奨)<br></div>PHP 8.0以降で利用可能です。<br>gettype よりも直感的で正確な名前（例：クラス名など）を返すため、現在のPHP開発ではこちらが推奨されます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">gettype($var)<br></div>古くからある関数で、"integer" や "string" などの文字列を返します。<br>ただし、歴史的経緯により浮動小数点数が "double" と返されるなど、現在の慣習と異なる場合があります。<br>デバッグや型判定の文字列取得には gettype よりも get_debug_type が推奨されています。<br>これは、クラス名などをより自然な形で返してくれるためです。<br>`,n7:"戻る",},en: {n1: "back",n2: "get_debug_type",n3: "php type declaration",n4: `About get_debug_type<br>Returns an intuitive and accurate name (e.g., class name). <br>`,n5: `[Sample]`,n6: `<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">get_debug_type($var) (Recommended)<br></div>Available in PHP 8.0 and later. <br>This is recommended for current PHP development because it returns a more intuitive and accurate name (e.g., class name) than gettype. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">gettype($var)<br></div>This is an old function that returns a string such as "integer" or "string". <br>However, due to historical reasons, it may differ from current conventions, such as returning floating-point numbers as "double". <br>Get_debug_type is recommended over gettype for debugging and type-checking strings. <br>This is because it returns class names and other information in a more natural format. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
