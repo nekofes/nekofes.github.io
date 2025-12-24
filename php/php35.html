@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">アロー関数</div></td></tr><tr><td><div id="n3">コールバック関数</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[アロー関数]</div>PHP 7.4で導入された匿名関数（クロージャ）をより短く書くための構文です。<br>fn(int $x): int => $x * 2;<br>fn(int $x): int （関数の定義部分）<br>fn: アロー関数であることを示すキーワードです。<br>(int $x): 引数の定義です。<br>: int: 戻り値の型指定です。<br>=> （矢印記号）<br>左側の引数を使って、右側の式を評価して返すという、定義と処理をつなぐ区切り記号です。<br>$x * 2 （関数の処理内容 兼 戻り値）<br>ここが処理の中身です。<br>アロー関数の最大の特徴は、この式の評価結果がそのまま return されるという点です。<br>fnで定義し、=>の右側にある処理の結果を自動的に返す、簡潔な匿名関数です。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//ノーマルの使い方
+	function test1()
+	{
+		$int = fn(int $num) : int => $num * 2;
+		//変数に値を設定して実行するケース
+		echo $int(5).PHP_EOL;//10
+		$tmp = 2;
+		//引数に変数を使用して実行するケース
+		echo $int($tmp).PHP_EOL;//4
+		$tax = 0.1;
+		$tmp =500;
+		$int2 = fn(int $num) : int => $num * (1 + $tax);
+		//外部変数を使用するケース
+		echo $int2($tmp).PHP_EOL;//550
+	}
+	//引数に参照結果を使用するけーす
+	function test2()
+	{
+		$int1 = fn(int &$num):int => ++$num + 1;
+		$tmp = 1;
+		echo $int1($tmp).PHP_EOL;//3
+		echo "tmp:$tmp".PHP_EOL;//2
+		$tmp = 10;
+		$int2 = fn(int &$num):int => $num++ + 1;
+		echo $int2($tmp).PHP_EOL;//11
+		echo "tmp:$tmp".PHP_EOL;//11
+	}
+	function test3()
+	{
+		$log = fn(string $msg) => print($msg);
+		$tmp = "log in test3 execute.";
+		$log($tmp).PHP_EOL;//log in test3 execute.
+	}
+	function test4()
+	{
+		$int = fn(array $ary):int => $this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);
+		$tmp = [];
+		$tmp[] = 1;
+		$tmp[] = 2;
+		$tmp[] = 10;
+		$tmp[] = 5;
+		echo $int($tmp).PHP_EOL;//15
+	}
+	private function add(int $num1, int $num2):int
+	{
+		return $num1 + $num2;
+	}
+	private function minus(int $num1, int $num2):int
+	{
+		return $num1 - $num2;
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+$cls1->test4();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//Normal usage
+	function test1()
+	{
+		$int = fn(int $num) : int => $num * 2;
+		//Execution with a variable value set
+		echo $int(5).PHP_EOL;//10
+		$tmp = 2;
+		//Execution with a variable argument
+		echo $int($tmp).PHP_EOL;//4
+		$tax = 0.1;
+		$tmp =500;
+		$int2 = fn(int $num) : int => $num * (1 + $tax);
+		//Execution with an external variable
+		echo $int2($tmp).PHP_EOL;//550
+	}
+	//Execution with a reference result argument
+	function test2()
+	{
+		$int1 = fn(int &$num):int => ++$num + 1;
+		$tmp = 1;
+		echo $int1($tmp).PHP_EOL;//3
+		echo "tmp:$tmp".PHP_EOL;//2 
+		$tmp = 10; 
+		$int2 = fn(int &$num):int => $num++ + 1; 
+		echo $int2($tmp).PHP_EOL;//11 
+		echo "tmp:$tmp".PHP_EOL;//11 
+	} 
+	function test3() 
+	{ 
+		$log = fn(string $msg) => print($msg); 
+		$tmp = "log in test3 execute."; 
+		$log($tmp).PHP_EOL;//log in test3 execute. 
+	} 
+	function test4() 
+	{ 
+		$int = fn(array $ary):int => $this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]); 
+		$tmp = []; 
+		$tmp[] = 1; $tmp[] = 2; 
+		$tmp[] = 10; 
+		$tmp[] = 5; 
+		echo $int($tmp).PHP_EOL;//15 
+	} 
+	private function add(int $num1, int $num2):int 
+	{ 
+		return $num1 + $num2; 
+	} 
+	private function minus(int $num1, int $num2):int 
+	{ 
+		return $num1 - $num2; 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+$cls1->test4();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>$int(5);<br>引数に5を入れて$intを実行します。<br>アロー関数を定義した$int変数を()とすることで関数として実行しています。<br>$int = fn(int $num) : int => $num * 2;<br>fn(int $num)<br>$numには引数としての5が入ります。<br>$num * 2;<br>$num(5) * 2 = 10<br>これが戻り値となります。<br>:int<br>がint型としての返り値として評価結果を返します。<br><br>$int2($tmp);<br>$tmp(500)を引数の値として$int2変数を実行しています。<br>$int2 = fn(int $num) : int => $num * (1 + $tax);<br>fn(int $num)<br>$numには$tmpの500が入ります。<br>$num * (1 + $tax)<br>$num(500) * (1 + $tax(0.1))<br>$taxは外部変数を使用できるので0.1の値を参照します。<br>500 * (1 + 0.1) = 500 * (1.1) =550<br>この計算結果を:intの返り値として評価結果を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2<br></div>$int1($tmp)<br>$tmp(1)を引数の値として$int1変数を実行しています。<br>$int1 = fn(int &$num):int => ++$num + 1;<br>fn(int &$num)<br>$num引数に$tmp(1)が入ります。<br>&$numなので参照渡しとなります。<br>++$num + 1;<br>++$numなので$numをインクリメントした結果を使います。<br>++$num(2) +1 = 2 + 1 = 3<br>:int<br>がint型としての返り値として評価結果を返します。<br>引数は参照渡しであるため$numがインクリメントされた結果が反映されます<br><br>$int2($tmp)<br>$tmp(10)を引数の値として$int2変数を実行しています。<br>$int2 = fn(int &$num):int => $num++ + 1;<br>fn(int &$num)<br>$num引数に$tmp(10)が入ります。<br>&$numなので参照渡しとなります。<br>$num++ + 1;<br>$num++なので、このステップが実行されたあとでないと$numがインクリメントされません。<br>そのため<br>$num++ + 1 = 1 + 1 =2<br>:int<br>がint型としての返り値として評価結果を返します。<br>引数は参照渡しであるため$numがインクリメントされた結果が反映されます<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3<br></div>PHPのアロー関数で戻り値の型として void を指定することはできません。<br>fn(string $msg):void<br>として実行すると下記のようにエラーが発生します。<br>Fatal error: A void function must not return a value <br><br>$log = fn(string $msg) => print($msg);<br>voidにするとエラーになりますが、型を指定しなければ、実行可能となります。(内部的には null が返されます)。<br>戻り値は print の結果（通常 1）になるが、無視して実行できます。<br>そのため、戻り値を指定せずに実行することで「値を返すこと」が目的ではないvoidのように実行できます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4<br></div>$int($tmp)<br>$intの引数に配列を渡します。<br>$int = fn(array $ary):int => $this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);<br>fn(array $ary)<br>$tmp配列を受け取ります。<br>$this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);<br>アロー関数は複数行に渡った実行ができないため<br>三項演算子を使ったり、<br>関数などを使うことで、複数行の代行ができます。<br>$this->add((int)$ary[0], (int)$ary[1])<br>1 + 2 =3<br>$this->minus((int)$ary[2], (int)$ary[3])<br>10 - 5 = 5<br>3 * 5 =15<br>:int<br>がint型としての返り値として評価結果を返します。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"アロー関数",n3:"コールバック関数",n4:`[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[アロー関数]</div>PHP 7.4で導入された匿名関数（クロージャ）をより短く書くための構文です。<br>fn(int $x): int => $x * 2;<br>fn(int $x): int （関数の定義部分）<br>fn: アロー関数であることを示すキーワードです。<br>(int $x): 引数の定義です。<br>: int: 戻り値の型指定です。<br>=> （矢印記号）<br>左側の引数を使って、右側の式を評価して返すという、定義と処理をつなぐ区切り記号です。<br>$x * 2 （関数の処理内容 兼 戻り値）<br>ここが処理の中身です。<br>アロー関数の最大の特徴は、この式の評価結果がそのまま return されるという点です。<br>fnで定義し、=>の右側にある処理の結果を自動的に返す、簡潔な匿名関数です。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>$int(5);<br>引数に5を入れて$intを実行します。<br>アロー関数を定義した$int変数を()とすることで関数として実行しています。<br>$int = fn(int $num) : int => $num * 2;<br>fn(int $num)<br>$numには引数としての5が入ります。<br>$num * 2;<br>$num(5) * 2 = 10<br>これが戻り値となります。<br>:int<br>がint型としての返り値として評価結果を返します。<br><br>$int2($tmp);<br>$tmp(500)を引数の値として$int2変数を実行しています。<br>$int2 = fn(int $num) : int => $num * (1 + $tax);<br>fn(int $num)<br>$numには$tmpの500が入ります。<br>$num * (1 + $tax)<br>$num(500) * (1 + $tax(0.1))<br>$taxは外部変数を使用できるので0.1の値を参照します。<br>500 * (1 + 0.1) = 500 * (1.1) =550<br>この計算結果を:intの返り値として評価結果を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2<br></div>$int1($tmp)<br>$tmp(1)を引数の値として$int1変数を実行しています。<br>$int1 = fn(int &$num):int => ++$num + 1;<br>fn(int &$num)<br>$num引数に$tmp(1)が入ります。<br>&$numなので参照渡しとなります。<br>++$num + 1;<br>++$numなので$numをインクリメントした結果を使います。<br>++$num(2) +1 = 2 + 1 = 3<br>:int<br>がint型としての返り値として評価結果を返します。<br>引数は参照渡しであるため$numがインクリメントされた結果が反映されます<br><br>$int2($tmp)<br>$tmp(10)を引数の値として$int2変数を実行しています。<br>$int2 = fn(int &$num):int => $num++ + 1;<br>fn(int &$num)<br>$num引数に$tmp(10)が入ります。<br>&$numなので参照渡しとなります。<br>$num++ + 1;<br>$num++なので、このステップが実行されたあとでないと$numがインクリメントされません。<br>そのため<br>$num++ + 1 = 1 + 1 =2<br>:int<br>がint型としての返り値として評価結果を返します。<br>引数は参照渡しであるため$numがインクリメントされた結果が反映されます<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3<br></div>PHPのアロー関数で戻り値の型として void を指定することはできません。<br>fn(string $msg):void<br>として実行すると下記のようにエラーが発生します。<br>Fatal error: A void function must not return a value <br><br>$log = fn(string $msg) => print($msg);<br>voidにするとエラーになりますが、型を指定しなければ、実行可能となります。(内部的には null が返されます)。<br>戻り値は print の結果（通常 1）になるが、無視して実行できます。<br>そのため、戻り値を指定せずに実行することで「値を返すこと」が目的ではないvoidのように実行できます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4<br></div>$int($tmp)<br>$intの引数に配列を渡します。<br>$int = fn(array $ary):int => $this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);<br>fn(array $ary)<br>$tmp配列を受け取ります。<br>$this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);<br>アロー関数は複数行に渡った実行ができないため<br>三項演算子を使ったり、<br>関数などを使うことで、複数行の代行ができます。<br>$this->add((int)$ary[0], (int)$ary[1])<br>1 + 2 =3<br>$this->minus((int)$ary[2], (int)$ary[3])<br>10 - 5 = 5<br>3 * 5 =15<br>:int<br>がint型としての返り値として評価結果を返します。<br>`,n7:"戻る",},en: {n1: "back",n2: "Arrow Function",n3: "Callback Function",n4:`[About Callback Functions]</div>PHP's callable is a type hint that indicates a data type that can be called as a function. <br>It is used to "allow only executable functions" when a function takes another function as an argument (higher-order function). <br>Available from PHP 5.4<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Arrow Function]</div>This is a syntax introduced in PHP 7.4 to write anonymous functions (closures) more concisely. <br>fn(int $x): int => $x * 2;<br>fn(int $x): int (function definition part)<br>fn: A keyword indicating that this is an arrow function. <br>(int $x): Argument definition. <br>: int: Specifies the return type. <br>=> (arrow symbol)<br>This is a separator between the definition and the operation; it evaluates and returns the expression on the right side using the argument on the left. <br>$x * 2 (function operation and return value)<br>This is the actual operation. <br>The most distinctive feature of arrow functions is that the evaluation result of this expression is returned as is. <br>This is a concise anonymous function defined with fn that automatically returns the result of the operation on the right side of the =>. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>$int(5);<br>Executes $int with 5 as the argument. <br>The $int variable used to define the arrow function is used as () to execute it as a function. <br>$int = fn(int $num) : int => $num * 2;<br>fn(int $num)<br>$num contains the argument value 5. <br>$num * 2;<br>$num(5) * 2 = 10<br>This is the return value. <br>:int<br>returns the evaluation result as an int type return value. <br><br>$int2($tmp);<br>The $int2 variable is executed with $tmp(500) as the argument value. <br>$int2 = fn(int $num) : int => $num * (1 + $tax);<br>fn(int $num)<br>$num contains the value 500 from $tmp. <br>$num * (1 + $tax)<br>$num(500) * (1 + $tax(0.1))<br>$tax can use external variables, so it references the value 0.1. <br>500 * (1 + 0.1) = 500 * (1.1) = 550<br>The result of this calculation is returned as the :int return value. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2<br></div>$int1($tmp)<br>The $int1 variable is executed with $tmp(1) as the argument value. <br>$int1 = fn(int &$num):int => ++$num + 1;<br>fn(int &$num)<br>$tmp(1) is entered as the $num argument. <br>&$num is passed by reference. <br>++$num + 1;<br>++$num is passed by reference, so the result of incrementing $num is used. <br>++$num(2) +1 = 2 + 1 = 3<br>:int<br>returns the evaluation result as an int type. <br>Since the argument is passed by reference, the result of incrementing $num is reflected. <br><br>$int2($tmp)<br>The $int2 variable is executed with $tmp(10) as the argument value. <br>$int2 = fn(int &$num):int => $num++ + 1;<br>fn(int &$num)<br>The $num argument is set to $tmp(10). <br>&$num is passed by reference. <br>$num++ + 1;<br>Because it is $num++, $num is not incremented until this step is executed. <br>Therefore, <br>$num++ + 1 = 1 + 1 = 2<br>:int<br>returns the evaluation result as an int type return value. <br>Since the argument is passed by reference, the result of incrementing $num is reflected. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3<br></div>PHP arrow functions cannot specify void as the return type. <br>fn(string $msg):void<br>If you run it as such, you will get the following error: <br>Fatal error: A void function must not return a value <br><br>$log = fn(string $msg) => print($msg);<br>Using void will result in an error, but it will be executable if you do not specify a type. (Internally, null is returned.) <br>The return value will be the print result (usually 1), but you can ignore this and execute the function. <br>Therefore, by running it without specifying a return value, you can execute it like a void function, which does not aim to return a value. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4<br></div>$int($tmp)<br>Pass an array as the $int argument. <br>$int = fn(array $ary):int => $this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);<br>fn(array $ary)<br>Receives the $tmp array. <br>$this->add((int)$ary[0], (int)$ary[1]) * $this->minus((int)$ary[2], (int)$ary[3]);<br>Since arrow functions cannot be executed across multiple lines,<br>you can use the ternary operator or<br>functions to perform multi-line operations. <br>$this->add((int)$ary[0], (int)$ary[1])<br>1 + 2 = 3<br>$this->minus((int)$ary[2], (int)$ary[3])<br>10 - 5 = 5<br>3 * 5 = 15<br>:int<br>The evaluation result is returned as an int type. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
