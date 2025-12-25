@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">call_user_func</div></td></tr><tr><td><div id="n3">コールバック関数</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">call_user_func</div>call_user_func関数を使用して普通の関数名を文字列で渡すことで<br>コールバックを指定できます。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+/*
+function func1()
+{
+	echo "func1 execute".PHP_EOL;
+}
+*/
+class test1
+{
+	//クラス内のメソッドを実行するケース
+	function test1()
+	{
+/*
+Fatal error:  Uncaught TypeError: call_user_func(): Argument #1 ($callback) must be a valid callback, function "func1" not found or invalid function name
+*/
+		//call_user_func("func1");
+		call_user_func([$this, "func1"]);//func1 execute
+		call_user_func("test1::func2");//static func2 execute
+	}
+
+	private function func1()
+	{
+		echo "func1 execute".PHP_EOL;
+	}
+	private static function func2()
+	{
+		echo "static func2 execute".PHP_EOL;
+	}
+	//戻り値を実行するケース
+	function test2()
+	{
+		$num1 = 10;
+		$num2 = 20;
+		//引数を指定するケース
+		$result = call_user_func([$this, "func3"], $num1, $num2);
+		echo "result:$result".PHP_EOL;//result:30
+	}
+	private function func3(int $num1, int $num2):int
+	{
+		return $num1 + $num2;
+	}
+	function test3()
+	{
+		$num1 = 10;
+		$num2 = 20;
+		//引数を指定するケース
+		//Warning:  test1::func4(): Argument #2 ($num2) must be passed by reference, value given
+		//$result = call_user_func([$this, "func4"], $num1, $num2);
+	}
+	private function func4(int $num1, int &$num2)//ここで参照渡しを設定しておく
+	{
+		$num2++;
+		return $num1 + $num2;
+	}
+	//コールバック関数を引数にしたケース
+	function test4()
+	{
+		 call_user_func([$this, "func5"], function($str) {
+            echo "Callback received: $str";
+        });
+		//Callback received: func5
+	}
+	private function func5(callable $callback):void
+	{
+		$callback("func5");
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+$cls1->test4();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+/*
+function func1()
+{
+echo "func1 execute".PHP_EOL;
+}
+*/
+class test1
+{
+	// Execute a method within a class
+	function test1()
+	{
+		/*
+		Fatal error: Uncaught TypeError: call_user_func(): Argument #1 ($callback) must be a valid callback, function "func1" not found, or invalid function name
+		*/
+		/call_user_func("func1");
+		call_user_func([$this, "func1"]);//func1 execute
+		call_user_func("test1::func2");//static func2 execute
+	}
+	
+	private function func1()
+	{
+		echo "func1 execute".PHP_EOL;
+	}
+	private static function func2()
+	{
+		echo "static func2 execute".PHP_EOL;
+	}
+	// Execute the return value
+	function test2()
+	{
+		$num1 = 10;
+		$num2 = 20;
+		//Argument specification case
+		$result = call_user_func([$this, "func3"], $num1, $num2);
+		echo "result:$result".PHP_EOL;//result:30
+	}
+	private function func3(int $num1, int $num2):int
+	{
+		return $num1 + $num2;
+	}
+	function test3()
+	{
+		$num1 = 10;
+		$num2 = 20;
+		//Argument specification case
+		//Warning: test1::func4(): Argument #2 ($num2) must be passed by reference, value given
+		//$result = call_user_func([$this, "func4"], $num1, $num2);
+	}
+	private function func4(int $num1, int &$num2)//Set up reference passing here
+	{
+		$num2++;
+		return $num1 + $num2;
+	}
+	//Callback function argument
+	function test4()
+	{
+		call_user_func([$this, "func5"], function($str) {
+			echo "Callback received: $str";
+		});
+		//Callback received: func5
+	}
+	private function func5(callable $callback):void
+	{
+		$callback("func5");
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+$cls1->test4();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>call_user_func([$this, "func1"]);<br>クラス内で関数を指定する場合は配列にクラスと関数名を指定します。<br><br>call_user_func("test1::func2");<br>staticメソッドを実行する方法です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2</div>$result = call_user_func([$this, "func3"], $num1, $num2);<br>実行する関数に引数がある場合は上記のように配列のあとにカンマ区切りで変数を実装します。<br>また<br>$result = call_user_func(<br>のようにすることで、戻り値を取得することができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3</div>call_user_funcは参照渡しが使えません。<br>これは、この関数(call_user_func)の内部使用にあります。<br>call_user_funcは内部的に全て引数を値渡しで受け取るように設定しているためです。<br>そのため、<br>$result =call_user_func([$this, "func4"], $num1, $num2);<br>のfunc4を実行する際、func4に参照渡しがあるため<br>Warning:  test1::func4(): Argument #2 ($num2) must be passed by reference, value given<br>というエラーが発生します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4</div>引数にする場合は<br>[$this, "func5"], function($str)<br>のように[]の後にコールバック関数を実装します。<br>この例ではfunctionのコールバック関数を実行できます。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"call_user_func",n3:"コールバック関数",n4:`[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">call_user_func</div>call_user_func関数を使用して普通の関数名を文字列で渡すことで<br>コールバックを指定できます。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>call_user_func([$this, "func1"]);<br>クラス内で関数を指定する場合は配列にクラスと関数名を指定します。<br><br>call_user_func("test1::func2");<br>staticメソッドを実行する方法です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2</div>$result = call_user_func([$this, "func3"], $num1, $num2);<br>実行する関数に引数がある場合は上記のように配列のあとにカンマ区切りで変数を実装します。<br>また<br>$result = call_user_func(<br>のようにすることで、戻り値を取得することができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3</div>call_user_funcは参照渡しが使えません。<br>これは、この関数(call_user_func)の内部使用にあります。<br>call_user_funcは内部的に全て引数を値渡しで受け取るように設定しているためです。<br>そのため、<br>$result =call_user_func([$this, "func4"], $num1, $num2);<br>のfunc4を実行する際、func4に参照渡しがあるため<br>Warning:  test1::func4(): Argument #2 ($num2) must be passed by reference, value given<br>というエラーが発生します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4</div>引数にする場合は<br>[$this, "func5"], function($str)<br>のように[]の後にコールバック関数を実装します。<br>この例ではfunctionのコールバック関数を実行できます。<br>`,n7:"戻る",},en: {n1: "back",n2:"call_user_func",n3:"Callback Function",n4:`[About Callback Functions]</div>PHP's callable function is a type hint that indicates a data type that can be called as a function. <br>It is used to "allow only executable functions" when a function takes another function as an argument (higher-order function). <br>Available from PHP 5.4 onwards. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">call_user_func</div>You can specify a callback by passing a regular function name as a string using the call_user_func function. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1</div>call_user_func([$this, "func1"]);<br>To specify a function within a class, specify the class and function name in an array. <br><br>call_user_func("test1::func2");<br>This is how to execute a static method. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2</div>$result = call_user_func([$this, "func3"], $num1, $num2);<br>If the function you want to execute takes arguments, implement them after the array, separated by commas, as shown above. <br>Also, you can get the return value by using the following:<br>$result = call_user_func(<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3</div>call_user_func cannot be passed by reference.<br>This is due to the internal usage of this function (call_user_func).<br>call_user_func is internally configured to receive all arguments by value.<br>Therefore, when executing func4 in <br>$result =call_user_func([$this, "func4"], $num1, $num2);<br>func4 is passed by reference, so<br>Warning: test1::func4(): Argument #2 ($num2) must be passed by reference, value given<br>An error occurs. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4</div>To use it as an argument, <br>[$this, "func5"], function($str)<br>Implement the callback function after the [], like this: <br>In this example, the callback function of function can be executed. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
