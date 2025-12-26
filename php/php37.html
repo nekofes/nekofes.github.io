@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">メソッドを部品（関数オブジェクト）としてコールバック関数</div></td></tr><tr><td><div id="n3">コールバック関数</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">メソッドを部品（関数オブジェクト）としてコールバック関数を実行</div>「部品」化したメソッド変数は、メソッドを部品（Callableオブジェクト）として切り出して、<br>コールバックとして利用できるようになります。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		echo "test1 execute".PHP_EOL;
+	}
+	function test2(int $num1, int $num2):int
+	{
+		return $num1 + $num2;
+	}
+	function test3(int &$result, array $ary):void
+	{
+		$result = 0;
+		for($i=0; $i<count($ary); $i++)
+		{
+			$result += $ary[$i];
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$num1 = 1;
+$num2 = 2;
+$ary = [];
+for($i=0; $i<3; $i++)
+{
+	$ary[] = $i +1;
+}
+$test1 =$cls1->test1(...);
+$test2 =$cls1->test2(...);
+$test3 =$cls1->test3(...);
+$result = 0;
+$test1();
+/*
+test1 execute
+test1 execute
+*/
+echo $test2($num1, $num2) . PHP_EOL;//3
+// 参照渡しも維持されます
+$test3($result, $ary); 
+echo "result:$result".PHP_EOL;//result:6
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1():void 
+	{ 
+		echo "test1 execute".PHP_EOL; 
+	} 
+	function test2(int $num1, int $num2):int 
+	{ 
+		return $num1 + $num2; 
+	} 
+	function test3(int &$result, array $ary):void 
+	{ 
+		$result = 0; 
+		for($i=0; $i<count($ary); $i++) 
+		{ 
+			$result += $ary[$i]; 
+		} 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$num1 = 1;
+$num2 = 2;
+$ary = [];
+for($i=0; $i<3; $i++)
+{ 
+	$ary[] = $i +1;
+}
+$test1 =$cls1->test1(...);
+$test2 =$cls1->test2(...);
+$test3 =$cls1->test3(...);
+$result = 0;
+$test1();
+/*
+test1 execute
+test1 execute
+*/
+echo $test2($num1, $num2) . PHP_EOL;//3
+// Passing by reference is also maintained
+$test3($result, $ary);
+echo "result:$result".PHP_EOL;//result:6
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">First-class Callable Syntax<br></div>メソッド名の後ろに (...) を付けます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">「...」の呼び方</div>PHPにおいて、この記号は文脈によって2通りの呼び方があります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">引数アンパック (Argument Unpacking)<br></div>今回のように、関数を呼び出す側で配列の前に付ける場合は「アンパック」と呼びます。<br>配列の中身をバラバラにして引数に展開する（荷解きする）イメージです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">可変長引数 (Variadic Functions) / スプラット演算子</div>関数の定義側<br>(例)<br>function test(...$args)<br>で使う場合は「可変長引数」や「スプラット演算子」と呼ばれます。<br>$test1 =$cls1->test1(...);<br>test1(...)とは、実行可能な関数オブジェクトとして変数に入れるということです。<br>(...) を使うことでメソッドを部品（関数オブジェクト）として切り出して、<br>好きなタイミングで実行できるようになります。<br></div><div id=h2><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test(array &$ary, int &$num):void
+	{
+		for($i=0;$i<10;$i++)
+		{
+			$ary[]=$num;
+			$num++;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$func = $cls2->test(...);
+$num = 1;
+$ary= [];
+$func($ary, $num);
+echo "ary count:".count($ary)." num:$num".PHP_EOL;//ary count:10 num:11
+echo "&lt;/pre&gt;";
+</pre></div><div id=h22><a href="javascript:void(0);" id="copy22" class="copy-button" data-target="codeBlock22">copy</a><pre id="codeBlock22" class="prettyprint linenums;lang-js;">
+class test2
+{
+	function test(array &$ary, int &$num):void
+	{
+		for($i=0;$i<10;$i++)
+		{
+			$ary[]=$num;
+			$num++;
+		}
+	}
+}
+echo "&lt;pre&gt;";
+
+$cls2 = new test2();
+$func = $cls2->test(...);
+$num = 1;
+$ary= [];
+$func($ary, $num);
+echo "ary count:".count($ary)." num:$num".PHP_EOL;//ary count:10 num:11
+echo "&lt;/pre&gt;";
+</pre></div><div id="n7">参照渡しのサンプルとなります。<br>実行元の関数の引数が参照渡しになっている場合、参照渡しが可能となります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$func = $cls2->test(...);</div>... (First-class callable syntax)により<br>クラス内部から自身のメソッドを実行する準備をします。<br>$func変数に()をつけることで実行できますが、<br>この例では配列とint型変数を設定し実行しています。<br><br>$cls2->test(...) によって、testメソッドを指すClosure オブジェクトが生成されます。<br>このとき、メソッド定義にある<br>&$ary（参照渡し）<br>&$num（参照渡し）<br>の性質も引き継がれます。<br>$func($ary, $num)を実行すると、変数$aryおよび$numそのものがメソッドに渡されます。<br>メソッド内での変更が呼び出し元の$aryおよび$numに反映されます。<br></div><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"メソッドを部品（関数オブジェクト）としてコールバック関数",n3:"コールバック関数",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">メソッドを部品（関数オブジェクト）としてコールバック関数を実行</div>「部品」化したメソッド変数は、メソッドを部品（Callableオブジェクト）として切り出して、<br>コールバックとして利用できるようになります。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">First-class Callable Syntax<br></div>メソッド名の後ろに (...) を付けます。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">「...」の呼び方</div>PHPにおいて、この記号は文脈によって2通りの呼び方があります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">引数アンパック (Argument Unpacking)<br></div>今回のように、関数を呼び出す側で配列の前に付ける場合は「アンパック」と呼びます。<br>配列の中身をバラバラにして引数に展開する（荷解きする）イメージです。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">可変長引数 (Variadic Functions) / スプラット演算子</div>関数の定義側<br>(例)<br>function test(...$args)<br>で使う場合は「可変長引数」や「スプラット演算子」と呼ばれます。<br>$test1 =$cls1->test1(...);<br>test1(...)とは、実行可能な関数オブジェクトとして変数に入れるということです。<br>(...) を使うことでメソッドを部品（関数オブジェクト）として切り出して、<br>好きなタイミングで実行できるようになります。<br>`,n7:`参照渡しのサンプルとなります。<br>実行元の関数の引数が参照渡しになっている場合、参照渡しが可能となります。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$func = $cls2->test(...);</div>... (First-class callable syntax)により<br>クラス内部から自身のメソッドを実行する準備をします。<br>$func変数に()をつけることで実行できますが、<br>この例では配列とint型変数を設定し実行しています。<br><br>$cls2->test(...) によって、testメソッドを指すClosure オブジェクトが生成されます。<br>このとき、メソッド定義にある<br>&$ary（参照渡し）<br>&$num（参照渡し）<br>の性質も引き継がれます。<br>$func($ary, $num)を実行すると、変数$aryおよび$numそのものがメソッドに渡されます。<br>メソッド内での変更が呼び出し元の$aryおよび$numに反映されます。<br>`,n8:"戻る",},en: {n1: "back",n2: "Callback function using a method as a component (function object)",n3: "Callback function",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[About callback functions]</div>PHP's callable is a type hint that indicates "a data type that can be called as a function." <br>It is used to "allow only executable functions," such as when a function receives another function as an argument (higher-order function). <br>Available from PHP 5.4<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Execute a callback function using a method as a component (function object)</div>A "component" method variable can be extracted as a component (Callable object) and used as a callback. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">First-class Callable Syntax<br></div>Add (...) after the method name. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">How to Call "..."</div>In PHP, this symbol can be called in two ways, depending on the context. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Argument Unpacking<br></div>When it's added before an array on the function caller, as in this case, it's called "unpacking." <br>It's like breaking down the contents of an array and unpacking it into arguments. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Variadic Functions / Splat Operator</div>When used in the function definition <br>(Example) <br>function test(...$args)<br>It's called a "variadic function" or "splat operator." <br>$test1 =$cls1->test1(...);<br>test1(...) means that it's stored as an executable function object in a variable. <br>Using (...) extracts a method into components (function objects) that can be executed at any time. <br>`,n7:`This is an example of passing by reference. <br>If the arguments of the executing function are passed by reference, passing by reference is possible. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$func = $cls2->test(...);</div>... (First-class callable syntax)<br>Prepare to execute your own method from within the class. <br>You can execute it by adding () to the $func variable,<br>In this example, an array and an int variable are set and executed. <br><br>$cls2->test(...) creates a Closure object pointing to the test method. <br>At this time, the properties of the method definition<br>&$ary (pass by reference)<br>&$num (pass by reference)<br>are also inherited. <br>When $func($ary, $num) is executed, the variables $ary and $num themselves are passed to the method. <br>Changes within the method are reflected in $ary and $num in the caller. <br>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h11=document.getElementById('h11');const h22=document.getElementById('h22');if(lang==1){h1.style.display="none";h2.style.display="none";h11.style.display="block";h22.style.display="block";}else{h1.style.display="block";h2.style.display="block";h11.style.display="none";h22.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
