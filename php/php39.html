@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">インスタンスメソッド/静的メソッド</div></td></tr><tr><td><div id="n3">コールバック関数</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br>オブジェクトメソッドを変数としてコールバック関数を実行<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">静的メソッド</div>(例)<br>[引数なし]<br>$func = $cls::testMethod();<br>[引数あり]<br>$func = $cls::testMethod(...);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インスタンスメソッド</div>(例)<br>[引数なし]<br>$func = $cls->testMethod();<br>[引数あり]<br>$func = $cls->testMethod(...);<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1(array $ary1, array $ary2):int
+	{
+		$total =0;
+		$this->sum($total, $ary1);
+		$this->sum($total, $ary2);
+		return $total;
+	}
+	private function sum(int &$num, array $ary):void
+	{
+		for($i=0; $i < count($ary); $i++)
+		{
+			$num += $ary[$i];
+		}
+	}
+	static function test2(int $num1, int $num2):int
+	{
+		return $num1 + $num2;
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+//インスタンスメソッド
+$func1 = $cls1->test1(...);
+$ary1=[];
+$ary2=[];
+$ary1[]=10;
+$ary2[]=1;
+$ary2[]=2;
+echo $func1($ary1, $ary2).PHP_EOL;//13
+//静的メソッド
+$func2 = $cls1::test2(...);
+$num1 =2;
+$num2 =3;
+echo $func2($num1, $num2).PHP_EOL;//5
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1(array $ary1, array $ary2):int 
+	{ 
+		$total =0; 
+		$this->sum($total, $ary1); 
+		$this->sum($total, $ary2); 
+		return $total; 
+	} 
+	private function sum(int &$num, array $ary):void 
+	{ 
+		for($i=0; $i < count($ary); $i++) 
+		{ 
+			$num += $ary[$i]; 
+		} 
+	} 
+	static function test2(int $num1, int $num2):int 
+	{ 
+		return $num1 + $num2; 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+//instance method
+$func1 = $cls1->test1(...);
+$ary1=[];
+$ary2=[];
+$ary1[]=10;
+$ary2[]=1;
+$ary2[]=2;
+echo $func1($ary1, $ary2).PHP_EOL;//13
+//Static Method
+$func2 = $cls1::test2(...);
+$num1 =2;
+$num2 =3;
+echo $func2($num1, $num2).PHP_EOL;//5
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インスタンスメソッド</div>コールバックは<br>他の関数に引数として渡したり<br>変数に代入して後から実行できるようにする<br>関数をいいます。<br>今回のサンプルは<br>インスタンスメソッドのケースでは<br>実行可能なオブジェクトを変数に代入して実行しています。<br>また、静的メソッドのケースでも<br>静的メソッド(共通関数として動作可能なメソッド)を取得して変数に代入し、<br>変数を実行時に必要な引数を設定して()で実行しています。<br><br>$func1 = $cls1->test1(...);<br>$cls1->test1を$func1変数に設定します。<br>$func1に()をつけるとインスタンスオブジェクトのメソッドを実行できます。<br>引数には...としています。<br>これで、$func1($ary1, $ary2)のように引数の部分に配列を2個設定しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">静的メソッド</div>$func2 = $cls1::test2(...);<br>$func2に()をつけると変数にした静的メソッドを実行できます。<br><br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"インスタンスメソッド/静的メソッド",n3:"コールバック関数",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[コールバック関数について]</div>PHPのcallableとは、「関数として呼び出すことができるデータ型」を表す型ヒントです。<br>関数が引数として別の関数を受け取る（高階関数）際などに、<br>「実行可能なものだけを許可する」ために使用されています。<br>※PHP 5.4から使用可能<br><br>オブジェクトメソッドを変数としてコールバック関数を実行<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">静的メソッド</div>(例)<br>[引数なし]<br>$func = $cls::testMethod();<br>[引数あり]<br>$func = $cls::testMethod(...);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インスタンスメソッド</div>(例)<br>[引数なし]<br>$func = $cls->testMethod();<br>[引数あり]<br>$func = $cls->testMethod(...);<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インスタンスメソッド</div>コールバックは<br>他の関数に引数として渡したり<br>変数に代入して後から実行できるようにする<br>関数をいいます。<br>今回のサンプルは<br>インスタンスメソッドのケースでは<br>実行可能なオブジェクトを変数に代入して実行しています。<br>また、静的メソッドのケースでも<br>静的メソッド(共通関数として動作可能なメソッド)を取得して変数に代入し、<br>変数を実行時に必要な引数を設定して()で実行しています。<br><br>$func1 = $cls1->test1(...);<br>$cls1->test1を$func1変数に設定します。<br>$func1に()をつけるとインスタンスオブジェクトのメソッドを実行できます。<br>引数には...としています。<br>これで、$func1($ary1, $ary2)のように引数の部分に配列を2個設定しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">静的メソッド</div>$func2 = $cls1::test2(...);<br>$func2に()をつけると変数にした静的メソッドを実行できます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Instance Method/Static Method",n3: "Callback Function",n4: `<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[About Callback Functions]</div>PHP's callable is a type hint that indicates "a data type that can be called as a function." <br>It is used to "only allow executables" when a function takes another function as an argument (higher-order function). <br>*Available from PHP 5.4<br><br>Executes a callback function using an object method as a variable<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Static Method</div>(Example)<br>[No Arguments]<br>$func = $cls::testMethod();<br>[With Arguments]<br>$func = $cls::testMethod(...);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Instance Method</div>(Example)<br>[No Arguments]<br>$func = $cls->testMethod();<br>[With Arguments]<br>$func = $cls->testMethod(...);<br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Instance Method</div>A callback is a function that can be passed as an argument to another function or assigned to a variable for later execution. <br>In this example, <br>In the case of an instance method, <br>an executable object is assigned to a variable and executed. <br>In the case of a static method, <br>a static method (a method that can operate as a common function) is obtained and assigned to a variable, <br>and the required arguments are set at execution time before being executed with (). <br><br>$func1 = $cls1->test1(...);<br>Set $cls1->test1 to the $func1 variable. <br>Adding () to $func1 executes a method on an instance object. <br>The argument is .... <br>This sets two arrays to the argument part, like so: $func1($ary1, $ary2). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Static Method</div>$func2 = $cls1::test2(...);<br>Adding () to $func2 executes a static method that has been assigned to a variable. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
