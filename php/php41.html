@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">call_user_func_array</div></td></tr><tr><td><div id="n3">コールバック関数</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">call_user_func_array</div>call_user_func_array は、<br>関数やクラスのメソッドを呼び出す際に、<br>引数を配列としてまとめて渡せるビルトイン関数です。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1(array $ary):int
+	{
+		$total = 0;
+		foreach($ary as $num) $total += $num;
+		return $total;
+	}
+	function test2(int $num1, int $num2, string $txt):string
+	{
+		return $txt . (string)($num1 + $num2);
+	}
+	function test3():void
+	{
+		$num = 4;
+		call_user_func_array([$this,"increment"], [&$num]); 
+		echo "num:$num".PHP_EOL;//num:5
+	}
+	static function test4(int $num1, int $num2):int
+	{
+		return $num1 + $num2;
+	}
+	function test5(int $num1, int $num2, int &$num3, string &$str):void
+	{
+		$num3 = $num1 + $num2;
+		$str = "test5";
+	}
+	private function increment(int &$num):void
+	{
+		echo "1 num:$num".PHP_EOL;//1 num:4
+		$num++;
+		echo "2 num:$num".PHP_EOL;//2 num:5
+	}
+}
+echo "&lt;pre&gt;";
+$ary =[];
+for($i=0; $i < 10; $i++) $ary[]=$i+1;
+$cls1= new test1();
+echo call_user_func_array([$cls1,"test1"], [$ary]).PHP_EOL;//55
+$ary =[];
+$ary[]=1;
+$ary[]=2;
+$ary[]="result : ";
+echo call_user_func_array([$cls1, "test2"], $ary).PHP_EOL;//result : 3
+$cls1->test3();
+echo call_user_func_array([$cls1, "test4"], $ary).PHP_EOL;//3
+$ary =[];
+$ary[]=7;
+$ary[]=8;
+echo call_user_func_array("test1::test4", $ary).PHP_EOL;//14
+$ary =[];
+$num=0;
+$str="test";
+$ary[]=2;
+$ary[]=3;
+$ary[]=&$num;
+$ary[]=&$str;
+call_user_func_array([$cls1, "test5"], $ary);
+echo "num:$num str:$str".PHP_EOL;//num:5 str:test5
+echo "num:".$ary[2]." str:".$ary[3].PHP_EOL;//num:5 str:test5
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+function test1(array $ary):int 
+{ 
+$total = 0; 
+foreach($ary as $num) $total += $num; 
+return $total; 
+} 
+function test2(int $num1, int $num2, string $txt):string 
+{ 
+return $txt . (string)($num1 + $num2); 
+} 
+function test3():void 
+{ 
+$num = 4; 
+call_user_func_array([$this,"increment"], [&$num]); 
+echo "num:$num".PHP_EOL;//num:5 
+} 
+static function test4(int $num1, int $num2):int 
+{ 
+return $num1 + $num2; 
+} 
+function test5(int $num1, int $num2, int &$num3, string &$str):void 
+{ 
+$num3 = $num1 + $num2; 
+$str = "test5"; 
+} 
+private function increment(int &$num):void 
+{ 
+echo "1 num:$num".PHP_EOL;//1 num:4 
+$num++; 
+echo "2 num:$num".PHP_EOL;//2 num:5 
+}
+}
+echo "&lt;pre&gt;";
+$ary =[];
+for($i=0; $i < 10; $i++) $ary[]=$i+1;
+$cls1= new test1();
+echo call_user_func_array([$cls1,"test1"], [$ary]).PHP_EOL;//55
+$ary =[];
+$ary[]=1;
+$ary[]=2;
+$ary[]="result : ";
+echo call_user_func_array([$cls1, "test2"], $ary).PHP_EOL;//result : 3
+$cls1->test3();
+echo call_user_func_array([$cls1, "test4"], $ary).PHP_EOL;//3
+$ary =[];
+$ary[]=7;
+$ary[]=8;
+echo call_user_func_array("test1::test4", $ary).PHP_EOL;//14
+$ary =[];
+$num=0;
+$str="test";
+$ary[]=2;
+$ary[]=3;
+$ary[]=&$num;
+$ary[]=&$str;
+call_user_func_array([$cls1, "test5"], $ary);
+echo "num:$num str:$str".PHP_EOL;//num:5 str:test5
+echo "num:".$ary[2]." str:".$ary[3].PHP_EOL;//num:5 str:test5
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[call_user_func_array の第1引数（callback型）にクラスのメソッドを指定する方法]</div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インスタンスメソッドを呼ぶ場合（今回の場合）</div>new(インスタンス化)したオブジェクトのメソッドを呼びます。<br>書き方: [$インスタンス変数, "メソッド名"]<br>(例)<br>[$cls1, "test1"]<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">静的（static）メソッドを呼ぶケース</div>メソッドに static がついている場合、インスタンス化せずに呼べます。<br>書き方: ["クラス名", "メソッド名"] または "クラス名::メソッド名"<br>(例)<br>["test1", "someStaticMethod"]<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">クラス内（自身）から呼び出すケース</div>ご提示いただいたコードの test3 内のように、自分自身のメソッドを呼ぶ場合です。<br>書き方: [$this, "メソッド名"]<br>(例)<br>call_user_func_array([$this, "increment"], [&$num]);<br><br><table border=1><tr><td>種類</td><td>call_user_func</td><td>call_user_func_array</td></tr><tr><td>引数</td><td>可変引数(個別の値)</td><td>単一の配列</td></tr><tr><td>参照渡し</td><td>不可能</td><td>可能(配列要素を参照する)</td></tr><tr><td>用途</td><td>静的な数もしくは少数の引数</td><td>動的な数もしくは配列データの展開</td></tr></table><br>call_user_func_array(callable, array $args)<br>この関数の第2引数そのものは必ず「配列（array型）」でなければなりません。 <br>ここに直接 int や string を入れることはできません。<br>しかし、その配列の中に int や string を入れることで、<br>実質的にどのような型の値でも関数へ渡すことができます。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"call_user_func_array",n3:"コールバック関数",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">call_user_func_array</div>call_user_func_array は、<br>関数やクラスのメソッドを呼び出す際に、<br>引数を配列としてまとめて渡せるビルトイン関数です。<br>`,n5:`[サンプル] `,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[call_user_func_array の第1引数（callback型）にクラスのメソッドを指定する方法]</div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インスタンスメソッドを呼ぶ場合（今回の場合）</div>new(インスタンス化)したオブジェクトのメソッドを呼びます。<br>書き方: [$インスタンス変数, "メソッド名"]<br>(例)<br>[$cls1, "test1"]<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">静的（static）メソッドを呼ぶケース</div>メソッドに static がついている場合、インスタンス化せずに呼べます。<br>書き方: ["クラス名", "メソッド名"] または "クラス名::メソッド名"<br>(例)<br>["test1", "someStaticMethod"]<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">クラス内（自身）から呼び出すケース</div>ご提示いただいたコードの test3 内のように、自分自身のメソッドを呼ぶ場合です。<br>書き方: [$this, "メソッド名"]<br>(例)<br>call_user_func_array([$this, "increment"], [&$num]);<br><br><table border=1><tr><td>種類</td><td>call_user_func</td><td>call_user_func_array</td></tr><tr><td>引数</td><td>可変引数(個別の値)</td><td>単一の配列</td></tr><tr><td>参照渡し</td><td>不可能</td><td>可能(配列要素を参照する)</td></tr><tr><td>用途</td><td>静的な数もしくは少数の引数</td><td>動的な数もしくは配列データの展開</td></tr></table><br>call_user_func_array(callable, array $args)<br>この関数の第2引数そのものは必ず「配列（array型）」でなければなりません。 <br>ここに直接 int や string を入れることはできません。<br>しかし、その配列の中に int や string を入れることで、<br>実質的にどのような型の値でも関数へ渡すことができます。<br>`,n7:"戻る",},en: {n1: "back",n2:"call_user_func_array",n3:"Callback function",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">call_user_func_array</div>call_user_func_array is a built-in function that allows you to pass arguments as an array when calling a function or class method. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[How to specify a class method as the first argument (callback type) of call_user_func_array]</div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Calling an instance method (in this case)</div>Call a method on a new (instantiated) object. <br>Syntax: [$instance variable, "method name"]<br>(Example)<br>[$cls1, "test1"]<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Calling a static method</div>If a method is marked as static, it can be called without instantiating it. <br>Writing style: ["class name", "method name"] or "class name::method name"<br>(Example)<br>["test1", "someStaticMethod"]<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Calling from within a class (itself)</div>This is when calling your own method, as in test3 in the code you provided. <br>Writing style: [$this, "method name"]<br>(Example)<br>call_user_func_array([$this, "increment"], [&$num]);<br><br><table border=1><tr><td>Type</td><td>call_user_func</td><td>call_user_func_array</td></tr><tr><td>Arguments</td><td>Variable Arguments (Individual Values)</td><td>Single Array</td></tr><tr><td>Pass by Reference</td><td>Not Possible</td><td>Possible (Reference to Array Elements)</td></tr><tr><td>Use</td><td>Static Number or Few Arguments</td><td>Dynamic Number or Array Data Expansion</td></tr></table><br>call_user_func_array(callable, array $args)<br>The second argument of this function must be an array. <br>You cannot directly put an int or string here. <br>However, by putting an int or string into the array, <br>you can pass values ​​of virtually any type to the function. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
