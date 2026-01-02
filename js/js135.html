@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return true;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">画像データ退避</div></td></tr><tr><td><div id="n3">画像表示処理</div></td></tr></table><br><div id="n4">共通画像を保存しておき使用するサンプルです。<br>同じ画像を使い回す場合、何度もコールするのは手間がかかるため<br>一度保存しておき、それを再利用するためのサンプルとなります。<br></div><br><div id="n5">[サンプル]</div><div id=h1><textarea id="t1" rows=17 cols=80>
+[test41.html]
+
+<img id=p1 style="display:none;">
+<img id=p2 style="display:none;">
+<img id=p3 style="display:none;">
+<img id=p4 style="display:none;">
+<img id=p5 style="display:none;">
+<img id=p6 style="display:none;">
+<img id=p7 style="display:none;">
+<img id=p8 style="display:none;">
+<img id=p9 style="display:none;">
+<img id=p10 style="display:none;">
+<img id=p11 style="display:none;">
+<img id=p12 style="display:none;">
+<img id=p13 style="display:none;">
+<img id=p14 style="display:none;">
+<img id=p15 style="display:none;">
+<img id=p16 style="display:none;">
+<img id=p17 style="display:none;">
+<img id=p18 style="display:none;">
+<img id=p19 style="display:none;">
+<img id=p20 style="display:none;">
+
+
+<img id=chooseImage style="width:100px;"><br>
+
+<button id="btn">画像を追加</button><br>
+
+<input id=no type=text value=1><br>
+
+<button id="display">画像を表示</button><br>
+
+[test41.php]
+//declare(strict_types=1);
+
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true);
+
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+// プリフライトリクエストならここで終了
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+	http_response_code(200);
+	exit;
+}
+//画像管理番号
+$no=(int)$data["no"];
+file_put_contents("debug.log", "test41.php no:$no\n", FILE_APPEND);
+//./img/test/の場所に
+//i1.pngからi20.pngがあると仮定します
+$path = "./img/test/i".(string)$no.".png";
+file_put_contents("debug.log", "test41.php path:$path\n", FILE_APPEND);
+
+outputImage($path);
+
+//画像を出力します
+function outputImage(string $path)
+{
+	if (!file_exists($path)) 
+	{
+file_put_contents("debug.log", "file_exists Image not found\n", FILE_APPEND);
+		header("HTTP/1.1 404 Not Found");
+		exit("Image not found");
+	}
+file_put_contents("debug.log", "file_exists exists\n", FILE_APPEND);
+	$finfo = finfo_open(FILEINFO_MIME_TYPE);
+	$mime  = finfo_file($finfo, $path);
+	finfo_close($finfo);
+	header("Content-Type: $mime");
+	ob_clean();
+	flush();
+	readfile($path);
+	exit;
+}
+</textarea></div><div id=h2><textarea id="t1" rows=17 cols=80>
+[test41.html]
+
+<img id=p1 style="display:none;">
+<img id=p2 style="display:none;">
+<img id=p3 style="display:none;">
+<img id=p4 style="display:none;">
+<img id=p5 style="display:none;">
+<img id=p6 style="display:none;">
+<img id=p7 style="display:none;">
+<img id=p8 style="display:none;">
+<img id=p9 style="display:none;">
+<img id=p10 style="display:none;">
+<img id=p11 style="display:none;">
+<img id=p12 style="display:none;">
+<img id=p13 style="display:none;">
+<img id=p14 style="display:none;">
+<img id=p15 style="display:none;">
+<img id=p16 style="display:none;">
+<img id=p17 style="display:none;">
+<img id=p18 style="display:none;">
+<img id=p19 style="display:none;">
+<img id=p20 style="display:none;">
+
+
+<img id=chooseImage style="width:100px;"><br>
+
+<button id="btn">Add Image</button><br>
+
+<input id=no type=text value=1><br>
+
+<button id="display">Display Image</button><br>
+
+[test41.php]
+//declare(strict_types=1);
+
+$json_data = file_get_contents("php://input");
+$data = json_decode($json_data, true);
+
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+// Preflight request, end here.
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+http_response_code(200);
+exit;
+}
+//Image control number
+$no=(int)$data["no"];
+file_put_contents("debug.log", "test41.php no:$no\n", FILE_APPEND);
+Assume that files i1.png to i20.png are located in the location //./img/test/
+$path = "./img/test/i".(string)$no.".png";
+file_put_contents("debug.log", "test41.php path:$path\n", FILE_APPEND);
+
+outputImage($path);
+
+//Output the image
+function outputImage(string $path)
+{
+if (!file_exists($path))
+{
+file_put_contents("debug.log", "file_exists Image not found\n", FILE_APPEND);
+header("HTTP/1.1 404 Not Found");
+exit("Image not found");
+}
+file_put_contents("debug.log", "file_exists exists\n", FILE_APPEND);
+$finfo = finfo_open(FILEINFO_MIME_TYPE); 
+$mime = finfo_file($finfo, $path); 
+finfo_close($finfo); 
+header("Content-Type: $mime"); 
+ob_clean(); 
+flush(); 
+readfile($path); 
+exit;
+}
+</textarea></div><br><div id=h3><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+let csv=[];
+let no=1;
+const display = document.getElementById('display');
+display.addEventListener('click', (e) => 
+{
+console.log("display.addEventListener");
+	const no = document.getElementById("no").value;
+console.log("no:"+no);
+	const img = document.getElementById("p" + no);
+	if (!img)
+	{
+console.log("if (!img)");
+		return;
+	}
+	document.getElementById("chooseImage").src = img.src;
+});
+const btn = document.getElementById('btn');
+btn.addEventListener('click', (e) => 
+{
+	prepareImageArray();
+	let csvNo = 0;
+	for(i=0; i < csv.length; i++)
+	{
+		csvNo = csv[i];
+		//存在チェック
+		if (existsImageData(csvNo) > 0)
+		{
+console.log("no:" + csvNo + " continue");
+			continue;
+		}
+		getImage(csvNo);
+	}
+});
+//テストデータとして使用する配列データを準備する
+function prepareImageArray()
+{
+	csv = []
+	switch(no)
+	{
+		case 1:
+			csv.push(1);
+			csv.push(3);
+			csv.push(20);
+			break;
+		case 2:
+			csv.push(2);
+			break;
+		case 3:
+			csv.push(1);
+			csv.push(5);
+			csv.push(20);
+			break;
+		default:
+			csv.push(10);
+			break;
+	}
+	if(no > 3)
+	{
+		return;
+	}
+	no++;
+}
+async function getImage(no)
+{
+console.log("getImage no:"+no);
+	//アイコン
+	fetch("http://localhost/test41.php", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			no: no,
+		}),
+	})
+	.then(res => res.blob())
+	.then(blob => {
+		const url = URL.createObjectURL(blob);
+		console.log("no:"+no+" 画像URL:", url);
+		const img = document.getElementById("p" + no);
+		img.src = url;
+	})
+	.catch(err => console.error("画像取得失敗:", err));
+
+}
+//存在チェック
+function existsImageData(no)
+{
+	const img = document.getElementById("p" + no);
+
+	if (!img)//noが存在しない場合は終了します
+	{
+console.log("noが存在しない場合は終了します");
+		return 2;
+	}
+	//すでに画像が入っているか（srcがセットされているか）チェックします
+	//img.getAttribute('src') が null または 空なら、まだ保存されていない
+	if (img.getAttribute('src'))
+	{
+console.log("すでに画像が入っているか（srcがセットされているか）");
+		return 1;
+	}
+	return 0;
+}
+</pre></div><div id=h4><a href="javascript:void(0);" id="copy2" class="copy-button" data-target="codeBlock2">copy</a><pre id="codeBlock2" class="prettyprint linenums;lang-js;">
+let csv=[];
+let no=1;
+const display = document.getElementById('display');
+display.addEventListener('click', (e) =>
+{
+console.log("display.addEventListener"); 
+	const no = document.getElementById("no").value;
+console.log("no:"+no); 
+	const img = document.getElementById("p" + no); 
+	if (!img) 
+	{
+		console.log("if (!img)"); 
+		return; 
+	} 
+	document.getElementById("chooseImage").src = img.src;
+});
+const btn = document.getElementById('btn');
+btn.addEventListener('click', (e) =>
+{ 
+	prepareImageArray(); 
+	let csvNo = 0; 
+	for(i=0; i < csv.length; i++)
+	{
+		csvNo = csv[i];
+		//Check existence
+		if (existsImageData(csvNo) > 0)
+		{
+			console.log("no:" + csvNo + " continue");
+			continue;
+		}
+		getImage(csvNo);
+	}
+});
+//Prepare array data to use as test data
+function prepareImageArray()
+{
+	csv = []
+	switch(no)
+	{
+		case 1:
+			csv.push(1);
+			csv.push(3);
+			csv.push(20);
+			break;
+		case 2:
+			csv.push(2);
+			break;
+		case 3:
+			csv.push(1);
+			csv.push(5);
+			csv.push(20);
+			break;
+		default:
+			csv.push(10);
+			break;
+	}
+	if(no > 3)
+	{
+		return;
+	}
+	no++;
+}
+async function getImage(no)
+{
+console.log("getImage no:"+no);
+	//Icon
+	fetch("http://localhost/test41.php", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+		no: no,
+		}),
+	})
+	.then(res => res.blob())
+	.then(blob => {
+		const url = URL.createObjectURL(blob);
+		console.log("no:"+no+" Image URL:", url);
+		const img = document.getElementById("p" + no);
+		img.src = url;
+	})
+	.catch(err => console.error("Image retrieval failed:", err));
+	
+}
+//Check existence
+function existsImageData(no)
+{
+	const img = document.getElementById("p" + no);
+	
+	if (!img) //Exit if no does not exist
+	{
+		console.log("Exit if no does not exist");
+		return 2;
+	}
+	//Check if an image is already included (src is set)
+	//If img.getAttribute('src') is null or empty, it has not yet been saved
+	if (img.getAttribute('src'))
+	{
+		console.log("Is an image already included (src is set)?");
+		return 1;
+	}
+	return 0;
+}
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">//テストデータとして使用する配列データを準備する<br>function prepareImageArray()</div>画像をimgタグに追加するための画像管理番号を配列に追加します。<br>let csv = [];とすると新しい配列を再作成するので<br>csv =[];<br>とすることで新規配列領域を作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">//存在チェック<br>function existsImageData(no)</div>下記チェックをして問題があれば処理を抜けます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!img)</div>タグが存在しない場合は処理を終了させています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (img.getAttribute('src'))</div>画像が指定のタグに存在している場合の判定処理です。<br>既に画像がsrcプロパティに存在しているのであれば、再度画像を格納する必要がないため<br>処理を抜けます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">async function getImage(no)</div>画像を取得して問題がなければ該当するimgタグに保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/test41.php", {</div>使用するphpパスにフェッチします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({<br>no: no,<br>}),<br></div>画像管理番号を渡す準備します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = URL.createObjectURL(blob);</div>画像urlオブジェクトを取得します。<br>img.src = url;<br>指定のsrcプロパティに取得したオブジェクトを設定します。<br><br></div><br><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"画像データ退避",n3:"画像表示処理",n4:`共通画像を保存しておき使用するサンプルです。<br>同じ画像を使い回す場合、何度もコールするのは手間がかかるため<br>一度保存しておき、それを再利用するためのサンプルとなります。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function prepareImageArray()</div>画像をimgタグに追加するための画像管理番号を配列に追加します。<br>let csv = [];とすると新しい配列を再作成するので<br>csv =[];<br>とすることで新規配列領域を作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function existsImageData(no)</div>下記チェックをして問題があれば処理を抜けます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!img)</div>タグが存在しない場合は処理を終了させています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (img.getAttribute('src'))</div>画像が指定のタグに存在している場合の判定処理です。<br>既に画像がsrcプロパティに存在しているのであれば、再度画像を格納する必要がないため<br>処理を抜けます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">async function getImage(no)</div>画像を取得して問題がなければ該当するimgタグに保存します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/test41.php", {</div>使用するphpパスにフェッチします。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({<br>no: no,<br>}),<br></div>画像管理番号を渡す準備します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = URL.createObjectURL(blob);</div>画像urlオブジェクトを取得します。<br>img.src = url;<br>指定のsrcプロパティに取得したオブジェクトを設定します。<br><br>`,n7:"戻る",},en: {n1: "back",n2: "Image data backup",n3: "Image display processing",n4:`This is a sample that saves and uses a common image. <br>If you reuse the same image, calling it repeatedly can be tedious.<br>This sample saves the image once and reuses it. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function prepareImageArray()</div>Add the image management number to the array to add the image to the img tag. <br>Let csv = []; recreates a new array, so<br>csv = [];<br>Create a new array area by setting it to: <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function existsImageData(no)</div>Perform the following checks and exit if there are any problems. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (!img)</div>If the tag does not exist, processing terminates. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (img.getAttribute('src'))</div>This check determines if an image exists in the specified tag. <br>If the image already exists in the src property, there is no need to store it again, so <br>the process will be skipped. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">async function getImage(no)</div>If the image is retrieved and there are no problems, it will be saved in the corresponding img tag. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">fetch("http://localhost/test41.php", {</div>Fetch to the PHP path you want to use.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">body: JSON.stringify({<br>no: no,<br>}),<br></div>Prepare to pass the image control number.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">const url = URL.createObjectURL(blob);</div>Get the image URL object.<br>img.src = url;<br>Sets the retrieved object to the specified src property. <br><br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{}}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h2=document.getElementById('h2');const h3=document.getElementById('h3');const h4=document.getElementById('h4');if(lang==1){h1.style.display="none";h2.style.display="block";h3.style.display="none";h4.style.display="block";}else{h1.style.display="block";h2.style.display="none";h3.style.display="block";h4.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
