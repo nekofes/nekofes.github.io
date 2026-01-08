@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">PHPの可変長引数</div></td></tr><tr><td><div id="n3">引数</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">...演算子（スプラット演算子）による定義</div>PHP 5.6以降、引数名の前に ... をつけることで、渡された複数の引数を一つの配列として受け取ることができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">通常の引数との併用</div>通常の引数の後に可変長引数を置くことができます。可変長引数は必ず最後に定義する必要があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">型指定（Type Hinting）</div>可変長引数にも型を指定できます。この場合、渡される全ての値がその型である必要があります。 <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">配列の展開（アンパック）</div>関数を呼び出す際に、配列の前に ... をつけると、配列の要素を個別の引数として展開して渡せます。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1(...$data):int
+	{
+		$total = 0;
+		for($i=0; $i < count($data); $i++) $total += $data[$i];
+		return $total;
+	}
+	function test2($str, ...$data):string
+	{
+		foreach($data as $tmp) $str.=$tmp;
+		return $str;
+	}
+	function test3(int ...$num):int
+	{
+		$total = 0;
+		foreach($num as $tmp) $total += $tmp;
+		return $total;
+	}
+	function test4(...$num):int
+	{
+		$total = 0;
+		foreach($num as $tmp) $total += $tmp;
+		return $total;
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+echo $cls1->test1(1,2,3).PHP_EOL;//6
+$tmp = "ghijk";
+echo $cls1->test2("a","bc", "def", $tmp).PHP_EOL;//abcdefghijk
+echo $cls1->test3(1,2,3,4,5,6,7,8,9,10).PHP_EOL;//55
+echo $cls1->test3(1,"2",3).PHP_EOL;//6
+//echo $cls1->test3(1,"aaa",3).PHP_EOL;//Fatal error:  Uncaught TypeError: test1::test4(): Argument #2 must be of type int, string given
+$ary=[];
+for($i=0; $i < 10; $i++)
+{
+	$ary[] =$i+1;
+	}
+var_dump($ary);
+/*
+array(10) {
+  [0]=>
+  int(1)
+  [1]=>
+  int(2)
+  [2]=>
+  int(3)
+  [3]=>
+  int(4)
+  [4]=>
+  int(5)
+  [5]=>
+  int(6)
+  [6]=>
+  int(7)
+  [7]=>
+  int(8)
+  [8]=>
+  int(9)
+  [9]=>
+  int(10)
+}
+*/
+echo $cls1->test4(...$ary).PHP_EOL;//55
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+function test1(...$data):int 
+{ 
+$total = 0; 
+for($i=0; $i < count($data); $i++) $total += $data[$i]; 
+return $total; 
+} 
+function test2($str, ...$data):string 
+{ 
+foreach($data as $tmp) $str.=$tmp; 
+return $str; 
+} 
+function test3(int ...$num):int 
+{ 
+$total = 0; 
+foreach($num as $tmp) $total += $tmp; 
+return $total; 
+} 
+function test4(...$num):int 
+{ 
+$total = 0; 
+foreach($num as $tmp) $total += $tmp; 
+return $total; 
+}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+echo $cls1->test1(1,2,3).PHP_EOL;//6
+$tmp = "ghijk";
+echo $cls1->test2("a","bc", "def", $tmp).PHP_EOL;//abcdefghijk
+echo $cls1->test3(1,2,3,4,5,6,7,8,9,10).PHP_EOL;//55
+echo $cls1->test3(1,"2",3).PHP_EOL;//6
+//echo $cls1->test3(1,"aaa",3).PHP_EOL;//Fatal error: Uncaught TypeError: test1::test4(): Argument #2 must be of type int, string given
+$ary=[];
+for($i=0; $i < 10; $i++)
+{ 
+$ary[] =$i+1; }
+var_dump($ary);
+/*
+array(10) { 
+[0]=> 
+int(1) 
+[1]=> 
+int(2) 
+[2]=> 
+int(3) 
+[3]=> 
+int(4) 
+[4]=> 
+int(5) 
+[5]=> 
+int(6) 
+[6]=> 
+int(7) 
+[7]=> 
+int(8) 
+[8]=> 
+int(9) 
+[9]=> 
+int(10)
+}
+*/
+echo $cls1->test4(...$ary).PHP_EOL;//55
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test1(...$data):int</div>引数名の前に ... をつけることで、渡された複数の引数を一つの配列として受け取ることができます。<br><br>test3(int ...$num): $num の各要素が int であることを強制します<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4</div>PHPは動的型付け言語なので、型宣言がない場合は渡された値の型（int, array, stringなど）がそのまま維持されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[エラーとなる例]<br>echo $cls1->test4($ary);</div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[内部エラー]<br>Warning:  Array to string conversion </div>引数は「$ary という配列が1個」だと解釈され<br>関数の引数である$numは[$ary]配列の中に配列が入った二次元配列のような状態になります。<br>$num[0] には配列（$ary）が入っています。<br>PHPでは echo で配列を表示しようとすると<br>Array to string conversion 警告が発生し、<br>中身ではなく文字列 "Array" として出力しようとします。<br>そのため、関数を呼び出す際にも ... を使って配列を展開（アンパック）して渡す必要があります。<br>(例)<br>echo $cls1->test4(...$ary);<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2:"PHPの可変長引数",n3:"引数",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">...演算子（スプラット演算子）による定義</div>PHP 5.6以降、引数名の前に ... をつけることで、渡された複数の引数を一つの配列として受け取ることができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">通常の引数との併用</div>通常の引数の後に可変長引数を置くことができます。可変長引数は必ず最後に定義する必要があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">型指定（Type Hinting）</div>可変長引数にも型を指定できます。この場合、渡される全ての値がその型である必要があります。 <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">配列の展開（アンパック）</div>関数を呼び出す際に、配列の前に ... をつけると、配列の要素を個別の引数として展開して渡せます。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test1(...$data):int</div>引数名の前に ... をつけることで、渡された複数の引数を一つの配列として受け取ることができます。<br><br>test3(int ...$num): $num の各要素が int であることを強制します<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4</div>PHPは動的型付け言語なので、型宣言がない場合は渡された値の型（int, array, stringなど）がそのまま維持されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[エラーとなる例]<br>echo $cls1->test4($ary);</div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[内部エラー]<br>Warning:  Array to string conversion </div>引数は「$ary という配列が1個」だと解釈され<br>関数の引数である$numは[$ary]配列の中に配列が入った二次元配列のような状態になります。<br>$num[0] には配列（$ary）が入っています。<br>PHPでは echo で配列を表示しようとすると<br>Array to string conversion 警告が発生し、<br>中身ではなく文字列 "Array" として出力しようとします。<br>そのため、関数を呼び出す際にも ... を使って配列を展開（アンパック）して渡す必要があります。<br>(例)<br>echo $cls1->test4(...$ary);<br>`,n7:"戻る",},en: {n1: "back",n2: "PHP Variable Length Arguments",n3: "Arguments",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Defining with the ... Operator (Splat Operator)</div>As of PHP 5.6, you can receive multiple passed arguments as a single array by adding ... before the argument name. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Using with Regular Arguments</div>Variable length arguments can be placed after regular arguments. Variable length arguments must always be defined last. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Type Hinting</div>You can also specify a type for variable length arguments. In this case, all passed values ​​must be of that type. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Unpacking an Array</div>When calling a function, you can unpack the array elements as individual arguments by adding ... before the array. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">function test1(...$data):int</div>By adding ... before the argument name, you can receive multiple passed arguments as a single array. <br><br>test3(int ... $num): Forces each element of $num to be an int.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test4</div>PHP is a dynamically typed language, so if no type declaration is provided, the type of the passed value (int, array, string, etc.) will be maintained. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Error Example]<br>echo $cls1->test4($ary);</div><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Internal Error]<br>Warning: Array to string conversion</div>The argument is interpreted as "one array named $ary."<br>The function argument $num is treated as a two-dimensional array with an array inside the [$ary] array. <br>$num[0] contains the array ($ary). <br>In PHP, when you try to display an array using echo,<br>an Array to string conversion warning occurs,<br>and the function attempts to output the string "Array" instead of the contents. <br>Therefore, when calling a function, you must unpack the array using ... before passing it. <br>(Example)<br>echo $cls1->test4(...$ary);<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
