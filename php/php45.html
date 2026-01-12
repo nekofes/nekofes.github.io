@@ -1,0 +1,700 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">match</div></td></tr><tr><td><div id="n3">判定関連</div></td></tr></table><br><div id="n4">match 式においては、「数字以外（文字列など）を扱うことのデメリット」はほぼ解消されており、文字列でも積極的に使って問題ありません。<br>match 式は 「厳密な比較 (===)」 を行うため、型が違えば一致しません。<br>このため、文字列を扱っても型変換によるバグが起きる心配がなくなりました。<br>match は、条件がすべて整数や文字列の場合、<br>内部的に「ジャンプテーブル（ハッシュマップのようなもの）」として処理されるため、条件が増えても高速に動作します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[PHP 7.2以降]</div>switch で文字列を使っても、内部で最適化されるようになりました。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[PHP 8.0以降]</div>match も同様に、文字列と整数のどちらを使っても高速に処理されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[match であえて「数字」を意識すべきケース]</div>以下のような場合は数字（あるいは Enum）を使うのが適切です。<br>状態（ステータス）の管理: HTTPステータスコード（200, 404など）や、<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">データベース上のフラグ（0: 停止, 1: 稼働）をあつかうケース</div>Enum（列挙型）の利用: PHP 8.1以降であれば、数字や文字列を直接使う代わりに<br>Enum を match で使うのが、推奨されます。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1(int $kind, int $num1, int $num2):int
+	{
+		$result = 0;
+		$result = match (true)
+		{
+			$kind === 0 => $num1 + $num2,
+			$kind === 1 => $num1 - $num2,
+			$kind === 2 => $num1 * $num2,
+			default => $num1 / $num2,
+		};
+		return $result;
+	}
+	function test2($data):string
+	{
+		$result = "";
+		try
+		{
+			$result = match($data)
+			{
+				1 => "num",
+				"1" => "string",
+				default => $this->judgeTest2(),
+			};
+		}
+		catch (Exception $e)
+		{
+			$result = $e->getMessage();
+		}
+		return $result;
+	}
+	private function judgeTest2(){ return "test2 match error";}
+	function test3():void
+	{
+		try 
+		{
+			$value = 3;
+			$result = match ($value) 
+			{
+				1 => "success",
+				default => throw new Exception("test3 match error"),
+			};
+			echo "this won't run.";
+		} catch (Exception $e) {
+			echo "error caught : " . $e->getMessage();
+		}
+		
+		echo "this will run."; // プログラムは続行している
+	}
+	function test4():void
+	{
+		$status= "error";
+		$result = match($status)
+		{
+			"success" => true,
+			"error" => false,
+			default => null,
+		};
+		if($result === false)
+		{
+			//matchで処理を終了させるケース
+			exit("match end");
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+echo $cls1->test1(0, 10, 2).PHP_EOL;//12
+echo $cls1->test1(1, 10, 2).PHP_EOL;//8
+echo $cls1->test1(2, 10, 2).PHP_EOL;//20
+echo $cls1->test1(3, 10, 2).PHP_EOL;//5
+echo "----------".PHP_EOL;
+echo $cls1->test2(1).PHP_EOL;//num
+echo $cls1->test2("1").PHP_EOL;//string
+echo $cls1->test2(0).PHP_EOL;//test2 match error
+//$cls1->test3();
+//[test3を実行した場合は下記のログが出力されます]
+/*
+error caught : test3 match error
+this will run.
+*/
+$cls1->test4();//match end
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1(int $kind, int $num1, int $num2):int 
+	{ 
+		$result = 0; 
+		$result = match (true) 
+		{ 
+		$kind === 0 => $num1 + $num2, 
+		$kind === 1 => $num1 - $num2, 
+		$kind === 2 => $num1 * $num2, 
+		default => $num1 / $num2, 
+		}; 
+		return $result; 
+	} 
+	function test2($data):string 
+	{ 
+		$result = ""; 
+		try 
+		{ 
+			$result = match($data) 
+			{ 
+				1 => "num", 
+				"1" => "string", 
+				default => $this->judgeTest2(), 
+			}; 
+		} 
+		catch (Exception $e) 
+		{ 
+			$result = $e->getMessage(); 
+		} 
+		return $result; 
+	} 
+	private function judgeTest2(){ return "test2 match error";}
+	function test3():void
+	{
+		try
+		{
+			$value = 3;
+			$result = match ($value)
+			{
+				1 => "success",
+				default => throw new Exception("test3 match error"),
+			};
+			echo "this won't run.";
+		} catch (Exception $e) {
+			echo "error caught: " . $e->getMessage();
+		}
+		
+		echo "this will run."; // The program continues.
+	}
+	function test4():void
+	{
+		$status= "error";
+		$result = match($status)
+		{
+			"success" => true,
+			"error" => false,
+			default => null,
+		};
+		if($result === false)
+		{
+			//End processing with match
+			exit("match end");
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+echo $cls1->test1(0, 10, 2).PHP_EOL;//12
+echo $cls1->test1(1, 10, 2).PHP_EOL;//8
+echo $cls1->test1(2, 10, 2).PHP_EOL;//20
+echo $cls1->test1(3, 10, 2).PHP_EOL;//5
+echo "----------".PHP_EOL;
+echo $cls1->test2(1).PHP_EOL;//num
+echo $cls1->test2("1").PHP_EOL;//string
+echo $cls1->test2(0).PHP_EOL;//test2 match error
+//$cls1->test3();
+//[The following log is output when test3 is executed]
+/*
+error caught: test3 match error
+this will run.
+*/
+$cls1->test4();//match end
+echo "&lt;/pre&gt;";
+echo "&lt;/pre&gt;";
+</div>
+<br>
+<div id="n6">
+<table border=1>
+<tr>
+<td>種類</td>
+<td>switch</td>
+<td>match</td>
+</tr>
+
+<tr>
+<td>評価</td>
+<td>ステートメント(Statement)</td>
+<td>式(Expression)</td>
+</tr>
+
+<tr>
+<td>比較</td>
+<td>通常の比較(==)</td>
+<td>型を含めた厳密な比較(===)</td>
+</tr>
+
+<tr>
+<td>戻り値</td>
+<td>なし</td>
+<td>あり</td>
+</tr>
+
+<tr>
+<td>終了処理</td>
+<td>breakが必要</td>
+<td>不要(自動終了)</td>
+</tr>
+
+<tr>
+<td>例外</td>
+<td>一致なしでもエラーにならない</td>
+<td>一致なしでdefaultがないと例外になる</td>
+</tr>
+</table>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+test4
+</div>
+try-catch を使っている場合は、例外が発生した瞬間に<br>
+catchブロックへジャンプし、プログラムは停止せずに続行されます。<br>
+</div>
+<br><br>
+<a id="n8" href='#' onClick="f2();">戻る</a>
+
+<br>
+<br>
+
+<table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table>
+
+<style>
+
+.marker99ccff
+{
+    background-color: rgb(153 204 255 / 0.5);
+}
+
+.marker8fbc8f
+{
+    background-color: rgb(143 188 143 / 0.5);
+}
+
+.markerffd700
+{
+    background-color: rgb(255 215 0 / 0.5);
+}
+.frame {
+background-color: rgb(240 248 255 / 0.5); 
+border: 3px solid rgb(30 144 255 / 1.00);    
+padding: 5px;            
+margin: 10px;            
+margin-left:0px;
+word-break:break-all;
+}
+
+.toggle-switch {
+position: relative;
+display: inline-block;
+width: 60px;
+height: 34px;
+}
+
+.toggle-switch input {
+display: none;
+}
+
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0; left: 0;
+right: 0; bottom: 0;
+background-color: lightgreen; 
+transition: 0.4s;
+border-radius: 34px;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 26px; width: 26px;
+left: 4px; bottom: 4px;
+background-color: white;
+transition: 0.4s;
+border-radius: 50%;
+content:"JP";
+text-align: center;
+}
+
+
+input:checked + .slider {
+background-color: lightblue; 
+}
+
+input:checked + .slider:before {
+transform: translateX(26px);
+content:"EN";
+text-align: center;
+}
+</style>
+
+
+
+<script>
+    
+    function copyCodeById(targetId) {
+      const codeElement = document.getElementById(targetId);
+      if (!codeElement) {
+        console.error("対象のコードブロックが見つかりません: " + targetId);
+        return;
+      }
+      
+      const codeText = codeElement.innerText;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(codeText)
+          .then(() => {
+            console.log("コピー成功");
+          })
+          .catch(err => {
+            console.error("コピー中にエラーが発生しました:", err);
+          });
+      } else {
+        console.error("Clipboard API はこのブラウザで利用できません");
+      }
+    }
+
+    
+    document.querySelectorAll('.copy-button').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        copyCodeById(targetId);
+      });
+    });
+</script>
+<script>
+
+let lang = 0; 
+let nextUrlPath="";
+const text = {
+  ja: {
+n1:"戻る",
+n2: "match",
+n3: "判定処理",
+n4:`
+match 式においては、「数字以外（文字列など）を扱うことのデメリット」はほぼ解消されており、文字列でも積極的に使って問題ありません。<br>
+match 式は 「厳密な比較 (===)」 を行うため、型が違えば一致しません。<br>
+このため、文字列を扱っても型変換によるバグが起きる心配がなくなりました。<br>
+match は、条件がすべて整数や文字列の場合、<br>
+内部的に「ジャンプテーブル（ハッシュマップのようなもの）」として処理されるため、条件が増えても高速に動作します。<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+[PHP 7.2以降]
+</div>
+switch で文字列を使っても、内部で最適化されるようになりました。<br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+[PHP 8.0以降]
+</div>
+match も同様に、文字列と整数のどちらを使っても高速に処理されます。<br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+[match であえて「数字」を意識すべきケース]
+</div>
+以下のような場合は数字（あるいは Enum）を使うのが適切です。<br>
+状態（ステータス）の管理: HTTPステータスコード（200, 404など）や、<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+データベース上のフラグ（0: 停止, 1: 稼働）をあつかうケース
+</div>
+Enum（列挙型）の利用: PHP 8.1以降であれば、数字や文字列を直接使う代わりに<br>
+Enum を match で使うのが、推奨されます。<br>
+`,
+n5:`
+[サンプル]
+`,
+n6:`
+<table border=1>
+<tr>
+<td>種類</td>
+<td>switch</td>
+<td>match</td>
+</tr>
+
+<tr>
+<td>評価</td>
+<td>ステートメント(Statement)</td>
+<td>式(Expression)</td>
+</tr>
+
+<tr>
+<td>比較</td>
+<td>通常の比較(==)</td>
+<td>型を含めた厳密な比較(===)</td>
+</tr>
+
+<tr>
+<td>戻り値</td>
+<td>なし</td>
+<td>あり</td>
+</tr>
+
+<tr>
+<td>終了処理</td>
+<td>breakが必要</td>
+<td>不要(自動終了)</td>
+</tr>
+
+<tr>
+<td>例外</td>
+<td>一致なしでもエラーにならない</td>
+<td>一致なしでdefaultがないと例外になる</td>
+</tr>
+</table>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+test4
+</div>
+try-catch を使っている場合は、例外が発生した瞬間に<br>
+catchブロックへジャンプし、プログラムは停止せずに続行されます。<br>
+`,
+n7:"戻る",
+  },
+  en: {
+n1: "back",
+n2: "match",
+n3: "Judgemt process",
+n4:`
+The "disadvantages of using non-numeric characters (such as strings)" in the match expression have been largely eliminated, making it safe to use with strings. <br>
+The match expression performs a "strict comparison (===)," meaning that different types will not match. <br>
+This eliminates the risk of type conversion bugs when working with strings. <br>
+When all conditions in match are integers or strings, <br>
+they are internally processed as a "jump table" (similar to a hash map), allowing for faster performance even with an increasing number of conditions. <br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+[PHP 7.2 and later]
+</div>
+When using strings in switch, internal optimizations are now performed. <br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+[PHP 8.0 and later]
+</div>
+match is also fast, regardless of whether you use a string or an integer. <br>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+[Cases where you should consider using numbers with match]
+</div>
+It's appropriate to use numbers (or enums) in the following cases: <br>
+Status management: HTTP status codes (200, 404, etc.) and <br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+Database flags (0: stopped, 1: running) are handled.
+</div>
+Using enums: In PHP 8.1 and later, it is recommended to use enums with match instead of using numbers or strings directly. <br>
+`,
+n5:`
+[Sample]
+`,
+n6:`
+<table border=1>
+<tr>
+<td>Type</td>
+<td>switch</td>
+<td>match</td>
+</tr>
+
+<tr>
+<td>Evaluation</td>
+<td>Statement</td>
+<td>Expression</td>
+</tr>
+
+<tr>
+<td>Comparison</td>
+<td>Normal Comparison (==)</td>
+<td>Strict Comparison Including Types (===)</td>
+</tr>
+
+<tr>
+<td>Return Value</td>
+<td>None</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Termination Process</td>
+<td>Break Required</td>
+<td>Not Required (Automatic Termination)</td>
+</tr>
+
+<tr>
+<td>Exception</td>
+<td>No Error Even if No Match Is Found</td>
+<td>Exception Occurs When No Match Is Found and No Default Is Used</td>
+</tr>
+</table>
+<br>
+<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">
+test4
+</div>
+When using try-catch, the moment an exception occurs, the program jumps to the catch block and continues without stopping. <br>
+`,
+n7:"back",
+}
+};
+function applyTextAll(lang, divIds) {
+  divIds.forEach((id) => applyText(lang, id));
+}
+
+
+function getText(lang, divId) {
+  
+  return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';
+}
+
+function applyText(lang, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerHTML = getText(lang, divId);
+}
+
+const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];
+
+document.addEventListener("DOMContentLoaded", () => {
+const toggle = document.getElementById("toggle");
+const hiddenLang = document.getElementById("lang");
+const langText = document.getElementById("langText");
+f4();
+toggle.addEventListener("change", () => {
+	changeToggle();
+});
+});
+function changeToggle()
+{
+
+    const hiddenLang = document.getElementById("lang");
+
+if (toggle.checked) 
+{
+
+	
+	hiddenLang.value = 1;
+        lang=1;
+	
+} 
+else 
+{
+
+	
+	hiddenLang.value = 0;
+        lang=0;
+	
+}
+    displayLangText();
+    
+    applyTextAll(lang==0?"ja":"en", ary);
+
+
+}
+function displayLangText()
+{
+    const hiddenLang = document.getElementById("lang");
+if (hiddenLang.value == 0) 
+{
+	
+	langText.textContent = "現在の言語: 日本語";
+} 
+else 
+{
+	
+	langText.textContent = "current language: English";
+}
+
+  
+    f3();
+    f0();
+    const obj=document.getElementById('lang');
+
+if(obj.value==1)
+{
+	toggle.checked=true;
+        const hiddenLang = document.getElementById("lang");
+	hiddenLang.value = 1;
+        
+        
+        
+
+
+}
+    else
+    {
+	toggle.checked=false;
+    }
+}
+function f1(value)
+{
+    const obj=document.getElementById('lang');
+    obj.value=value;
+    f0();
+}
+function f0()
+{
+    const obj=document.getElementById('lang');
+    let lang=obj.value;
+    
+
+    
+    
+    
+    applyTextAll(lang==0?"ja":"en", ary);
+f4();
+
+}
+function f4()
+{
+    const obj=document.getElementById('lang');
+    let lang=obj.value;
+//htmlとphpを言語切替
+const h1=document.getElementById('h1');
+//const h2=document.getElementById('h2');
+const h11=document.getElementById('h11');
+//const h22=document.getElementById('h22');
+if(lang==1)
+{
+	h1.style.display="none";
+	
+	h11.style.display="block";
+	
+}
+else
+{
+	h1.style.display="block";
+	
+	h11.style.display="none";
+	
+}
+
+}
+
+function f3()
+{
+    let o1=new URL(window.location.href);
+    let o2=o1.searchParams;
+    let d=o2.get('lang');
+    const hiddenLang = document.getElementById("lang");
+    if(d==1||hiddenLang.value==1)
+    {
+        hiddenLang.value=1;
+    }
+    else
+    {
+        hiddenLang.value=0;
+    }
+}
+function f2()
+{
+    const obj=document.getElementById('lang');
+    let lang=obj.value;
+
+
+
+
+
+
+
+
+
+
+
+
+    window.location.href=urlPath();
+}
+function urlPath()
+{
+const obj=document.getElementById('lang');
+let lang=obj.value;
+    nextUrlPath="/php/index.html";
+return nextUrlPath+"?lang=" + lang;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
+
