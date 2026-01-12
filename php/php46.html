@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">配列要素の上書き(1)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">配列要素を更新する処理のサンプルです。</div></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		$data = ["num1" => 100, "num2" => 20];
+		$this->sum1($data);//sum total:120
+		$data["num1"] = 10;
+		$this->sum1($data);//sum total:30
+	}
+	function test2():void
+	{
+		$data = [1, 2, 3, 4, 5];
+		$index = 0;
+		foreach($data as &$num)
+		{
+			switch($index)
+			{
+				case 2:
+				case 4:
+				case 5:
+					$num *= 10;
+					break;
+			}
+			echo "index:$index num:$num".PHP_EOL;
+/*
+index:0 num:1
+index:1 num:2
+index:2 num:30
+index:3 num:4
+index:4 num:50
+*/
+			$index++;
+		}
+		$this->sum2($data);//sum total:87
+	}
+	function test3():void
+	{
+		$colors = ['red', 'green', 'blue'];
+		// インデックス1から1つ削除し、'yellow'を挿入
+		array_splice($colors, 1, 1, 'yellow'); 
+		for($i=0;$i<count($colors);$i++)
+		{
+			echo "i:$i colors:".$colors[$i].PHP_EOL;
+		}
+/*
+i:0 colors:red
+i:1 colors:yellow
+i:2 colors:blue
+*/
+		foreach ($colors as $key => $value)
+		{
+			echo "value:$value".PHP_EOL;
+		}
+/*
+value:red
+value:yellow
+value:blue
+*/
+	}
+	private function sum1(array $ary)
+	{
+		$total = 0;
+		foreach ($ary as $key => $num)
+		{
+			$total += $num;
+		}
+		echo "sum total:$total".PHP_EOL;
+	}
+	private function sum2(array $ary)
+	{
+		$total = 0;
+		foreach ($ary as $num)
+		{
+			$total += $num;
+		}
+		echo "sum total:$total".PHP_EOL;
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1():void 
+	{ 
+		$data = ["num1" => 100, "num2" => 20]; 
+		$this->sum1($data);//sum total:120 
+		$data["num1"] = 10; 
+		$this->sum1($data);//sum total:30 
+	} 
+	function test2():void 
+	{ 
+		$data = [1, 2, 3, 4, 5]; 
+		$index = 0; 
+		foreach($data as &$num) 
+		{ 
+			switch($index) 
+			{ 
+				case 2: 
+				case 4: 
+				case 5: 
+					$num *= 10; 
+					break; 
+			} 
+			echo "index:$index num:$num".PHP_EOL;
+/*
+index:0 num:1
+index:1 num:2
+index:2 num:30
+index:3 num:4
+index:4 num:50
+*/
+			$index++;
+		}
+		$this->sum2($data);//sum total:87
+	}
+	function test3():void
+	{
+		$colors = ['red', 'green', 'blue'];
+		// Delete one from index 1 and insert 'yellow'
+		array_splice($colors, 1, 1, 'yellow');
+		for($i=0;$i<count($colors);$i++)
+		{
+			echo "i:$i colors:".$colors[$i].PHP_EOL;
+		}
+/*
+i:0 colors:red
+i:1 colors:yellow
+i:2 colors:blue
+*/
+		foreach ($colors as $key => $value)
+		{
+			echo "value:$value".PHP_EOL;
+		}
+/*
+value:red
+value:yellow
+value:blue
+*/
+	}
+	private function sum1(array $ary) 
+	{ 
+		$total = 0; 
+		foreach ($ary as $key => $num) 
+		{ 
+			$total += $num; 
+		} 
+		echo "sum total:$total".PHP_EOL; 
+	} 
+	private function sum2(array $ary) 
+	{ 
+		$total = 0; 
+		foreach ($ary as $num) 
+		{ 
+			$total += $num; 
+		} 
+		echo "sum total:$total".PHP_EOL; 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data["num1"] = 10;</div>連想配列のキーを指定して値を変更します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">foreach($data as &$num)</div>$(参照渡し)をすることで<br>配列の要素を直接書き換えることができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_splice</div>配列の一部を削除し、別の要素で置き換えます。<br><br>count($colors)の件数は変わりません。<br>array_spliceを実行するとインデックス1から1つ削除し、代わりに 'yellow' を1つ挿入されます。<br>array_spliceの処理は新しい配列を返すのではなく、元の変数 $colors 自体を直接書き換える処理です。<br>要素を減らすとインデックスが詰まってしまい<br>要素のスキップが発生する可能性があります。<br>しかし今回は1つ消して、1つ入れる置換処理のため<br>配列の件数も添字の対応も変わりません。<br>そのためループ処理に影響を与えることはありません。<br><br>phpのforeachは配列要素の順番が保証されています。<br>これは内部的に順序付きマップとして保持されているためです。<br>そのため、明示的にソート等の処理をしない限り、定義した順番どおりに処理されます。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "配列要素の上書き(1)",n3: "配列関連",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">配列要素を更新する処理のサンプルです。</div>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data["num1"] = 10;</div>連想配列のキーを指定して値を変更します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">foreach($data as &$num)</div>$(参照渡し)をすることで<br>配列の要素を直接書き換えることができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_splice</div>配列の一部を削除し、別の要素で置き換えます。<br><br>count($colors)の件数は変わりません。<br>array_spliceを実行するとインデックス1から1つ削除し、代わりに 'yellow' を1つ挿入されます。<br>array_spliceの処理は新しい配列を返すのではなく、元の変数 $colors 自体を直接書き換える処理です。<br>要素を減らすとインデックスが詰まってしまい<br>要素のスキップが発生する可能性があります。<br>しかし今回は1つ消して、1つ入れる置換処理のため<br>配列の件数も添字の対応も変わりません。<br>そのためループ処理に影響を与えることはありません。<br><br>phpのforeachは配列要素の順番が保証されています。<br>これは内部的に順序付きマップとして保持されているためです。<br>そのため、明示的にソート等の処理をしない限り、定義した順番どおりに処理されます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Overwriting Array Elements (1)",n3: "Array Related",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">This is a sample of updating an array element.</div>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data["num1"] = 10;</div>Specify an associative array key to change its value. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">foreach($data as &$num)</div>By using $(pass by reference),<br>you can directly modify array elements. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_splice</div>Deletes part of an array and replaces it with another element. <br><br>The number of elements in count($colors) remains unchanged. <br>When array_splice is executed, one element is deleted from index 1 and a single 'yellow' is inserted instead. <br>array_splice does not return a new array, but instead directly modifies the original variable $colors itself. <br>Reducing elements can clog the index,<br>leading to skipped elements. <br>However, in this case, we are deleting one element and adding one,<br>so the number of elements in the array and the corresponding subscripts will not change. <br>Therefore, this does not affect the loop processing. <br><br>PHP's foreach guarantees the order of array elements. <br>This is because they are internally stored as an ordered map. <br>Therefore, unless you explicitly sort them, they will be processed in the defined order. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
