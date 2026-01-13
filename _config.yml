@@ -3,3 +3,11 @@ url: "https://nekofes.github.io"
 
 plugins:
   - jekyll-sitemap
+exclude:
+  - node_modules
+  - vendor
+  - .bundle
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .gitignore
