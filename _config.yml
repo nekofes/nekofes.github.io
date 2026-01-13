@@ -3,4 +3,3 @@ url: "https://nekofes.github.io"
 
 plugins:
   - jekyll-sitemap
-gem "jekyll-sitemap"
