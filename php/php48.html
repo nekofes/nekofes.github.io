@@ -1,0 +1,317 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">読み込んだファイルデータのタブの判定処理</div></td></tr><tr><td><div id="n3">判定処理</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">読み込んだファイルデータのタブの判定処理</div>中括弧を使用して<br>&#92;u{0009}<br>のように書くことでUnikodeコードポイントを使用した判定ができます。<br>php7.0より<br>内部の0(ゼロ)はなくてもあっても構いません。<br>&#92;u{9}<br>でも動作します。<br>javascriptでは&quot;&#92;u0009&quot;と書きますが、PHPでは&#92;u{...} という中括弧(ブレース)が必要な形式となりました。<br>※php7.0以降より<br>そのため、単に &quot;&#92;u0009&quot; と書くと、<br>PHPはその文字列を<br>「バックスラッシュ、u、0、0、0、9」<br>という単なる文字列として判定します。<br>「&#92;t」を認識させるには、<br>必ずダブルクォーテーション（"）で囲む必要があります。<br>シングルクォーテーション（'t'）では単なる2文字として扱われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[正規表現のケース]<br></div>$text="タブの入った文字列";<br>if (preg_match('/&#92;t/', $text)) {<br>&nbsp;&nbsp;echo "タブ文字が見つかりました";<br>}<br></div><br><div id="n5">[サンプル]</div><br>[aaa.html]<br><textarea id="t1" rows=17 cols=80>
+<html>
+<script>
+async function test(d)
+{
+	let lastNo = await lastPageNo();
+	let no = 0;
+
+
+	if(d > 0)
+	{		
+		if(no < 1)
+		{
+			no=1;
+		}
+		else if(no>lastNo)
+		{
+			no=lastNo;
+		}
+	}
+	obj.value=no;
+}
+</script>
+</html>
+</textarea><br><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		//同一階層にphpが存在していると仮定します
+		$path = "aaa.html";	
+		$ary = [];
+		$this->loadFile($ary, $path);
+		for($i=0; $i<3; $i++)
+		{
+			$this->loadFileData($ary, $i);
+			echo "&lt;hr&gt;";
+		}
+	}
+	private function loadFileData(array $ary, int $kind)
+	{
+		$flg = 0;
+		$data = "";
+		switch($kind)
+		{
+			case 0:
+				$data = "\\tタブ文字を使用して判定";
+				break;
+			case 1:
+				$data = "タブ入力文字を使用して判定";
+				break;
+			case 2:
+				$data = "Unicode エスケープシーケンスを使用して判定";
+				break;
+		}
+		echo $data.PHP_EOL;
+		for($i=0; $i<count($ary); $i++)
+		{
+			$data = $ary[$i];
+			$length = mb_strlen($data);
+			$count = 0;
+			//読み込んだ1行を1文字ずつ判定します
+			for($j=0; $j < $length; $j++)
+			{
+				//タブ判定処理
+				if($this->judgeTab(mb_substr($data, $j, 1), $kind) == 1)
+				{
+					$count++;
+				}
+			}
+			if($count == 0) continue;
+			//タブと判定したケースは、該当行インデックスとデータを出力
+			echo "i:$i tab count:$count data:$data".PHP_EOL;
+		}
+	}
+	//タブ判定処理
+	//$data:1文字
+	//$kind:判定種類
+	//0:\tタブ文字を使用して判定
+	//1:タブ入力文字を使用して判定
+	//2:Unicode エスケープシーケンスを使用して判定
+	private function judgeTab(string $data, $kind) : int
+	{
+		$result = 0;
+		switch($kind)
+		{
+			case 0:
+				if ($data === "\t")
+				{
+					$result = 1;
+				}
+				break;
+			case 1:
+				//タブ文字をダブルコーテーション内に設定して判定
+				if ($data === "	")
+				{
+					$result = 1;
+				}
+				break;
+			case 2:
+				if ($data === "\u{0009}")
+				{
+					$result = 1;
+				}
+				break;
+		}
+		return $result;
+	}
+	private function loadFile(array &$ary, string $path):void
+	{
+		$ary = [];
+        $file = fopen($path, "r");
+        $tmp="";
+        while(!feof($file))
+        {
+            $ary[]=fgets($file);
+        }
+        fclose($file);
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		//Assumes PHP exists at the same level
+		$path = "aaa.html";
+		$ary = [];
+		$this->loadFile($ary, $path);
+		for($i=0; $i<3; $i++)
+		{
+			$this->loadFileData($ary, $i);
+		echo "&lt;hr&gt;";
+		}
+	}
+	private function loadFileData(array $ary, int $kind)
+	{
+		$flg = 0;
+		$data = "";
+		switch($kind)
+		{
+			case 0:
+				$data = "Test using a tab character";
+				break;
+			case 1:
+				$data = "Test using a tab input character";
+				break;
+			case 2:
+				$data = "Test using a Unicode escape sequence";
+				break;
+		}
+		echo $data.PHP_EOL;
+		for($i=0; $i < count($ary); $i++)
+		{
+			$data = $ary[$i];
+			$length = mb_strlen($data);
+			$count = 0;
+			// Judge each character in the read line.
+			for($j=0; $j < $length; $j++)
+			{
+				// Tab detection process
+				if($this->judgeTab(mb_substr($data, $j, 1), $kind) == 1)
+				{
+					$count++;
+				}
+			}
+			if($count == 0) continue;
+			// If a tab is detected, output the corresponding line index and data.
+			echo "i:$i tab count:$count data:$data".PHP_EOL;
+		}
+	}
+	// Tab detection process
+	//$data: 1 character
+	//$kind: Judgement type
+	//0: Judge using a tab character
+	//1: Judge using a tab input character
+	//2: Judge using a Unicode escape sequence
+	private function judgeTab(string $data, $kind) : int
+	{
+		$result = 0;
+		switch($kind)
+		{
+			case 0:
+				if ($data === "\t")
+				{
+					$result = 1;
+				}
+				break;
+			case 1:
+				//Set a tab character in double quotes and check.
+				if ($data === " ")
+				{
+					$result = 1;
+				}
+				break;
+			case 2:
+				if ($data === "\u{0009}")
+				{
+					$result = 1;
+				}
+				break;
+		}
+		return $result;
+	}
+	private function loadFile(array &$ary, string $path):void
+	{
+		$ary = [];
+		$file = fopen($path, "r");
+		$tmp="";
+		while(!feof($file))
+		{
+			$ary[]=fgets($file);
+		}
+		fclose($file);
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+echo "&lt;/pre&gt;";
+</pre></div><br><br><div id="n6">[結果]<br><textarea id="t2" rows=17 cols=80>
+&#92;tタブ文字を使用して判定
+i:4 tab count:1 data:	let lastNo = await lastPageNo();
+i:5 tab count:1 data:	let no = 0;
+i:8 tab count:1 data:	if(d > 0)
+i:9 tab count:3 data:	{		
+i:10 tab count:2 data:		if(no < 1)
+i:11 tab count:2 data:		{
+i:12 tab count:3 data:			no=1;
+i:13 tab count:2 data:		}
+i:14 tab count:2 data:		else if(no>lastNo)
+i:15 tab count:2 data:		{
+i:16 tab count:3 data:			no=lastNo;
+i:17 tab count:2 data:		}
+i:18 tab count:1 data:	}
+i:19 tab count:1 data:	obj.value=no;
+タブ入力文字を使用して判定
+i:4 tab count:1 data:	let lastNo = await lastPageNo();
+i:5 tab count:1 data:	let no = 0;
+i:8 tab count:1 data:	if(d > 0)
+i:9 tab count:3 data:	{		
+i:10 tab count:2 data:		if(no < 1)
+i:11 tab count:2 data:		{
+i:12 tab count:3 data:			no=1;
+i:13 tab count:2 data:		}
+i:14 tab count:2 data:		else if(no>lastNo)
+i:15 tab count:2 data:		{
+i:16 tab count:3 data:			no=lastNo;
+i:17 tab count:2 data:		}
+i:18 tab count:1 data:	}
+i:19 tab count:1 data:	obj.value=no;
+Unicode エスケープシーケンスを使用して判定
+i:4 tab count:1 data:	let lastNo = await lastPageNo();
+i:5 tab count:1 data:	let no = 0;
+i:8 tab count:1 data:	if(d > 0)
+i:9 tab count:3 data:	{		
+i:10 tab count:2 data:		if(no < 1)
+i:11 tab count:2 data:		{
+i:12 tab count:3 data:			no=1;
+i:13 tab count:2 data:		}
+i:14 tab count:2 data:		else if(no>lastNo)
+i:15 tab count:2 data:		{
+i:16 tab count:3 data:			no=lastNo;
+i:17 tab count:2 data:		}
+i:18 tab count:1 data:	}
+i:19 tab count:1 data:	obj.value=no;
+</textarea><br>このサンプルではhtmlファイルを1行ずつ読み込み、そのデータを配列に追加したものを<br>(1) &#92;tタブ文字を使用して判定<br>(2) タブ入力文字を使用して判定<br>(3) Unicode エスケープシーケンスを使用して判定<br>の3種類で判定しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data = $ary[$i];<br></div>ファイルから読み込んだ行を取り出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$length = mb_strlen($data);<br></div>1行分の長さを取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">for($j=0; $j < $length; $j++)<br></div>1行文のデータを1文字ずつ判定するためfor文を使っています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mb_substr($data, $j, 1)<br></div>1文字を取得します。<br><br>[今回のサンプルで使用した判定の種類]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(1) if ($data === &quot;&#92;t&quot;)<br></div>エスケープシーケンスのタブ文字を使用した判定処理<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(2) if ($data === &quot;	&quot;)<br></div>直接入力したタブ文字を使用した判定処理<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(3) if ($data === &quot;&#92;u{0009}&quot;)<br></div>Unicodeエスケープシーケンスを使用した判定処理<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "読み込んだファイルデータのタブの判定処理",n3: "判定処理",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">読み込んだファイルデータのタブの判定処理</div>中括弧を使用して<br>&#92;u{0009}<br>のように書くことでUnikodeコードポイントを使用した判定ができます。<br>php7.0より<br>内部の0(ゼロ)はなくてもあっても構いません。<br>&#92;u{9}<br>でも動作します。<br>javascriptでは&quot;&#92;u0009&quot;と書きますが、PHPでは&#92;u{...} という中括弧(ブレース)が必要な形式となりました。<br>※php7.0以降より<br>そのため、単に &quot;&#92;u0009&quot; と書くと、<br>PHPはその文字列を<br>「バックスラッシュ、u、0、0、0、9」<br>という単なる文字列として判定します。<br>「&#92;t」を認識させるには、<br>必ずダブルクォーテーション（"）で囲む必要があります。<br>it must be enclosed in double quotation marks (").<br>Single quotation marks ('t') will treat it as just two characters.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Regular Expression Case]<br></div>$text="String containing a tab";<br>if (preg_match('/&#92;t/', $text)) {<br>&nbsp;&nbsp;echo "A tab character was found";<br>}<br>`,n5:`[Sample]`,n6:`[result]<br><textarea id="t2" rows=17 cols=80>
+Test using a tab character
+i:4 tab count:1 data:	let lastNo = await lastPageNo();
+i:5 tab count:1 data:	let no = 0;
+i:8 tab count:1 data:	if(d > 0)
+i:9 tab count:3 data:	{		
+i:10 tab count:2 data:		if(no < 1)
+i:11 tab count:2 data:		{
+i:12 tab count:3 data:			no=1;
+i:13 tab count:2 data:		}
+i:14 tab count:2 data:		else if(no>lastNo)
+i:15 tab count:2 data:		{
+i:16 tab count:3 data:			no=lastNo;
+i:17 tab count:2 data:		}
+i:18 tab count:1 data:	}
+i:19 tab count:1 data:	obj.value=no;
+Test using a tab input character
+i:4 tab count:1 data:	let lastNo = await lastPageNo();
+i:5 tab count:1 data:	let no = 0;
+i:8 tab count:1 data:	if(d > 0)
+i:9 tab count:3 data:	{		
+i:10 tab count:2 data:		if(no < 1)
+i:11 tab count:2 data:		{
+i:12 tab count:3 data:			no=1;
+i:13 tab count:2 data:		}
+i:14 tab count:2 data:		else if(no>lastNo)
+i:15 tab count:2 data:		{
+i:16 tab count:3 data:			no=lastNo;
+i:17 tab count:2 data:		}
+i:18 tab count:1 data:	}
+i:19 tab count:1 data:	obj.value=no;
+Test using a Unicode escape sequence
+i:4 tab count:1 data:	let lastNo = await lastPageNo();
+i:5 tab count:1 data:	let no = 0;
+i:8 tab count:1 data:	if(d > 0)
+i:9 tab count:3 data:	{		
+i:10 tab count:2 data:		if(no < 1)
+i:11 tab count:2 data:		{
+i:12 tab count:3 data:			no=1;
+i:13 tab count:2 data:		}
+i:14 tab count:2 data:		else if(no>lastNo)
+i:15 tab count:2 data:		{
+i:16 tab count:3 data:			no=lastNo;
+i:17 tab count:2 data:		}
+i:18 tab count:1 data:	}
+i:19 tab count:1 data:	obj.value=no;
+</textarea><br>This sample reads an HTML file line by line, adds the data to an array, and then:<br>(1) Uses the &#92;t tab character to make a judgment.<br>(2) (1) Determine using a tab input character<br>(2) Determine using a Unicode escape sequence<br>The above three methods are used for determination.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data = $ary[$i];<br></div>Extract lines read from a file.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$length = mb_strlen($data);<br></div>Get the length of one line.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">for($j=0; $j < $length; $j++)<br></div>A for statement is used to evaluate each character in a line of data. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mb_substr($data, $j, 1)<br></div>Get one character. <br><br>[Test types used in this sample]<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(1) if ($data === &quot;&#92;t&quot;)<br></div>Testing using the tab escape sequence<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(2) if ($data === &quot; &quot;)<br></div>Test using manually entered tab characters<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(3) if ($data === &quot;&#92;u{0009}&quot;)<br></div>Test using Unicode escape sequences<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
