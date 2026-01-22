@@ -5,4 +5,4 @@ RewriteCond %{HTTP_REFERER} !^https?://(www\.)?ss1\.xrea\.com/app\.s17\.xrea\.co
 # 許可したい特定のサイトからの参照も許可
 RewriteCond %{HTTP_REFERER} !^https?://(www\.)?nekofes\.github\.io [NC]
 # それ以外のサイトからの画像ファイルへのアクセスは禁止
-RewriteRule \.(jpe?g|png|gif|bmp)$ - [F]
+RewriteRule \.(jpe?g|png|gif|bmp|zip)$ - [F]
