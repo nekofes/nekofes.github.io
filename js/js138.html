@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>Javascript MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">現在のタイトルの変更</div></td></tr><tr><td><div id="n3">画面関連</div></td></tr></table><br><div id="n4">言語切替によりタイトルを変更したい場合は<br>document.titleを使用することになります。<br>document.title は、<br>ブラウザのタブやウィンドウのタイトルバーに表示される<br>ページのタイトルを取得、<br>または<br>変更するためのプロパティです。<br><br>しかし、読み込んだ画像が諸事情により重い処理があるなどの理由があると<br>document.titleが正しく反映されないケースがあります。<br>この場合は、DOMContentLoadedのタイミングで実行することにより<br>タイトルの反映が可能になります。<br>[HTML/CSS]<br><textarea id="text" rows=10 cols=100>
+[HTML]
+<title>game</title>
+...
+<input type=hidden id=lang name=lang value=0>
+</textarea></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+window.addEventListener('DOMContentLoaded', ()=>
+{
+	changeLang();//言語判定処理
+	changeTitle();//タイトル変更
+});
+//言語判定処理
+//lang:
+//0:japanese
+//1:english
+function changeLang()
+{
+	let url = new URL(window.location.href);
+	let param = url.searchParams;
+	let lang = param.get('lang');
+	const obj = document.getElementById('lang');
+	if(lang==1 || obj.value==1)
+	{
+		obj.value = 1;
+	}
+	else
+	{
+		obj.value = 0;
+	}
+}
+//タイトル変更
+function changeTitle()
+{
+	const obj = document.getElementById('lang');
+	let lang = obj.value;
+	const title = document.getElementById('t1');
+	//背景色と文字色を変更する
+	title.style.display = "flex";
+	title.style.justifyContent = "center";
+	title.style.alignItems = "center";
+	title.style.backgroundColor = "rgb(240 255 240 / 1.00)";
+	document.title = lang == 0 ? "日本語のタイトル" : "english title";
+}
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+window.addEventListener('DOMContentLoaded', ()=>
+{
+	changeLang(); // Language Determination Process
+	changeTitle(); // Change Title
+});
+// Language Determination Process
+//lang:
+//0: Japanese
+//1: English
+function changeLang()
+{
+	let url = new URL(window.location.href);
+	let param = url.searchParams;
+	let lang = param.get('lang');
+	const obj = document.getElementById('lang');
+	if(lang==1 || obj.value==1)
+	{
+		obj.value = 1;
+	}
+	else
+	{
+		obj.value = 0;
+	}
+}
+// Change Title
+function changeTitle()
+{
+	const obj = document.getElementById('lang');
+	let lang = obj.value;
+	const title = document.getElementById('t1');
+	//Change background and text colors
+	title.style.display = "flex";
+	title.style.justifyContent = "center";
+	title.style.alignItems = "center";
+	title.style.backgroundColor = "rgb(240 255 240 / 1.00)";
+	document.title = lang == 0 ? "English Title" : "English Title";
+}
+</pre></div><div id="n6">loadイベントで実行することは<br>ページ全体の読み込みが終わってから実行されるため、<br>タイミングとしては確実な部類に入ります。<br>しかし、load イベントは、画像や広告、外部スクリプトがすべて読み込まれるまで発生しません。<br>このためload イベントが発生していない（＝実行待ち状態）」になっている可能性があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[解決策]</div>「DOMContentLoaded」を使う方法があります。<br>これは画像などを待たず、HTMLの構造さえ読み込めれば実行されるため、より早く確実にタイトルを変えられます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[DOMContentLoaded イベント]</div>ブラウザがHTML（DOMツリー）の解析を終えた瞬間に実行されます。<br>画像などを待たないので、より早いタイミングで確実にタイトルを書き換えることができます。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "現在のタイトルの変更",n3: "画面関連",n4:`言語切替によりタイトルを変更したい場合は<br>document.titleを使用することになります。<br>document.title は、<br>ブラウザのタブやウィンドウのタイトルバーに表示される<br>ページのタイトルを取得、<br>または<br>変更するためのプロパティです。<br><br>しかし、読み込んだ画像が諸事情により重い処理があるなどの理由があると<br>document.titleが正しく反映されないケースがあります。<br>この場合は、DOMContentLoadedのタイミングで実行することにより<br>タイトルの反映が可能になります。<br>`,n5:`[サンプル]`,n6:`loadイベントで実行することは<br>ページ全体の読み込みが終わってから実行されるため、<br>タイミングとしては確実な部類に入ります。<br>しかし、load イベントは、画像や広告、外部スクリプトがすべて読み込まれるまで発生しません。<br>このためload イベントが発生していない（＝実行待ち状態）」になっている可能性があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[解決策]</div>「DOMContentLoaded」を使う方法があります。<br>これは画像などを待たず、HTMLの構造さえ読み込めれば実行されるため、より早く確実にタイトルを変えられます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[DOMContentLoaded イベント]</div>ブラウザがHTML（DOMツリー）の解析を終えた瞬間に実行されます。<br>画像などを待たないので、より早いタイミングで確実にタイトルを書き換えることができます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Change current title",n3: "Screen related",n4:`If you want to change the title when switching languages, you'll need to use document.title. <br>document.title is a property used to retrieve or change the page title, which is displayed in the title bar of browser tabs and windows. <br><br>However, if the loaded image is experiencing heavy processing due to various reasons, document.title may not be updated correctly. <br>In this case, executing it at the DOMContentLoaded event will allow the title to be updated. <br>`,n5:`[Sample]`,n6:`Executing with the load event is executed after the entire page has finished loading, making it a reliable timing. <br>However, the load event does not occur until all images, ads, and external scripts have loaded. <br>This may mean that the load event has not yet occurred (i.e., is waiting to be executed). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Solution]</div>You can use "DOMContentLoaded." <br>This event executes as soon as the HTML structure is loaded, without waiting for images or other content, allowing for faster and more reliable title changes. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[DOMContentLoaded Event]</div>This event executes the moment the browser finishes parsing the HTML (DOM tree). <br>Since it doesn't wait for images or other content, it allows for faster and more reliable title changes. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/js/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
