@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">ヒアドキュメント &lt;&lt;&lt;</div></td></tr><tr><td><div id="n3">出力関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">ヒアドキュメント（&lt;&lt;&lt;）</div>複数行のHTMLを、クォーテーションの脱出（エスケープ）を気にせずに書くことができます。</div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//&lt;&lt;&lt;'EOD': Nowdoc（変数を展開しない）
+	//変数は文字列として、そのまま出力されます。
+	function test1():void
+	{
+		$lang = 0;
+		echo &lt;&lt;&lt;'EOD'
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		EOD;
+	}
+	//&lt;&lt;&lt;"EOD" : ヒアドキュメント（変数を展開する）
+	function test2():void
+	{
+		$lang = 0;
+		echo &lt;&lt;&lt;"EOD"
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		EOD;
+	}
+	//&lt;&lt;&lt;EOD : ヒアドキュメント（クォーテーションなしは、ダブルクォーテーションと同じ扱い）
+	function test3():void
+	{
+		$lang = 0;
+		echo &lt;&lt;&lt;EOD
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		EOD;
+	}
+	//コメントをつける
+	function test4():void
+	{
+		$lang = 0;
+		$flg = 1;
+		echo &lt;&lt;&lt;EOD
+		{$lang /* 言語切替の変数 */}
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		&lt;input type=hidden id="flg" value={$flg} &gt;
+		&lt;!-- lang変数の結果は0に置き換わります --&gt;
+		EOD;
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+$cls1->test4();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//&lt;&lt;&lt;'EOD': Nowdoc (does not expand variables)
+	//Variables are output as strings.
+	function test1():void
+	{
+		$lang = 0;
+		echo &lt;&lt;&lt;'EOD'
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		EOD;
+	}
+	//&lt;&lt;&lt;"EOD": Here document (expand variables)
+	function test2():void
+	{
+		$lang = 0;
+		echo &lt;&lt;&lt;"EOD"
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		EOD;
+	}
+	//&lt;&lt;&lt;EOD: Here document (no quotes are treated the same as double quotes)
+	function test3():void
+	{
+		$lang = 0;
+		echo &lt;&lt;&lt;EOD
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		EOD;
+	}
+	//Add a comment
+	function test4():void
+	{
+		$lang = 0;
+		$flg = 1;
+		echo &lt;&lt;&lt;EOD
+		{$lang /* Language switching variable */}
+		&lt;input type=hidden id="lang" value=$lang &gt;
+		&lt;input type=hidden id="flg" value={$flg} &gt;
+		&lt;!-- The result of the lang variable is replaced with 0 --&gt;
+		EOD;
+	}
+}
+echo "<pre>";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+$cls1->test4();
+echo "<pre>";
+</pre></div><div id="n6">[出力結果]</div><br><textarea id="t1" rows=7 cols=50>
+test1()
+<input type=hidden id="lang" value=$lang >
+test2()
+<input type=hidden id="lang" value=0 >
+test3()
+<input type=hidden id="lang" value=0 >
+test4()
+0
+<input type=hidden id="lang" value=0 >
+<input type=hidden id="flg" value=1 >
+
+</textarea><br><div id="n7"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[識別子（ラベル）]</div>ヒアドキュメントの「<<<」の後に続く文字列<br>識別子の命名ルール<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[使用できる文字]</div>半角英数字とアンダースコア（_）のみ。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[開始文字]</div>数字から始めてはいけません（英字またはアンダースコアで始める必要があります）。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[慣習]</div>一般的には EOD（End Of Document）、EOF（End Of File）、HTML など、<br>中身が何であるか分かりやすい大文字の英単語がよく使われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[注意点]</div>開始の識別子と終了の識別子は、大文字・小文字も含めて完全に一致させる必要があります。<br>ヒアドキュメントの内容（本文）の中に、終了識別子と同じ文字列を単独で含めないように注意してください。<br>意図しない場所で終了したと判定される原因になります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インデント（PHP 7.3以降）</div>終了識別子の前にインデント（スペースやタブ）を入れることが可能です。<br>開始時のインデント量と揃える必要があります。<br>&lt;!-- lang変数の結果は0に置き換わります --&gt;<br>HTMLコメントの中にPHPの$から始まる変数を書くとエラーになります。<br><table border=1><tr><td>書き方</td><td>内容</td></tr><tr><td>&lt;&lt;&lt;'EOD' </td><td>Nowdoc（変数を展開しない）</td></tr><tr><td>&lt;&lt;&lt;"EOD"</td><td>ヒアドキュメント（変数を展開する）</td></tr><tr><td>&lt;&lt;&lt;EOD</td><td>ヒアドキュメント（クォーテーションなしは、ダブルクォーテーションと同じ扱い）</td></tr></table></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "ヒアドキュメント &lt;&lt;&lt;",n3: "出力関連",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">ヒアドキュメント（&lt;&lt;&lt;）</div>複数行のHTMLを、クォーテーションの脱出（エスケープ）を気にせずに書くことができます。`,n5:`[サンプル]`,n6:`[出力結果]`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[識別子（ラベル）]</div>ヒアドキュメントの「<<<」の後に続く文字列<br>識別子の命名ルール<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[使用できる文字]</div>半角英数字とアンダースコア（_）のみ。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[開始文字]</div>数字から始めてはいけません（英字またはアンダースコアで始める必要があります）。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[慣習]</div>一般的には EOD（End Of Document）、EOF（End Of File）、HTML など、<br>中身が何であるか分かりやすい大文字の英単語がよく使われます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[注意点]</div>開始の識別子と終了の識別子は、大文字・小文字も含めて完全に一致させる必要があります。<br>ヒアドキュメントの内容（本文）の中に、終了識別子と同じ文字列を単独で含めないように注意してください。<br>意図しない場所で終了したと判定される原因になります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">インデント（PHP 7.3以降）</div>終了識別子の前にインデント（スペースやタブ）を入れることが可能です。<br>開始時のインデント量と揃える必要があります。<br>&lt;!-- lang変数の結果は0に置き換わります --&gt;<br>HTMLコメントの中にPHPの$から始まる変数を書くとエラーになります。<br><table border=1><tr><td>書き方</td><td>内容</td></tr><tr><td>&lt;&lt;&lt;'EOD' </td><td>Nowdoc（変数を展開しない）</td></tr><tr><td>&lt;&lt;&lt;"EOD"</td><td>ヒアドキュメント（変数を展開する）</td></tr><tr><td>&lt;&lt;&lt;EOD</td><td>ヒアドキュメント（クォーテーションなしは、ダブルクォーテーションと同じ扱い）</td></tr></table>`,n8:"戻る",},en: {n1: "back",n2: "Here document <<<",n3: "Output related",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Here document (<<<)</div>You can write multi-line HTML without worrying about escaping quotes.`,n5:`[Sample]`,n6:`[Output]`,n7:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Identifier (Label)]</div>The string following the "<<<" in a here-document <br>Identifier Naming Rules <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Characters Allowed]</div>Only alphanumeric characters and underscores (_). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Starting Character]</div>Cannot start with a number (must start with a letter or underscore). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Convention]</div>Generally, capitalized words such as EOD (End Of Document), EOF (End Of File), and HTML are often used to clearly indicate the contents. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Notes]</div>The start and end identifiers must match exactly, including case. <br>Be careful not to include a single string identical to the end identifier within the here document's content (body). <br>This may cause the document to be detected as having ended in an unintended location. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Indentation (PHP 7.3 and later)</div>You can add indentation (spaces or tabs) before the closing identifier. <br>The indentation must match the opening indentation. <br>&lt;!-- The result of the lang variable is replaced with 0 --&gt;<br>Writing a PHP variable beginning with $ inside an HTML comment will result in an error. <br><table border=1><tr><td>Syntax</td><td>Content</td></tr><tr><td>&lt;&lt;&lt;'EOD' </td><td>Nowdoc (does not expand variables)</td></tr><tr><td>&lt;&lt;&lt;"EOD"</td><td>Heredoc (expands variables)</td></tr><tr><td>&lt;&lt;&lt;EOD</td><td>Heredoc (no quotes are treated the same as double quotes)</td></tr></table>`,n8:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
