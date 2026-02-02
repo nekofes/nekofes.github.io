@@ -1,0 +1,211 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">Mac専用コマンド sips</div></td></tr><tr><td><div id="n3">画像関連</div></td></tr></table><br><div id="n4">拡張子はpngでもデータ形式がavifだった場合に変換する方法です。<br>PNGサポートがOKなのに Imagick でエラーが出る場合、<br>画像に含まれる独自のプロファイルが Imagick と相性が悪い可能性が高いです。<br>Macのプレビューで開けるのであれば、<br>Mac標準の sips (Scriptable Image Processing System) を使うのが一番確実です。<br>Macの「プレビュー」アプリと同じ仕組みで動くため、プレビューで開ける画像なら必ず処理できます。<br>ImagickやGDのライブラリ不足に悩まされることがありません。<br>OSレベルで最適化されています。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+outputResizeImage();
+//画像リサイズ出力
+function outputResizeImage()
+{
+	$kind=0;
+	$input_dir = '../img/';   
+	$output_dir = '../img/out/'; 
+	$imageSize = 300;
+	resizeImageMacOnly($kind, $input_dir, $output_dir, $imageSize);
+}
+function resizeImageMacOnly(int $kind, string $input_dir, string $output_dir, int $imageSize)
+{
+	$files=[];
+	getImageDir($kind, $input_dir, $output_dir, $files);
+	if(count($files)==0)
+	{
+		echo "対象ファイルが存在しません。";
+		return;
+	}
+	// 保存先フォルダがなければ作成する
+	if (!is_dir($output_dir))
+	{
+		mkdir($output_dir, 0755, true);
+	}
+	$absPathOut="/Applications/MAMP/htdocs/img/";
+	convertImageSize($input_dir, $output_dir, $files, $imageSize, $absPathOut);
+}
+function convertImageSize(string $input_dir, string $output_dir, array &$files, int $imageSize, string $absPathOut)
+{
+	// 出力先ディレクトリの絶対パスを確実に取得
+	$abs_out_base = realpath($output_dir);
+	
+	foreach ($files as $file) 
+	{
+		$in_file = $input_dir . $file;
+		$abs_input = realpath($in_file);
+
+		if (!$abs_input || !$abs_out_base)
+		{
+			echo "パスエラー: 入力または出力フォルダが見つかりません。\n";
+			continue;
+		}
+
+		// 出力先のフルパスを正しく結合（outフォルダの中のファイル名）
+		$abs_output = $abs_out_base . '/' . $file;
+
+		// コマンドの組み立て
+		// 注意：--out の後の半角スペースと変数 $abs_output を確実に含める
+		$command = "sips --setProperty format png --resampleWidth " . (int)$imageSize . " " . escapeshellarg($abs_input) . " --out " . escapeshellarg($abs_output);
+
+		echo "実行コマンド: " . htmlspecialchars($command) . "\n";
+
+		$exec_log = [];
+		$return_var = 0;
+		
+		// 第2引数は配列、第3引数は変数
+		exec($command . " 2>&1", $exec_log, $return_var); 
+
+		if ($return_var === 0)
+		{
+			echo "成功: $file\n";
+		}
+		else
+		{
+			echo "失敗 (コード: $return_var)\n";
+			echo "詳細情報: " . implode("&lt;br&gt;", $exec_log) . "\n";
+		}
+	}
+}
+function getImageDir(int $kind, string $input_dir, string $output_dir, array &$files)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+
+	$flg=0;
+	foreach ($all_files as $file) 
+	{
+		$flg=0;
+		if($kind==0)
+		{
+			// '/i' 修飾子をつけることで大文字小文字を区別せずに検索
+			if (preg_match('/\.png$/i', $file)) 
+			{
+				$flg=1;
+			}
+		}
+		else
+		{
+			//最も一般的な書き方（OR演算子）
+			// (jpg|jpeg) で「jpg」または「jpeg」にマッチ
+			//if (preg_match('/\.(jpg|jpeg)$/i', $file))
+
+			//短く書く方法（量指定子 ?）
+			// jpe?g で「jpg」と「jpeg」の両方にマッチ
+			if (preg_match('/\.jpe?g$/i', $file)) 
+			{
+				$flg=1;
+			}
+		}
+		if($flg==0)continue;
+		$files[] = $file;
+	}
+
+}
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+outputResizeImage();
+//Resize image output
+function outputResizeImage()
+{
+	$kind=0;
+	$input_dir = '../img/';
+	$output_dir = '../img/out/';
+	$imageSize = 300;
+	resizeImageMacOnly($kind, $input_dir, $output_dir, $imageSize);
+}
+function resizeImageMacOnly(int $kind, string $input_dir, string $output_dir, int $imageSize)
+{
+	$files=[];
+	getImageDir($kind, $input_dir, $output_dir, $files);
+	if(count($files)==0)
+	{
+		echo "The target file does not exist.";
+		return;
+	}
+	//Create the destination folder if it does not exist.
+	if (!is_dir($output_dir))
+	{
+	mkdir($output_dir, 0755, true);
+	}
+	$absPathOut="/Applications/MAMP/htdocs/img/";
+	convertImageSize($input_dir, $output_dir, $files, $imageSize, $absPathOut);
+}
+function convertImageSize(string $input_dir, string $output_dir, array &$files, int $imageSize, string $absPathOut)
+{
+	// Ensure absolute path of output directory is obtained.
+	$abs_out_base = realpath($output_dir);
+	
+	foreach ($files as $file)
+	{
+		$in_file = $input_dir . $file;
+		$abs_input = realpath($in_file);
+		
+		if (!$abs_input || !$abs_out_base)
+		{
+			echo "Path error: Input or output folder not found.\n";
+			continue;
+		}
+	
+		// Correctly combine the full output path (filename in the out folder).
+		$abs_output = $abs_out_base . '/' . $file;
+		
+		// Assembling the command
+		// Note: Be sure to include a space after --out and the variable $abs_output.
+		$command = "sips --setProperty format png --resampleWidth " . (int)$imageSize . " " . escapeshellarg($abs_input) . " --out " . escapeshellarg($abs_output);
+		
+		echo "Command to execute: " . htmlspecialchars($command) . "\n";
+		
+		$exec_log = [];
+		$return_var = 0;
+		
+		// The second argument is an array, and the third argument is a variable.
+		exec($command . " 2>&1", $exec_log, $return_var);
+	
+		if ($return_var === 0)
+		{
+			echo "Success: $file\n";
+		}
+		else
+		{
+			echo "Failed (Code: $return_var)\n";
+			echo "More information: " . implode("&lt;br&gt;", $exec_log) . "\n";
+		}
+	}
+}
+function getImageDir(int $kind, string $input_dir, string $output_dir, array &$files)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+	
+	$flg=0;
+	foreach ($all_files as $file)
+	{
+		$flg=0;
+		if($kind==0)
+		{
+			// Use the '/i' modifier to perform a case-insensitive search.
+			if (preg_match('/\.png$/i', $file))
+			{
+				$flg=1;
+			}
+		}
+		else
+		{
+			// Most common syntax (OR operator)
+			// (jpg|jpeg) matches "jpg" or "jpeg"
+			/if (preg_match('/\.(jpg|jpeg)$/i', $file))
+			
+			// Shorter way (quantifier ?)
+			// jpe?g matches both "jpg" and "jpeg"
+			if (preg_match('/\.jpe?g$/i', $file))
+			{
+				$flg=1;
+			}
+		}
+		if($flg==0)continue;
+		$files[] = $file;
+	}
+
+}
+</pre></div><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">--setProperty format png<br></div>sipsに対して「中身が何であれ、出力は強制的にPNG形式にする」と明示的に指示を出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[中身の変換]<br></div>AVIF形式の画像データを、PNG形式のデータに再構築します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[不整合の解消]<br></div>出力ファイル名（.png）と中身（PNGデータ）を正しく一致させます。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "Mac専用コマンド sips",n3: "Mac専用コマンド sips画像関連",n4:`拡張子はpngでもデータ形式がavifだった場合に変換する方法です。<br>PNGサポートがOKなのに Imagick でエラーが出る場合、<br>画像に含まれる独自のプロファイルが Imagick と相性が悪い可能性が高いです。<br>Macのプレビューで開けるのであれば、<br>Mac標準の sips (Scriptable Image Processing System) を使うのが一番確実です。<br>Macの「プレビュー」アプリと同じ仕組みで動くため、プレビューで開ける画像なら必ず処理できます。<br>ImagickやGDのライブラリ不足に悩まされることがありません。<br>OSレベルで最適化されています。<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">--setProperty format png<br></div>sipsに対して「中身が何であれ、出力は強制的にPNG形式にする」と明示的に指示を出します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[中身の変換]<br></div>AVIF形式の画像データを、PNG形式のデータに再構築します。<br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[不整合の解消]<br></div>出力ファイル名（.png）と中身（PNGデータ）を正しく一致させます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Mac-specific command sips",n3: "Mac-specific command sips image-related",n4:`This is a method for converting images with a png extension but in the aiv format. <br>If PNG support is OK but Imagick throws an error, <br>It's likely that the image contains a unique profile that's incompatible with Imagick. <br>If you can open it in Mac Preview, <br>The most reliable solution is to use Mac's standard sips (Scriptable Image Processing System). <br>It works the same way as Mac's Preview app, so it can always process any image that can be opened in Preview. <br>You won't have to worry about insufficient Imagick or GD libraries. <br>Optimized at the OS level. <br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">--setProperty format png<br></div>This command explicitly instructs SIPS to "force PNG format output regardless of the content." <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Content Conversion]<br></div>Reconstructs AVIF image data into PNG format. <br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Resolve inconsistencies]<br></div>Make sure the output file name (.png) and contents (PNG data) match correctly. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
