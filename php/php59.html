@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">リネームしたファイルを指定の場所にコピーする処理</div></td></tr><tr><td><div id="n3">ファイル関連</div></td></tr></table><br><div id="n4">ファイルを一定のルールによってコピーするサンプルです。<br>ファイル名に規則がある場合、そのファイル名を基準に<br>(1) ファイル名の変更をしてファイルを指定の場所にコピー<br>(2) ファイル名から一定の情報を取得<br>していています。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+
+$input_dir = '../img/';   
+$output_dir = '../img/out/'; 
+copyFileIdRule($input_dir, $output_dir);
+
+//nocopy:コピーの有無
+//0:コピーしない
+//1:コピーする
+function copyFileIdRule(string $input_dir, string $output_dir, $nocopy=0)
+{
+    $filename="";//取得したファイル名
+    $fileId="";//ファイルID
+    $ext="";//拡張子
+    $tmp1="";
+    $tmp2="";
+    $ary=[];
+    $no=[];
+    $list=[];
+
+    // 保存先フォルダがなければ作成する
+    if (!is_dir($output_dir))
+    {
+        mkdir($output_dir, 0755, true);
+    }
+
+    //xxx_001_name1.png
+    //拡張子とそれ以外に分ける
+    //_でsplitする
+    //最初に2個をファイル名にして_で結合する
+    //残りの文字列(2個目の_から.までの文字列)を分離して変数にして後で出力する
+    $files = scandir($input_dir);
+    $index = 0;
+    foreach($files as $file)
+    {
+        //  . : カレントディレクトリ
+        // .. : 親ディレクトリ
+        if($file === "." || $file === "..") continue;
+
+        //フォルダは対象外としています
+        if(is_dir($input_dir . $file)) continue;
+
+        //macのケース
+        if($file === ".DS_Store") continue;
+
+        $index++;
+        $filename = $file;
+        $ary = explode("_", $file);
+        $info=pathinfo($filename);
+        $filename=$info["filename"];//ファイルID
+        $ext=$info['extension'];//拡張子
+        //最後のアンダースコアで分割します
+        //ex.)
+        //$filename:
+        //aaa_bbb_xxx
+        $lastPos = strrpos($filename, "_");
+        $tmp1 = substr($filename, 0, $lastPos); // "aaa_bbb"
+        $tmp2 = substr($filename, $lastPos + 1); // "xxx"
+        $fileId = $tmp1 . "." . $ext; // "aaa_bbb.png"
+        $no[]=(string)$ary[1];
+        $list[]=$tmp2;
+        if($nocopy==1)
+        {
+            //ファイル存在チェックをしていないため
+            //上書きになります
+            if(copy($input_dir . $file, $output_dir . $fileId))
+            {
+                //コピーに成功しました
+            }
+            else
+            {
+                echo "copy fail i:$index filename:$file&lt;br&gt;";
+            }
+        }
+    }
+    //ファイル管理番号を表示
+    $count = count($no);
+    for($i=0;$i < $count;++$i)
+    {
+        echo $no[$i]."&lt;br&gt;";
+    }
+	echo "&lt;hr&gt;";
+    //リストを表示
+    $count = count($list);
+    for($i=0;$i < $count;++$i)
+    {
+        echo $list[$i]."&lt;br&gt;";
+    }
+}
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+$input_dir = '../img/';
+$output_dir = '../img/out/';
+copyFileIdRule($input_dir, $output_dir);
+
+//nocopy: Copy
+//0: Do not copy
+//1: Copy
+function copyFileIdRule(string $input_dir, string $output_dir, $nocopy=0)
+{
+	$filename=""; // Retrieved file name
+	$fileId=""; // File ID
+	$ext=""; // Extension
+	$tmp1="";
+	$tmp2="";
+	$ary=[];
+	$no=[];
+	$list=[];
+	
+	// Create the destination folder if it does not exist
+	if (!is_dir($output_dir))
+	{
+		mkdir($output_dir, 0755, true);
+	}
+	
+	/xxx_001_name1.png
+	// Separate the file name from the extension
+	// Split with _
+	// First, make the two strings into file names and join them with _
+	// Separate the remaining string (the string from the second _ to .) and save it as a variable to output later.
+	$files = scandir($input_dir);
+	$index = 0;
+	foreach($files as $file)
+	{
+		// . : Current directory
+		// .. : Parent directory
+		if($file === "." || $file === "..") continue;
+		
+		// Folders are not included.
+		if(is_dir($input_dir . $file)) continue;
+		
+		// Mac case
+		if($file === ".DS_Store") continue;
+		
+		$index++;
+		$filename = $file;
+		$ary = explode("_", $file);
+		$info=pathinfo($filename);
+		$filename=$info["filename"]; // File ID
+		$ext=$info['extension']; // Extension
+		// Split at the last underscore
+		//Example)
+		//$filename:
+		//aaa_bbb_xxx
+		$lastPos = strrpos($filename, "_");
+		$tmp1 = substr($filename, 0, $lastPos); // "aaa_bbb"
+		$tmp2 = substr($filename, $lastPos + 1); // "xxx"
+		$fileId = $tmp1 . "." . $ext; // "aaa_bbb.png"
+		$no[]=(string)$ary[1];
+		$list[]=$tmp2;
+		if($nocopy==1)
+		{
+			//File existence check not performed
+			//Overwritten
+			if(copy($input_dir . $file, $output_dir . $fileId))
+			{
+				//Copy successful
+			}
+			else
+			{
+				echo "copy fail i:$index filename:$file&lt;br&gt;";
+			}
+		}
+	}
+	// Display the file control number
+	$count = count($no);
+	for($i=0;$i < $count;++$i)
+	{
+		echo $no[$i]."&lt;br&gt;";
+	}
+	echo "&lt;hr&gt;";
+	// Display the list
+	$count = count($list);
+	for($i=0;$i < $count;++$i)
+	{
+		echo $list[$i]."&lt;br&gt;";
+	}
+}
+</pre></div><div id="n6">今回のファイル名の規則<br>xxx_001_name1.png<br>このファイル名の命名規則から<br>(1)xxx_001<br>(2)name1<br>(3)png<br>のように_(アンダースコア)で区切るとします。<br>その場合、(1)と(2)は最後の_で分割することで分離させます。<br>最初にファイルIDと拡張に分割します。<br>pathinfo() にファイルパスを渡すと、ファイル名（拡張子なし）や拡張子を連想配列で返してくれます。<br>$info=pathinfo($filename);<br>$filename=$info["filename"];//ファイルID<br>$ext=$info['extension'];//拡張子<br>次に最後のアンダースコアで分割します<br>$lastPos = strrpos($filename, "_");//最後の位置を取得します<br>$tmp1 = substr($filename, 0, $lastPos); // xxx_001<br>$tmp2 = substr($filename, $lastPos + 1); // name1<br><br>ファイル名の中に連番があります。<br>番号を下記のように抽出して配列に格納します。<br>$ary = explode("_", $file);<br>...<br>$no[]=(string)$ary[1];<br>そして、結果を番号の一覧として表示しています。<br>//ファイル管理番号を表示<br>$count = count($no);<br>for($i=0;$i<$count;++$i)<br>{<br>&nbsp;&nbsp;echo $no[$i]."&lt;br&gt;";<br>}<br>また、nameの一覧も表示しています。<br>$list[]=$tmp2;<br>...<br>//リストを表示<br>$count = count($list);<br>for($i=0;$i<$count;++$i)<br>{<br>&nbsp;&nbsp;echo $list[$i]."&lt;br&gt;";<br>}<br><br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "リネームしたファイルを指定の場所にコピーする処理",n3: "ファイル関連",n4:`ファイルを一定のルールによってコピーするサンプルです。<br>ファイル名に規則がある場合、そのファイル名を基準に<br>(1) ファイル名の変更をしてファイルを指定の場所にコピー<br>(2) ファイル名から一定の情報を取得<br>していています。<br>`,n5:`[サンプル]`,n6:`今回のファイル名の規則<br>xxx_001_name1.png<br>このファイル名の命名規則から<br>(1)xxx_001<br>(2)name1<br>(3)png<br>のように_(アンダースコア)で区切るとします。<br>その場合、(1)と(2)は最後の_で分割することで分離させます。<br>最初にファイルIDと拡張に分割します。<br>pathinfo() にファイルパスを渡すと、ファイル名（拡張子なし）や拡張子を連想配列で返してくれます。<br>$info=pathinfo($filename);<br>$filename=$info["filename"];$ext=$info['extension'];次に最後のアンダースコアで分割します<br>$lastPos = strrpos($filename, "_");$tmp1 = substr($filename, 0, $lastPos); $tmp2 = substr($filename, $lastPos + 1); <br>ファイル名の中に連番があります。<br>番号を下記のように抽出して配列に格納します。<br>$ary = explode("_", $file);<br>...<br>$no[]=(string)$ary[1];<br>そして、結果を番号の一覧として表示しています。<br>$count = count($no);<br>for($i=0;$i<$count;++$i)<br>{<br>&nbsp;&nbsp;echo $no[$i]."&lt;br&gt;";<br>}<br>また、nameの一覧も表示しています。<br>$list[]=$tmp2;<br>...<br>$count = count($list);<br>for($i=0;$i<$count;++$i)<br>{<br>&nbsp;&nbsp;echo $list[$i]."&lt;br&gt;";<br>}<br><br>`,n7:"戻る",},en: {n1: "back",n2: "Process to copy renamed files to a specified location",n3: "File-related",n4:`This is a sample that copies files according to certain rules. <br>If there are filename rules, we use those filenames as a basis.<br>(1) Rename the file and copy it to a specified location.<br>(2) Obtain certain information from the filename.<br>`,n5:`[Sample]`,n6:`Filename Rules in This Example<br>xxx_001_name1.png<br>From this filename naming rule,<br>(1)xxx_001<br>(2)name1<br>(3)png<br>Let's assume that the filenames are separated by an underscore (_).<br>In this case, (1) and (2) are separated by the final _.<br>First, split into the file ID and extension. <br>When you pass a file path to pathinfo(), it returns the file name (without the extension) and the extension in an associative array. <br>$info=pathinfo($filename);<br>$filename=$info["filename"];$ext=$info['extension'];Next, split on the last underscore.<br>$lastPos = strrpos($filename, "_");$tmp1 = substr($filename, 0, $lastPos); $tmp2 = substr($filename, $lastPos + 1); <br>The file name contains a sequential number. <br>Extract the number and store it in an array as shown below. <br>$ary = explode("_", $file);<br>...<br>$no[]=(string)$ary[1];<br>The results are then displayed as a list of numbers. <br>$count = count($no);<br>for($i=0;$i<$count;++$i)<br>{<br>&nbsp;&nbsp;echo $no[$i]."&lt;br&gt;";<br>}<br>The names are also displayed as a list. <br>$list[]=$tmp2;<br>...<br>$count = count($list);<br>for($i=0;$i<$count;++$i)<br>{<br>&nbsp;&nbsp;echo $list[$i]."&lt;br&gt;";<br>}<br><br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
