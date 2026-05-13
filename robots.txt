@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Sitemap: https://nekofes.github.io/sitemap.xml
+Sitemap: https://nekofes.github.io/sitemap.xml.gz
 Disallow:
