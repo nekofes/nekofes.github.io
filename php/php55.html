@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">file_put_contents</div></td></tr><tr><td><div id="n3">出力関連</div></td></tr></table><br><div id="n4">file_put_contentsは、PHPでデータをファイルに書き込むための関数です。<br><table border=1><tr><td>第1引数(必須)</td><td>ファイル名</td><td>書き込み先のパス</td></tr><tr><td>第2引数(必須)</td><td>文字列、配列、またはストリームリソース</td><td>書き込みデータ</td><td></td></tr><tr><td>第3引数(任意)</td><td>フラグ</td><td>[FILE_APPEND]<br>既存の内容を消さずに、追記します。<br>[LOCK_EX]<br>書き込み中にファイルを排他ロックし、他のプロセスからの干渉を防ぎます。<br>[FILE_USE_INCLUDE_PATH]<br>include_path（ライブラリなどが置いてある標準ディレクトリ群）の中から、<br>指定したファイル名を探して書き込みを試みます。<br>※ |（パイプ）記号を使うことで、複数の設定を同時に適用できます。</td></tr></table></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+[ケース1]
+$d1=(int)$data["d1"];
+$d2=(int)$data["d2"];
+$lang=(int)$data["lang"];
+file_put_contents('debug.log', "d1:$d1 d2:$d2 lang:$lang\n", FILE_APPEND);
+[出力例]
+d1:$7 d2:$2 lang:0
+
+[ケース2]
+[localhost/index.php]
+equire_once("clsMain.php");
+class index extends oya
+{
+	function test()
+	{
+		file_put_contents('debug.log', "index.php test()\n", FILE_APPEND);
+	}
+}
+
+[localhost/common/index.php]
+class oya
+{
+	function test2()
+	{
+		file_put_contents('debug.log', "oya.php test2()\n", FILE_APPEND);
+	}
+}
+$cls = new index();
+$cls->test();
+$cls->test2();
+
+[ケース3]
+[localhost/index.php]
+equire_once("clsMain.php");
+class index extends oya
+{
+	function test()
+	{
+		file_put_contents(__DIR__ . 'debug.log', "index.php test()\n", FILE_APPEND);
+	}
+}
+
+[localhost/common/index.php]
+class oya
+{
+	function test2()
+	{
+		file_put_contents(__DIR__ . 'debug.log', "oya.php test2()\n", FILE_APPEND);
+	}
+}
+$cls = new index();
+$cls->test();
+$cls->test2();
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+[Case 1]
+$d1=(int)$data["d1"];
+$d2=(int)$data["d2"];
+$lang=(int)$data["lang"];
+file_put_contents('debug.log', "d1:$d1 d2:$d2 lang:$lang\n", FILE_APPEND);
+[Output example]
+d1:$7 d2:$2 lang:0
+
+[Case 2]
+[localhost/index.php]
+equire_once("clsMain.php");
+class index extends oya
+{ 
+	function test() 
+	{ 
+		file_put_contents('debug.log', "index.php test()\n", FILE_APPEND); 
+	}
+}
+
+[localhost/common/index.php]
+class oya
+{ 
+	function test2() 
+	{ 
+		file_put_contents('debug.log', "oya.php test2()\n", FILE_APPEND); 
+	}
+}
+$cls = new index();
+$cls->test();
+$cls->test2();
+
+[Case 3]
+[localhost/index.php]
+equire_once("clsMain.php");
+class index extends oya
+{ 
+	function test() 
+	{ 
+		file_put_contents(__DIR__ . 'debug.log', "index.php test()\n", FILE_APPEND); 
+	}
+}
+
+[localhost/common/index.php]
+class oya
+{ 
+	function test2() 
+	{ 
+		file_put_contents(__DIR__ . 'debug.log', "oya.php test2()\n", FILE_APPEND); 
+	}
+}
+$cls = new index();
+$cls->test();
+$cls->test2();
+</pre></div><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">FILE_APPEND<br></div>[上書き]<br>デフォルトでは既存のファイル内容はすべて削除され、新しいデータに置き換わります。<br><br>[戻り値]<br>成功すると書き込まれたバイト数を返し、失敗すると false を返します。<br><br>[ディレクトリ権限]書き込み先のディレクトリに、PHPを実行するユーザーの書き込み権限(Apacheなど)が必要です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[ケース2]<br></div>ファイルは「現在実行（アクセス）されているスクリプト」のあるディレクトリに作成されます。<br>そのため<br>localhost/index.php<br>を実行した場合、継承した<br>localhost/common/index.php<br>のtest2を実行したとしても<br>localhost直下のdebug.logに<br>testとtest2の実行結果が出力されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[ケース3]<br></div>index.php の test() を実行<br>__DIR__ は localhost/ (ルート) に出力します。<br>[作成場所]<br>localhost/debug.log<br>oya.php の test2() を実行<br>__DIR__ は localhost/common/ に出力します。<br>[作成場所]<br>localhost/common/debug.log<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[LOCK_EX]<br></div>ファイルに書き込む際に「排他的ロック（Exclusive Lock）」をかけるためのフラグです。<br><br>[注意点]<br>[読み込み時の制限]<br>LOCK_EX は「書き込み」をブロックするものですが、<br>OSや設定によっては、書き込みロック中のファイルを他のプログラムが<br>file_get_contents などで「読み込む」ことすら制限される場合があります。<br><br>[ネットワークファイルシステム]<br>NFS（ネットワーク経由の共有フォルダ）など、環境によってはファイルロックが正しく動作しないことがあります。<br>※LANも同様です。安全に書き込みをすることを考慮する場合はデータベースを利用することなどを視野に入れてください。<br><br>[自動解除]<br>file_put_contents を使った場合、<br>関数の実行が終われば自動的にロックは解除（アンロック）されるため、<br>自分で解除コードを書く必要はありません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">パラメータに割り当てられているビット(数字)<br></div>FILE_USE_INCLUDE_PATH = 1<br>FILE_APPEND = 8<br>LOCK_EX = 2<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "file_put_contents",n3: "出力関連",n4:`file_put_contentsは、PHPでデータをファイルに書き込むための関数です。<br><table border=1><tr><td>第1引数(必須)</td><td>ファイル名</td><td>書き込み先のパス</td></tr><tr><td>第2引数(必須)</td><td>文字列、配列、またはストリームリソース</td><td>書き込みデータ</td><td></td></tr><tr><td>第3引数(任意)</td><td>フラグ</td><td>[FILE_APPEND]<br>既存の内容を消さずに、追記します。<br>[LOCK_EX]<br>書き込み中にファイルを排他ロックし、他のプロセスからの干渉を防ぎます。<br>[FILE_USE_INCLUDE_PATH]<br>include_path（ライブラリなどが置いてある標準ディレクトリ群）の中から、<br>指定したファイル名を探して書き込みを試みます。<br>※ |（パイプ）記号を使うことで、複数の設定を同時に適用できます。</td></tr></table>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">FILE_APPEND<br></div>[上書き]<br>デフォルトでは既存のファイル内容はすべて削除され、新しいデータに置き換わります。<br><br>[戻り値]<br>成功すると書き込まれたバイト数を返し、失敗すると false を返します。<br><br>[ディレクトリ権限]書き込み先のディレクトリに、PHPを実行するユーザーの書き込み権限(Apacheなど)が必要です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[ケース2]<br></div>ファイルは「現在実行（アクセス）されているスクリプト」のあるディレクトリに作成されます。<br>そのため<br>localhost/index.php<br>を実行した場合、継承した<br>localhost/common/index.php<br>のtest2を実行したとしても<br>localhost直下のdebug.logに<br>testとtest2の実行結果が出力されます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[ケース3]<br></div>index.php の test() を実行<br>__DIR__ は localhost/ (ルート) に出力します。<br>[作成場所]<br>localhost/debug.log<br>oya.php の test2() を実行<br>__DIR__ は localhost/common/ に出力します。<br>[作成場所]<br>localhost/common/debug.log<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[LOCK_EX]<br></div>ファイルに書き込む際に「排他的ロック（Exclusive Lock）」をかけるためのフラグです。<br><br>[注意点]<br>[読み込み時の制限]<br>LOCK_EX は「書き込み」をブロックするものですが、<br>OSや設定によっては、書き込みロック中のファイルを他のプログラムが<br>file_get_contents などで「読み込む」ことすら制限される場合があります。<br><br>[ネットワークファイルシステム]<br>NFS（ネットワーク経由の共有フォルダ）など、環境によってはファイルロックが正しく動作しないことがあります。<br>※LANも同様です。安全に書き込みをすることを考慮する場合はデータベースを利用することなどを視野に入れてください。<br><br>[自動解除]<br>file_put_contents を使った場合、<br>関数の実行が終われば自動的にロックは解除（アンロック）されるため、<br>自分で解除コードを書く必要はありません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">パラメータに割り当てられているビット(数字)<br></div>FILE_USE_INCLUDE_PATH = 1<br>FILE_APPEND = 8<br>LOCK_EX = 2<br>`,n7:"戻る",},en: {n1: "back",n2: "file_put_contents",n3: "Output",n4:`file_put_contents is a function for writing data to a file in PHP. <br><table border=1><tr><td>First argument (required)</td><td>File name</td><td>Destination path</td></tr><tr><td>Second argument (required)</td><td>String, array, or stream resource</td><td>Data to write</td><td></td></tr><tr><td>Third argument (optional)</td><td>Flag</td><td>[FILE_APPEND]<br>Appends to existing content without erasing it. <br>[LOCK_EX]<br>Exclusively locks the file while writing to prevent interference from other processes. <br>[FILE_USE_INCLUDE_PATH]<br>Searches for the specified file name in the include_path (a set of standard directories containing libraries, etc.) and attempts to write to it. <br>Note: You can apply multiple settings simultaneously by using the | (pipe) symbol.</td></tr></table>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">FILE_APPEND<br></div>[Overwrite]<br>By default, all existing file contents are deleted and replaced with the new data. <br><br>[Return Value]<br>Returns the number of bytes written if successful; otherwise, returns false. <br><br>[Directory Permissions]The destination directory must have write permissions for the user running PHP (e.g., Apache). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Case 2]<br></div>The file is created in the directory where the currently executing (accessed) script is located. <br>Therefore, if you execute localhost/index.php<br>, even if you execute test2 in the inherited localhost/common/index.php<br>, the execution results of test and test2 will be output to debug.log directly under localhost. <br><br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Case 3]<br></div>Execute test() in index.php<br>__DIR__ is output to localhost/ (root). <br>[Location]<br>localhost/debug.log<br>Execute test2() in oya.php<br>__DIR__ is output to localhost/common/. <br>[Location]<br>localhost/common/debug.log<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[LOCK_EX]<br></div>This flag applies an "exclusive lock" when writing to a file. <br><br>[Notes]<br>[Read Restrictions]<br>LOCK_EX blocks "writes," but depending on the OS and settings, other programs may be restricted from even "reading" a write-locked file using commands like file_get_contents. <br><br>[Network File System]<br>File locking may not function properly in some environments, such as NFS (a shared folder over a network). <br>*The same applies to LANs. If you are concerned about secure writing, consider using a database. <br><br>[Automatic Release]<br>When using file_put_contents,<br>the lock is automatically released (unlocked) once the function execution is complete,<br>so there is no need to write the unlock code yourself. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Bits (numbers) assigned to the parameter<br></div>FILE_USE_INCLUDE_PATH = 1<br>FILE_APPEND = 8<br>LOCK_EX = 2<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

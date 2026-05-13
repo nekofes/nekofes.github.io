@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">imagepng / imagejpeg</div></td></tr><tr><td><div id="n3">画像関連</div></td></tr></table><br><div id="n4">画像の縮小をする方法としてimagepngおよびimagejpegがあります。</div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+$kind = 1;//0;//[0]png [1]jpg
+$input_dir = "./img/";//変換元となる画像フォルダパス
+$output_dir = "./img/out/";//変換先に出力する画像フォルダパス
+$imageSize = 300;//px単位
+//画像リサイズ変換処理
+resizeImageCreateFromPngOrJpeg($kind, $input_dir, $output_dir, $imageSize);
+
+//画像リサイズ変換処理
+//kind:[0]png [1]jpg
+//input_dir:変換元となる画像フォルダパス
+//output_dir:変換先に出力する画像フォルダパス
+//imageSize:px単位
+function resizeImageCreateFromPngOrJpeg(int $kind, string $input_dir, string $output_dir, int $imageSize)
+{
+    $all_files = scandir($input_dir);
+    $files = [];
+
+    //指定したフォルダの画像ファイルID(拡張子がpngもしくはjpg)を取得する処理
+    imageDir($kind, $input_dir, $files);
+
+    if(count($files)==0)
+    {
+        echo "対象ファイルが存在しません。\n";
+        return;
+    }
+
+    // 保存先フォルダがなければ作成する
+    if (!is_dir($output_dir))
+    {
+        mkdir($output_dir, 0755, true);
+    }
+
+    //画像サイズ変更
+    resizeImage($kind, $input_dir, $output_dir, $imageSize, $files);
+}
+
+//画像サイズ変更
+function resizeImage(int $kind, string $input_dir, string $output_dir, int $imageSize, array &$files)
+{
+    $src_image = null;
+    foreach ($files as $file) 
+    {
+        echo "file:$file\n";
+        if(!file_exists($input_dir . $file))
+        {
+            echo "ファイルは存在しないので次のファイルを判定します。\n";
+            continue;
+        }
+        $image_into = getimagesize($input_dir . $file);
+        if($image_into === false)
+        {
+            if(($kind == 0 && $image_into[2] !== IMAGETYPE_PNG) || 
+               ($kind == 1 && $image_into[2] !== IMAGETYPE_JPEG)
+              )
+            {
+                echo "画像情報が誤っています。\n";
+                continue;
+            }
+        }
+        // 1. 画像をメモリに読み込む
+        if($kind == 0)
+        {
+            $src_image = imagecreatefrompng($input_dir . $file);            
+        }
+        else
+        {
+            $src_image = imagecreatefromjpeg($input_dir . $file);
+        }
+        if (!$src_image) continue;
+
+        // 2. リサイズ（例：幅300pxに固定し、比率は維持）
+        $resized_image = imagescale($src_image, $imageSize);
+
+        // 3. ファイル名を取得（元のファイル名と同じ名前で保存するため）
+        $filename = basename($input_dir . $file);
+        $save_path = $output_dir . $filename;
+
+        // 4. 指定したフォルダに直接保存
+        // imagepngの第2引数にパスを渡すと、ファイルとして書き出されます
+        if($kind == 0)
+        {
+            //透過（アルファチャンネル）を維持したい場合
+            //imagescale は基本的には透過を維持しますが、
+            //より確実に透過設定を保持して保存したい場合は、保存前に以下の設定を入れるのが一般的です。
+            //保存の直前に透過設定を維持する処理
+            imagealphablending($resized_image, false);
+            imagesavealpha($resized_image, true);
+            imagepng($resized_image, $save_path);
+        }
+        else
+        {
+            imagejpeg($resized_image, $save_path);
+        }
+
+        // 5. メモリ解放
+        imagedestroy($src_image);
+        imagedestroy($resized_image);
+
+        echo "保存完了: " . $save_path . "\n";
+    }    
+}
+//指定したフォルダの画像ファイルID(拡張子がpngもしくはjpg)を取得する処理
+//kind:[0]png [1]jpg
+//input_dir:指定するフォルダパス
+//files:取得したファイルIDの結果を格納する配列
+function imageDir(int $kind, string $input_dir, array &$files)
+{
+    $all_files = scandir($input_dir);
+    $files = [];
+
+    $flg=0;
+    foreach ($all_files as $file) 
+    {
+        $flg=0;
+        if($kind==0)
+        {
+            // '/i' 修飾子をつけることで大文字小文字を区別せずに検索
+            if (preg_match('/\.png$/i', $file)) 
+            {
+                $flg=1;
+            }
+        }
+        else
+        {
+            //最も一般的な書き方（OR演算子）
+            // (jpg|jpeg) で「jpg」または「jpeg」にマッチ
+            //if (preg_match('/\.(jpg|jpeg)$/i', $file))
+
+            //短く書く方法（量指定子 ?）
+            // jpe?g で「jpg」と「jpeg」の両方にマッチ
+            if (preg_match('/\.jpe?g$/i', $file)) 
+            {
+                $flg=1;
+            }
+        }
+        if($flg==0)continue;
+        $files[] = $file;
+    }
+
+}
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+$kind = 1; //0; //[0]png [1]jpg
+$input_dir = "./img/"; //Source image folder path
+$output_dir = "./img/out/"; //Destination image folder path
+$imageSize = 300; //Pixel units
+//Image resizing process
+resizeImageCreateFromPngOrJpeg($kind, $input_dir, $output_dir, $imageSize);
+
+//Image resizing process
+//kind:[0]png [1]jpg
+//input_dir:Source image folder path
+//output_dir:Destination image folder path
+//imageSize:Pixel units
+function resizeImageCreateFromPngOrJpeg(int $kind, string $input_dir, string $output_dir, int $imageSize)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+	
+	//Get image file IDs (with extensions .png or .jpg) in the specified folder
+	imageDir($kind, $input_dir, $files);
+	
+	if(count($files)==0)
+	{
+		echo "The target file does not exist.\n";
+		return;
+	}
+	
+	//Create the destination folder if it does not exist
+	if (!is_dir($output_dir))
+	{
+		mkdir($output_dir, 0755, true);
+	}
+	
+	//Resize the image
+	resizeImage($kind, $input_dir, $output_dir, $imageSize, $files);
+}
+	
+//Resize the image
+function resizeImage(int $kind, string $input_dir, string $output_dir, int $imageSize, array &$files)
+{
+	$src_image = null;
+	foreach ($files as $file)
+	{
+		echo "file:$file\n";
+		if(!file_exists($input_dir . $file))
+		{
+			echo "The file does not exist, so try the next file.\n";
+			continue;
+		}
+		$image_into = getimagesize($input_dir . $file);
+		if($image_into === false)
+		{
+			if(($kind == 0 && $image_into[2] !== IMAGETYPE_PNG) ||
+			($kind == 1 && $image_into[2] !== IMAGETYPE_JPEG)
+			)
+			{
+				echo "The image information is incorrect.\n";
+				continue;
+			}
+		}
+		// 1. Load the image into memory.
+		if($kind == 0)
+		{
+			$src_image = imagecreatefrompng($input_dir . $file);
+		}
+		else
+		{
+			$src_image = imagecreatefromjpeg($input_dir . $file);
+		}
+		if (!$src_image) continue;
+		
+		// 2. Resize (e.g., fix width to 300px, maintain aspect ratio)
+		$resized_image = imagescale($src_image, $imageSize);
+		
+		// 3. Get filename (to save with the same name as the original)
+		$filename = basename($input_dir . $file);
+		$save_path = $output_dir . $filename;
+		
+		// 4. Save directly to a specified folder
+		// Pass a path as the second argument to imagepng to write the file.
+		if($kind == 0)
+		{
+			// If you want to preserve transparency (alpha channel)
+			// imagescale generally preserves transparency,
+			// To more reliably preserve transparency settings when saving, it's common to set the following before saving.
+			// Maintain transparency settings immediately before saving.
+			imagealphablending($resized_image, false);
+			imagesavealpha($resized_image, true);
+			imagepng($resized_image, $save_path);
+		}
+		else
+		{
+			imagejpeg($resized_image, $save_path);
+		}
+		
+		// 5. Free memory.
+		imagedestroy($src_image);
+		imagedestroy($resized_image);
+		
+		echo "Saving completed: " . $save_path . "\n";
+	}
+}
+// Obtain image file IDs (with extensions .png or .jpg) in the specified folder.
+//kind:[0]png [1]jpg
+//input_dir: Folder path to be specified.
+//files: Array to store the obtained file IDs.
+function imageDir(int $kind, string $input_dir, array &$files)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+	
+	$flg=0;
+	foreach ($all_files as $file)
+	{
+		$flg=0;
+		if($kind==0)
+		{
+			// Use the '/i' modifier to perform a case-insensitive search.
+			if (preg_match('/\.png$/i', $file))
+			{
+				$flg=1;
+			}
+		}
+		else
+		{
+			// Most common syntax (OR operator)
+			// (jpg|jpeg) matches "jpg" or "jpeg"
+			//if (preg_match('/\.(jpg|jpeg)$/i', $file))
+			
+			// Shorter syntax (quantifier ?)
+			// jpe?g matches both "jpg" and "jpeg"
+			if (preg_match('/\.jpe?g$/i', $file))
+			{
+				$flg=1;
+			}
+		} 
+		if($flg==0)continue; 
+		$files[] = $file; 
+	}
+
+}
+</pre></div><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$all_files = scandir($input_dir);</div>指定したフォルダに存在するファイル情報を配列に返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.png$/i', $file))</div>'/i' 修飾子をつけることで大文字小文字を区別せずに検索した結果を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.(jpg|jpeg)$/i', $file))</div>(jpg|jpeg) で「jpg」または「jpeg」にマッチした結果を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.jpe?g$/i', $file))</div>jpe?g で「jpg」と「jpeg」の両方にマッチした結果を返します。<br>preg_match で jpeg と jpg の両方にマッチさせるには、<br>正規表現の |（OR演算子） または ?（直前の文字が0回か1回）を使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.(png|jpg|jpeg)$/i', $file)) {</div>PNGもJPGもまとめて処理したい場合は上記のように判定することができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&#92;.</div>ドットそのものを指します（エスケープ）。<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(...|...)</div>括弧内のいずれかの文字列に一致（OR）。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">e?</div>e が「0文字」または「1文字」存在することを指します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$</div>文字列の最後であることを指定します（途中に .jpg が含まれるファイル名を除外するため）。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">/i</div>大文字・小文字を区別しません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">is_dir($output_dir)</div>指定したフォルダが存在するかどうか？を判定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mkdir($output_dir, 0755, true);</div>指定したフォルダを作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">getimagesize($input_dir . $file);</div>画像の情報を取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$image_into === false || $image_into[2] !== IMAGETYPE_PNG(jpgはIMAGETYPE_JPEG)</div>ファイルが有効でない場合の条件です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imagescale</div>縦横比を維持したまま簡単にリサイズできます。<br>php version 5.5以降<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">basename</div>ファイル名部分のみを取得する関数です。<br>ここでは元のファイル名と同じ名前で保存するため、ファイル名を取得しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imagepng / imagejpeg</div>直接指定のフォルダへファイルとして書き出します。<br>第2引数が出力先の場所です。<br><br>透過（アルファチャンネル）を維持したい場合<br>imagescale は基本的には透過を維持しますが、より確実に透過設定を保持して保存したい場合は、保存前に以下の設定を入れるのが一般的です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">保存の直前に透過設定を維持する処理</div>imagealphablending($resized_image, false);<br>imagesavealpha($resized_image, true);<br>imagepng($resized_image, $save_path);<br><br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "imagepng / imagejpeg",n3: "画像関連",n4:`画像の縮小をする方法としてimagepngおよびimagejpegがあります。`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$all_files = scandir($input_dir);</div>指定したフォルダに存在するファイル情報を配列に返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.png$/i', $file))</div>'/i' 修飾子をつけることで大文字小文字を区別せずに検索した結果を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.(jpg|jpeg)$/i', $file))</div>(jpg|jpeg) で「jpg」または「jpeg」にマッチした結果を返します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.jpe?g$/i', $file))</div>jpe?g で「jpg」と「jpeg」の両方にマッチした結果を返します。<br>preg_match で jpeg と jpg の両方にマッチさせるには、<br>正規表現の |（OR演算子） または ?（直前の文字が0回か1回）を使用します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.(png|jpg|jpeg)$/i', $file)) {</div>PNGもJPGもまとめて処理したい場合は上記のように判定することができます。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&#92;.</div>ドットそのものを指します（エスケープ）。<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(...|...)</div>括弧内のいずれかの文字列に一致（OR）。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">e?</div>e が「0文字」または「1文字」存在することを指します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$</div>文字列の最後であることを指定します（途中に .jpg が含まれるファイル名を除外するため）。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">/i</div>大文字・小文字を区別しません。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">is_dir($output_dir)</div>指定したフォルダが存在するかどうか？を判定します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mkdir($output_dir, 0755, true);</div>指定したフォルダを作成します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">getimagesize($input_dir . $file);</div>画像の情報を取得します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$image_into === false || $image_into[2] !== IMAGETYPE_PNG(jpgはIMAGETYPE_JPEG)</div>ファイルが有効でない場合の条件です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imagescale</div>縦横比を維持したまま簡単にリサイズできます。<br>php version 5.5以降<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">basename</div>ファイル名部分のみを取得する関数です。<br>ここでは元のファイル名と同じ名前で保存するため、ファイル名を取得しています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imagepng / imagejpeg</div>直接指定のフォルダへファイルとして書き出します。<br>第2引数が出力先の場所です。<br><br>透過（アルファチャンネル）を維持したい場合<br>imagescale は基本的には透過を維持しますが、より確実に透過設定を保持して保存したい場合は、保存前に以下の設定を入れるのが一般的です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">保存の直前に透過設定を維持する処理</div>imagealphablending($resized_image, false);<br>imagesavealpha($resized_image, true);<br>imagepng($resized_image, $save_path);<br>`,n7:"戻る",},en: {n1: "back",n2: "imagepng / imagejpeg",n3: "Image related",n4:`Imagepng and imagejpeg are methods for reducing image size.`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$all_files = scandir($input_dir);</div>Returns an array containing information about files in the specified folder. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.png$/i', $file))</div>The '/i' modifier returns search results that are case-insensitive. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.(jpg|jpeg)$/i', $file))</div>(jpg|jpeg) returns results that match "jpg" or "jpeg". <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.jpe?g$/i', $file))</div>jpe?g returns results that match both "jpg" and "jpeg". <br>To match both jpeg and jpg using preg_match,<br>Use the regular expression | (OR operator) or ? (the preceding character appears 0 or 1 times).<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if (preg_match('/\.(png|jpg|jpeg)$/i', $file)) {</div>If you want to process both PNG and JPG files, you can use the above command.<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">&#92;.</div>Refers to the dot itself (escaped).<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">(...|...)</div>Matches any of the strings in the brackets (OR). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">e?</div>Means either zero or one e character. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$</div>Specifies the end of the string (to exclude filenames that contain .jpg). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">/i</div>Case-insensitive. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">is_dir($output_dir)</div>Determines whether the specified folder exists. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">mkdir($output_dir, 0755, true);</div>Creates the specified folder. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">getimagesize($input_dir . $file);</div>Get image information. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$image_into === false || $image_into[2] !== IMAGETYPE_PNG (jpg is IMAGETYPE_JPEG)</div>This condition applies if the file is invalid. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imagescale</div>Easily resize images while maintaining their aspect ratio. <br>PHP version 5.5 or later<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">basename</div>This function retrieves only the filename. <br>Here, the filename is retrieved to save the image with the same name as the original. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">imagepng / imagejpeg</div>Writes the image to a specified folder. <br>The second argument specifies the output location. <br><br>If you want to preserve transparency (alpha channel)<br>imagescale generally preserves transparency, but if you want to save the image with transparency settings more reliably, you can generally set the following before saving: <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Maintain transparency settings immediately before saving.</div>imagealphablending($resized_image, false);<br>imagesavealpha($resized_image, true);<br>imagepng($resized_image, $save_path);<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

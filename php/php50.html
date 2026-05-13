@@ -1,0 +1,497 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">多次元配列の要素削除</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">多次元配列の要素削除</div>要素を削除する方法としてunsetがあります。<br>unset(配列[要素]);<br>配列の行を削除する<br>unset(配列[要素][要素]);<br>要素のデータを消す<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		$ary =[
+			[1,2,3],
+			[4,5,6],
+			[7,8,9],
+		];
+		var_dump($ary);
+/*
+array(3) {
+  [0]=>
+  array(3) {
+    [0]=>
+    int(1)
+    [1]=>
+    int(2)
+    [2]=>
+    int(3)
+  }
+  [1]=>
+  array(3) {
+    [0]=>
+    int(4)
+    [1]=>
+    int(5)
+    [2]=>
+    int(6)
+  }
+  [2]=>
+  array(3) {
+    [0]=>
+    int(7)
+    [1]=>
+    int(8)
+    [2]=>
+    int(9)
+  }
+}
+*/
+		for($i=0; $i<3; $i++)
+		{
+			for($j=0; $j<3; $j++)
+			{
+				//配列の要素の中身を削除
+				//この状態では要素の中身だけを削除だけであり、行を削除したことにはなっていません
+				if($i==1)
+				{
+					//unsetでは要素のインデックスは自動では詰められません
+					unset($ary[$i][$j]);
+				}
+			}
+		}
+		var_dump($ary);
+/*
+array(3) {
+  [0]=>
+  array(3) {
+    [0]=>
+    int(1)
+    [1]=>
+    int(2)
+    [2]=>
+    int(3)
+  }
+  [1]=>
+  array(0) {
+  }
+  [2]=>
+  array(3) {
+    [0]=>
+    int(7)
+    [1]=>
+    int(8)
+    [2]=>
+    int(9)
+  }
+}
+*/
+		for($i=0; $i<3; $i++)
+		{
+			for($j=0; $j<3; $j++)
+			{
+				//配列の要素の中身を削除
+				//この状態では要素の中身だけを削除だけであり、行を削除したことにはなっていません
+				if($i==1)
+				{
+					//行データを削除したい場合は下記のように削除します
+					unset($ary[$i]);
+				}
+			}
+		}
+		var_dump($ary);
+/*
+array(2) {
+  [0]=>
+  array(3) {
+    [0]=>
+    int(1)
+    [1]=>
+    int(2)
+    [2]=>
+    int(3)
+  }
+  [2]=>
+  array(3) {
+    [0]=>
+    int(7)
+    [1]=>
+    int(8)
+    [2]=>
+    int(9)
+  }
+}
+*/
+		//番号を詰めたい場合: array_values($配列); を実行
+		$ary = array_values($ary);
+		var_dump($ary);
+	}
+	function test2():void
+	{
+		$ary = [
+			"A" => [
+				"A1" => [1,2,3],
+				"A2" => [4,5,6]
+			],
+			"B" => [
+				"B1" => [11,12,13],
+				"B2" => [14,15,16]
+			],
+			"C" => [
+				"C1" => [21,22,23],
+				"C2" => [24,25,26]
+			],
+		];
+		unset($ary["B"]["B1"]);
+		unset($ary["B"]["B2"]);
+		var_dump($ary);
+/*
+array(3) {
+  ["A"]=>
+  array(2) {
+    ["A1"]=>
+    array(3) {
+      [0]=>
+      int(1)
+      [1]=>
+      int(2)
+      [2]=>
+      int(3)
+    }
+    ["A2"]=>
+    array(3) {
+      [0]=>
+      int(4)
+      [1]=>
+      int(5)
+      [2]=>
+      int(6)
+    }
+  }
+  ["B"]=>
+  array(0) {
+  }
+  ["C"]=>
+  array(2) {
+    ["C1"]=>
+    array(3) {
+      [0]=>
+      int(21)
+      [1]=>
+      int(22)
+      [2]=>
+      int(23)
+    }
+    ["C2"]=>
+    array(3) {
+      [0]=>
+      int(24)
+      [1]=>
+      int(25)
+      [2]=>
+      int(26)
+    }
+  }
+}
+*/
+		//行を削除するケース
+		unset($ary["B"]);
+		//番号を詰めたい場合: array_values($配列); を実行
+		$ary = array_values($ary);
+		var_dump($ary);
+/*
+array(2) {
+  [0]=>
+  array(2) {
+    ["A1"]=>
+    array(3) {
+      [0]=>
+      int(1)
+      [1]=>
+      int(2)
+      [2]=>
+      int(3)
+    }
+    ["A2"]=>
+    array(3) {
+      [0]=>
+      int(4)
+      [1]=>
+      int(5)
+      [2]=>
+      int(6)
+    }
+  }
+  [1]=>
+  array(2) {
+    ["C1"]=>
+    array(3) {
+      [0]=>
+      int(21)
+      [1]=>
+      int(22)
+      [2]=>
+      int(23)
+    }
+    ["C2"]=>
+    array(3) {
+      [0]=>
+      int(24)
+      [1]=>
+      int(25)
+      [2]=>
+      int(26)
+    }
+  }
+}
+*/
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</div>
+
+<div id=h11>
+<a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a>
+<pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1():void 
+	{ 
+		$ary =[ 
+		[1,2,3], 
+		[4,5,6], 
+		[7,8,9], 
+		]; 
+		var_dump($ary);
+/*
+array(3) { 
+[0]=> 
+array(3) { 
+[0]=> 
+int(1) 
+[1]=> 
+int(2) 
+[2]=> 
+int(3) 
+} 
+[1]=> 
+array(3) { 
+[0]=> 
+int(4) 
+[1]=> 
+int(5) 
+[2]=> 
+int(6) 
+} 
+[2]=> 
+array(3) { 
+[0]=> 
+int(7) 
+[1]=> 
+int(8) 
+[2]=> 
+int(9) 
+}
+}
+*/ 
+		for($i=0; $i<3; $i++) 
+		{
+			for($j=0; $j<3; $j++)
+			{
+				//Delete the contents of the array element.
+				//In this state, only the contents of the element are deleted; the row is not actually deleted.
+				if($i==1)
+				{
+					//Unset does not automatically fill the element index.
+					unset($ary[$i][$j]);
+				}
+			}
+		}
+		var_dump($ary);
+/*
+array(3) {
+[0]=>
+array(3) {
+[0]=>
+int(1)
+[1]=>
+int(2)
+[2]=>
+int(3)
+}
+[1]=>
+array(0) {
+}
+[2]=>
+array(3) {
+[0]=>
+int(7)
+[1]=>
+int(8)
+[2]=>
+int(9)
+}
+}
+*/
+		for($i=0; $i<3; $i++)
+		{
+			for($j=0; $j<3; $j++)
+			{
+				//Delete the contents of the array element.
+				//At this stage, only the element contents are deleted; the row is not actually deleted.
+				if($i==1)
+				{
+					//To delete row data, use the following:
+					unset($ary[$i]);
+				}
+			}
+		}
+		var_dump($ary);
+/*
+array(2) {
+[0]=>
+array(3) {
+[0]=>
+int(1)
+[1]=>
+int(2)
+[2]=>
+int(3)
+}
+[2]=>
+array(3) {
+[0]=>
+int(7)
+[1]=>
+int(8)
+[2]=>
+int(9)
+}
+}
+*/
+		//To pad the numbers: Execute array_values($array);
+		$ary = array_values($ary); 
+		var_dump($ary); 
+	} 
+	function test2():void 
+	{ 
+		$ary = [ 
+		"A" => [ 
+		"A1" => [1,2,3], 
+		"A2" => [4,5,6] 
+		], 
+		"B" => [ 
+		"B1" => [11,12,13], 
+		"B2" => [14,15,16] 
+		], 
+		"C" => [ 
+		"C1" => [21,22,23], 
+		"C2" => [24,25,26] 
+		], 
+		]; 
+		unset($ary["B"]["B1"]); 
+		unset($ary["B"]["B2"]); 
+		var_dump($ary);
+/*
+array(3) { 
+["A"]=> 
+array(2) { ["A1"]=> 
+array(3) { 
+[0]=> 
+int(1) 
+[1]=> 
+int(2) 
+[2]=> 
+int(3) 
+} 
+["A2"]=> 
+array(3) { 
+[0]=> 
+int(4) 
+[1]=> 
+int(5) 
+[2]=> 
+int(6) 
+} 
+} 
+["B"]=> 
+array(0) { 
+} 
+["C"]=> 
+array(2) { 
+["C1"]=> 
+array(3) { 
+[0]=> 
+int(21) 
+[1]=> 
+int(22) 
+[2]=> 
+int(23) 
+} 
+["C2"]=> 
+array(3) { 
+[0]=> 
+int(24) 
+[1]=> 
+int(25) 
+[2]=> int(26)
+}
+}
+}
+*/
+		//To delete a row
+		unset($ary["B"]);
+		//To pad the numbers: Execute array_values($array);
+		$ary = array_values($ary);
+		var_dump($ary);
+/*
+array(2) {
+[0]=>
+array(2) {
+["A1"]=>
+array(3) {
+[0]=>
+int(1)
+[1]=>
+int(2)
+[2]=>
+int(3)
+}
+["A2"]=>
+array(3) {
+[0]=>
+int(4)
+[1]=>
+int(5)
+[2]=>
+int(6)
+}
+}
+[1]=>
+array(2) {
+["C1"]=>
+array(3) {
+[0]=> 
+int(21) 
+[1]=> 
+int(22) 
+[2]=> 
+int(23) 
+} 
+["C2"]=> 
+array(3) { 
+[0]=> 
+int(24) 
+[1]=> 
+int(25) 
+[2]=> 
+int(26) 
+} 
+}
+}
+*/ 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">行を削除するケース</div>unset($ary[$i]);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">連想配列の行を削除するケース</div>unset($ary["B"]);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_values</div>内部インデックスを詰めたい場合に使用します。<br>この関数は配列の要素の中身を消しただけでは結果は変わりません。<br>行データを削除するような実行をした結果に対して内部インデックスをリナンバリングしてくれます。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "多次元配列の要素削除",n3: "配列関連",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">多次元配列の要素削除</div>要素を削除する方法としてunsetがあります。<br>unset(配列[要素]);<br>配列の行を削除する<br>unset(配列[要素][要素]);<br>要素のデータを消す<br>`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">行を削除するケース</div>unset($ary[$i]);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">連想配列の行を削除するケース</div>unset($ary["B"]);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_values</div>内部インデックスを詰めたい場合に使用します。<br>この関数は配列の要素の中身を消しただけでは結果は変わりません。<br>行データを削除するような実行をした結果に対して内部インデックスをリナンバリングしてくれます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Deleting elements from a multidimensional array",n3: "Array-related",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Deleting elements from a multidimensional array</div>The unset command is a way to delete elements. <br>unset(array[element]);<br>Deleting an array row<br>unset(array[element][element]);<br>Deleting element data<br>`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Deleting a row</div>unset($ary[$i]);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">Deleting an associative array row</div>unset($ary["B"]);<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">array_values</div>Use this function when you want to compress the internal index.<br>This function does not change the results if you simply delete the contents of an array element.<br>This function renumbers the internal index after deleting row data.<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

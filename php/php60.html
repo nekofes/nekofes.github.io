@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">ファイル/フォルダ</div></td></tr><tr><td><div id="n3">フォルダ関連</div></td></tr></table><br><div id="n4">再帰処理を利用してフォルダリストの<br>フォルダ<br>ファイル<br>を取得します。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+$aryType = [];//[0]folder [1]file
+$aryPath = [];//全てのパスを格納する配列
+
+$dir = ".";
+//$dir = "./a";
+//$dir = "./b";
+
+recursionDirectory($dir, $aryPath, $aryType);
+
+for($i=0; $i < count($aryPath); ++$i)
+{
+	echo "i:$i type:".$aryType[$i]." path:".$aryPath[$i]."&lt;br&gt;";
+}
+
+function recursionDirectory(string $dir, array &$aryPath, array &$aryType)
+{
+	$files = scandir($dir);
+	foreach ($files as $file) 
+	{
+		// 「.」と「..」はスキップ
+		if ($file === '.' || $file === '..') continue;
+		
+		//macのケース
+		if($file === ".DS_Store") continue;
+
+		//Windowsではパスの区切りに \ を使い、LinuxやMacでは / を使います。
+		//PHPの DIRECTORY_SEPARATOR 定数を使うと、
+		//実行されているOSに合わせて自動的に適切な区切り文字（/ か \）を選択してくれます。
+		$path = $dir . DIRECTORY_SEPARATOR . $file;
+		$aryPath[] = $path;
+		
+		if(is_dir($path))//フォルダ
+		{
+			$aryType[] = 0;
+			recursionDirectory($path, $aryPath, $aryType);
+		}
+		else//ファイル
+		{
+			$aryType[] = 1;
+		}
+	}
+}
+
+/*
+[出力結果]
+---------------
+$dir = ".";
+---------------
+i:0 type:0 path:./a
+i:1 type:0 path:./a/a
+i:2 type:1 path:./a/test1.html
+i:3 type:1 path:./a/test2.php
+i:4 type:0 path:./b
+i:5 type:0 path:./b/c
+i:6 type:1 path:./b/c/test2.html
+i:7 type:1 path:./b/test2.html
+i:8 type:1 path:./b/test2.php
+i:9 type:1 path:./test1.php
+
+---------------
+$dir = "./a";
+---------------
+i:0 type:0 path:./a/a
+i:1 type:1 path:./a/test1.html
+i:2 type:1 path:./a/test2.php
+
+---------------
+$dir = "./b";
+---------------
+i:0 type:0 path:./b/c
+i:1 type:1 path:./b/c/test2.html
+i:2 type:1 path:./b/test2.html
+i:3 type:1 path:./b/test2.php
+*/
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+$aryType = []; //[0]folder [1]file
+$aryPath = []; //Array storing all paths
+
+$dir = ".";
+//$dir = "./a";
+//$dir = "./b";
+
+recursionDirectory($dir, $aryPath, $aryType);
+
+for($i=0; $i < count($aryPath); ++$i)
+{
+	echo "i:$i type:".$aryType[$i]." path:".$aryPath[$i]."&lt;br&gt;";
+}
+
+function recursionDirectory(string $dir, array &$aryPath, array &$aryType)
+{
+	$files = scandir($dir);
+	foreach ($files as $file)
+	{
+		/ Skip "." and ".."
+		if ($file === '.' || $file === '..') continue;
+		
+		//Mac case
+		if($file === ".DS_Store") continue;
+		
+		//Windows uses \ as the path separator, while Linux and Mac use / .
+		//PHP's DIRECTORY_SEPARATOR constant can be used to automatically select the appropriate separator (/ or \) based on the operating system being used.
+		$path = $dir . DIRECTORY_SEPARATOR . $file; 
+		$aryPath[] = $path; 
+		
+		if(is_dir($path))//folder 
+		{ 
+			$aryType[] = 0; 
+			recursionDirectory($path, $aryPath, $aryType); 
+		} 
+		else//file 
+		{ 
+			$aryType[] = 1; 
+		} 
+	}
+}
+
+/*
+[Output result]
+---------------
+$dir = ".";
+---------------
+i:0 type:0 path:./a
+i:1 type:0 path:./a/a
+i:2 type:1 path:./a/test1.html
+i:3 type:1 path:./a/test2.php
+i:4 type:0 path:./b
+i:5 type:0 path:./b/c
+i:6 type:1 path:./b/c/test2.html
+i:7 type:1 path:./b/test2.html
+i:8 type:1 path:./b/test2.php
+i:9 type:1 path:./test1.php
+
+---------------
+$dir = "./a";
+---------------
+i:0 type:0 path:./a/a
+i:1 type:1 path:./a/test1.html
+i:2 type:1 path:./a/test2.php
+
+---------------
+$dir = "./b";
+---------------
+i:0 type:0 path:./b/c
+i:1 type:1 path:./b/c/test2.html
+i:2 type:1 path:./b/test2.html
+i:3 type:1 path:./b/test2.php
+*/
+</pre></div><div id="n6">$files = scandir($dir);<br>指定したパスのフォルダおよびファイルの一覧を取得します。<br>この一覧からフォルダかファイルを判定し<br>フォルダの場合は、その中のリストを再帰処理を使用して取得します。<br>この処理方法により、指定したパスの全のフォルダパスおよびファイルパスを取得する方法となります。<br><br>DIRECTORY_SEPARATOR<br>Windowsではパスの区切りに \ を使い、LinuxやMacでは / を使います。<br>PHPの DIRECTORY_SEPARATOR 定数を使うと、<br>実行されているOSに合わせて自動的に適切な区切り文字（/ か \）を選択してくれます。<br>if ($file === '.' || $file === '..') continue;<br>.<br>カレントディレクトリ<br>..<br>親ディレクトリ<br>recursionDirectory($path, $aryPath, $aryType);<br>フォルダの場合は、そのフォルダ内のリストを取得する必要があるため<br>実行している再帰関数を実行します。<br>そのとき、第1引数の$pathには<br>$path = $dir . DIRECTORY_SEPARATOR . $file;<br>フォルダパスを渡します。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "ファイル/フォルダ",n3: "フォルダ関連",n4:`再帰処理を利用してフォルダリストの<br>フォルダ<br>ファイル<br>を取得します。<br>`,n5:`[サンプル]`,n6:`$files = scandir($dir);<br>指定したパスのフォルダおよびファイルの一覧を取得します。<br>この一覧からフォルダかファイルを判定し<br>フォルダの場合は、その中のリストを再帰処理を使用して取得します。<br>この処理方法により、指定したパスの全のフォルダパスおよびファイルパスを取得する方法となります。<br><br>DIRECTORY_SEPARATOR<br>Windowsではパスの区切りに \ を使い、LinuxやMacでは / を使います。<br>PHPの DIRECTORY_SEPARATOR 定数を使うと、<br>実行されているOSに合わせて自動的に適切な区切り文字（/ か \）を選択してくれます。<br>if ($file === '.' || $file === '..') continue;<br>.<br>カレントディレクトリ<br>..<br>親ディレクトリ<br>recursionDirectory($path, $aryPath, $aryType);<br>フォルダの場合は、そのフォルダ内のリストを取得する必要があるため<br>実行している再帰関数を実行します。<br>そのとき、第1引数の$pathには<br>$path = $dir . DIRECTORY_SEPARATOR . $file;<br>フォルダパスを渡します。<br>`,n7:"戻る",},en: {n1: "back",n2: "Files/Folders",n3: "Folder-related",n4:`Uses recursive processing to retrieve a list of folders<br>folders<br>files<br>using a recursive process. <br>`,n5:`[Sample]`,n6:`$files = scandir($dir);<br>Retrieves a list of folders and files in the specified path. <br>Determines whether this list is a folder or a file.<br>If it is a folder, recursive processing is used to retrieve the contents of that folder. <br>This method retrieves all folder and file paths in the specified path. <br><br>DIRECTORY_SEPARATOR<br>Windows uses \ as a path separator, while Linux and Mac use /. <br>PHP's DIRECTORY_SEPARATOR constant<br>automatically selects the appropriate separator (/ or \) based on the operating system. <br>if ($file === '.' || $file === '..') continue;<br>.<br>Current directory<br>..<br>Parent directory<br>recursionDirectory($path, $aryPath, $aryType);<br>If it's a folder, you need to get a list of the contents of that folder.<br>Execute the recursive function you're running.<br>At that time, the first argument, $path, is:<br>$path = $dir . DIRECTORY_SEPARATOR . $file;<br>Pass the folder path.<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

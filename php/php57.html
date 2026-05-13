@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">ImageMagick</div></td></tr><tr><td><div id="n3">画像関連</div></td></tr></table><br><div id="n4"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">phpinfo();</div>を実行した結果を検索して<br>imagick<br>のキーワードが存在しているか？を判定します。<br>存在していない場合は、php.iniの「imagick」が無効(コメントアウト)になっている可能性があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[php.iniの場所]<br>echo "ini path:".php_ini_loaded_file();<br></div>上記を実行した後で出力された結果からphp.iniの場所を編集することになります。<br>※編集前にphp.iniファイルのバックアップをとっておくことを、お勧めします。<br>(例)<br>ini path:/Applications/MAMP/bin/php/php8.2.0/conf/php.ini<br><br>php.iniを探すと下記のように設定されているステップがあると思います。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">;extension=imagick.so</div>「;」はコメントアウトにする記号ですので、この「;」を外します。<br>(例)<br>extension=imagick.so;20260128 mod コメントアウトを外した<br>;extension=imagick.so<br><br>この結果を保存した後、Apacheを再起動します。<br>phpinfo();を再実行後<br>imagickがphpinfoの結果で表示されると、<br>ImageMagickが使用可能の状態になります。<br><br>Imagickが使えるメリット<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[エラーに強い]</div>GDで読み込めない微妙な破損画像も、内部的に修復して開いてくれることが多いです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[高品質]</div>FILTER_LANCZOS などの高度な計算手法が使えるため、縮小しても画像がボケにくいです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[多機能]</div>PDFやWebPなど、PNG/JPG以外の形式も同じ書き方で扱えます。<br><br>通常はファイル形式を明示して読み込ませるのですが。<br>稀に開けないことがあり、その場合バイナリとして読み込ませることで<br>ファイルが開ける可能性があります。<br>今回のサンプルはバイナリで読み込ませる方法となります。<br></div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+$kind = 1;//0;//[0]png [1]jpg
+$input_dir = "./img/";//変換元となる画像フォルダパス
+$output_dir = "./img/out/";//変換先に出力する画像フォルダパス
+$imageSize = 300;//px単位
+//画像リサイズ変換処理
+resizeImageImageMagick($kind, $input_dir, $output_dir, $imageSize);
+//phpinfo();
+
+//画像リサイズ変換処理
+//kind:[0]png [1]jpg
+//input_dir:変換元となる画像フォルダパス
+//output_dir:変換先に出力する画像フォルダパス
+//imageSize:px単位
+function resizeImageImageMagick(int $kind, string $input_dir, string $output_dir, int $imageSize)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+
+	//指定したフォルダの画像ファイルID(拡張子がpngもしくはjpg)を取得する処理
+	imageDir($kind, $input_dir, $files);
+
+	if(count($files)==0)
+	{
+		echo "対象ファイルが存在しません。\n";
+		return;
+	}
+
+	// 保存先フォルダがなければ作成する
+	if (!is_dir($output_dir))
+	{
+		mkdir($output_dir, 0755, true);
+	}
+
+	//画像サイズ変更
+	resizeImage($kind, $input_dir, $output_dir, $imageSize, $files);
+}
+
+//画像サイズ変更
+function resizeImage(int $kind, string $input_dir, string $output_dir, int $imageSize, array &$files)
+{
+	$src_image = null;
+	foreach ($files as $file) 
+	{
+		echo "file:$file\n";
+		if(!file_exists($input_dir . $file))
+		{
+			echo "ファイルは存在しないので次のファイルを判定します。\n";
+			continue;
+		}
+		$image_into = getimagesize($input_dir . $file);
+		if($image_into === false)
+		{
+			if(($kind == 0 && $image_into[2] !== IMAGETYPE_PNG) || 
+			($kind == 1 && $image_into[2] !== IMAGETYPE_JPEG)
+			)
+			{
+				echo "画像情報が誤っています。\n";
+				continue;
+			}
+		}
+		// 3. ファイル名を取得（元のファイル名と同じ名前で保存するため）
+		$filename = basename($input_dir . $file);
+		$save_path = $output_dir . $filename;
+
+		// 4. 指定したフォルダに直接保存
+		// imagepngの第2引数にパスを渡すと、ファイルとして書き出されます
+		if($kind == 0)
+		{
+			$ext = "png";
+		}
+		else
+		{
+			$ext = "jpg";
+		}
+		try 
+		{
+			//インスタンス作成（GDのimagecreatefrom...より読み込み能力が高い）
+			$img_tmp = file_get_contents($input_dir . $file);
+			$image = new Imagick();
+			//ファイルからではなく、データとして読み込み
+			$image->readImageBlob($img_tmp);
+			//リサイズ（幅、高さ0で比率維持、高品質フィルタ使用）
+			$image->resizeImage($imageSize, 0, Imagick::FILTER_LANCZOS, 1);
+			//フォーマットをPNG/JPGに明示的に設定
+			$image->setImageFormat($ext);
+			//指定のフォルダに保存
+			$image->writeImage($save_path);
+			//メモリ解放
+			$image->clear();
+			echo "処理が成功しました\n";
+		}
+		catch (Exception $e)
+		{
+			// Imagickでも読み込めないほど破損している場合
+			echo "エラー: " . $e->getMessage()."\n";
+			continue;
+		}
+		echo "保存完了: " . $save_path . "\n";
+	}    
+}
+//指定したフォルダの画像ファイルID(拡張子がpngもしくはjpg)を取得する処理
+//kind:[0]png [1]jpg
+//input_dir:指定するフォルダパス
+//files:取得したファイルIDの結果を格納する配列
+function imageDir(int $kind, string $input_dir, array &$files)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+
+	$flg=0;
+	foreach ($all_files as $file) 
+	{
+		$flg=0;
+		if($kind==0)
+		{
+			// '/i' 修飾子をつけることで大文字小文字を区別せずに検索
+			if (preg_match('/\.png$/i', $file)) 
+			{
+				$flg=1;
+			}
+		}
+		else
+		{
+			//最も一般的な書き方（OR演算子）
+			// (jpg|jpeg) で「jpg」または「jpeg」にマッチ
+			//if (preg_match('/\.(jpg|jpeg)$/i', $file))
+
+			//短く書く方法（量指定子 ?）
+			// jpe?g で「jpg」と「jpeg」の両方にマッチ
+			if (preg_match('/\.jpe?g$/i', $file)) 
+			{
+				$flg=1;
+			}
+		}
+		if($flg==0)continue;
+		$files[] = $file;
+	}
+
+}
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+$kind = 1;//0;//[0]png [1]jpg
+$input_dir = "./img/";//Source image folder path
+$output_dir = "./img/out/";//Destination image folder path
+$imageSize = 300;//Pixel units
+//Image resizing process
+resizeImageImageMagick($kind, $input_dir, $output_dir, $imageSize);
+//phpinfo();
+
+//Image resizing process
+//kind:[0]png [1]jpg
+//input_dir:Source image folder path
+//output_dir:Destination image folder path
+//imageSize:Pixel units
+function resizeImageImageMagick(int $kind, string $input_dir, string $output_dir, int $imageSize)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+	
+	//Get image file IDs (with extensions .png or .jpg) in the specified folder
+	imageDir($kind, $input_dir, $files);
+	
+	if(count($files)==0)
+	{
+		echo "The target file does not exist.\n";
+		return;
+	}
+	
+	//Create the destination folder if it does not exist
+	if (!is_dir($output_dir))
+	{
+		mkdir($output_dir, 0755, true);
+	}
+	
+	//Resize the image
+	resizeImage($kind, $input_dir, $output_dir, $imageSize, $files);
+}
+
+//Resize the image
+function resizeImage(int $kind, string $input_dir, string $output_dir, int $imageSize, array &$files)
+{
+	$src_image = null;
+	foreach ($files as $file)
+	{
+	echo "file:$file\n";
+	if(!file_exists($input_dir . $file))
+	{
+		echo "The file does not exist, so the next file will be checked.\n";
+		continue;
+	}
+	$image_into = getimagesize($input_dir . $file);
+	if($image_into === false)
+	{
+		if(($kind == 0 && $image_into[2] !== IMAGETYPE_PNG) ||
+		($kind == 1 && $image_into[2] !== IMAGETYPE_JPEG)
+		)
+		{
+			echo "The image information is incorrect.\n";
+			continue;
+		}
+	}
+	// 3. Get the file name (to save it with the same name as the original).
+	$filename = basename($input_dir . $file);
+	$save_path = $output_dir . $filename;
+	
+	// 4. Save directly to the specified folder.
+	// If you pass a path to the second argument of imagepng, it will be written as a file.
+	if($kind == 0)
+	{
+		$ext = "png";
+	}
+	else
+	{
+		$ext = "jpg";
+	}
+	try
+	{
+		//Create an instance (higher read performance than GD's imagecreatefrom...)
+		$img_tmp = file_get_contents($input_dir . $file);
+		$image = new Imagick();
+		//Read as data, not from a file
+		$image->readImageBlob($img_tmp);
+		//Resize (set width and height to 0, maintain ratio, use high-quality filter)
+		$image->resizeImage($imageSize, 0, Imagick::FILTER_LANCZOS, 1);
+		//Explicitly set the format to PNG/JPG
+		$image->setImageFormat($ext);
+		//Save to a specified folder
+		$image->writeImage($save_path);
+		//Free memory
+		$image->clear();
+		echo "The operation was successful\n";
+	}
+	catch (Exception $e)
+	{
+		// If the file is corrupted to the point that even Imagick cannot read it:
+		echo "Error: " . $e->getMessage()."\n";
+		continue;
+	}
+		echo "Saved: " . $save_path . "\n";
+	}
+}
+//Get image file IDs (with extensions .png or .jpg) in the specified folder.
+//kind:[0]png [1]jpg
+//input_dir:Specified folder path
+//files:Array to store the retrieved file IDs.
+function imageDir(int $kind, string $input_dir, array &$files)
+{
+	$all_files = scandir($input_dir);
+	$files = [];
+	
+	$flg=0;
+	foreach ($all_files as $file)
+	{
+		$flg=0;
+		if($kind==0)
+		{
+			//Add the '/i' modifier to perform a case-insensitive search.
+			if (preg_match('/\.png$/i', $file))
+			{
+				$flg=1;
+			}
+		}
+		else
+		{
+			// Most common syntax (OR operator)
+			// (jpg|jpeg) matches "jpg" or "jpeg"
+			//if (preg_match('/\.(jpg|jpeg)$/i', $file))
+			
+			// Shorter syntax (quantifier ?)
+			// jpe?g matches both "jpg" and "jpeg"
+			if (preg_match('/\.jpe?g$/i', $file))
+			{
+				$flg=1;
+			}
+		}
+		if($flg==0)continue;
+		$files[] = $file;
+	}
+
+}
+</pre></div><div id="n6">try...catchで実装することにより、<br>一つの破損ファイルでプログラムを止めないようにスキップするのが一般的です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">readImageBlob</div>ファイルパスを渡して直接開くのではなく、一旦 file_get_contents でデータをメモリに読み込み、<br>それを Imagick に設定する方法です。<br>blobにすることで厳格なヘッダーチェックを回避できる場合があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$image->readImageBlob($img_tmp);</div>ファイルからではなく、データとして読み込みます。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "ImageMagick",n3: "画像関連",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">phpinfo();</div>を実行した結果を検索して<br>imagick<br>のキーワードが存在しているか？を判定します。<br>存在していない場合は、php.iniの「imagick」が無効(コメントアウト)になっている可能性があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[php.iniの場所]<br>echo "ini path:".php_ini_loaded_file();<br></div>上記を実行した後で出力された結果からphp.iniの場所を編集することになります。<br>※編集前にphp.iniファイルのバックアップをとっておくことを、お勧めします。<br>(例)<br>ini path:/Applications/MAMP/bin/php/php8.2.0/conf/php.ini<br><br>php.iniを探すと下記のように設定されているステップがあると思います。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">;extension=imagick.so</div>「;」はコメントアウトにする記号ですので、この「;」を外します。<br>(例)<br>extension=imagick.so;20260128 mod コメントアウトを外した<br>;extension=imagick.so<br><br>この結果を保存した後、Apacheを再起動します。<br>phpinfo();を再実行後<br>imagickがphpinfoの結果で表示されると、<br>ImageMagickが使用可能の状態になります。<br><br>Imagickが使えるメリット<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[エラーに強い]</div>GDで読み込めない微妙な破損画像も、内部的に修復して開いてくれることが多いです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[高品質]</div>FILTER_LANCZOS などの高度な計算手法が使えるため、縮小しても画像がボケにくいです。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[多機能]</div>PDFやWebPなど、PNG/JPG以外の形式も同じ書き方で扱えます。<br><br>通常はファイル形式を明示して読み込ませるのですが。<br>稀に開けないことがあり、その場合バイナリとして読み込ませることで<br>ファイルが開ける可能性があります。<br>今回のサンプルはバイナリで読み込ませる方法となります。<br>`,n5:`[サンプル]`,n6:`try...catchで実装することにより、<br>一つの破損ファイルでプログラムを止めないようにスキップするのが一般的です。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">readImageBlob</div>ファイルパスを渡して直接開くのではなく、一旦 file_get_contents でデータをメモリに読み込み、<br>それを Imagick に設定する方法です。<br>blobにすることで厳格なヘッダーチェックを回避できる場合があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$image->readImageBlob($img_tmp);</div>ファイルからではなく、データとして読み込みます。<br>`,n7:"戻る",},en: {n1: "back",n2: "ImageMagick",n3: "Image-related",n4:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">phpinfo();</div>Search the results to determine whether the <br>imagick<br>keyword is present. <br>If it is not present, "imagick" may be disabled (commented out) in php.ini. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[php.ini location]<br>echo "ini path:".php_ini_loaded_file();<br></div>After executing the above, you will need to edit the php.ini location using the output. <br>*We recommend making a backup of your php.ini file before editing. <br>(Example)<br>ini path:/Applications/MAMP/bin/php/php8.2.0/conf/php.ini<br><br>Look for php.ini and you should see the following settings: <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">;extension=imagick.so</div>The ";" is the comment symbol, so remove this ";". <br>(Example)<br>extension=imagick.so;20260128 mod uncommented<br>;extension=imagick.so<br><br>After saving this result, restart Apache. <br>After re-executing phpinfo();<br>If imagick appears in the phpinfo results,<br>ImageMagick is enabled. <br><br>Advantages of using Imagick<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Error-resistant]</div>Even slightly corrupted images that cannot be loaded with GD can often be repaired internally and opened. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[High quality]</div>By using advanced calculation methods such as FILTER_LANCZOS, images are less likely to become blurry even when reduced in size. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">[Multi-functional]</div>You can also use the same syntax to handle formats other than PNG/JPG, such as PDF and WebP. <br><br>Normally, you would explicitly specify the file format to load. <br>In rare cases, the file may not open. In such cases, loading it as a binary file may open it. <br>This sample demonstrates loading the file as a binary file. <br>`,n5:`[Sample]`,n6:`Implementing a try...catch routine<br>commonly allows you to skip over a single corrupted file to prevent the program from halting. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">readImageBlob</div>Instead of passing a file path and opening it directly, first read the data into memory using file_get_contents and then set it in Imagick. <br>By converting it to a blob, you may be able to avoid strict header checks. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$image->readImageBlob($img_tmp);</div>Reads the data, not from a file. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

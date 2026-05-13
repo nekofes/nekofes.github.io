@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">配列要素の上書き(2)</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4">配列要素を更新する処理のサンプルです。</div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		$user1 = ['name' => 'tanaka', 'age' => 30];
+		$user2 = ['name' => 'sato', 'age' => 25];
+		
+		$user = [];
+		$user[] = $user1;
+		$user[] = $user2;
+		
+		for ($i = 0; $i < count($user); $i++) {
+			// $user[$i]（各ユーザーの配列）の 'name' をチェック
+			if (isset($user[$i]['name']) && $user[$i]['name'] === "sato") 
+			{
+				if (isset($user[$i]['age']))
+				{
+					$user[$i]['age'] = 20; // 元の配列を直接更新
+				}
+			}
+		}
+		
+		print_r($user);
+/*
+Array
+(
+    [0] => Array
+        (
+            [name] => tanaka
+            [age] => 30
+        )
+
+    [1] => Array
+        (
+            [name] => sato
+            [age] => 20
+        )
+
+)
+*/
+	}
+	function test2():void
+	{
+		$user1 = ['name' => 'tanaka', 'age' => 30];
+		$user2 = ['name' => 'sato', 'age' => 25];
+		
+		$user = [];
+		$user[] = $user1;
+		$user[] = $user2;
+
+		foreach ($user as &$tmp) { // & を使って直接参照する
+			if (($tmp['name'] ?? '') === "sato") {
+				$tmp['age'] = 20;
+			}
+		}
+		
+		print_r($user);
+/*
+Array
+(
+    [0] => Array
+        (
+            [name] => tanaka
+            [age] => 30
+        )
+
+    [1] => Array
+        (
+            [name] => sato
+            [age] => 20
+        )
+
+)
+*/
+		unset($tmp); // 参照を解除します
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		$user1 = ['name' => 'tanaka', 'age' => 30];
+		$user2 = ['name' => 'sato', 'age' => 25];
+		
+		$user = [];
+		$user[] = $user1;
+		$user[] = $user2;
+		
+		for ($i = 0; $i < count($user); $i++) 
+		{
+			// Check 'name' for $user[$i] (each user's array)
+			if (isset($user[$i]['name']) && $user[$i]['name'] === "sato")
+			{
+				if (isset($user[$i]['age'])))
+				{
+					$user[$i]['age'] = 20; // Update the original array directly
+				}
+			}
+		}
+		
+		print_r($user);
+/*
+Array
+(
+[0] => Array
+(
+[name] => tanaka
+[age] => 30
+)
+
+[1] => Array
+(
+[name] => sato
+[age] => 20
+)
+
+)
+*/
+	}
+	function test2():void
+	{
+		$user1 = ['name' => 'tanaka', 'age' => 30];
+		$user2 = ['name' => 'sato', 'age' => 25];
+		
+		$user = [];
+		$user[] = $user1;
+		$user[] = $user2;
+		
+		foreach ($user as &$tmp) { // Direct reference using &
+			if (($tmp['name'] ?? '') === "sato") 
+			{
+				$tmp['age'] = 20;
+			}
+		}
+		
+		print_r($user);
+/*
+Array
+(
+[0] => Array
+(
+[name] => tanaka
+[age] => 30
+)
+
+[1] => Array
+(
+[name] => sato
+[age] => 20
+)
+
+)
+*/
+		unset($tmp); // Release reference
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;/pre&gt;";
+</pre></div><br><div id="n6">$user は「ユーザーの配列」を格納した多次元配列です。<br>条件判定や更新を行う際は、現在の要素である $user[$i] に対して行う必要があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">isset()</div>変数が存在するか」を true/false で返す関数です。<br>値を比較する場合は、直接 == や === で比較します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">??(Null合体演算子)</div>このサンプルでは値が正しく入っているので問題ありませんが、<br>他のデータ連携により予期せぬデータが入っている可能性があります。<br>そのとき<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$tmp['name']</div>のように実装した場合、予期せぬデータが入っていると<br>PHPは"Warning: Undefined array key" という警告を出してしまいます。<br>もしも、キーが存在しなくてもエラーを回避して安全に比較をすることができるように<br>Null合体演算子を使い処理を実装することが推奨されます。<br></div><br><br><a id="n8" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "配列要素の上書き(2)",n3: "配列関連",n4:`配列要素を更新する処理のサンプルです。`,n5:`[サンプル]`,n6:`$user は「ユーザーの配列」を格納した多次元配列です。<br>条件判定や更新を行う際は、現在の要素である $user[$i] に対して行う必要があります。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">isset()</div>変数が存在するか」を true/false で返す関数です。<br>値を比較する場合は、直接 == や === で比較します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">??(Null合体演算子)</div>このサンプルでは値が正しく入っているので問題ありませんが、<br>他のデータ連携により予期せぬデータが入っている可能性があります。<br>そのとき<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$tmp['name']</div>のように実装した場合、予期せぬデータが入っていると<br>PHPは"Warning: Undefined array key" という警告を出してしまいます。<br>もしも、キーが存在しなくてもエラーを回避して安全に比較をすることができるように<br>Null合体演算子を使い処理を実装することが推奨されます。<br>`,n7:"戻る",},en: {n1: "back",n2: "Overwriting Array Elements (2)",n3: "Array Related",n4:`This is a sample of an array element update process.`,n5:`[Sample]`,n6:`$user is a multidimensional array containing an array of users. <br>When performing conditional tests or updates, you must perform them on the current element, $user[$i]. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">isset()</div>This function returns true/false to determine whether a variable exists. <br>To compare values, use == or === directly. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">?? (Null coalescing operator)</div>In this sample, the values ​​are entered correctly, so there is no problem.<br>However, unexpected data may be included due to other data integration.<br>In that case<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$tmp['name']</div>If implemented like this, if unexpected data is included,<br>PHP will issue a "Warning: Undefined array key" warning.<br>If the key does not exist, it is recommended to implement the process using the null coalescing operator to avoid errors and safely perform comparisons.<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

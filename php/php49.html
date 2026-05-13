@@ -1,0 +1,356 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">多次元配列の作成</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4">PHPで多次元配列を実装する主な方法は、「配列の要素の中にさらに配列を入れる」ことです。</div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	//行データを追加
+	function test1():void
+	{
+		$ary =[
+			[1,2,3],
+			[4,5,6],
+		];
+		$this->echoArray($ary, 2, 2);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:4
+index:4 i:1 j:1 ary:5
+index:5 i:1 j:2 ary:6
+*/
+		//要素(行)を追加
+		$ary[] = [
+			7,8,9
+		];
+		$this->echoArray($ary, 3, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:4
+index:4 i:1 j:1 ary:5
+index:5 i:1 j:2 ary:6
+index:6 i:2 j:0 ary:7
+index:7 i:2 j:1 ary:8
+index:8 i:2 j:2 ary:9
+*/
+		$ary2 =[
+			[
+				"person" => "tanaka",
+				"age" =>20,
+			],
+			[
+				"person" => "sato",
+				"age" =>21,
+			],
+		];
+		$this->echoPersonAge($ary2);
+/*
+person:tanaka age:20
+person:sato age:21
+*/
+		//要素(行)を追加
+		$ary2[] = [
+			"person" => "suzuki",
+			"age" =>22,
+		];
+		$this->echoPersonAge($ary2);
+/*
+person:tanaka age:20
+person:sato age:21
+person:suzuki age:22
+*/
+	}
+	private function echoArray(array $ary, int $row, int $col)
+	{
+		$index = 0;
+		for($i=0; $i < $row; $i++)
+		{
+			for($j=0; $j < $col; $j++)
+			{
+				echo "index:$index i:$i j:$j ary:".(string)($ary[$i][$j]).PHP_EOL;
+				$index++;
+			}
+		}
+	}
+	private function echoPersonAge(array $ary)
+	{
+		foreach($ary as $tmp)
+		{
+			echo "person:".$tmp["person"]." age:".$tmp["age"].PHP_EOL;
+		}
+	}
+	//列に追加
+	function test2():void
+	{
+		$ary =[
+			[1,2],
+			[4,5],
+		];
+		$this->echoArray($ary, 2, 2);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:1 j:0 ary:4
+index:3 i:1 j:1 ary:5
+*/
+		$ary[0][] = 3;
+		$ary[1][] = 6;
+		$this->echoArray($ary, 2, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:4
+index:4 i:1 j:1 ary:5
+index:5 i:1 j:2 ary:6
+*/
+	}
+	//3次元配列データの作成
+	function test3():void
+	{
+		$ary = []; // 空の配列を用意
+		
+		for ($i = 1; $i <= 3; $i++)
+		{
+			$row = []; // 各行の配列を初期化
+			for ($j = 1; $j <= 3; $j++)
+			{
+				$row[] = $i * $j; // 列を追加
+			}
+			$ary[] = $row; // 作成した行を本体に追加
+		}
+		$this->echoArray($ary, 3, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:2
+index:4 i:1 j:1 ary:4
+index:5 i:1 j:2 ary:6
+index:6 i:2 j:0 ary:3
+index:7 i:2 j:1 ary:6
+index:8 i:2 j:2 ary:9
+*/
+		$ary2 = [];
+		for ($i = 0; $i < 3; $i++) { // 1 <= 3 ではなく 0 < 3
+			for ($j = 0; $j < 3; $j++) {
+				for ($k = 0; $k < 3; $k++) {
+					// 計算式を調整（元の計算を維持するなら ($i+1)*($j+1)*($k+1)）
+					$ary2[$i][$j][$k] = ($i + 1) * ($j + 1) * ($k + 1);
+				}
+			}
+		}
+		$this->echoArray($ary, 3, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:2
+index:4 i:1 j:1 ary:4
+index:5 i:1 j:2 ary:6
+index:6 i:2 j:0 ary:3
+index:7 i:2 j:1 ary:6
+index:8 i:2 j:2 ary:9
+*/
+	}
+	private function echoArray3(array $ary, int $count1, int $count2, int $count3)
+	{
+		$index = 0;
+		for($i=0; $i < $count1; $i++)
+		{
+			for($j=0; $j < $count2; $j++)
+			{
+				for($k=0; $k < $count3; $k++)
+				{
+					echo "index:$index i:$i j:$j k:$k ary:".(string)($ary[$i][$j][$k]).PHP_EOL;
+					$index++;
+				}
+			}
+		}
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;hr&gt;";
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id=h11><a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a><pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	//Add row data 
+	function test1():void 
+	{ 
+	$ary =[ 
+	[1,2,3], 
+	[4,5,6], 
+	]; 
+	$this->echoArray($ary, 2, 2);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:4
+index:4 i:1 j:1 ary:5
+index:5 i:1 j:2 ary:6
+*/ 
+	//Add element (row) 
+	$ary[] = [ 
+	7,8,9 
+	]; 
+	$this->echoArray($ary, 3, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:4
+index:4 i:1 j:1 ary:5
+index:5 i:1 j:2 ary:6
+index:6 i:2 j:0 ary:7
+index:7 i:2 j:1 ary:8
+index:8 i:2 j:2 ary:9
+*/ 
+	$ary2 =[ 
+	[ 
+	"person" => "tanaka", 
+	"age" =>20, 
+	], 
+	[ 
+	"person" => "sato", 
+	"age" =>21, 
+	], 
+	]; 
+	$this->echoPersonAge($ary2);
+/*
+person:tanaka age:20
+person:sato age:21
+*/ 
+	//Add element (row) 
+	$ary2[] = [ 
+	"person" => "suzuki", 
+	"age" =>22, 
+	]; 
+	$this->echoPersonAge($ary2);
+/*
+person:tanaka age:20
+person:sato age:21
+person:suzuki age:22
+*/ 
+	} 
+	private function echoArray(array $ary, int $row, int $col) 
+	{ 
+		$index = 0; 
+		for($i=0; $i < $row; $i++) 
+		{ 
+			for($j=0; $j < $col; $j++) 
+			{ 
+				echo "index:$index i:$i j:$j ary:".(string)($ary[$i][$j]).PHP_EOL; 
+				$index++; 
+			} 
+		} 
+	} 
+	private function echoPersonAge(array $ary) 
+	{ 
+		foreach($ary as $tmp) 
+		{ 
+			echo "person:".$tmp["person"]." age:".$tmp["age"].PHP_EOL; 
+		} 
+	} 
+	//add to column 
+	function test2():void 
+	{ 
+		$ary =[ 
+		[1,2], [4,5], 
+		]; 
+		$this->echoArray($ary, 2, 2);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:1 j:0 ary:4
+index:3 i:1 j:1 ary:5
+*/ 
+		$ary[0][] = 3; 
+		$ary[1][] = 6; 
+		$this->echoArray($ary, 2, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:4
+index:4 i:1 j:1 ary:5
+index:5 i:1 j:2 ary:6
+*/ 
+	} 
+	//Create 3D array data 
+	function test3():void 
+	{ 
+		$ary = []; // Prepare an empty array
+		
+		for ($i = 1; $i <= 3; $i++)
+		{
+			$row = []; // Initialize the array for each row
+			for ($j = 1; $j <= 3; $j++)
+			{
+				$row[] = $i * $j; // Add a column
+			}
+			$ary[] = $row; // Add the created row to the body
+		}
+		$this->echoArray($ary, 3, 3);
+	/*
+	index:0 i:0 j:0 ary:1
+	index:1 i:0 j:1 ary:2
+	index:2 i:0 j:2 ary:3
+	index:3 i:1 j:0 ary:2
+	index:4 i:1 j:1 ary:4
+	index:5 i:1 j:2 ary:6
+	index:6 i:2 j:0 ary:3
+	index:7 i:2 j:1 ary:6
+	index:8 i:2 j:2 ary:9
+	*/
+		$ary2 = [];
+		for ($i = 0; $i < 3; $i++) { // 0 < 3, not 1 <= 3
+			for ($j = 0; $j < 3; $j++) {
+				for ($k = 0; $k < 3; $k++) {
+					// Adjust the formula (to keep the original calculation, use ($i+1)*($j+1)*($k+1)))
+					$ary2[$i][$j][$k] = ($i + 1) * ($j + 1) * ($k + 1);
+				}
+			}
+		}
+		$this->echoArray($ary, 3, 3);
+/*
+index:0 i:0 j:0 ary:1
+index:1 i:0 j:1 ary:2
+index:2 i:0 j:2 ary:3
+index:3 i:1 j:0 ary:2
+index:4 i:1 j:1 ary:4
+index:5 i:1 j:2 ary:6
+index:6 i:2 j:0 ary:3
+index:7 i:2 j:1 ary:6
+index:8 i:2 j:2 ary:9
+*/ 
+	} 
+	private function echoArray3(array $ary, int $count1, int $count2, int $count3) 
+	{ 
+		$index = 0; 
+		for($i=0; $i < $count1; $i++) 
+		{ 
+			for($j=0; $j < $count2; $j++) 
+			{ 
+				for($k=0; $k < $count3; $k++) 
+				{ 
+					echo "index:$index i:$i j:$j k:$k ary:".(string)($ary[$i][$j][$k]).PHP_EOL; 
+					$index++; 
+				} 
+			} 
+		} 
+	}
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+echo "&lt;hr&gt;";
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1()</div>既存の多次元配列に新しいデータを追加するには、[](空のブラケット)を使います。<br>配列の末尾に新しい配列を追加するには、[]を使います。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2()</div>すでにある行（子配列）に対して、新しい値を追加します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3()</div>配列[ページ][行][列]<br>配列の要素の中に、さらに配列を入れるネスト構造を追加する方法となります。 <br><br>行の追加: $array[] = [新データ];<br>列の追加: $array[行インデックス][] = 新データ;<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "多次元配列の作成",n3: "配列関連",n4:`PHPで多次元配列を実装する主な方法は、「配列の要素の中にさらに配列を入れる」ことです。`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1()</div>既存の多次元配列に新しいデータを追加するには、[](空のブラケット)を使います。<br>配列の末尾に新しい配列を追加するには、[]を使います。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2()</div>すでにある行（子配列）に対して、新しい値を追加します。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3()</div>配列[ページ][行][列]<br>配列の要素の中に、さらに配列を入れるネスト構造を追加する方法となります。 <br><br>行の追加: $array[] = [新データ];<br>列の追加: $array[行インデックス][] = 新データ;<br>`,n7:"戻る",},en: {n1: "back",n2: "Creating Multidimensional Arrays",n3: "Array Related",n4:`The primary way to implement multidimensional arrays in PHP is to "enclose arrays within array elements."`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test1()</div>To add new data to an existing multidimensional array, use [] (empty brackets). <br>To add a new array to the end of an array, use []. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test2()</div>Append new values ​​to an existing row (child array). <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">test3()</div>Array [Page][Row][Column]<br>This method adds a nested structure by placing an array within an array element. <br><br>Add a row: $array[] = [new data];<br>Add a column: $array[row index][] = new data;<br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>

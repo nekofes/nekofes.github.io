@@ -1,0 +1,488 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if(self!=top){top.location=self.location;}</script><title>PHP MEMO</title><script type = "text/javascript" src="../o/run_prettify.js"></script><link href = "../o/prettify.css" type="text/css" rel="stylesheet" /><style>.prettyprint ol.linenums > li {list-style-type: decimal; }.copy-button {display: inline-block; padding: 2px 5px; border: 1px solid #000; border-radius: 3px; text-decoration: none; color: #000; background-color: #ffffcc; }.copy-button:hover {background-color: #ffeb99; }</style></head><body oncontextmenu='return false;'><table><tr><td><label class="toggle-switch"><input type="checkbox" id="toggle"><span class="slider"></span></label></td><td><p id="langText">現在の言語: 日本語</p></td></tr></table><input type="hidden" id="lang" value="0"><a id="n1" href='#' onClick="f2();">戻る</a><br><br><table><tr><td style="font-size:150%;font-width:bold;background-color:rgb(143 188 143 / 0.4);"><div id="n2">多次元配列の要素更新</div></td></tr><tr><td><div id="n3">配列関連</div></td></tr></table><br><div id="n4">多次元配列の更新は要素をしていする方法があります。連想配列の多次元配列に更新にはarray_replace_recursiveを使い、差し替えた配列で返す方法もあります。</div><br><div id="n5">[サンプル]</div><br><div id=h1><a href="javascript:void(0);" id="copy1" class="copy-button" data-target="codeBlock1">copy</a><pre id="codeBlock1" class="prettyprint linenums;lang-js;">
+class test1
+{
+	function test1():void
+	{
+		$ary =[
+			[1,2,3],
+			[4,5,6],
+			[7,8,9],
+		];
+		$ary[0][0]=100;
+		$ary[0][1]=101;
+		$ary[0][2]=102;
+		for($i=0; $i<3; $i++)
+		{
+			if($i==1)
+			{
+				for($j=0; $j<3; $j++)
+				{
+					$ary[$i][$j]+=10;
+				}
+			}
+		}
+		print_r($ary);
+	}
+/*
+Array
+(
+    [0] => Array
+        (
+            [0] => 100
+            [1] => 101
+            [2] => 102
+        )
+
+    [1] => Array
+        (
+            [0] => 14
+            [1] => 15
+            [2] => 16
+        )
+
+    [2] => Array
+        (
+            [0] => 7
+            [1] => 8
+            [2] => 9
+        )
+
+)
+*/
+	function test2():void
+	{
+		$ary = [
+			"A" => [
+				"up" => [1,2,3],
+				"down" => [4,5,6]
+			],
+			"B" => [
+				"up" => [11,12,13],
+				"down" => [14,15,16]
+			],
+			"C" => [
+				"up" => [21,22,23],
+				"down" => [24,25,26]
+			],
+		];
+		foreach ($ary as $key => &$data)// & を付けるのがポイント
+		{
+			if($key === "A")
+			{
+				$data["up"] = array_map(fn($v) => $v + 100, $data["up"]);
+			}
+			foreach($data["down"] as &$value)
+			{
+				$value += 10;
+			}
+		}
+		print_r($ary);
+
+		unset($value);//内側の参照解除
+		unset($data);//外側の参照解除
+	}
+/*
+Array
+(
+    [A] => Array
+        (
+            [up] => Array
+                (
+                    [0] => 101
+                    [1] => 102
+                    [2] => 103
+                )
+
+            [down] => Array
+                (
+                    [0] => 14
+                    [1] => 15
+                    [2] => 16
+                )
+
+        )
+
+    [B] => Array
+        (
+            [up] => Array
+                (
+                    [0] => 11
+                    [1] => 12
+                    [2] => 13
+                )
+
+            [down] => Array
+                (
+                    [0] => 24
+                    [1] => 25
+                    [2] => 26
+                )
+
+        )
+
+    [C] => Array
+        (
+            [up] => Array
+                (
+                    [0] => 21
+                    [1] => 22
+                    [2] => 23
+                )
+
+            [down] => Array
+                (
+                    [0] => 34
+                    [1] => 35
+                    [2] => 36
+                )
+
+        )
+
+)
+*/
+	function test3():void
+	{
+		$ary = [
+			"A" => [
+				"up" => [1,2,3],
+				"down" => [4,5,6]
+			],
+			"B" => [
+				"up" => [11,12,13],
+				"down" => [14,15,16]
+			],
+			"C" => [
+				"up" => [21,22,23],
+				"down" => [24,25,26]
+			],
+		];
+		$tmp=[];
+		$tmp=$ary["C"]["up"];
+		foreach ($tmp as &$value)
+		{
+			$value += 100;
+		}
+		/*
+		array_mapを使用して1行で計算する書き方
+		$tmp = array_map(fn($v) => $v + 100, $ary["C"]["up"]);
+		*/
+		print_r($tmp);
+		$aryNew = [
+			"C" => ["up" => $tmp], // Cのupのみ更新
+		];
+		// 深い階層まで比較して上書きしてくれる
+		$ary = array_replace_recursive($ary, $aryNew);
+		print_r($ary);
+	}
+/*
+Array
+(
+    [A] => Array
+        (
+            [up] => Array
+                (
+                    [0] => 1
+                    [1] => 2
+                    [2] => 3
+                )
+
+            [down] => Array
+                (
+                    [0] => 4
+                    [1] => 5
+                    [2] => 6
+                )
+
+        )
+
+    [B] => Array
+        (
+            [up] => Array
+                (
+                    [0] => 11
+                    [1] => 12
+                    [2] => 13
+                )
+
+            [down] => Array
+                (
+                    [0] => 14
+                    [1] => 15
+                    [2] => 16
+                )
+
+        )
+
+    [C] => Array
+        (
+            [up] => Array
+                (
+                    [0] => 1000
+                    [1] => 2000
+                    [2] => 3000
+                )
+
+            [down] => Array
+                (
+                    [0] => 24
+                    [1] => 25
+                    [2] => 26
+                )
+
+        )
+
+)
+*/
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</div>
+
+<div id=h11>
+<a href="javascript:void(0);" id="copy11" class="copy-button" data-target="codeBlock11">copy</a>
+<pre id="codeBlock11" class="prettyprint linenums;lang-js;">
+class test1
+{ 
+	function test1():void 
+	{ 
+		$ary =[ 
+		[1,2,3], 
+		[4,5,6], 
+		[7,8,9], 
+		]; 
+		$ary[0][0]=100; 
+		$ary[0][1]=101; 
+		$ary[0][2]=102; 
+		for($i=0; $i<3; $i++) 
+		{ 
+			if($i==1) 
+			{ 
+				for($j=0; $j<3; $j++) 
+				{ 
+					$ary[$i][$j]+=10; 
+				} 
+			} 
+		} 
+		print_r($ary); 
+	}
+/*
+Array
+( 
+[0] => Array 
+( 
+[0] => 100 
+[1] => 101 
+[2] => 102 
+) 
+
+[1] => Array 
+( 
+[0] => 14 [1] => 15
+[2] => 16
+)
+
+[2] => Array
+(
+[0] => 7
+[1] => 8
+[2] => 9
+)
+
+)
+*/
+	function test2():void
+	{
+		$ary = [
+			"A" => [
+				"up" => [1,2,3],
+				"down" => [4,5,6]
+			],
+			"B" => [
+				"up" => [11,12,13],
+				"down" => [14,15,16]
+			],
+			"C" => [
+				"up" => [21,22,23],
+				"down" => [24,25,26]
+			],
+		];
+		foreach ($ary as $key => &$data)// The key is the &.
+		{
+			if($key === "A")
+			{
+				$data["up"] = array_map(fn($v) => $v + 100, $data["up"]);
+			}
+			foreach($data["down"] as &$value)
+			{
+				$value += 10;
+			}
+		}
+		print_r($ary);
+		
+		unset($value); // Inner dereference
+		unset($data); // Outer dereference
+	}
+/*
+Array
+(
+[A] => Array
+(
+[up] => Array
+(
+[0] => 101
+[1] => 102
+[2] => 103
+)
+
+[down] => Array
+(
+[0] => 14
+[1] => 15
+[2] => 16
+)
+
+)
+
+[B] => Array
+(
+[up] => Array
+(
+[0] => 11 
+[1] => 12 
+[2] => 13 
+) 
+
+[down] => Array 
+( 
+[0] => 24 
+[1] => 25 
+[2] => 26 
+) 
+
+) 
+
+[C] => Array 
+( 
+[up] => Array 
+( 
+[0] => 21 
+[1] => 22 
+[2] => 23 
+) 
+
+[down] => Array 
+( 
+[0] => 34 
+[1] => 35 
+[2] => 36 
+) 
+
+)
+
+)
+*/ 
+	function test3():void 
+	{ 
+		$ary = [ 
+			"A" => [ 
+				"up" => [1,2,3], 
+				"down" => [4,5,6] 
+			], 
+			"B" => [ 
+				"up" => [11,12,13],
+				"down" => [14,15,16]
+			],
+			"C" => [
+				"up" => [21,22,23],
+				"down" => [24,25,26]
+			],
+		];
+		$tmp=[];
+		$tmp=$ary["C"]["up"];
+		foreach ($tmp as &$value)
+		{
+			$value += 100;
+		}
+		/*
+		One-line calculation using array_map
+		$tmp = array_map(fn($v) => $v + 100, $ary["C"]["up"]);
+		*/
+		print_r($tmp);
+		$aryNew = [
+			"C" => ["up" => $tmp], // Updates only the up value of C
+		];
+		// Compares and overwrites even deep within the hierarchy
+		$ary = array_replace_recursive($ary, $aryNew); 
+		print_r($ary); 
+	}
+/*
+Array
+( 
+[A] => Array 
+( 
+[up] => Array 
+( 
+[0] => 1 
+[1] => 2 
+[2] => 3 
+) 
+
+[down] => Array 
+( 
+[0] => 4 
+[1] => 5 
+[2] => 6 
+) 
+
+) 
+
+[B] => Array 
+( 
+[up] => Array 
+( 
+[0] => 11 
+[1] => 12 
+[2] => 13 
+) 
+
+[down] => Array 
+( 
+[0] => 14 
+[1] => 15 
+[2] => 16 
+) 
+
+) 
+
+[C] => Array 
+( 
+[up] => Array 
+( 
+[0] => 1000 
+[1] => 2000 
+[2] => 3000 
+) 
+
+[down] => Array 
+( 
+[0] => 24 
+[1] => 25 
+[2] => 26 
+) 
+
+)
+
+)
+*/
+}
+echo "&lt;pre&gt;";
+$cls1= new test1();
+$cls1->test1();
+$cls1->test2();
+$cls1->test3();
+echo "&lt;/pre&gt;";
+</pre></div><div id="n6"><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary[$i][$j]+=10;</div>要素を指定して値を差し替えています。<br>このケースでは、指定の要素に10を加算した結果に差し替えています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if($key === "A")</div>キーがAのみを対象としています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data["up"] = array_map(fn($v) => $v + 100, $data["up"]);</div>array_map関数を使用して元のデータに100を加算した結果を返して、差し替えています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">foreach($data["down"] as &$value)<br>{<br>&nbsp;&nbsp;$value += 10;<br>}<br></div>down配列の中身を一つずつ更新<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = array_replace_recursive($ary, $aryNew);</div>array_replace_recursive は、「新しい値で上書きする（置換する）」ための関数です。<br>そのため「元の値に100を加算する」といった計算処理を直接行うことはできません。<br>この変更のためにワンクッションを置いて計算済み配列を準備したものと差し替える必要があります。<br></div><br><br><a id="n7" href='#' onClick="f2();">戻る</a><br><br><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'><tr><td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'><b>著作権情報</b></td></tr><tr class=p2><td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。<br>ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br>または公開したりすることはできません。<br>当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br>その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br>一切の責任を負わないものとします。<br></td></tr></table><style>.marker99ccff{background-color: rgb(153 204 255 / 0.5);}.marker8fbc8f{background-color: rgb(143 188 143 / 0.5);}.markerffd700{background-color: rgb(255 215 0 / 0.5);}.frame {background-color: rgb(240 248 255 / 0.5); border: 3px solid rgb(30 144 255 / 1.00);    padding: 5px;            margin: 10px;            margin-left:0px;word-break:break-all;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {display: none;}.slider {position: absolute;cursor: pointer;top: 0; left: 0;right: 0; bottom: 0;background-color: lightgreen; transition: 0.4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px; width: 26px;left: 4px; bottom: 4px;background-color: white;transition: 0.4s;border-radius: 50%;content:"JP";text-align: center;}input:checked + .slider {background-color: lightblue; }input:checked + .slider:before {transform: translateX(26px);content:"EN";text-align: center;}</style><script>function copyCodeById(targetId) {const codeElement = document.getElementById(targetId);if (!codeElement) {console.error("対象のコードブロックが見つかりません: " + targetId);return;}const codeText = codeElement.innerText;if (navigator.clipboard && navigator.clipboard.writeText) {navigator.clipboard.writeText(codeText).then(() => {console.log("コピー成功");}).catch(err => {console.error("コピー中にエラーが発生しました:", err);});} else {console.error("Clipboard API はこのブラウザで利用できません");}}document.querySelectorAll('.copy-button').forEach(function(button) {button.addEventListener('click', function() {const targetId = this.getAttribute('data-target');copyCodeById(targetId);});});</script><script>let lang = 0; let nextUrlPath="";const text = {ja: {n1:"戻る",n2: "多次元配列の要素更新",n3: "配列関連",n4:`多次元配列の更新は要素をしていする方法があります。<br>連想配列の多次元配列に更新にはarray_replace_recursiveを使い、差し替えた配列で返す方法もあります。`,n5:`[サンプル]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary[$i][$j]+=10;</div>要素を指定して値を差し替えています。<br>このケースでは、指定の要素に10を加算した結果に差し替えています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if($key === "A")</div>キーがAのみを対象としています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data["up"] = array_map(fn($v) => $v + 100, $data["up"]);</div>array_map関数を使用して元のデータに100を加算した結果を返して、差し替えています。<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">foreach($data["down"] as &$value)<br>{<br>&nbsp;&nbsp;$value += 10;<br>}<br></div>down配列の中身を一つずつ更新<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = array_replace_recursive($ary, $aryNew);</div>array_replace_recursive は、「新しい値で上書きする（置換する）」ための関数です。<br>そのため「元の値に100を加算する」といった計算処理を直接行うことはできません。<br>この変更のためにワンクッションを置いて計算済み配列を準備したものと差し替える必要があります。<br>`,n7:"戻る",},en: {n1: "back",n2: "Updating elements in a multidimensional array",n3: "Array-related",n4:`Multidimensional arrays can be updated by specifying elements. <br>To update a multidimensional associative array, you can also use array_replace_recursive and return the replaced array.`,n5:`[Sample]`,n6:`<div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary[$i][$j]+=10;</div>Specifies an element and replaces its value. <br>In this case, the specified element is replaced with the result of adding 10. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">if($key === "A")</div>Only targets values ​​with key A. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$data["up"] = array_map(fn($v) => $v + 100, $data["up"]);</div>The array_map function is used to add 100 to the original data, which is then returned and replaced. <br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">foreach($data["down"] as &$value)<br>{<br>&nbsp;&nbsp;$value += 10;<br>}<br></div>Update the contents of the down array one by one<br><br><div style="background-color:rgb(245 255 250 / 1.0);text-align:left;">$ary = array_replace_recursive($ary, $aryNew);</div>array_replace_recursive is a function used to "overwrite (replace) with new values." <br>Therefore, it cannot directly perform calculations such as "adding 100 to the original value." <br>To make this change, you need to take a step back and replace the calculated array with a prepared one. <br>`,n7:"back",}};function applyTextAll(lang, divIds) {divIds.forEach((id) => applyText(lang, id));}function getText(lang, divId) {return (text[lang] && text[lang][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(lang, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(lang, divId);}const ary = ["n1", "n2", "n3", "n4", "n5", "n6", "n7"];document.addEventListener("DOMContentLoaded", () => {const toggle = document.getElementById("toggle");const hiddenLang = document.getElementById("lang");const langText = document.getElementById("langText");f4();toggle.addEventListener("change", () => {changeToggle();});});function changeToggle(){const hiddenLang = document.getElementById("lang");if (toggle.checked) {hiddenLang.value = 1;lang=1;} else {hiddenLang.value = 0;lang=0;}displayLangText();applyTextAll(lang==0?"ja":"en", ary);}function displayLangText(){const hiddenLang = document.getElementById("lang");if (hiddenLang.value == 0) {langText.textContent = "現在の言語: 日本語";} else {langText.textContent = "current language: English";}f3();f0();const obj=document.getElementById('lang');if(obj.value==1){toggle.checked=true;const hiddenLang = document.getElementById("lang");hiddenLang.value = 1;}else{toggle.checked=false;}}function f1(value){const obj=document.getElementById('lang');obj.value=value;f0();}function f0(){const obj=document.getElementById('lang');let lang=obj.value;applyTextAll(lang==0?"ja":"en", ary);f4();}function f4(){const obj=document.getElementById('lang');let lang=obj.value;const h1=document.getElementById('h1');const h11=document.getElementById('h11');if(lang==1){h1.style.display="none";h11.style.display="block";}else{h1.style.display="block";h11.style.display="none";}}function f3(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const hiddenLang = document.getElementById("lang");if(d==1||hiddenLang.value==1){hiddenLang.value=1;}else{hiddenLang.value=0;}}function f2(){const obj=document.getElementById('lang');let lang=obj.value;window.location.href=urlPath();}function urlPath(){const obj=document.getElementById('lang');let lang=obj.value;nextUrlPath="/php/index.html";return nextUrlPath+"?lang=" + lang;}</script></body></html>
