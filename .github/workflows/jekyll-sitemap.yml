@@ -1,77 +1,12 @@
-name: Build Jekyll and Deploy to gh-pages
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-env:
-  BUNDLE_JOBS: 4
-  BUNDLE_RETRY: 3
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1.7'
-
-      - name: Show Ruby / Gem env (debug)
-        run: |
-          ruby -v
-          gem env
-          which gem
-          which bundle || true
-
-      - name: Install Bundler (safe)
-        run: |
-          gem install bundler -v "~> 2.4" --no-document || gem install bundler --no-document
-          bundle -v
-
-      - name: Install Gems (verbose)
-        run: |
-          bundle config set --local path 'vendor/bundle'
-          bundle install --jobs $BUNDLE_JOBS --retry $BUNDLE_RETRY --verbose
-        env:
-          BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile
-
       - name: Build site (Jekyll)
         run: bundle exec jekyll build --destination ./_site
 
-      - name: Upload site artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: ./_site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download site artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: site
-          path: ./site
-
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          publish_branch: gh-pages
+      - name: Gzip sitemap
+        run: |
+          if [ -f ./_site/sitemap.xml ]; then
+            gzip -c ./_site/sitemap.xml > ./_site/sitemap.xml.gz
+            echo "Created sitemap.xml.gz"
+          else
+            echo "No sitemap.xml found"
+            exit 1
+          fi
