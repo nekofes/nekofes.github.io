@@ -29,17 +29,26 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1' # 3.1 系を指定。必要なら 3.1.7 等に変更可
+          ruby-version: '3.1.7'
 
-      - name: Install Bundler
+      - name: Show Ruby / Gem env (debug)
         run: |
-          gem install bundler -v "~> 2.4" || gem install bundler
+          ruby -v
+          gem env
+          which gem
+          which bundle || true
+
+      - name: Install Bundler (safe)
+        run: |
+          gem install bundler -v "~> 2.4" --no-document || gem install bundler --no-document
           bundle -v
 
-      - name: Install Gems
+      - name: Install Gems (verbose)
         run: |
           bundle config set --local path 'vendor/bundle'
-          bundle install --jobs $BUNDLE_JOBS --retry $BUNDLE_RETRY
+          bundle install --jobs $BUNDLE_JOBS --retry $BUNDLE_RETRY --verbose
+        env:
+          BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile
 
       - name: Build site (Jekyll)
         run: bundle exec jekyll build --destination ./_site
