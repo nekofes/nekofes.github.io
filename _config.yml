@@ -3,6 +3,8 @@ url: "https://nekofes.github.io"
 
 plugins:
   - jekyll-sitemap
+  - jekyll-last-modified-at
+
 exclude:
   - node_modules
   - vendor
