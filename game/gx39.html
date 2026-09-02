@@ -1,1 +1,2289 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="/js/cd.js"></script><script src="/js/cmn.js"></script><script>if(self!=top){top.location=self.location;}function go_url(url) {document.frm1.action=url;document.frm1.submit(); }</script><title>game</title><body oncontextmenu='return false;'><form id=frm1 name=frm1 method="POST" method="GET" ><input type=hidden id=lang name=lang value=0><div id=h1><table style='width:300px;'><tr><td><img id="icon" width=50px height=50px></td><td style='background:#4169e1;color:white;text-align:center;width:250px;'><span id="gametitle">上(下)と違うのは？</span></td></tr></table><table style='width:300px;height:300px;' border="0">	<tr><td><div class="vertical-list-container"><input type="radio" id="gamecount0" name="gamecount" value="0" checked><input type="radio" id="gamecount1" name="gamecount" value="1"><input type="radio" id="gamecount2" name="gamecount" value="2"><input type="radio" id="gamecount3" name="gamecount" value="3"><input type="radio" id="gamecount4" name="gamecount" value="4"><input type="radio" id="gamecount5" name="gamecount" value="5"><input type="radio" id="gamecount6" name="gamecount" value="6"><input type="radio" id="gamecount7" name="gamecount" value="7"><input type="radio" id="gamecount8" name="gamecount" value="8"><input type="radio" id="gamecount9" name="gamecount" value="9"><input type="radio" id="gamecount10" name="gamecount" value="10"><input type="radio" id="gamecount11" name="gamecount" value="11"><input type="radio" id="gamecount12" name="gamecount" value="12"><input type="radio" id="gamecount13" name="gamecount" value="13"><div class="list-box"><label for="gamecount0" class="label-item"><span id="n0"></span></label><label for="gamecount1" class="label-item"><span id="n1"></span></label><label for="gamecount2" class="label-item"><span id="n2"></span></label><label for="gamecount3" class="label-item"><span id="n3"></span></label><label for="gamecount4" class="label-item"><span id="n4"></span></label><label for="gamecount5" class="label-item"><span id="n5"></span></label><label for="gamecount6" class="label-item"><span id="n6"></span></label><label for="gamecount7" class="label-item"><span id="n7"></span></label><label for="gamecount8" class="label-item"><span id="n8"></span></label><label for="gamecount9" class="label-item"><span id="n9"></span></label><label for="gamecount10" class="label-item"><span id="n10"></span></label><label for="gamecount11" class="label-item"><span id="n11"></span></label><label for="gamecount12" class="label-item"><span id="n12"></span></label><label for="gamecount13" class="label-item"><span id="n13"></span></label><div class="selection-indicator"></div></div></div>	</td></tr><style>#gamecount0:checked ~ .list-box .selection-indicator { transform: translateY(0); }#gamecount1:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 1)); }#gamecount2:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 2)); }#gamecount3:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 3)); }#gamecount4:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 4)); }#gamecount5:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 5)); }#gamecount6:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 6)); }#gamecount7:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 7)); }#gamecount8:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 8)); }#gamecount9:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 9)); }#gamecount10:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 10)); }#gamecount11:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 11)); }#gamecount12:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 12)); }#gamecount13:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 13)); }#gamecount14:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 14)); }#gamecount15:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 15)); }#gamecount16:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 16)); }#gamecount17:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 17)); }#gamecount18:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 18)); }#gamecount19:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 19)); }#gamecount20:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 20)); }#gamecount21:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 21)); }#gamecount22:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 22)); }#gamecount23:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 23)); } #gamecount0:checked ~ .list-box label[for="gamecount0"],#gamecount1:checked ~ .list-box label[for="gamecount1"],#gamecount2:checked ~ .list-box label[for="gamecount2"],#gamecount3:checked ~ .list-box label[for="gamecount3"],#gamecount4:checked ~ .list-box label[for="gamecount4"],#gamecount5:checked ~ .list-box label[for="gamecount5"],#gamecount6:checked ~ .list-box label[for="gamecount6"],#gamecount7:checked ~ .list-box label[for="gamecount7"],#gamecount8:checked ~ .list-box label[for="gamecount8"],#gamecount9:checked ~ .list-box label[for="gamecount9"],#gamecount10:checked ~ .list-box label[for="gamecount10"],#gamecount11:checked ~ .list-box label[for="gamecount11"],#gamecount12:checked ~ .list-box label[for="gamecount12"],#gamecount13:checked ~ .list-box label[for="gamecount13"],#gamecount14:checked ~ .list-box label[for="gamecount14"],#gamecount15:checked ~ .list-box label[for="gamecount15"],#gamecount16:checked ~ .list-box label[for="gamecount16"],#gamecount17:checked ~ .list-box label[for="gamecount17"],#gamecount18:checked ~ .list-box label[for="gamecount18"],#gamecount19:checked ~ .list-box label[for="gamecount19"],#gamecount20:checked ~ .list-box label[for="gamecount20"],#gamecount21:checked ~ .list-box label[for="gamecount21"],#gamecount22:checked ~ .list-box label[for="gamecount22"],#gamecount23:checked ~ .list-box label[for="gamecount23"]{color: white;}</style>    <script>const radioButtonsGameCount = document.querySelectorAll('input[name="gamecount"]');function gameCount(){const mode = document.querySelector('input[name="gamecount"]:checked').value;return mode;}radioButtonsGameCount.forEach(radio => radio.addEventListener("change", gameCount));</script><tr><td style='background:#4169e1;color:white;text-align:center;height:50px;'><span id="t2">説明</span></td></tr><tr><td><div id="t3"></div></td></tr></table><table border="0"><tr><td><a href="javascript:f04();"><img id="bk" style="width:50px;height:50px;"></a>	</td><td style="text-align:center;"><input id="btn1" class="layer1" style="left:75px;width:200px;height:30px;" type=button onclick='f3();' value="スタート"></td></tr></table></div><div id=h2 class="container"><table border=0><tr><td style="background-color:rgb(0 102 255 / 1.00);">SCORE</td><td><div id=score style="text-align:center;background-color:rgb(240 248 255 / 1.00);">0</div></td></tr></table><table style='width:300px;' border="0"><tr><td style='width:87px;background-color:white;color:#000033;text-align:left;'><label id=t1>上(下)と違うのは？</label></td></tr></table><table style='width:300px;' border="1"><tr><td style="width:300px;height:50px;text-align:center;background-color:rgb(30 144 255 / 0.50);"><span id="d1">MIGI TO</span></td></tr><tr><td><table><tr><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(0);'><div id="idx0kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx0kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx0kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img0" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(1);'><div id="idx1kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx1kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx1kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img1" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(2);'><div id="idx2kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx2kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx2kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img2" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(3);'><div id="idx3kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx3kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx3kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img3" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td></tr><tr><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(4);'><div id="idx4kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx4kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx4kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img4" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(5);'><div id="idx5kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx5kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx5kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img5" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(6);'><div id="idx6kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx6kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx6kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img6" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(7);'><div id="idx7kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx7kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx7kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img7" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td></tr><tr><td colspan=9 style="background-color: #28a745;"></td></tr><tr><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(8);'><div id="idx8kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx8kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx8kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img8" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(9);'><div id="idx9kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx9kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx9kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img9" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(10);'><div id="idx10kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx10kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx10kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img10" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(11);'><div id="idx11kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx11kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx11kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img11" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td></tr><tr><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(12);'><div id="idx12kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx12kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx12kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img12" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(13);'><div id="idx13kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx13kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx13kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img13" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(14);'><div id="idx14kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx14kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx14kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img14" style="width:100px;height:100px;"></div></a></td><td style="width:10px;height:100px;">&nbsp;</td><td style="text-align:center;align-content:center;width:100px;height:100px;"><a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(15);'><div id="idx15kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx15kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div><div id="idx15kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img15" style="width:100px;height:100px;"></div></a></td><td style="width:50px;height:100px;">&nbsp;</td></tr></table></td></tr></table><style>td span{display: inline-block;vertical-align: middle;}.bs0 {padding: 2px 8px;display: inline-block;border-radius: 4px;border: 1px solid #333;              display: inline-block;     border-radius: 4px;        align-content:center;}</style><style>.num{display: inline-block; width: 300px; height: 100px; background-color: rgb(60 179 113 / 0.50); text-align: center; align-content: center; }label[id^="i"] {display: inline-block;width: 40px;height: 40px;color: rgb(0 0 0 / 0.60);background-color: rgb(135 206 250 / 0.30);border: 2px solid rgb(135 206 250 / 1.00);border-radius: 8px;cursor: pointer;transition: 0.2s; font-weight: bold;box-shadow: 0 2px 4px rgba(0,0,0,0.1);display: flex;justify-content: center;align-items: center;}@media (hover: hover) {label[id^="i"]:hover {background-color: #3cb371;color: white;}}label[id^="i"]:active {background-color: #3cb371;color: white;transform: scale(0.85); transition: 0.05s;      }</style><table><tr><td><a href="javascript:f05(2);" style="top:450px;left:00px;"><img id="bk2" style="width:50px;height:50px;"></a>	</td><td style="text-align:center;"><input id="btn2" style="top:460px;left:70px;width:200px;height:30px;display:none;" type=button onclick='f5();' value='もう一度'></td></tr></table><span class="layer layer6" id="end" style="top:100px;left:0px;width:300px;height:50px;background-color:rgb(255 240 245 / 0.50);text-align:center;display:inline-flex;justify-content:center;align-items:center;display:none;">GAME OVER</span></div><input type=hidden id=c0 name=c0 value=0><input type=hidden id=no name=no value=0><input type=hidden id="csv" value=""><img id=pi0 style="display:none;"><img id=pi1 style="display:none;"><img id=pi2 style="display:none;"><img id=pi3 style="display:none;"><img id=pi4 style="display:none;"><img id=pi5 style="display:none;"><img id=pi6 style="display:none;"><img id=pi7 style="display:none;"><img id=pi8 style="display:none;"><img id=pi00 style="display:none;"><img id=p0 style="display:none;"><img id=p1 style="display:none;"><img id=p2 style="display:none;"><img id=p3 style="display:none;"><img id=p4 style="display:none;"><img id=p5 style="display:none;"><img id=p6 style="display:none;"><img id=p7 style="display:none;"><img id=p8 style="display:none;"><img id=p9 style="display:none;"><img id=p10 style="display:none;"><img id=p11 style="display:none;"><img id=p12 style="display:none;"><img id=p13 style="display:none;"><img id=p14 style="display:none;"><img id=p15 style="display:none;"><img id=p16 style="display:none;"><img id=p17 style="display:none;"><img id=p18 style="display:none;"><img id=p19 style="display:none;"><img id=p20 style="display:none;"><img id=p21 style="display:none;"><img id=p22 style="display:none;"><img id=p23 style="display:none;"><img id=p24 style="display:none;"><img id=p25 style="display:none;"><img id=p26 style="display:none;"><img id=p27 style="display:none;"><img id=p28 style="display:none;"><img id=p29 style="display:none;"><img id=p30 style="display:none;"><img id=p31 style="display:none;"><img id=p32 style="display:none;"><img id=p33 style="display:none;"><img id=p34 style="display:none;"><img id=p35 style="display:none;"><img id=p36 style="display:none;"><img id=p37 style="display:none;"><img id=p38 style="display:none;"><img id=p39 style="display:none;"><img id=p40 style="display:none;"><img id=p41 style="display:none;"><img id=p42 style="display:none;"><img id=p43 style="display:none;"><img id=p44 style="display:none;"><img id=p45 style="display:none;"><img id=p46 style="display:none;"><img id=p47 style="display:none;"><img id=p48 style="display:none;"><img id=p49 style="display:none;"><img id=p50 style="display:none;"><img id=p51 style="display:none;"><img id=p52 style="display:none;"><img id=p53 style="display:none;"><img id=p54 style="display:none;"><img id=p55 style="display:none;"><img id=p56 style="display:none;"><img id=p57 style="display:none;"><img id=p58 style="display:none;"><img id=p59 style="display:none;"><img id=p60 style="display:none;"><img id=p61 style="display:none;"><img id=p62 style="display:none;"><img id=p63 style="display:none;"><img id=p64 style="display:none;"><img id=p65 style="display:none;"><img id=p66 style="display:none;"><img id=p67 style="display:none;"><img id=p68 style="display:none;"><img id=p69 style="display:none;"><img id=p70 style="display:none;"><img id=p71 style="display:none;"><img id=p72 style="display:none;"><img id=p73 style="display:none;"><img id=p74 style="display:none;"><img id=p75 style="display:none;"><img id=p76 style="display:none;"><img id=p77 style="display:none;"><img id=p78 style="display:none;"><img id=p79 style="display:none;"><img id=p80 style="display:none;"><img id=p81 style="display:none;"><img id=p82 style="display:none;"><img id=p83 style="display:none;"><img id=p84 style="display:none;"><img id=p85 style="display:none;"><img id=p86 style="display:none;"><img id=p87 style="display:none;"><img id=p88 style="display:none;"><img id=p89 style="display:none;"><img id=p90 style="display:none;"><img id=p91 style="display:none;"><img id=p92 style="display:none;"><img id=p93 style="display:none;"><img id=p94 style="display:none;"><img id=p95 style="display:none;"><img id=p96 style="display:none;"><img id=p97 style="display:none;"><img id=p98 style="display:none;"><img id=p99 style="display:none;"><img id=p100 style="display:none;"><img id=p101 style="display:none;"><img id=p102 style="display:none;"><img id=p103 style="display:none;"><img id=p104 style="display:none;"><img id=p105 style="display:none;"><img id=p106 style="display:none;"><img id=p107 style="display:none;"><img id=p108 style="display:none;"><img id=p109 style="display:none;"><img id=p110 style="display:none;"><img id=p111 style="display:none;"><img id=p112 style="display:none;"><img id=p113 style="display:none;"><img id=p114 style="display:none;"><img id=p115 style="display:none;"><img id=p116 style="display:none;"><img id=p117 style="display:none;"><img id=p118 style="display:none;"><img id=p119 style="display:none;"><img id=p120 style="display:none;"><img id=p121 style="display:none;"><img id=p122 style="display:none;"><img id=p123 style="display:none;"><img id=p124 style="display:none;"><img id=p125 style="display:none;"><img id=p126 style="display:none;"><img id=p127 style="display:none;"><img id=p128 style="display:none;"><img id=p129 style="display:none;"><img id=p130 style="display:none;"><img id=p131 style="display:none;"><img id=p132 style="display:none;"><img id=p133 style="display:none;"><img id=p134 style="display:none;"><img id=p135 style="display:none;"><img id=p136 style="display:none;"><img id=p137 style="display:none;"><img id=p138 style="display:none;"><img id=p139 style="display:none;"><img id=p140 style="display:none;"><img id=p141 style="display:none;"><img id=p142 style="display:none;"><img id=p143 style="display:none;"><img id=p144 style="display:none;"><img id=p145 style="display:none;"><img id=p146 style="display:none;"><img id=p147 style="display:none;"><img id=p148 style="display:none;"><img id=p149 style="display:none;"><img id=p150 style="display:none;"><img id=p151 style="display:none;"><img id=p152 style="display:none;"><img id=p153 style="display:none;"><img id=p154 style="display:none;"><img id=p155 style="display:none;"><img id=p156 style="display:none;"><img id=p157 style="display:none;"><img id=p158 style="display:none;"><img id=p159 style="display:none;"><img id=p160 style="display:none;"><img id=p161 style="display:none;"><img id=p162 style="display:none;"><img id=p163 style="display:none;"><img id=p164 style="display:none;"><img id=p165 style="display:none;"><img id=p166 style="display:none;"><img id=p167 style="display:none;"><img id=p168 style="display:none;"><img id=p169 style="display:none;"><img id=p170 style="display:none;"><img id=p171 style="display:none;"><img id=p172 style="display:none;"><img id=p173 style="display:none;"><img id=p174 style="display:none;"><img id=p175 style="display:none;"><img id=p176 style="display:none;"><img id=p177 style="display:none;"><img id=p178 style="display:none;"><img id=p179 style="display:none;"><img id=p180 style="display:none;"><img id=p181 style="display:none;"><img id=p182 style="display:none;"><img id=p183 style="display:none;"><img id=p184 style="display:none;"><img id=p185 style="display:none;"><img id=p186 style="display:none;"><img id=p187 style="display:none;"><img id=p188 style="display:none;"><img id=p189 style="display:none;"><img id=p190 style="display:none;"><img id=p191 style="display:none;"><img id=p192 style="display:none;"><input type=hidden id="kind" value=0> <input type=hidden id=rr value=0><style>img {background-color: transparent; transition: background-color 0.3s; }img.is-pink {background-color: #ffe4e1; }	.container{position: sticky;}.layer{width: 300px;height: 300px;position: absolute;}.layer1{z-index:1;}.layer2{z-index:2;}.layer3{z-index:3;}.layer4{z-index:4;}.layer5{z-index:5;}.layer6{z-index:6;}.layer7{z-index:7;}.layer10{width: 50px;height: 50px;background-color:seagreen;}.hidden-file-input {display: none;}.custom-btn {display: inline-block;padding: 10px 20px;background-color: #007bff;color: white;cursor: pointer;border-radius: 5px;transition: background 0.3s;font-size: 14px;border: none;}.custom-btn:hover {background-color: #0056b3;}.btn-output {background-color: #28a745;}.btndesign1 {display: flex;justify-content: center;align-items: center;height:30px;margin:0 auto;padding: .9em 2em;border: none;border-radius: 5px;background-color: #2589d0;color: #fff;font-weight: 600;font-size: 1em;}.btndesign1:hover {background-color: #1579c0;}.bc{background-color:#3399FF;color:white;border-color:#3399FF;border-radius:8px;}.btn1,a.btn1 {color: rgb(105 105 105 / 1.00);background-color: rgb(204 204 255 / 0.50);text-decoration: none; display: inline-block;padding: 10px 20px;}.btn1:hover,a.btn1:hover {color: rgb(105 105 105 / 1.00);background: rgb(204 204 255 / 1.00);text-decoration: none;}a.btn1--radius {border-radius: 100vh;}.scroll-area {width: 90%; max-width: 600px;    height: 100px;border: 1px solid #ccc;overflow-y: auto;overflow-x: hidden;white-space: pre-wrap;padding: 10px;box-sizing: border-box; }.scroll-area::-webkit-scrollbar {width: 8px;            }.scroll-area::-webkit-scrollbar-track {background: #f1f1f1;}.scroll-area::-webkit-scrollbar-thumb {background: #888;border-radius: 4px;}.vertical-list-container {--item-height: 40px;      --item-count: 8;                     --width: 300px; --bg-color: #f8f9fa;--active-color: #28a745;}input[type="radio"] { display: none; }.list-box {position: relative;display: flex;flex-direction: column; width: 300px !important; background: var(--bg-color);border-radius: 8px;padding: 4px;border: 1px solid #ddd;}.label-item {height: var(--item-height);z-index: 2;display: flex;align-items: center;padding-left: 15px; font-size: 14px;font-weight: bold;cursor: pointer;transition: color 0.3s;   width: 300px !important; }.selection-indicator {position: absolute;top: 4px;left: 4px;width: calc(100% - 8px);height: var(--item-height);background: var(--active-color);border-radius: 6px;transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);z-index: 1;}input[type="radio"]:checked + label, input:checked ~ .list-box label[for]:has(+ input:checked), .label-item:has(input:checked) { color: white; }.hidden-file-input {display: none;}.custom-btn {display: inline-block;padding: 10px 20px;background-color: #007bff;color: white;cursor: pointer;border-radius: 5px;transition: background 0.3s;font-size: 14px;border: none;}.custom-btn:hover {background-color: #0056b3;}.btn-output {background-color: #28a745;}.btndesign1 {display: flex;justify-content: center;align-items: center;height:30px;margin:0 auto;padding: .9em 2em;border: none;border-radius: 5px;background-color: #2589d0;color: #fff;font-weight: 600;font-size: 1em;}.btndesign1:hover {background-color: #1579c0;}.bc{background-color:#3399FF;color:white;border-color:#3399FF;border-radius:8px;}.btn1,a.btn1 {color: rgb(105 105 105 / 1.00);background-color: rgb(204 204 255 / 0.50);text-decoration: none; display: inline-block;padding: 10px 20px;}.btn1:hover,a.btn1:hover {color: rgb(105 105 105 / 1.00);background: rgb(204 204 255 / 1.00);text-decoration: none;}a.btn1--radius {border-radius: 100vh;}.scroll-area {width: 90%; max-width: 600px;    height: 100px;border: 1px solid #ccc;overflow-y: auto;overflow-x: hidden;white-space: pre-wrap;padding: 10px;box-sizing: border-box; }.scroll-area::-webkit-scrollbar {width: 8px;            }.scroll-area::-webkit-scrollbar-track {background: #f1f1f1;}.scroll-area::-webkit-scrollbar-thumb {background: #888;border-radius: 4px;}.vertical-list-container {--item-height: 40px;      --item-count: 8;          --width: 200px;           --bg-color: #f8f9fa;--active-color: #28a745;}input[type="radio"] { display: none; }.list-box {position: relative;display: flex;flex-direction: column; width: var(--width);background: var(--bg-color);border-radius: 8px;padding: 4px;border: 1px solid #ddd;}.label-item {height: var(--item-height);z-index: 2;display: flex;align-items: center;padding-left: 15px; font-size: 14px;font-weight: bold;cursor: pointer;transition: color 0.3s;}.selection-indicator {position: absolute;top: 4px;left: 4px;width: calc(100% - 8px);height: var(--item-height);background: var(--active-color);border-radius: 6px;transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);z-index: 1;}input[type="radio"]:checked + label, input:checked ~ .list-box label[for]:has(+ input:checked), .label-item:has(input:checked) { color: white; }</style><script>function f01(){let d="";if(f0()==0){d="http://localhost/img/";}else{d="https://ss1.xrea.com/app.s17.xrea.com/img/";}return d;}function f0(){return cdf1();}async function f00(){let d="";let d1=f0();if(d1<1){d="http://localhost/nekofes.php";}else{d="https://ss1.xrea.com/app.s17.xrea.com/nekofes.php";}return d;}window.addEventListener('DOMContentLoaded', async ()=>{await f32();await f10();});window.addEventListener('load', async ()=>{await f05(0);await f16();await f15();await f11();});async function f10(){const obj=document.getElementById('lang');let lang=obj.value;const title=document.getElementById('t1');const d1=document.getElementById('d1');title.style.display="flex";title.style.justifyContent="center";title.style.alignItems="center";title.style.backgroundColor="rgb(240 255 240 / 1.00)";document.title=lang==0?"上(下)と違うのは？ [Web game]":"Find the One: Top or Bottom? [Web game]";d1.innerText=lang==0?"上(下)と違うのは？":"Find the One: Top or Bottom?";}async function f32(){let o1=new URL(window.location.href);let o2=o1.searchParams;let d=o2.get('lang');const obj=document.getElementById('lang');if(d==1||obj.value==1){obj.value=1;}else{obj.value=0;}}async function f05(d){let d1="none";let d2="none";switch(d){case 0:d1="block";break;case 1:d2="block";break;case 2:await f12();f18();d1="block";d2="none";break;}document.getElementById("h1").style.display=d1;document.getElementById("h2").style.display=d2;document.getElementById("c0").value=d;}let dd1=[];let dd2=0;let dd3=0;let dd4=gameCount();let dd6=[];let dd7=0;let dd8=0;let dd9=0;let dd10=0;let dd11=0;let intervalId = null;async function f3(){f18();dd3=0;dd8=0;document.getElementById("score").innerText=dd8;document.getElementById('end').style.display="none";document.getElementById('btn2').style.display="none";await f20();await f12();await f05(1);await f17();}async function test(j){for(let i=0;i<4;i++){document.getElementById('idx'+i+'kind'+j).style.display="block";document.getElementById('idx'+i+'kind'+j).innerText=i;}document.getElementById("idx0kind0").style.backgroundColor="blue";document.getElementById("idx0kind0").style.color="black";}async function f20(){for(let i=0;i<16;i++){for(let j=0;j<3;j++){document.getElementById('idx'+i+'kind'+j).style.display="none";document.getElementById('idx'+i+'kind'+j).style.backgroundColor="white";}}}async function f7(d1){if(dd3>0){return;}if(dd2==0&&d1>7)return;if(dd2==1&&d1<8)return;if(dd1[d1]==-1)return;f18();let kind="";switch(dd4){case 0:kind="kind0";break;case 1:kind="kind1";break;case 2:kind="kind2";break;}if(dd7==d1){dd8++;document.getElementById("score").innerText=dd8;await f20();await f17();}else{dd3=1;	document.getElementById("idx"+String(d1)+kind).style.backgroundColor="rgb(255 215 0 / 1.00)";document.getElementById("idx"+String(dd7)+kind).style.backgroundColor="rgb(255 240 245 / 1.00)";document.getElementById('end').style.display="block";document.getElementById('btn2').style.display="block";}}async function f12(){for(let i=0;i<16;i++){document.getElementById("idx"+i+"kind0").style.display = "none";document.getElementById("idx"+i+"kind1").style.display = "none";document.getElementById("idx"+i+"kind2").style.display = "none";document.getElementById("idx"+i+"kind0").style.backgroundColor="#ffffffff";document.getElementById("idx"+i+"kind1").style.backgroundColor="#ffffffff";document.getElementById("idx"+i+"kind2").style.backgroundColor="#ffffffff";document.getElementById("idx"+i+"kind0").innerText = "";document.getElementById("idx"+i+"kind1").innerText = "";}for(let i=0;i<16;i++){document.getElementById("img"+i).src=document.getElementById("pi00").src;}}async function f5(){f18();dd3=0;await f20();await f12();document.getElementById('end').style.display="none";document.getElementById('btn2').style.display="none";dd8=0;document.getElementById("score").innerText=dd8;await f17();}function f9(){return 50;}async function f26(){await f05(1);await f25();if(dd8<0){dd8=0;document.getElementById("score").innerText=dd8;}}async function f15(){const obj=document.getElementById('lang');let lang=obj.value;	const title=document.getElementById('gametitle');title.innerText=lang==0?"上(下)と違うのは？":"Find the One: Top or Bottom?";	}async function f22(){}async function f14(no){const img = document.getElementById("p" + no); if (!img){return 2;}if (img.getAttribute('src')){return 1;}return 0;}async function f16(){let d1="";let url=await f00();for(let i=0;i<3;i++){switch(i){case 0:d1="bk";break;case 1:d1="icon";break;case 2:d1="pi00";break;case 3:d1="imgjp";break;case 4:d1="imgen";break;}await f19(url,d1,0,i);}document.getElementById("bk2").src=document.getElementById("bk").src;}async function f17(){await f12();dd4=gameCount();let url=await f00();const lang=document.getElementById('lang').value;const response = await fetch(url, {method: 'POST',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({n1: 6,n2: 39,n3: 1,n4: 1,d1: 2,d2: 1,d3: dd4,d4: 1,d5: 1,lang: lang}),});const data = await response.json();dd4=parseInt(data.details.kind);dd7=parseInt(data.details.answer);dd2=parseInt(data.details.updown);const d1=document.getElementById('d1');if(dd2 == 0){d1.innerText = lang == 0 ? "上にしかないのは？" : "Which is only at the top?";}else{d1.innerText = lang == 0 ? "下にしかないのは？" : "Which is only at the bottom?";}	dd1=data.details.csv.split(',');let tmp="";await f12();if(dd4==2){let d6=0;for(let i=0;i<dd1.length;i++){document.getElementById("idx"+String(i)+"kind2").style.display = "block";d6=parseInt(dd1[i]);if(d6<1){document.getElementById('img'+i).src=document.getElementById("pi00").src;}else{const d4=await f14(d6);if(d4<1){await f19(url,"p"+d6,1,d6);		}document.getElementById('img'+i).src=document.getElementById("p"+d6).src;		}}		}else{let kind = (parseInt(dd4) === 0) ? "kind0" : "kind1";for(let i=0;i<dd1.length;i++){tmp=String(dd1[i]);if(tmp=="-1")tmp="";let target = document.getElementById("idx"+String(i)+kind);if(target){target.innerText = tmp;target.style.display = "block"; }}}}async function f13(id,num){document.getElementById("i"+String(id)).innerText=String(num);}function f18(){}async function f8(kind){let d1="";let display="";let color="";dd11=0;let d3="";let d4="";let d = null;for(let i=0;i<dd1.length;i++){switch(kind){case 0:case 1:let kind = (parseInt(dd4) === 0) ? "kind0" : "kind1";d = document.getElementById("idx"+String(i)+kind);d.style.display=display;color="rgb(245 255 250 / 1.00)";d.innerText=dd1[i];d.style.display="block";d.style.backgroundColor=color;break;case 2:let img=document.getElementById("img"+i);d = document.getElementById("idx"+String(i)+"kind2");display="block";img.style.display="block";color="rgb(248 248 255 / 1.00)";d.style.backgroundColor=color;break;}}}async function f19(url,id,d1,d2){const lang=document.getElementById('lang').value;const response = await fetch(url, {method: 'POST',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({n1: 6,n2: 39,n3: 1,n4: 1,d1: d1,d2: d2,d3: 1,d4: 1,d5: 1,lang: lang}),});const blob = await response.blob(); const url2 = URL.createObjectURL(blob);const img = document.getElementById(id);img.src = url2;}function f04(){const obj=document.getElementById('lang');let lang=obj.value;let url="";url='./index.html?lang='+lang;window.location.href=url;}</script><script>let langCd = 0; let nextUrlPath="";const text = {ja: {t1:`上(下)と違うのは？`,t2:`説明`,t3:`問題の指示をみて<br>上(もしくは下)にしかないものを選んでください。<br>間違うとゲームオーバーです。<br>正解するとスコアがカウントアップされ、<br>次の問題が表示されます。<br>`,t4:``,t5:``,t6:``,t7:``,t8:``,t9:``,t10:``,t17:``,n0:`上にしかないもの(数字)`,n1:`上にしかないもの(アルファベット)`,n2:`上にしかないもの(画像)`,n3:`上にしかないもの(ランダム)`,n4:`下にしかないもの(数字)`,n5:`下にしかないもの(アルファベット)`,n6:`下にしかないもの(画像)`,n7:`下にしかないもの(ランダム)`,n8:`上もしくは下(数字)`,n9:`上もしくは下(アルファベット)`,n10:`上もしくは下(画像)`,n11:`上もしくは下(ランダム)`,n12:`下にしかないものあり(数字)`,n13:`下にしかないものあり(アルファベット)`,n14:`下にしかないものあり(画像)`,n15:`下にしかないものあり(ランダム)`,n16:`上にしかないものあり(数字)`,n17:`上にしかないものあり(アルファベット)`,n18:`上にしかないものあり(画像)`,n19:`上にしかないものあり(ランダム)`,n20:`ランダム(数字)`,n21:`ランダム(アルファベット)`,n22:`ランダム(画像)`,n23:`ランダム(ランダム)`,},en: {t1:`Find the One: Top or Bottom?`,t2:`description`,t3:`Please look at the instructions for the problem and select the item that appears only at the top (or bottom).<br>If you choose the wrong one, it's game over.<br>If you choose correctly,<br>your score will be increase and the next question will be displayed.<br>`,t4:``,t5:``,t6:``,t7:``,t8:``,t9:``,t10:``,t17:``,n0: "Top Only (Numbers)",n1: "Top Only (Alphabets)",n2: "Top Only (Images)",n3: "Top Only (Random)",n4: "Bottom Only (Numbers)",n5: "Bottom Only (Alphabets)",n6: "Bottom Only (Images)",n7: "Bottom Only (Random)",n8: "Top or Bottom (Numbers)",n9: "Top or Bottom (Alphabets)",n10: "Top or Bottom (Images)",n11: "Top or Bottom (Random)",n12: "Bottom Includes Exclusive (Numbers)",n13: "Bottom Includes Exclusive (Alphabets)",n14: "Bottom Includes Exclusive (Images)",n15: "Bottom Includes Exclusive (Random)",n16: "Top Includes Exclusive (Numbers)",n17: "Top Includes Exclusive (Alphabets)",n18: "Top Includes Exclusive (Images)",n19: "Top Includes Exclusive (Random)",n20: "Random (Numbers)",n21: "Random (Alphabets)",n22: "Random (Images)",n23: "Random (Random)",}};function applyTextAll(langCd, divIds) {divIds.forEach((id) => applyText(langCd, id));}function getText(langCd, divId) {return (text[langCd] && text[langCd][divId]) ?? (text.ja && text.ja[divId]) ?? '';}function applyText(langCd, divId) {const el = document.getElementById(divId);if (!el) return;el.innerHTML = getText(langCd, divId);}const ary = ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t17", "n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19", "n20", "n21", "n22", "n23", ];async function f11(){const obj=document.getElementById('lang');let d0=obj.value;applyTextAll(d0==0?"ja":"en", ary);const btn1=document.getElementById('btn1');btn1.value=d0==0?"スタート":"START";const btn2=document.getElementById('btn2');btn2.value=d0==0?"もう一度":"RETRY";}</script><br /><br /><br><script></script><div class="layer" style="text-align:center;"><h1 style="display:none;">katsuyuki hori</h1><div id=t17></div><br /><br /><br /><br /><table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'>	<tr>	<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'>	<b>著作権情報</b>	</td>	</tr>	<tr class=p2>	<td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></form></body></div></html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/cd.js"></script>
+<script src="/js/cmn.js"></script>
+<script>
+if(self!=top){top.location=self.location;}
+function go_url(url) {document.frm1.action=url;document.frm1.submit(); }
+</script>
+<title>game</title>
+<!--
+<body oncontextmenu='return false;'>
+-->
+<body oncontextmenu='return false;'>
+<form id=frm1 name=frm1 method="POST" method="GET" >
+
+<input type=hidden id=lang name=lang value=0>
+
+<!-- スタート画面 start -->
+<div id=h1>
+
+<table style='width:300px;'>
+<tr>
+<td>
+<!--
+アイコン
+/Applications/MAMP/htdocs/img/gx6/icon_nervous.png
+-->
+<!--
+<img id="icon" width=50px height=50px src="../img/gx6/icon_nervous.png">
+-->
+<img id="icon" width=50px height=50px>
+</td>
+<td style='background:#4169e1;color:white;text-align:center;width:250px;'>
+<span id="gametitle">上(下)と違うのは？</span>
+<!--
+Find the One: Top or Bottom?
+-->
+</td>
+</tr>
+</table>
+<table style='width:300px;height:300px;' border="0">
+
+
+<!-- 修正開始 -->	
+<tr>
+<td>
+
+<div class="vertical-list-container">
+
+	<input type="radio" id="gamecount0" name="gamecount" value="0" checked>
+	<input type="radio" id="gamecount1" name="gamecount" value="1">
+	<input type="radio" id="gamecount2" name="gamecount" value="2">
+	<input type="radio" id="gamecount3" name="gamecount" value="3">
+	<input type="radio" id="gamecount4" name="gamecount" value="4">
+	<input type="radio" id="gamecount5" name="gamecount" value="5">
+	<input type="radio" id="gamecount6" name="gamecount" value="6">
+	<input type="radio" id="gamecount7" name="gamecount" value="7">
+	<input type="radio" id="gamecount8" name="gamecount" value="8">
+	<input type="radio" id="gamecount9" name="gamecount" value="9">
+	<input type="radio" id="gamecount10" name="gamecount" value="10">
+	<input type="radio" id="gamecount11" name="gamecount" value="11">
+	<input type="radio" id="gamecount12" name="gamecount" value="12">
+	<input type="radio" id="gamecount13" name="gamecount" value="13">
+	<input type="radio" id="gamecount14" name="gamecount" value="14">
+
+	<div class="list-box">
+		<label for="gamecount0" class="label-item"><span id="n0"></span></label>
+		<label for="gamecount1" class="label-item"><span id="n1"></span></label>
+		<label for="gamecount2" class="label-item"><span id="n2"></span></label>
+		<label for="gamecount3" class="label-item"><span id="n3"></span></label>
+		<label for="gamecount4" class="label-item"><span id="n4"></span></label>
+		<label for="gamecount5" class="label-item"><span id="n5"></span></label>
+		<label for="gamecount6" class="label-item"><span id="n6"></span></label>
+		<label for="gamecount7" class="label-item"><span id="n7"></span></label>
+		<label for="gamecount8" class="label-item"><span id="n8"></span></label>
+		<label for="gamecount9" class="label-item"><span id="n9"></span></label>
+		<label for="gamecount10" class="label-item"><span id="n10"></span></label>
+		<label for="gamecount11" class="label-item"><span id="n11"></span></label>
+		<label for="gamecount12" class="label-item"><span id="n12"></span></label>
+		<label for="gamecount13" class="label-item"><span id="n13"></span></label>
+		<label for="gamecount14" class="label-item"><span id="n14"></span></label>
+
+		<div class="selection-indicator"></div>
+	</div>
+</div>
+<!-- 修正開始 -->	
+<!--
+<tr>
+<td>
+
+<div class="vertical-list-container">
+
+	<input type="radio" id="gamecount0" name="gamecount" value="0" checked>
+	<input type="radio" id="gamecount1" name="gamecount" value="1">
+	<input type="radio" id="gamecount2" name="gamecount" value="2">
+	<input type="radio" id="gamecount3" name="gamecount" value="3">
+	<input type="radio" id="gamecount4" name="gamecount" value="4">
+	<input type="radio" id="gamecount5" name="gamecount" value="5">
+	<input type="radio" id="gamecount6" name="gamecount" value="6">
+	<input type="radio" id="gamecount7" name="gamecount" value="7">
+	<input type="radio" id="gamecount8" name="gamecount" value="8">
+	<input type="radio" id="gamecount9" name="gamecount" value="9">
+	<input type="radio" id="gamecount10" name="gamecount" value="10">
+	<input type="radio" id="gamecount11" name="gamecount" value="11">
+	<input type="radio" id="gamecount12" name="gamecount" value="12">
+	<input type="radio" id="gamecount13" name="gamecount" value="13">
+	<input type="radio" id="gamecount14" name="gamecount" value="14">
+	<input type="radio" id="gamecount15" name="gamecount" value="15">
+	<input type="radio" id="gamecount16" name="gamecount" value="16">
+	<input type="radio" id="gamecount17" name="gamecount" value="17">
+	<input type="radio" id="gamecount18" name="gamecount" value="18">
+	<input type="radio" id="gamecount19" name="gamecount" value="19">
+	<input type="radio" id="gamecount20" name="gamecount" value="20">
+	<input type="radio" id="gamecount21" name="gamecount" value="21">
+	<input type="radio" id="gamecount22" name="gamecount" value="22">
+	<input type="radio" id="gamecount23" name="gamecount" value="23">
+
+	<div class="list-box">
+		<label for="gamecount0" class="label-item"><span id="n0"></span></label>
+		<label for="gamecount1" class="label-item"><span id="n1"></span></label>
+		<label for="gamecount2" class="label-item"><span id="n2"></span></label>
+		<label for="gamecount3" class="label-item"><span id="n3"></span></label>
+		<label for="gamecount4" class="label-item"><span id="n4"></span></label>
+		<label for="gamecount5" class="label-item"><span id="n5"></span></label>
+		<label for="gamecount6" class="label-item"><span id="n6"></span></label>
+		<label for="gamecount7" class="label-item"><span id="n7"></span></label>
+		<label for="gamecount8" class="label-item"><span id="n8"></span></label>
+		<label for="gamecount9" class="label-item"><span id="n9"></span></label>
+		<label for="gamecount10" class="label-item"><span id="n10"></span></label>
+		<label for="gamecount11" class="label-item"><span id="n11"></span></label>
+		<label for="gamecount12" class="label-item"><span id="n12"></span></label>
+		<label for="gamecount13" class="label-item"><span id="n13"></span></label>
+		<label for="gamecount14" class="label-item"><span id="n14"></span></label>
+		<label for="gamecount15" class="label-item"><span id="n15"></span></label>
+		<label for="gamecount16" class="label-item"><span id="n16"></span></label>
+		<label for="gamecount17" class="label-item"><span id="n17"></span></label>
+		<label for="gamecount18" class="label-item"><span id="n18"></span></label>
+		<label for="gamecount19" class="label-item"><span id="n19"></span></label>
+		<label for="gamecount20" class="label-item"><span id="n20"></span></label>
+		<label for="gamecount21" class="label-item"><span id="n21"></span></label>
+		<label for="gamecount22" class="label-item"><span id="n22"></span></label>
+		<label for="gamecount23" class="label-item"><span id="n23"></span></label>
+
+		<div class="selection-indicator"></div>
+	</div>
+</div>
+
+-->
+</td>
+</tr>
+<style>
+
+/* 各番号に応じた移動距離（縦方向 translateY） */
+#gamecount0:checked ~ .list-box .selection-indicator { transform: translateY(0); }
+#gamecount1:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 1)); }
+#gamecount2:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 2)); }
+#gamecount3:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 3)); }
+#gamecount4:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 4)); }
+#gamecount5:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 5)); }
+#gamecount6:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 6)); }
+#gamecount7:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 7)); }
+#gamecount8:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 8)); }
+#gamecount9:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 9)); }
+#gamecount10:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 10)); }
+#gamecount11:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 11)); }
+#gamecount12:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 12)); }
+#gamecount13:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 13)); }
+#gamecount14:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 14)); }
+#gamecount15:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 15)); }
+#gamecount16:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 16)); }
+#gamecount17:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 17)); }
+#gamecount18:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 18)); }
+#gamecount19:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 19)); }
+#gamecount20:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 20)); }
+#gamecount21:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 21)); }
+#gamecount22:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 22)); }
+#gamecount23:checked ~ .list-box .selection-indicator { transform: translateY(calc(var(--item-height) * 23)); }
+
+/* 
+選択中の文字色（シンプルに指定） 
+]最後のカンマを除く
+*/
+#gamecount0:checked ~ .list-box label[for="gamecount0"],
+#gamecount1:checked ~ .list-box label[for="gamecount1"],
+#gamecount2:checked ~ .list-box label[for="gamecount2"],
+#gamecount3:checked ~ .list-box label[for="gamecount3"],
+#gamecount4:checked ~ .list-box label[for="gamecount4"],
+#gamecount5:checked ~ .list-box label[for="gamecount5"],
+#gamecount6:checked ~ .list-box label[for="gamecount6"],
+#gamecount7:checked ~ .list-box label[for="gamecount7"],
+#gamecount8:checked ~ .list-box label[for="gamecount8"],
+#gamecount9:checked ~ .list-box label[for="gamecount9"],
+#gamecount10:checked ~ .list-box label[for="gamecount10"],
+#gamecount11:checked ~ .list-box label[for="gamecount11"],
+#gamecount12:checked ~ .list-box label[for="gamecount12"],
+#gamecount13:checked ~ .list-box label[for="gamecount13"],
+#gamecount14:checked ~ .list-box label[for="gamecount14"],
+#gamecount15:checked ~ .list-box label[for="gamecount15"],
+#gamecount16:checked ~ .list-box label[for="gamecount16"],
+#gamecount17:checked ~ .list-box label[for="gamecount17"],
+#gamecount18:checked ~ .list-box label[for="gamecount18"],
+#gamecount19:checked ~ .list-box label[for="gamecount19"],
+#gamecount20:checked ~ .list-box label[for="gamecount20"],
+#gamecount21:checked ~ .list-box label[for="gamecount21"],
+#gamecount22:checked ~ .list-box label[for="gamecount22"],
+#gamecount23:checked ~ .list-box label[for="gamecount23"]
+{
+color: white;
+}
+</style>    
+
+<script>
+const radioButtonsGameCount = document.querySelectorAll('input[name="gamecount"]');
+
+function gameCount()
+{
+/* 現在チェックされているラジオボタンの value を取得 */
+const mode = document.querySelector('input[name="gamecount"]:checked').value;
+//console.log("gameCount():"+mode);
+/* 選択されたmodeに対応する数値を返す */
+return mode;
+}
+radioButtonsGameCount.forEach(radio => radio.addEventListener("change", gameCount));
+</script>
+
+
+<tr>
+<td style='background:#4169e1;color:white;text-align:center;height:50px;'>
+<span id="t2">説明</span>
+</td>
+</tr>
+<!-- 20260312 mod 扉絵追加修正 sta -->
+<tr>
+<td>
+<!--
+	<div id="img0" style="width:300px;display:block;"><img id="imgjp" style="width:300px;"></div>
+	<div id="img1" style="width:300px;display:none;"><img id="imgen" style="width:300px;"></div>
+-->
+	<div id="t3">
+	</div>
+</td>
+</tr>
+<!-- 20260312 mod 扉絵追加修正 end -->
+</table>
+
+<table border="0">
+<tr>
+<td>
+<a href="javascript:f04();">
+<img id="bk" style="width:50px;height:50px;">
+</a>	
+</td>
+<td style="text-align:center;">
+<input id="btn1" class="layer1" style="left:75px;width:200px;height:30px;" type=button onclick='f3();' value="スタート">
+</td>
+</tr>
+</table>
+
+</div>
+<!-- スタート画面 end -->
+
+<!-- ゲーム画面 start -->
+<div id=h2 class="container">
+
+<table border=0>
+<tr>
+<td style="background-color:rgb(0 102 255 / 1.00);">SCORE</td>
+<td><div id=score style="text-align:center;background-color:rgb(240 248 255 / 1.00);">0</div></td>
+</tr>
+</table>
+
+<table style='width:300px;' border="0">
+<!--
+メッセージ
+-->
+<tr>
+<td style='width:87px;background-color:white;color:#000033;text-align:left;'>
+<!--
+<label id=title>
+-->
+<label id=t1>
+上(下)と違うのは？
+</label>
+</td>
+</tr>
+</table>
+
+<table style='width:300px;' border="1">
+<tr>
+<td style="width:300px;height:50px;text-align:center;background-color:rgb(30 144 255 / 0.50);">
+<span id="d1">MIGI TO</span>
+</td>
+</tr>
+<tr>
+<td>
+<!-- 問題文 -->
+ <!--
+<span id="d2" class="num" style="width:300px;background-color:rgb(60 179 113 / 0.50);text-align:center;align-content:center;"></span>
+-->
+<table>
+<!-- 1行目 -->
+	<tr>
+<!-- 選択データ(問題) -->
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(0);'>
+			<!-- 数字 -->
+			<div id="idx0kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx0kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx0kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img0" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(1);'>
+			<!-- 数字 -->
+			<div id="idx1kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx1kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx1kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img1" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(2);'>
+			<!-- 数字 -->
+			<div id="idx2kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx2kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx2kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img2" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(3);'>
+			<!-- 数字 -->
+			<div id="idx3kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx3kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx3kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img3" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+	</tr>
+<!-- 2行目 -->
+	<tr>
+<!-- 選択データ(問題) -->
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(4);'>
+			<!-- 数字 -->
+			<div id="idx4kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx4kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx4kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img4" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(5);'>
+			<!-- 数字 -->
+			<div id="idx5kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx5kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx5kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img5" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(6);'>
+			<!-- 数字 -->
+			<div id="idx6kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx6kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx6kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img6" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(7);'>
+			<!-- 数字 -->
+			<div id="idx7kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx7kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx7kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img7" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+	</tr>
+<tr>
+<td colspan=9 style="background-color: #28a745;"></td>
+</tr>
+<!-- 3行目 -->
+	<tr>
+<!-- 選択データ(問題) -->
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(8);'>
+			<!-- 数字 -->
+			<div id="idx8kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx8kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx8kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img8" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(9);'>
+			<!-- 数字 -->
+			<div id="idx9kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx9kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx9kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img9" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(10);'>
+			<!-- 数字 -->
+			<div id="idx10kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx10kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx10kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img10" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(11);'>
+			<!-- 数字 -->
+			<div id="idx11kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx11kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx11kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img11" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+	</tr>
+
+<!-- 4行目 -->
+	<tr>
+<!-- 選択データ(問題) -->
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(12);'>
+			<!-- 数字 -->
+			<div id="idx12kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx12kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx12kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img12" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(13);'>
+			<!-- 数字 -->
+			<div id="idx13kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx13kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx13kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img13" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(14);'>
+			<!-- 数字 -->
+			<div id="idx14kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx14kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx14kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img14" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:10px;height:100px;">&nbsp;</td>
+		<td style="text-align:center;align-content:center;width:100px;height:100px;">
+			<a href="javascript:void(0);" style="width:70px;height:70px;" onclick='f7(15);'>
+			<!-- 数字 -->
+			<div id="idx15kind0" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- テキスト -->
+			<div id="idx15kind1" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"></div>
+			<!-- 画像 -->
+			<div id="idx15kind2" style="text-align:center;align-content:center;width:100px;height:100px;display:none;"><img id="img15" style="width:100px;height:100px;"></div>
+			</a>
+		</td>
+ 		<td style="width:50px;height:100px;">&nbsp;</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<style>
+td span{
+	display: inline-block;
+	vertical-align: middle;
+}/* 共通の土台設定 */
+.bs0 {
+padding: 2px 8px;
+display: inline-block;
+border-radius: 4px;
+  border: 1px solid #333;    /* 黒い細線 */
+  /*padding: 2px 8px;*/          /* 内側の上下左右に余白 */
+  display: inline-block;     /* 余白を正しく反映させる */
+  border-radius: 4px;        /* 角を少し丸くするとおしゃれ */
+align-content:center;
+}
+
+</style>
+
+<style>
+/* 300pxの70% */
+/* font-size: 210px; */
+/* 上下中央揃えを確実にするため */
+/* line-height: 300px; */
+/*
+height: 300px; 
+*/
+.num{
+    display: inline-block; 
+    width: 300px; 
+    height: 100px; 
+    background-color: rgb(60 179 113 / 0.50); 
+    text-align: center; 
+    align-content: center; 
+}
+/* labelタグをボタン風にする設定 */
+/* --- 元々の設定（共通） --- */
+label[id^="i"] {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    color: rgb(0 0 0 / 0.60);
+    background-color: rgb(135 206 250 / 0.30);
+    border: 2px solid rgb(135 206 250 / 1.00);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s; /* 戻る時の滑らかさ */
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 1. PCでマウスを乗せた時（スマホでは反応しない） */
+@media (hover: hover) {
+    label[id^="i"]:hover {
+        background-color: #3cb371;
+        color: white;
+    }
+}
+
+/* 2. 押した瞬間（PC・スマホ共通） */
+label[id^="i"]:active {
+    background-color: #3cb371;
+    color: white;
+    transform: scale(0.85); /* ぐっと押し込む感じ（15%縮小） */
+    transition: 0.05s;      /* 押した反応は速く */
+}
+</style>
+<table>
+<tr>
+<td>
+<!--
+<a class="layer layer4" href="javascript:f05(2);">
+-->
+<a href="javascript:f05(2);" style="top:450px;left:00px;">
+<img id="bk2" style="width:50px;height:50px;">
+</a>	
+</td>
+<td style="text-align:center;">
+<!--
+<td colspan="4" style="text-align:center;width:250px;">
+<input id="btn2" class="layer1" style="left:75px;width:200px;height:30px;display:none;" type=button onclick='f5();' value='もう一度'>
+-->
+<input id="btn2" style="top:460px;left:70px;width:200px;height:30px;display:none;" type=button onclick='f5();' value='もう一度'>
+</td>
+</tr>
+</table>
+<!-- GAME OVER -->
+<span class="layer layer6" id="end" style="top:100px;left:0px;width:300px;height:50px;background-color:rgb(255 240 245 / 0.50);text-align:center;display:inline-flex;justify-content:center;align-items:center;display:none;">GAME OVER</span>
+</div>
+<!-- スタート画面 end -->
+
+<input type=hidden id=c0 name=c0 value=0>
+<input type=hidden id=no name=no value=0>
+<!-- 選択肢のcsv -->
+<input type=hidden id="csv" value="">
+<!--
+隠しておきコピーして使う
+00:noimage or display:none;
+0:左上
+1:右上
+2:左下
+3:右下
+4:差し替え用画像
+pi00:noimage.png(必要なら)
+-->
+<img id=pi0 style="display:none;">
+<img id=pi1 style="display:none;">
+<img id=pi2 style="display:none;">
+<img id=pi3 style="display:none;">
+<img id=pi4 style="display:none;">
+<img id=pi5 style="display:none;">
+<img id=pi6 style="display:none;">
+<img id=pi7 style="display:none;">
+<img id=pi8 style="display:none;">
+<img id=pi00 style="display:none;">
+
+<!--
+選択肢画像ボタンに使用する画像(各キャラ)
+-->
+<img id=p0 style="display:none;">
+<img id=p1 style="display:none;">
+<img id=p2 style="display:none;">
+<img id=p3 style="display:none;">
+<img id=p4 style="display:none;">
+<img id=p5 style="display:none;">
+<img id=p6 style="display:none;">
+<img id=p7 style="display:none;">
+<img id=p8 style="display:none;">
+<img id=p9 style="display:none;">
+
+<img id=p10 style="display:none;">
+<img id=p11 style="display:none;">
+<img id=p12 style="display:none;">
+<img id=p13 style="display:none;">
+<img id=p14 style="display:none;">
+<img id=p15 style="display:none;">
+<img id=p16 style="display:none;">
+<img id=p17 style="display:none;">
+<img id=p18 style="display:none;">
+<img id=p19 style="display:none;">
+
+<img id=p20 style="display:none;">
+<img id=p21 style="display:none;">
+<img id=p22 style="display:none;">
+<img id=p23 style="display:none;">
+<img id=p24 style="display:none;">
+<img id=p25 style="display:none;">
+<img id=p26 style="display:none;">
+<img id=p27 style="display:none;">
+<img id=p28 style="display:none;">
+<img id=p29 style="display:none;">
+
+<img id=p30 style="display:none;">
+<img id=p31 style="display:none;">
+<img id=p32 style="display:none;">
+<img id=p33 style="display:none;">
+<img id=p34 style="display:none;">
+<img id=p35 style="display:none;">
+<img id=p36 style="display:none;">
+<img id=p37 style="display:none;">
+<img id=p38 style="display:none;">
+<img id=p39 style="display:none;">
+
+<img id=p40 style="display:none;">
+<img id=p41 style="display:none;">
+<img id=p42 style="display:none;">
+<img id=p43 style="display:none;">
+<img id=p44 style="display:none;">
+<img id=p45 style="display:none;">
+<img id=p46 style="display:none;">
+<img id=p47 style="display:none;">
+<img id=p48 style="display:none;">
+<img id=p49 style="display:none;">
+
+<img id=p50 style="display:none;">
+<img id=p51 style="display:none;">
+<img id=p52 style="display:none;">
+<img id=p53 style="display:none;">
+<img id=p54 style="display:none;">
+<img id=p55 style="display:none;">
+<img id=p56 style="display:none;">
+<img id=p57 style="display:none;">
+<img id=p58 style="display:none;">
+<img id=p59 style="display:none;">
+
+<img id=p60 style="display:none;">
+<img id=p61 style="display:none;">
+<img id=p62 style="display:none;">
+<img id=p63 style="display:none;">
+<img id=p64 style="display:none;">
+<img id=p65 style="display:none;">
+<img id=p66 style="display:none;">
+<img id=p67 style="display:none;">
+<img id=p68 style="display:none;">
+<img id=p69 style="display:none;">
+
+<img id=p70 style="display:none;">
+<img id=p71 style="display:none;">
+<img id=p72 style="display:none;">
+<img id=p73 style="display:none;">
+<img id=p74 style="display:none;">
+<img id=p75 style="display:none;">
+<img id=p76 style="display:none;">
+<img id=p77 style="display:none;">
+<img id=p78 style="display:none;">
+<img id=p79 style="display:none;">
+
+<img id=p80 style="display:none;">
+<img id=p81 style="display:none;">
+<img id=p82 style="display:none;">
+<img id=p83 style="display:none;">
+<img id=p84 style="display:none;">
+<img id=p85 style="display:none;">
+<img id=p86 style="display:none;">
+<img id=p87 style="display:none;">
+<img id=p88 style="display:none;">
+<img id=p89 style="display:none;">
+
+<img id=p90 style="display:none;">
+<img id=p91 style="display:none;">
+<img id=p92 style="display:none;">
+<img id=p93 style="display:none;">
+<img id=p94 style="display:none;">
+<img id=p95 style="display:none;">
+<img id=p96 style="display:none;">
+<img id=p97 style="display:none;">
+<img id=p98 style="display:none;">
+<img id=p99 style="display:none;">
+
+<img id=p100 style="display:none;">
+<img id=p101 style="display:none;">
+<img id=p102 style="display:none;">
+<img id=p103 style="display:none;">
+<img id=p104 style="display:none;">
+<img id=p105 style="display:none;">
+<img id=p106 style="display:none;">
+<img id=p107 style="display:none;">
+<img id=p108 style="display:none;">
+<img id=p109 style="display:none;">
+
+<img id=p110 style="display:none;">
+<img id=p111 style="display:none;">
+<img id=p112 style="display:none;">
+<img id=p113 style="display:none;">
+<img id=p114 style="display:none;">
+<img id=p115 style="display:none;">
+<img id=p116 style="display:none;">
+<img id=p117 style="display:none;">
+<img id=p118 style="display:none;">
+<img id=p119 style="display:none;">
+
+<img id=p120 style="display:none;">
+<img id=p121 style="display:none;">
+<img id=p122 style="display:none;">
+<img id=p123 style="display:none;">
+<img id=p124 style="display:none;">
+<img id=p125 style="display:none;">
+<img id=p126 style="display:none;">
+<img id=p127 style="display:none;">
+<img id=p128 style="display:none;">
+<img id=p129 style="display:none;">
+
+<img id=p130 style="display:none;">
+<img id=p131 style="display:none;">
+<img id=p132 style="display:none;">
+<img id=p133 style="display:none;">
+<img id=p134 style="display:none;">
+<img id=p135 style="display:none;">
+<img id=p136 style="display:none;">
+<img id=p137 style="display:none;">
+<img id=p138 style="display:none;">
+<img id=p139 style="display:none;">
+
+<img id=p140 style="display:none;">
+<img id=p141 style="display:none;">
+<img id=p142 style="display:none;">
+<img id=p143 style="display:none;">
+<img id=p144 style="display:none;">
+<img id=p145 style="display:none;">
+<img id=p146 style="display:none;">
+<img id=p147 style="display:none;">
+<img id=p148 style="display:none;">
+<img id=p149 style="display:none;">
+
+<img id=p150 style="display:none;">
+<img id=p151 style="display:none;">
+<img id=p152 style="display:none;">
+<img id=p153 style="display:none;">
+<img id=p154 style="display:none;">
+<img id=p155 style="display:none;">
+<img id=p156 style="display:none;">
+<img id=p157 style="display:none;">
+<img id=p158 style="display:none;">
+<img id=p159 style="display:none;">
+
+<img id=p160 style="display:none;">
+<img id=p161 style="display:none;">
+<img id=p162 style="display:none;">
+<img id=p163 style="display:none;">
+<img id=p164 style="display:none;">
+<img id=p165 style="display:none;">
+<img id=p166 style="display:none;">
+<img id=p167 style="display:none;">
+<img id=p168 style="display:none;">
+<img id=p169 style="display:none;">
+
+<img id=p170 style="display:none;">
+<img id=p171 style="display:none;">
+<img id=p172 style="display:none;">
+<img id=p173 style="display:none;">
+<img id=p174 style="display:none;">
+<img id=p175 style="display:none;">
+<img id=p176 style="display:none;">
+<img id=p177 style="display:none;">
+<img id=p178 style="display:none;">
+<img id=p179 style="display:none;">
+
+<img id=p180 style="display:none;">
+<img id=p181 style="display:none;">
+<img id=p182 style="display:none;">
+<img id=p183 style="display:none;">
+<img id=p184 style="display:none;">
+<img id=p185 style="display:none;">
+<img id=p186 style="display:none;">
+<img id=p187 style="display:none;">
+<img id=p188 style="display:none;">
+<img id=p189 style="display:none;">
+
+<img id=p190 style="display:none;">
+<img id=p191 style="display:none;">
+<img id=p192 style="display:none;">
+
+<!--
+種類
+0:
+1:
+2:
+3:
+-->
+<input type=hidden id="kind" value=0>
+<!-- 
+ボタンの表示する管理番号
+<input type=hidden id=bno value=0>
+-->
+<!-- 結果 -->
+<input type=hidden id=rr value=0>
+
+<!--
+選択肢画像ボタンに使用する画像(各キャラ)
+-->
+
+<style>
+/* 初期状態：背景は透明（transparentがデフォルト） */
+img {
+  background-color: transparent; 
+  transition: background-color 0.3s; /* 切り替えを滑らかにする（任意） */
+}
+
+/* クラスが付与された時の色 */
+img.is-pink {
+  background-color: #ffe4e1; /* 薄いピンク（MistyRoseなど） */
+}	
+
+.container{
+	position: sticky;
+}
+.layer{
+	width: 300px;
+	height: 300px;
+	position: absolute;
+}
+.layer1{
+	z-index:1;
+}
+.layer2{
+	z-index:2;
+}
+.layer3{
+	z-index:3;
+}
+.layer4{
+	z-index:4;
+}
+.layer5{
+	z-index:5;
+}
+.layer6{
+	z-index:6;
+}
+.layer7{
+	z-index:7;
+}
+.layer10{
+	width: 50px;
+	height: 50px;
+	background-color:seagreen;
+}
+/*
+リストボックス追加
+*/
+.hidden-file-input {
+    display: none;
+}
+
+.custom-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-size: 14px;
+    border: none;
+}
+
+.custom-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 出力用は色を変える例 */
+.btn-output {
+    background-color: #28a745;
+}
+.btndesign1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*height:50px;*/
+    height:30px;
+    margin:0 auto;
+    padding: .9em 2em;
+    border: none;
+    border-radius: 5px;
+    background-color: #2589d0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+}
+.btndesign1:hover {
+    background-color: #1579c0;
+}
+.bc{
+    background-color:#3399FF;
+    color:white;
+    border-color:#3399FF;
+    border-radius:8px;
+}
+.btn1,
+a.btn1 {
+color: rgb(105 105 105 / 1.00);
+background-color: rgb(204 204 255 / 0.50);
+/* 下線を消す設定 */
+text-decoration: none; 
+/* ボタンらしく見せるための微調整（任意） */
+display: inline-block;
+padding: 10px 20px;
+}
+
+.btn1:hover,
+a.btn1:hover {
+color: rgb(105 105 105 / 1.00);
+background: rgb(204 204 255 / 1.00);
+/* ホバー時も下線を表示させない */
+text-decoration: none;
+}
+a.btn1--radius {
+border-radius: 100vh;
+}
+/* 1. まずはエリア本体の設定（ここが重要！） */
+.scroll-area {
+    /* 「最大でも400pxまで」としつつ、それ以下の画面幅なら「横幅の90%」にする */
+    width: 90%; 
+    max-width: 600px;
+    
+    /* 左右中央に寄せたい場合に追加 */
+    /*
+    margin-left: auto;
+    margin-right: auto;
+    */
+    height: 100px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    padding: 10px;
+    box-sizing: border-box; /* 重要：paddingを含めて幅を計算する設定 */
+}
+
+/* 2. スクロールバーの見た目（オプション） */
+.scroll-area::-webkit-scrollbar {
+    width: 8px;            /* ここはスクロールバーの「幅」です */
+}
+.scroll-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.vertical-list-container {
+    --item-height: 40px;      /* 各項目の高さ */
+    --item-count: 8;          /* 項目の数 */
+    /* --width: 200px; */           /* リストの幅 */
+	--width: 300px; /* ここも300pxにする */
+    --bg-color: #f8f9fa;
+    --active-color: #28a745;
+}
+
+input[type="radio"] { display: none; }
+
+.list-box {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 縦並びに変更 */
+	/* var(--width) をやめて、直接300pxと指定する */
+    /* ★ここに !important をつけて、枠ごと 300px に広げます */
+    width: 300px !important; 
+    background: var(--bg-color);
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid #ddd;
+}
+
+.label-item {
+    height: var(--item-height);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding-left: 15px; /* 左揃えが見やすい */
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+	/* width: 100%; */   /* ★親（300px）の横幅いっぱいに広げる */
+	width: 300px !important; /* ★ !important をつけてみる */
+}
+
+/* インジケーター（選択背景）の基本設定 */
+.selection-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(100% - 8px);
+    height: var(--item-height);
+    background: var(--active-color);
+    border-radius: 6px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* 選択された時の色変更 */
+input[type="radio"]:checked + label, /* 隣接セレクタの場合の考慮 */
+input:checked ~ .list-box label[for]:has(+ input:checked), /* 汎用的な指定 */
+.label-item:has(input:checked) { color: white; }
+
+/*
+スクロールボックス追加のケース
+*/
+.hidden-file-input {
+    display: none;
+}
+
+.custom-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-size: 14px;
+    border: none;
+}
+
+.custom-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 出力用は色を変える例 */
+.btn-output {
+    background-color: #28a745;
+}
+.btndesign1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*height:50px;*/
+    height:30px;
+    margin:0 auto;
+    padding: .9em 2em;
+    border: none;
+    border-radius: 5px;
+    background-color: #2589d0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+}
+.btndesign1:hover {
+    background-color: #1579c0;
+}
+.bc{
+    background-color:#3399FF;
+    color:white;
+    border-color:#3399FF;
+    border-radius:8px;
+}
+.btn1,
+a.btn1 {
+color: rgb(105 105 105 / 1.00);
+background-color: rgb(204 204 255 / 0.50);
+/* 下線を消す設定 */
+text-decoration: none; 
+/* ボタンらしく見せるための微調整（任意） */
+display: inline-block;
+padding: 10px 20px;
+}
+
+.btn1:hover,
+a.btn1:hover {
+color: rgb(105 105 105 / 1.00);
+background: rgb(204 204 255 / 1.00);
+/* ホバー時も下線を表示させない */
+text-decoration: none;
+}
+a.btn1--radius {
+border-radius: 100vh;
+}
+/* 1. まずはエリア本体の設定（ここが重要！） */
+.scroll-area {
+    /* 「最大でも400pxまで」としつつ、それ以下の画面幅なら「横幅の90%」にする */
+    width: 90%; 
+    max-width: 600px;
+    
+    /* 左右中央に寄せたい場合に追加 */
+    /*
+    margin-left: auto;
+    margin-right: auto;
+    */
+    height: 100px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    padding: 10px;
+    box-sizing: border-box; /* 重要：paddingを含めて幅を計算する設定 */
+}
+
+/* 2. スクロールバーの見た目（オプション） */
+.scroll-area::-webkit-scrollbar {
+    width: 8px;            /* ここはスクロールバーの「幅」です */
+}
+.scroll-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.vertical-list-container {
+    --item-height: 40px;      /* 各項目の高さ */
+    --item-count: 8;          /* 項目の数 */
+    --width: 200px;           /* リストの幅 */
+    --bg-color: #f8f9fa;
+    --active-color: #28a745;
+}
+
+input[type="radio"] { display: none; }
+
+.list-box {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 縦並びに変更 */
+    width: var(--width);
+    background: var(--bg-color);
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid #ddd;
+}
+
+.label-item {
+    height: var(--item-height);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding-left: 15px; /* 左揃えが見やすい */
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+/* インジケーター（選択背景）の基本設定 */
+.selection-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(100% - 8px);
+    height: var(--item-height);
+    background: var(--active-color);
+    border-radius: 6px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* 選択された時の色変更 */
+input[type="radio"]:checked + label, /* 隣接セレクタの場合の考慮 */
+input:checked ~ .list-box label[for]:has(+ input:checked), /* 汎用的な指定 */
+.label-item:has(input:checked) { color: white; }
+
+</style>
+
+ <!--
+上(下)と違うのは？ end
+-->
+<script>
+//0:localhost
+//1:xrea
+function f01()
+{
+	let d="";
+//console.log("f0():"+f0());	
+	if(f0()==0)
+	{
+		d="http://localhost/img/";
+	}
+	else
+	{
+		d="https://ss1.xrea.com/app.s17.xrea.com/img/";
+	}
+//console.log("f01 start result:"+String(f0()));
+	return d;
+}
+
+/*
+window.addEventListener('DOMContentLoaded', async ()=>
+{
+	await f32();
+	let lang=document.getElementById('lang').value;
+	document.title=lang==0?"上(下)と違うのは？ [Web game]":"Find the One: Top or Bottom? [Web game]";
+});
+*/
+
+//0:localhost
+//1:本番
+//async function f0()
+function f0()
+{
+	return cdf1();//0;//1;
+}
+//フェッチするURL
+async function f00()
+{
+    //fetch("http://localhost/nekofes.php", {
+    //fetch("https://ss1.xrea.com/app.s17.xrea.com/nekofes.php", {
+	let d="";
+	//let d1=await f0();
+	let d1=f0();
+//console.log("f00 d1:"+d1);	
+	//if(f0()<1)
+	if(d1<1)
+	{
+		d="http://localhost/nekofes.php";
+	}
+	else
+	{
+		d="https://ss1.xrea.com/app.s17.xrea.com/nekofes.php";
+	}
+	return d;
+}
+window.addEventListener('DOMContentLoaded', async ()=>
+{
+	await f32();//言語判定処理
+	await f10();//タイトル変更
+});
+//window.addEventListener('load', function ()
+window.addEventListener('load', async ()=>
+{
+	// await f32();//言語判定処理
+	await f05(0);//画面切替
+	await f16();//共通画像を読み込む
+	await f15();//デフォルト文字列設定
+	//await f17();//csv取得
+	await f11();//言語切替処理
+});
+//タイトル変更
+async function f10()
+{
+	const obj=document.getElementById('lang');
+	let lang=obj.value;
+	//const title=document.getElementById('title');
+	const title=document.getElementById('t1');
+	const d1=document.getElementById('d1');
+	//const no=document.getElementById("no").value;
+//console.log("f10 title:"+title.innerText+" no:"+no+" lang:"+lang);	
+	//背景色と文字色を変更する
+	title.style.display="flex";
+	title.style.justifyContent="center";
+	title.style.alignItems="center";
+	title.style.backgroundColor="rgb(240 255 240 / 1.00)";
+	document.title=lang==0?"上(下)と違うのは？ [Web game]":"Find the One: Top or Bottom? [Web game]";
+	d1.innerText=lang==0?"上(下)と違うのは？":"Find the One: Top or Bottom?";
+}
+
+//言語判定処理
+async function f32()
+{
+	let o1=new URL(window.location.href);
+	let o2=o1.searchParams;
+	let d=o2.get('lang');
+	const obj=document.getElementById('lang');
+	if(d==1||obj.value==1)
+	{
+		obj.value=1;
+	}
+	else
+	{
+		obj.value=0;
+	}
+//console.log("f32 lang:"+obj.value);
+}
+//画面切替
+//0:スタート画面
+//1:問題(絵の表示)画面
+//2:選択肢画面
+async function f05(d)
+{
+	let d1="none";
+	let d2="none";
+	switch(d)
+	{
+		case 0:
+			d1="block";
+			break;
+		case 1:
+			d2="block";
+			break;
+		case 2:
+			await f12();
+			f18();
+			d1="block";
+			d2="none";
+			/*
+			if(dd5>0)
+			{
+				clearInterval(intervalId);
+				dd5=0;
+			}
+			*/
+			//f12();//レベルによりdivの表示切替
+			break;
+	}
+//console.log("1 f05 d1:"+d1+" d2:"+d2);	
+	document.getElementById("h1").style.display=d1;//"none";
+//console.log("2");	
+	document.getElementById("h2").style.display=d2;//"block";
+//console.log("3");	
+	document.getElementById("c0").value=d;//画面の種類
+//console.log("4");	
+}
+let dd1=[];//上(下)と違うのは？に使う配列
+let dd2=0;//未使用
+let dd3=0;//[0]ゲーム可能 [1]ゲーム不可(もう一度)
+//ランダムは最後に追加
+//その時に=1を0に変更する
+//ランダムはさいごにしたいので修正
+let dd4=gameCount();//0;//種類 [0]数字 [1]アルファベット [2]画像 [3]ランダム
+//let dd5=[];//判定処理 すべて1になったら次の問題(カウントアップ)
+let dd6=[];//csv配列
+let dd7=0;//answer index
+//dd8:スコア
+let dd8=0;
+//dd9:スタートボタンの管理番号
+let dd9=0;//未使用
+let dd10=0;//未使用
+let dd11=0;//表示区分
+let intervalId = null;
+//スタートボタン
+async function f3()
+{
+	f18();
+	//dd9=1;
+	dd3=0;
+	dd8=0;
+	document.getElementById("score").innerText=dd8;
+	//document.getElementById('d3').style.visibility="hidden";
+	document.getElementById('end').style.display="none";//ゲームオーバーラベルを非表示する
+	//document.getElementById('end2').style.display="none";
+	//document.getElementById('fra').style.display="none";
+	document.getElementById('btn2').style.display="none";//もう一度ボタンを表示する
+	//document.getElementById('answer').style.display="none";//解説欄を非表示にする
+	//await test(0);
+	await f20();
+	await f12();
+	await f05(1);//画面の切替
+	await f17();//csvを取得する
+	//await f12(0,0);
+}
+//正解のインデックスを保存しておくこと
+//それ以外はNGとして判定する
+//なので不正解の場合はピンク色にする
+//正解(一致してる)なら黄色にする
+async function test(j)
+{
+	for(let i=0;i<4;i++)
+	{
+		document.getElementById('idx'+i+'kind'+j).style.display="block";
+		document.getElementById('idx'+i+'kind'+j).innerText=i;
+	}
+	document.getElementById("idx0kind0").style.backgroundColor="blue";
+	document.getElementById("idx0kind0").style.color="black";
+	//document.getElementById("idx0kind0").innerText="aaa";
+}
+//共通処理
+//スタートとリスタートおよび次の問題で表示切り替えをするためのもの
+//デフォルトで非表示にするもの
+async function f20()
+{
+	for(let i=0;i<16;i++)
+	{
+		for(let j=0;j<3;j++)
+		{
+			document.getElementById('idx'+i+'kind'+j).style.display="none";
+			document.getElementById('idx'+i+'kind'+j).style.backgroundColor="white";//"rgb(245 255 250 / 1.00)";
+		}
+	}
+}
+//20260516 comment out 未使用のため
+/*
+async function f21()
+{
+//console.log("f21 dd4:"+dd4);
+	for(let i=0;i<4;i++)
+	{
+		document.getElementById('idx'+i+'kind'+dd4).style.display="block";
+	}
+}
+*/
+//判定処理
+async function f7(d1)
+{
+	if(dd3>0)
+	{
+		return;
+	}
+	//問題により上下で使用するエリアが異なるため
+	if(dd2==0&&d1>7)return;
+	if(dd2==1&&d1<8)return;
+	if(dd1[d1]==-1)return;
+	f18();
+//console.log("f7 d1:"+d1+" dd2[0]:"+dd2[0]);
+	//r=parseInt(document.getElementById('rr').value);
+	//答え(f7で選択したボタンインデックスをdd6配列の結果で選択した数字を拾い、dd2(答えの数字)と比較して判定することになる)
+	let kind="";
+	switch(dd4)
+	{
+		case 0://数字
+			kind="kind0";
+			break;
+		case 1://アルファベット
+			kind="kind1";
+			break;
+		case 2://画像
+			kind="kind2";
+			break;
+	}
+//console.log('user choose index:'+d1);	
+	//aaa
+	//修正すること
+	//dd7をcsv変換した配列にするため
+	if(dd7==d1)
+	{
+// /console.log("couse in!! 正解 d1:"+d1);		
+		//正解
+		//スコア
+		dd8++;
+		document.getElementById("score").innerText=dd8;
+		await f20();
+		await f17();
+	}
+	else
+	{
+//console.log("couse in!! 不正解 dd11:"+dd11);		
+		//不正解
+		dd3=1;
+//console.log("2");	
+		//if(dd11==0||dd11==2)return;
+//console.log("course in!!");	
+		/*	
+		for(let i=0;i<16;i++)
+		{
+			let d = document.getElementById("idx"+String(i)+kind);
+			d.style.display="block";
+			switch(dd4)
+			{
+				case 0:
+				case 1:
+					switch(dd11)
+					{
+						case 0:
+						case 1:
+							d4=dd6[i];
+							break;
+						case 2:
+						case 3:
+							if(dd7==i)
+							{
+								d4=dd6[4];
+							}
+							else
+							{
+								d4=dd6[i];
+							}
+							break;
+					}
+					d.innerText=d4;
+//console.log("i:"+i+" d4:"+d4);					
+					//d.style.display="block";
+					//d.style.backgroundColor="#ffffffff";
+					break;
+				case 2:
+					//aaa
+					//ここが何をしたいのか？わからない
+					let img=document.getElementById("img"+i);
+					img.style.display="block";
+					break;
+			}
+			//d.style.display="block";
+			d.style.backgroundColor="#ffffffff";
+		}
+		*/
+		//選択した部分の背景色を変更する
+		document.getElementById("idx"+String(d1)+kind).style.backgroundColor="rgb(255 215 0 / 1.00)";//gold
+		//背景色をピンクにしてい間違った部分を伝える
+		//ピンク色にする
+//console.log('ピンク色にする dd7 count:'+dd7.length+' kind:'+kind);		
+		document.getElementById("idx"+String(dd7)+kind).style.backgroundColor="rgb(255 240 245 / 1.00)";
+		//正解の部分を変更する
+		document.getElementById('end').style.display="block";//ゲームオーバーラベルを表示する
+//console.log("1");		
+		document.getElementById('btn2').style.display="block";//もう一度ボタンを表示する
+	}
+}
+//aaa
+
+//背景色クリア
+async function f12()
+{
+	for(let i=0;i<16;i++)
+	{
+		document.getElementById("idx"+i+"kind0").style.display = "none";
+		document.getElementById("idx"+i+"kind1").style.display = "none";
+		document.getElementById("idx"+i+"kind2").style.display = "none";
+		document.getElementById("idx"+i+"kind0").style.backgroundColor="#ffffffff";
+		document.getElementById("idx"+i+"kind1").style.backgroundColor="#ffffffff";
+		document.getElementById("idx"+i+"kind2").style.backgroundColor="#ffffffff";
+		document.getElementById("idx"+i+"kind0").innerText = "";
+		document.getElementById("idx"+i+"kind1").innerText = "";
+		//document.getElementById("img"+String(i)).src=document.getElementById("pi00").src;
+	}
+	for(let i=0;i<16;i++)
+	{
+		document.getElementById("img"+i).src=document.getElementById("pi00").src;
+	}
+}
+//もう一度イベント
+async function f5()
+{
+	f18();
+	//インデックスを進める
+	//そのため先頭インデックスを削除する
+//console.log("f5 start");	
+	dd3=0;
+	//await f12(0,0);
+	await f20();
+	await f12();
+	//document.getElementById('d3').style.visibility="hidden";
+//console.log("1");	
+	document.getElementById('end').style.display="none";//ゲームオーバーラベルを表示する
+	//document.getElementById('end2').style.display="none";
+	// /document.getElementById('fra').style.display="none";
+//console.log("2");	
+	document.getElementById('btn2').style.display="none";//もう一度ボタンを表示する
+	//document.getElementById('answer').style.display="none";//解説欄を非表示にする
+//console.log("3");	
+	dd8=0;
+//console.log("4");	
+	document.getElementById("score").innerText=dd8;//スコアをリセット
+//console.log("5");	
+//console.log("6");	
+	//await f8();//個数チェックをして個数が不足していたらリロードする
+	await f17();//csv取得
+//console.log("7");	
+//console.log("8");	
+}
+function f9()
+{
+	return 50;
+}
+//スタートから次へ
+async function f26()
+{
+	await f05(1);//画面の切替
+	await f25();
+//console.log("f26 dd8(スコア):"+dd8);	
+	if(dd8<0)
+	{
+		dd8=0;
+		document.getElementById("score").innerText=dd8;
+	}
+}
+//デフォルト文字列設定
+async function f15()
+{
+	const obj=document.getElementById('lang');
+	let lang=obj.value;
+	
+	//タイトル
+	const title=document.getElementById('gametitle');
+	title.innerText=lang==0?"上(下)と違うのは？":"Find the One: Top or Bottom?";
+	
+}
+async function f22()
+{
+
+}
+//存在チェック
+//[戻り値]
+//0:存在しない
+//x>0:存在する
+async function f14(no)
+{
+//console.log("f14 p"+no);
+	const img = document.getElementById("p" + no);
+ 
+	if (!img)//noが存在しない場合は終了します
+	{
+//console.log("noが存在しない場合は終了します");
+		return 2;
+	}
+	//すでに画像が入っているか（srcがセットされているか）チェックします
+	//img.getAttribute('src') が null または 空なら、まだ保存されていない
+	if (img.getAttribute('src'))
+	{
+//console.log("すでに画像が入っているか（srcがセットされているか）");
+		return 1;
+	}
+//console.log("未セット");
+	return 0;
+}
+//共通画像を読み込む
+async function f16()
+{
+	let d1="";
+	let url=await f00();
+//console.log("f16 url:"+url);
+//最初は扉絵なしでアップする
+//そして扉絵付きでアップする
+	for(let i=0;i<3;i++)
+	//for(let i=0;i<4;i++)
+	{
+		switch(i)
+		{
+			case 0://戻る
+				d1="bk";
+				break;
+			case 1://アイコン
+				d1="icon";
+				break;
+			case 2:
+				d1="pi00";
+				break;
+			case 3://jp
+				d1="imgjp";
+				break;
+			case 4://en
+				d1="imgen";
+				break;
+		}
+		await f19(url,d1,0,i);
+	}
+/*
+隠しておきコピーして使う
+00:noimage or display:none;
+0:左上
+1:右上
+2:左下
+3:右下
+<img id=pi0 style="display:none;">
+<img id=pi1 style="display:none;">
+<img id=pi2 style="display:none;">
+<img id=pi3 style="display:none;">
+<img id=pi4 style="display:none;">
+<img id=pi00 style="display:none;">
+*/
+	//bkからbk2にsrcをコピーする
+	document.getElementById("bk2").src=document.getElementById("bk").src;
+}
+//csv取得及び差し替え
+async function f17()
+{
+	await f12();
+	//aaa
+	//バージョンアップをしたら修正すること
+	dd4=gameCount();
+	//dd4=gameCount();
+// /console.log("gamecount:"+dd4);	
+	//document.getElementById('fra').style.display="none";
+	let url=await f00();
+	const lang=document.getElementById('lang').value;
+//console.log("f17 start url:"+url);
+	//fetch("http://localhost/nekofes.php", {
+	const response = await fetch(url, {
+			method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			n1: 6,//脳トレ
+			n2: 39,//上(下)と違うのは？
+			n3: 1,
+			n4: 1,
+			d1: 2,//csv
+			d2: 1,
+			d3: dd4,//gameCount();//0:数字 1:アルファベット 2:画像 3:ランダム
+			d4: 1,//
+			d5: 1,//
+			lang: lang
+		}),
+	});
+	const data = await response.json();
+	//ランダムならdd4を変更した種類に再設定する
+	dd4=parseInt(data.details.kind);
+//console.log("dd4:"+String(dd4));	
+	//正解のインデックスを配列にします
+	dd7=parseInt(data.details.answer);
+	//for test
+	//dd7=2;
+//console.log("dd7:"+dd7);	
+	//let kind=parseInt(data.details.kind);
+//console.log("dd4:"+dd4);	
+	dd2=parseInt(data.details.updown);
+	const d1=document.getElementById('d1');
+	if(dd2 == 0)
+	{
+		d1.innerText = lang == 0 ? "上にしかないのは？" : "Which is only at the top?";
+	}
+	else
+	{
+		d1.innerText = lang == 0 ? "下にしかないのは？" : "Which is only at the bottom?";
+	}
+	
+	dd1=data.details.csv.split(',');//上下用のデータをcsvにしたものを配列に変換する
+//console.log("dd1:"+data.details.csv);	
+//console.log("csv:"+data.details.csv);	
+	/*
+	dd5=[];
+	for(let i=0;i<4;i++)
+	{
+		dd5.push(0);
+	}
+	*/
+	let tmp="";
+	//表示エリアを非表示にします
+	/*
+	for(let i=0;i<4;i++)
+	{
+		document.getElementById("idx"+i+"kind0").style.display = "none";
+		document.getElementById("idx"+i+"kind1").style.display = "none";
+		document.getElementById("idx"+i+"kind2").style.display = "none";
+	}
+	*/
+	await f12();
+	if(dd4==2)
+	{
+//console.log("画像 course in!!");		
+		/*
+		let id="img";
+		let d1="";
+		a2=[];
+		a2=data.details.csv.split(',');
+		//正解に使用するのはpi0(ひとつだけ違うも)
+		//不正解にするにはpi1(それ以外同じもの)
+		for(let i=0;i<a2.length;i++)
+		{
+			d1="img"+String(i);
+			await f19(url,d1,1,parseInt(a2[i]));
+		}
+		//画像のケース
+		for(let i=0;i<dd1.length;i++)
+		{
+			document.getElementById("idx"+String(i)+"kind2").style.display = "block";
+		}
+		*/
+		let d6=0;
+		//画像のケース
+		for(let i=0;i<dd1.length;i++)
+		{
+			document.getElementById("idx"+String(i)+"kind2").style.display = "block";
+
+			d6=parseInt(dd1[i]);
+			if(d6<1)
+			{
+				document.getElementById('img'+i).src=document.getElementById("pi00").src;
+			}
+			else
+			{
+				const d4=await f14(d6);
+//console.log("i:"+i+" d6:"+d6+" d4(result):"+d4);
+				//if(d4>0)continue;
+				//[戻り値]
+				//0:存在しない
+				//x>0:存在する
+				if(d4<1)
+				{
+					//ファイルが存在しない場合は
+					//画像を取得して
+					//種類 [0]csv [1]共通画像 [2]各画像
+					await f19(url,"p"+d6,1,d6);		
+				}
+				document.getElementById('img'+i).src=document.getElementById("p"+d6).src;		
+			}
+
+			/*
+			//tmp=String(dd6[i]);
+			//d1:種類 [0]共通画像 [1]各画像 [2]csv
+			//d2:画像の管理番号
+			//async function f19(url,id,d1,d2)
+			d1="pi"+String(i);
+//console.log("i:"+i+" id:"+id);			
+			await f19(url,d1,1,parseInt(dd6[i]));
+			*/
+		}
+		
+		//for test
+		//後で消すこと
+		/*
+		for(let i=0;i<5;i++)
+		{
+			document.getElementById("pi"+String(i)).style.display="block";
+		}
+		*/
+	}
+	else
+	{
+//console.log("文字列関連 course in!!");		
+		//let kind=dd4<1?"kind0":"kind1";
+		let kind = (parseInt(dd4) === 0) ? "kind0" : "kind1";
+		for(let i=0;i<dd1.length;i++)
+		{
+
+			tmp=String(dd1[i]);
+			if(tmp=="-1")tmp="";
+//console.log("i:"+i+" tmp:"+tmp);		
+//document.getElementById('idx'+i+'kind'+j).innerText="";//i;	
+			let target = document.getElementById("idx"+String(i)+kind);
+			//console.log("target:", target); // 要素が取得できているか確認
+			if(target)
+			{
+				target.innerText = tmp;
+				target.style.display = "block"; // 念のため表示を強制する
+			}
+		}
+	}
+	//console.log("idx0kind0の個数:", document.querySelectorAll('#idx0kind0').length);
+	/*
+	document.getElementById("idx0kind0").style.backgroundColor="yellow";
+	document.getElementById("idx0kind0").style.color="black";
+	document.getElementById("idx0kind0").innerText="aaa";
+	*/
+	//20260626 comment out たぶん不要なので
+	//aaa
+	//問題を表示
+	//await f8(kind);
+}
+//id:divのid
+//num:選択肢の数字
+async function f13(id,num)
+{
+	document.getElementById("i"+String(id)).innerText=String(num);
+}
+function f18()
+{
+	/*
+	if(dd10<2)//判定結果
+	{
+		clearInterval(intervalId);
+		//dd11=0;
+		//document.getElementById("fra").style.display="block";
+	}
+	dd10=2;
+	*/
+}
+async function f8(kind)
+{
+	let d1="";//背景色
+	//dd10=0;
+	//dd11=1;
+	let display="";
+	let color="";
+	dd11=0;
+	let d3="";
+	let d4="";
+	let d = null;
+	for(let i=0;i<dd1.length;i++)
+	{
+		switch(kind)
+		{
+			case 0:
+			case 1:
+				let kind = (parseInt(dd4) === 0) ? "kind0" : "kind1";
+				d = document.getElementById("idx"+String(i)+kind);
+				d.style.display=display;
+				//aaa
+				//色は変更すること
+/*
+if(dd11==0||dd11==2)
+{
+console.log("d2:"+d2+" d4:"+d4);					
+}
+*/
+				color="rgb(245 255 250 / 1.00)";
+				d.innerText=dd1[i];
+				d.style.display="block";
+				d.style.backgroundColor=color;
+				break;
+			case 2:
+				let img=document.getElementById("img"+i);
+				d = document.getElementById("idx"+String(i)+"kind2");
+				display="block";
+				//aaa
+				//修正すること
+				//dd7をcsv変換した配列とするため
+				/*
+				if(i==dd7)//一つだけ違う画像
+				{
+					img.src=document.getElementById("pi0").src;
+				}
+				else
+				{
+					img.src=document.getElementById("pi1").src;
+				}
+				*/
+				//img.src=document.getElementById("pi"+String(i)).src;
+				//color="rgb(25 25 112 / 1.00)";
+				img.style.display="block";
+				//d.style.display=display;
+				color="rgb(248 248 255 / 1.00)";//ghost white1
+				d.style.backgroundColor=color;
+				break;
+		}
+	}
+}
+
+//画像の取得
+//d1:種類 [0]共通画像 [1]各画像 [2]csv
+//d2:画像の管理番号
+async function f19(url,id,d1,d2)
+{
+//console.log("f19 url:"+url+" id:"+id+" d1:"+d1+" d2:"+d2);
+	const lang=document.getElementById('lang').value;
+	//fetch("http://localhost/nekofes.php", {
+	const response = await fetch(url, {
+			method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			n1: 6,//脳トレ
+			n2: 39,//上(下)と違うのは？
+			n3: 1,
+			n4: 1,
+			d1: d1,//種類 [0]共通画像 [1]各画像 [2]csv
+			d2: d2,//画像の種類
+			d3: 1,
+			d4: 1,//
+			d5: 1,//
+			lang: lang
+		}),
+	});
+	//responseから「blob」としてデータを取り出す
+    const blob = await response.blob(); 
+	const url2 = URL.createObjectURL(blob);
+//console.log("f19 id:"+id);
+//console.log("(1)画像URL--:", url2);
+	const img = document.getElementById(id);
+//console.log("img1 before:", img.src);
+	img.src = url2;
+//console.log("img1 after:", img.src);
+}
+
+//キャンセル
+function f04()
+{
+	/*
+	if(dd5>0)
+	{
+		clearInterval(intervalId);
+		dd5=0;
+	}
+	*/
+	const obj=document.getElementById('lang');
+	let lang=obj.value;
+	let url="";
+	url='./index.html?lang='+lang;
+	window.location.href=url;
+}
+
+</script>
+
+<!-- 共通 -->
+<script>
+// グローバル変数
+let langCd = 0; // 0=日本語, 1=英語
+let nextUrlPath="";
+const text = {
+  ja: {
+t1:`
+上(下)と違うのは？
+`,
+t2:`
+説明
+`,
+t3:`
+問題の指示をみて<br>
+上(もしくは下)にしかないものを選んでください。<br>
+間違うとゲームオーバーです。<br>
+正解するとスコアがカウントアップされ、<br>
+次の問題が表示されます。<br>
+`,
+t4:`
+`,
+t5:`
+`,
+t6:`
+`,
+t7:`
+`,
+t8:`
+`,
+t9:`
+`,
+t10:`
+`,
+t17:`
+`,
+n0:`
+上にしかないもの(数字)
+`,
+n1:`
+上にしかないもの(アルファベット)
+`,
+n2:`
+上にしかないもの(画像)
+`,
+n3:`
+上にしかないもの(ランダム)
+`,
+n4:`
+下にしかないもの(数字)
+`,
+n5:`
+下にしかないもの(アルファベット)
+`,
+n6:`
+下にしかないもの(画像)
+`,
+n7:`
+下にしかないもの(ランダム)
+`,
+n8:`
+上もしくは下(数字)
+`,
+n9:`
+上もしくは下(アルファベット)
+`,
+n10:`
+上もしくは下(画像)
+`,
+n11:`
+上もしくは下(ランダム)
+`,
+n12:`
+下にしかないものあり(数字)
+`,
+n13:`
+下にしかないものあり(アルファベット)
+`,
+n14:`
+下にしかないものあり(画像)
+`,
+n15:`
+下にしかないものあり(ランダム)
+`,
+n16:`
+上にしかないものあり(数字)
+`,
+n17:`
+上にしかないものあり(アルファベット)
+`,
+n18:`
+上にしかないものあり(画像)
+`,
+n19:`
+上にしかないものあり(ランダム)
+`,
+n20:`
+ランダム(数字)
+`,
+n21:`
+ランダム(アルファベット)
+`,
+n22:`
+ランダム(画像)
+`,
+n23:`
+ランダム(ランダム)
+`,
+  },
+  en: {
+t1:`
+Find the One: Top or Bottom?
+`,
+t2:`
+description
+`,
+t3:`
+Please look at the instructions for the problem and select the item that appears only at the top (or bottom).<br>
+If you choose the wrong one, it's game over.<br>
+If you choose correctly,<br>
+your score will be increase and the next question will be displayed.<br>
+`,
+t4:`
+`,
+t5:`
+`,
+t6:`
+`,
+t7:`
+`,
+t8:`
+`,
+t9:`
+`,
+t10:`
+`,
+t17:`
+`,
+n0: "Top Only (Numbers)",
+n1: "Top Only (Alphabets)",
+n2: "Top Only (Images)",
+n3: "Top Only (Random)",
+n4: "Bottom Only (Numbers)",
+n5: "Bottom Only (Alphabets)",
+n6: "Bottom Only (Images)",
+n7: "Bottom Only (Random)",
+n8: "Top or Bottom (Numbers)",
+n9: "Top or Bottom (Alphabets)",
+n10: "Top or Bottom (Images)",
+n11: "Top or Bottom (Random)",
+n12: "Bottom Includes Exclusive (Numbers)",
+n13: "Bottom Includes Exclusive (Alphabets)",
+n14: "Bottom Includes Exclusive (Images)",
+n15: "Bottom Includes Exclusive (Random)",
+n16: "Top Includes Exclusive (Numbers)",
+n17: "Top Includes Exclusive (Alphabets)",
+n18: "Top Includes Exclusive (Images)",
+n19: "Top Includes Exclusive (Random)",
+n20: "Random (Numbers)",
+n21: "Random (Alphabets)",
+n22: "Random (Images)",
+n23: "Random (Random)",
+}
+};
+function applyTextAll(langCd, divIds) {
+  divIds.forEach((id) => applyText(langCd, id));
+}
+
+// (1) 取得：langCdとdivのidを渡してHTML文字列を返す
+function getText(langCd, divId) {
+  // 言語がなければ日本語にフォールバック、該当idがなければ空文字
+  return (text[langCd] && text[langCd][divId]) ?? (text.ja && text.ja[divId]) ?? '';
+}
+// (2) 反映：langCdとdivのidを渡してDOMに流し込む
+function applyText(langCd, divId) {
+  const el = document.getElementById(divId);
+  if (!el) return;
+  el.innerHTML = getText(langCd, divId);
+}
+//各説明
+const ary = [
+	"t1", 
+	"t2", 
+	"t3", 
+	"t4", 
+	"t5", 
+	"t6", 
+	"t7", 
+	"t8", 
+	"t9", 
+	"t10", 
+	"t17", 
+	"n0", 
+	"n1", 
+	"n2", 
+	"n3", 
+	"n4", 
+	"n5", 
+	"n6", 
+	"n7", 
+	"n8", 
+	"n9", 
+	"n10", 
+	"n11", 
+	"n12", 
+	"n13", 
+	"n14", 
+	"n15", 
+	"n16", 
+	"n17", 
+	"n18", 
+	"n19", 
+	"n20", 
+	"n21", 
+	"n22", 
+	"n23", 
+];
+//言語切替処理
+//function changeLang()
+async function f11()
+{
+	//displayLangText();
+	const obj=document.getElementById('lang');
+	let d0=obj.value;//lang
+	//applyTextAll(langCd==0?"ja":"en", ary);
+	applyTextAll(d0==0?"ja":"en", ary);
+	const btn1=document.getElementById('btn1');
+	btn1.value=d0==0?"スタート":"START";
+	const btn2=document.getElementById('btn2');
+	btn2.value=d0==0?"もう一度":"RETRY";
+//console.log("lang:"+d0);	
+	//20260506 comment out 扉絵を準備できてないため
+	//扉絵を追加したら解放すること
+	/*
+	const img0=document.getElementById('img0');
+	const img1=document.getElementById('img1');
+	if(d0<1)
+	{
+		img0.style.display="block";
+		img1.style.display="none";
+	}
+	else
+	{
+		img1.style.display="block";
+		img0.style.display="none";
+	}
+	*/
+}
+</script>
+
+<br />
+<br />
+<br>
+<script>
+</script>
+
+<!--
+著作権情報
+-->
+<!--
+<div class="layer layer6" style="text-align:300px;">
+	position:absolute;
+-->
+<div class="layer" style="text-align:center;">
+<h1 style="display:none;">katsuyuki hori</h1>
+<div id=t17></div>
+<br /><br /><br /><br /><!--  著作権情報 -->
+<table style='background-color:rgba(220,220,220,255);color:black;text-align:center;'>	<tr>	<td style='background-color:rgba(198,198,255,255);color:black;text-align:center;'>	<b>著作権情報</b>	</td>	</tr>	<tr class=p2>	<td align=left >	ホームページおよびアプリ等に掲載されている情報等については、いかなる保障もいたしません。	<br />	ホームページおよびアプリ等を通じて入手したいかなる情報も複製、販売、出版または使用させたり、<br />	または公開したりすることはできません。	<br />	当方は、ホームページおよびアプリ等を利用したいかなる理由によっての障害等が発生しても、<br />	その結果ホームページおよびアプリ等を利用された本人または他の第三者が被った損害について<br />	一切の責任を負わないものとします。	<br />	</td>	</tr></table></form></body>
+</div>
+</html>
